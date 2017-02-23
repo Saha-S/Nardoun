@@ -1,5 +1,6 @@
 package com.appmagazine.nardoon.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,6 +16,15 @@ import android.view.MenuItem;
 
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.R;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import cz.msebera.android.httpclient.Header;
 
 public class Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -104,4 +114,73 @@ public class Main extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+    // dashte bash injaro che khube nadiiii   >  *********
+
+    public  void webServiceActivation()
+    {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        params.put("username", "");
+        params.put("password", "");
+
+        client.post("http://192.168.0.244/matbakh/public/api/attemptlogin", params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onStart() {
+                // called before request is started
+               // loginpb1.setVisibility(View.VISIBLE);
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                // called when response HTTP status is "200 OK"
+               // loginpb1.setVisibility(View.INVISIBLE);
+                String value = new String(response);
+                try {
+                    JSONObject obj =new JSONArray(value).getJSONObject(0);
+
+
+
+//                    App.loginname=obj.getString("name");
+//                    App.complexname=obj.getString("complex_name");
+//                    App.setConnectionData();
+//                    App.newactivity(ServerLogin.this,Login.class);
+//                    finish();
+
+
+                } catch (JSONException e1) {
+
+                    e1.printStackTrace();
+                }
+
+
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+
+                if(statusCode==406)
+                {
+                    App.CustomToast("حساب کاربری شما تایید نشده است !");
+                    //loginpb1.setVisibility(View.INVISIBLE);
+                }else if(statusCode==401){
+                    App.CustomToast("نام کاربری یا کلمه عبور اشتباه میباشد !");
+                    //loginpb1.setVisibility(View.INVISIBLE);
+
+                } else{
+                    App.CustomToast("fail "+statusCode);
+                    App.CustomToast(" لطفا دوباره سعی کنید ");
+                    //loginpb1.setVisibility(View.INVISIBLE);
+                }
+            }
+
+
+            @Override
+            public void onRetry(int retryNo) {
+                // called when request is retried
+            }
+        });
+    }
+
 }
