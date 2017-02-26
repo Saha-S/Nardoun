@@ -15,7 +15,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="11"
+        android:weightSum="10"
         android:gravity="bottom|right"
         tools:ignore="RtlHardcoded,UselessParent">
 
@@ -35,7 +35,8 @@
                 android:src="@drawable/ic_menu_send"
                 app:fabSize="normal"
                 android:layout_weight="0"
-                app:layout_anchorGravity="bottom|right" />
+                app:layout_anchorGravity="bottom|right"
+                android:visibility="gone"/>
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/pager"
@@ -50,9 +51,11 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="10"
+            android:layout_weight="9"
             android:background="?attr/colorPrimary"
-            android:baselineAligned="false">
+            android:baselineAligned="false"
+            android:paddingTop="3dp"
+            >
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tab_layout"
@@ -62,8 +65,7 @@
                 android:elevation="6dp"
                 android:minHeight="?attr/actionBarSize"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                tools:ignore="UnusedAttribute"
-                app:tabTextAppearance="@android:style/TextAppearance.DeviceDefault.Widget.TabWidget" />
+                tools:ignore="UnusedAttribute" />
 
         </LinearLayout>
 

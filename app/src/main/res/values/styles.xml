@@ -23,4 +23,8 @@
         <item name="android:typeface">serif</item>
     </style>
 
+    <style name="TextAppearance.DeviceDefault.Widget.TabWidget" parent="TextAppearance.DeviceDefault.Widget.TabWidget" >
+        <item name="android:typeface">serif</item>
+    </style>
+
 </resources>
