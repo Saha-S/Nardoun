@@ -7,26 +7,82 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.appmagazine.nardoon.activities.Main"
-    tools:showIn="@layout/app_bar_main"
-    >
+    tools:showIn="@layout/app_bar_main">
 
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="10"
+        android:weightSum="11"
         android:gravity="bottom|right"
-        tools:ignore="RtlHardcoded,UselessParent">
+        tools:ignore="RtlHardcoded,UselessParent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#e6e6e6"
+            android:layout_weight="1"
+
+        android:minHeight="65dp"
+            android:gravity="right|center"
+            android:weightSum="12"
+            android:id="@+id/ll_Filter">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="11"
+                android:gravity="right|center"
+                android:layout_marginRight="8dp">
+
+                <TextView
+                    android:text="فیلتر کردن با (برچسب، محل، عکس)"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView2"
+                    android:layout_weight="1"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="right|center">
+
+                <ImageView
+                    app:srcCompat="@mipmap/filter"
+                    android:id="@+id/imageView2"
+                    android:minHeight="12dp"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0"
-            android:gravity="bottom|right">
+            android:layout_weight="9">
 
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fab"
@@ -38,34 +94,30 @@
                 app:layout_anchorGravity="bottom|right"
                 android:visibility="gone"/>
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/pager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
 
         </LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="9"
+            android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:baselineAligned="false"
             android:paddingTop="3dp"
-            >
+            android:layout_weight="1">
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
                 android:elevation="6dp"
                 android:minHeight="?attr/actionBarSize"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                tools:ignore="UnusedAttribute" />
+                tools:ignore="UnusedAttribute"
+                style="@style/AppTabLayout"
+                app:tabTextAppearance="@style/AppTabTextAppearance"
+                />
 
         </LinearLayout>
 

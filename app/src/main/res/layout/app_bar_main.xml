@@ -7,6 +7,8 @@
     android:fitsSystemWindows="true"
     tools:context="com.appmagazine.nardoon.activities.Main">
 
+    <include layout="@layout/content_main" />
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,13 +32,12 @@
                  android:layout_height="wrap_content"
                  android:text="آگهی جدید"
                  android:textSize="16dp"
-                 android:layout_marginLeft="5dp"/>
+                 android:layout_marginLeft="7dp"/>
              <ImageButton
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:background="@android:drawable/ic_menu_add"
-                 android:layout_marginLeft="2dp"
-                 />
+                 android:layout_width="10dp"
+                 android:layout_height="10dp"
+                 android:layout_marginLeft="4dp"
+                 android:background="@mipmap/add" />
 
              </LinearLayout>
 
@@ -77,9 +78,6 @@
 
 
     </android.support.design.widget.AppBarLayout>
-
-    <include layout="@layout/content_main" />
-
 
 
 </android.support.design.widget.CoordinatorLayout>

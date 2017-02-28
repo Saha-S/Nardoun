@@ -1,10 +1,12 @@
 package com.appmagazine.nardoon.activities;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -49,24 +51,28 @@ public class Main extends AppCompatActivity
     TextView tvtitle;
     Typeface tfmorvarid;
     LinearLayout llnewagahi;
+    LinearLayout llFilter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+       // forceRTLIfSupported();
 
         ibmenu=(ImageButton) findViewById(R.id.ib_menu);
         tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
         llnewagahi=(LinearLayout) findViewById(R.id.ll_new_agahi);
+        llFilter=(LinearLayout) findViewById(R.id.ll_Filter);
         tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
         tvtitle.setTypeface(tfmorvarid);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("نی نی عکس").setIcon(R.drawable.baby));
-        tabLayout.addTab(tabLayout.newTab().setText("پیامک انبوه").setIcon(R.drawable.sms));
-        tabLayout.addTab(tabLayout.newTab().setText("دسته بندی").setIcon(R.drawable.list));
-        tabLayout.addTab(tabLayout.newTab().setText("صفحه اصلی").setIcon(R.drawable.home));
+        tabLayout.addTab(tabLayout.newTab().setText("نی نی عکس").setIcon(R.mipmap.baby));
+        tabLayout.addTab(tabLayout.newTab().setText("پیامک انبوه").setIcon(R.mipmap.sms));
+        tabLayout.addTab(tabLayout.newTab().setText("دسته بندی").setIcon(R.mipmap.list));
+        tabLayout.addTab(tabLayout.newTab().setText("صفحه اصلی").setIcon(R.mipmap.home));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
 
@@ -147,6 +153,17 @@ public class Main extends AppCompatActivity
 
             }
         });
+
+        llFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(Main.this , Filter.class);
+                startActivity(intent);
+
+            }
+        });
+
     }
 
     @Override
@@ -248,6 +265,13 @@ public class Main extends AppCompatActivity
         });
 
 
+    }
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    private void forceRTLIfSupported()
+    {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
+            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+        }
     }
 
 
