@@ -25,6 +25,21 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
     List<Poster> mDataset; // لیست داده هایی از نوع مدل phone که در اداپتر هستند
     Context context; // کانتکست لیست
 
+    public static class PosterHolder extends RecyclerView.ViewHolder { // تابع viewholder برای تعریف اشاره گر به آیتم های هر سطر
+        // به طور مثال در هر سطر یک imageview و یک textview داریم . همان ویو های موجود در فایل item_phone.xml
+        TextView title;
+        ImageView image;
+
+
+        public PosterHolder(View itemView) {
+            super(itemView);
+
+            title = (TextView) itemView.findViewById(R.id.title);
+            image = (ImageView) itemView.findViewById(R.id.img);
+
+        }
+    }
+
     public PosterAdapter(Context context, List<Poster> myDataset) { // تابع سازنده
         this.mDataset = myDataset;
         this.context = context;
@@ -47,10 +62,10 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
         Log.i("LOGTLT",holder.title.toString());
 
 // در صورتی که ویو سطر های شما عکس داشته باشد به کمک کتابخانه پیکاسو به این شکل لود می کنیم.
-    //    Glide.with(context)
-      //          .load("http://nardoun.ir/upload/"+mDataset.get(position).image) // دریافت آدرس از داده ها
-      //          .placeholder(R.mipmap.bookmark)
-      //          .into(holder.image); // img از holder
+        Glide.with(context)
+                .load("http://nardoun.ir/upload/"+mDataset.get(position).image) // دریافت آدرس از داده ها
+                .placeholder(R.mipmap.bookmark)
+                .into(holder.image); // img از holder
     }
 
     public void update(List<Poster> list) { // تابعی اضافی که خودمان برای تغییر داده های اداپتر ساخته ایم.
@@ -63,18 +78,5 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
         return mDataset.size();
     }
 
-    public static class PosterHolder extends RecyclerView.ViewHolder { // تابع viewholder برای تعریف اشاره گر به آیتم های هر سطر
-        // به طور مثال در هر سطر یک imageview و یک textview داریم . همان ویو های موجود در فایل item_phone.xml
-        TextView title;
-        ImageView image;
 
-
-        public PosterHolder(View itemView) {
-                super(itemView);
-
-            title = (TextView) itemView.findViewById(R.id.title);
-            image = (ImageView) itemView.findViewById(R.id.img);
-
-        }
-    }
 }
