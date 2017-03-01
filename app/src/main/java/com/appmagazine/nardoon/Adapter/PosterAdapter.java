@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +26,8 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
 
     List<Poster> mDataset; // لیست داده هایی از نوع مدل phone که در اداپتر هستند
     Context context; // کانتکست لیست
+
+    private int lastPosition = -1;
 
     public static class PosterHolder extends RecyclerView.ViewHolder { // تابع viewholder برای تعریف اشاره گر به آیتم های هر سطر
         // به طور مثال در هر سطر یک imageview و یک textview داریم . همان ویو های موجود در فایل item_phone.xml
@@ -70,6 +74,16 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
                 .load("http://nardoun.ir/upload/"+mDataset.get(position).image) // دریافت آدرس از داده ها
                 .placeholder(R.mipmap.nopic)
                 .into(holder.image); // img از holder
+
+
+
+
+
+//        Animation animation = AnimationUtils.loadAnimation(context,
+//                (position > lastPosition) ? android.R.anim.slide_in_left
+//                        : android.R.anim.slide_out_right);
+//        holder.itemView.startAnimation(animation);
+//        lastPosition = position;
     }
 
     public void update(List<Poster> list) { // تابعی اضافی که خودمان برای تغییر داده های اداپتر ساخته ایم.
