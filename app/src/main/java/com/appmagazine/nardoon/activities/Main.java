@@ -201,82 +201,8 @@ public class Main extends AppCompatActivity
     }
 
 
-    // dashte bash injaro che khube nadiiii   >  *********
-
-    public  void webServiceActivation()
-    {
-
-        AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-        params.put("username", "");
-        params.put("password", "");
-
-        client.post("http://192.168.0.244/matbakh/public/api/attemptlogin", params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onStart() {
-                // called before request is started
-               // loginpb1.setVisibility(View.VISIBLE);
-            }
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                // called when response HTTP status is "200 OK"
-               // loginpb1.setVisibility(View.INVISIBLE);
-                String value = new String(response);
-                try {
-                    JSONObject obj =new JSONArray(value).getJSONObject(0);
 
 
-
-
-//                    App.loginname=obj.getString("name");
-//                    App.complexname=obj.getString("complex_name");
-//                    App.setConnectionData();
-//                    App.newactivity(ServerLogin.this,Login.class);
-//                    finish();
-
-
-                } catch (JSONException e1) {
-
-                    e1.printStackTrace();
-                }
-
-
-            }
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-
-                if(statusCode==406)
-                {
-                    App.CustomToast("حساب کاربری شما تایید نشده است !");
-                    //loginpb1.setVisibility(View.INVISIBLE);
-                }else if(statusCode==401){
-                    App.CustomToast("نام کاربری یا کلمه عبور اشتباه میباشد !");
-                    //loginpb1.setVisibility(View.INVISIBLE);
-
-                } else{
-                    App.CustomToast("fail "+statusCode);
-                    App.CustomToast(" لطفا دوباره سعی کنید ");
-                    //loginpb1.setVisibility(View.INVISIBLE);
-                }
-            }
-
-
-            @Override
-            public void onRetry(int retryNo) {
-                // called when request is retried
-            }
-        });
-
-
-    }
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
-    private void forceRTLIfSupported()
-    {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
-            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        }
-    }
 
 
 

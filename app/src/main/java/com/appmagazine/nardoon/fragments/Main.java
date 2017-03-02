@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.appmagazine.nardoon.Adapter.PosterAdapter;
+import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.EndlessRecyclerViewScrollListener;
 import com.appmagazine.nardoon.NetUtils;
 import com.appmagazine.nardoon.Poster;
@@ -77,8 +78,12 @@ public class Main extends Fragment {
 // در این قسمت کارهایی که وقتی کلیک می شود را تعریف می کنیم
                 //Toast.makeText(getContext(), "آیتم شماره " + array.get(position).id + " را کلیک کردید!", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getContext() , Details.class);
-                int positionID = array.get(position).id;
-                intent.putExtra("ID", positionID);
+                intent.putExtra("id", array.get(position).id+"");
+                intent.putExtra("title", array.get(position).title);
+                intent.putExtra("image", array.get(position).image);
+                intent.putExtra("location", array.get(position).location);
+                intent.putExtra("price", array.get(position).price);
+
                 startActivity(intent);
             }
         }));
