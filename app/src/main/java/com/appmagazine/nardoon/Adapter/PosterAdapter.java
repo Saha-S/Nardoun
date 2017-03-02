@@ -29,6 +29,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
         // به طور مثال در هر سطر یک imageview و یک textview داریم . همان ویو های موجود در فایل item_phone.xml
         TextView title;
         TextView price;
+        TextView location;
         ImageView image;
 
 
@@ -37,6 +38,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
 
             title = (TextView) itemView.findViewById(R.id.title);
             price = (TextView) itemView.findViewById(R.id.price);
+            location = (TextView) itemView.findViewById(R.id.location);
             image = (ImageView) itemView.findViewById(R.id.img);
 
         }
@@ -61,6 +63,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
 // در این قسمت holder از نوع PhoneHolder می باشد که در پایین بصورت کلاس داخلی تعریف کرده ایم.
         holder.title.setText(mDataset.get(position).title);  // به ویو title موجود در holder مقدار ست می کنیم.
         holder.price.setText(mDataset.get(position).price+" تومان ");  // به ویو title موجود در holder مقدار ست می کنیم.
+        holder.location.setText("در "+mDataset.get(position).location);  // به ویو title موجود در holder مقدار ست می کنیم.
 
 // در صورتی که ویو سطر های شما عکس داشته باشد به کمک کتابخانه پیکاسو به این شکل لود می کنیم.
         Glide.with(context)
