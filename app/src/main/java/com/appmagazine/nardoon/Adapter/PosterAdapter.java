@@ -28,6 +28,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
     public static class PosterHolder extends RecyclerView.ViewHolder { // تابع viewholder برای تعریف اشاره گر به آیتم های هر سطر
         // به طور مثال در هر سطر یک imageview و یک textview داریم . همان ویو های موجود در فایل item_phone.xml
         TextView title;
+        TextView price;
         ImageView image;
 
 
@@ -35,6 +36,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
             super(itemView);
 
             title = (TextView) itemView.findViewById(R.id.title);
+            price = (TextView) itemView.findViewById(R.id.price);
             image = (ImageView) itemView.findViewById(R.id.img);
 
         }
@@ -58,13 +60,12 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
     public void onBindViewHolder(PosterHolder holder, int position) { // تابعی که برای مقدار دهی به ویو های ظاهری فراخوانی میشود.
 // در این قسمت holder از نوع PhoneHolder می باشد که در پایین بصورت کلاس داخلی تعریف کرده ایم.
         holder.title.setText(mDataset.get(position).title);  // به ویو title موجود در holder مقدار ست می کنیم.
-        Log.i("LOGIMG",holder.image.toString());
-        Log.i("LOGTLT",holder.title.toString());
+        holder.price.setText(mDataset.get(position).price+" تومان ");  // به ویو title موجود در holder مقدار ست می کنیم.
 
 // در صورتی که ویو سطر های شما عکس داشته باشد به کمک کتابخانه پیکاسو به این شکل لود می کنیم.
         Glide.with(context)
                 .load("http://nardoun.ir/upload/"+mDataset.get(position).image) // دریافت آدرس از داده ها
-                .placeholder(R.mipmap.bookmark)
+                .placeholder(R.mipmap.nopic)
                 .into(holder.image); // img از holder
     }
 

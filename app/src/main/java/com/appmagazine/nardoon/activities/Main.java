@@ -55,12 +55,6 @@ public class Main extends AppCompatActivity
     LinearLayout llnewagahi;
     LinearLayout llFilter;
 
-    RecyclerView recyclerView;
-    PosterAdapter adapter;
-    LinearLayoutManager linearLayoutManager;
-    List<Poster> array;
-    SwipeRefreshLayout swipeRefreshLayout;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,17 +71,6 @@ public class Main extends AppCompatActivity
         tvtitle.setTypeface(tfmorvarid);
 
 
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe); // اشاره گر سوایپ ریفرش لیوت
-        recyclerView = (RecyclerView) findViewById(R.id.list); // اشاره گر ریسایکلر ویو
-        linearLayoutManager = new LinearLayoutManager(getBaseContext(), LinearLayoutManager.VERTICAL, false); // تعریف لینیر لیوت منیجر به صورت عمودی
-        array = new ArrayList<>();// ایجاد لیست داده ها
-        adapter = new PosterAdapter(getBaseContext(), array); //ساخت اداپتر از لیست داده ها
-
-        recyclerView.setLayoutManager(linearLayoutManager); //  ست کردن لیوت منیجر به ریسایکلر ویو
-        recyclerView.setAdapter(adapter); // ست کردن آداپتر به ریسایکلر ویو
-
-
-
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("نی نی عکس").setIcon(R.mipmap.baby));
         tabLayout.addTab(tabLayout.newTab().setText("پیامک انبوه").setIcon(R.mipmap.sms));
@@ -95,7 +78,6 @@ public class Main extends AppCompatActivity
         tabLayout.addTab(tabLayout.newTab().setText("صفحه اصلی").setIcon(R.mipmap.home));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        loadData(0);
 
         ViewGroup vg = (ViewGroup) tabLayout.getChildAt(0);
         int tabsCount = vg.getChildCount();
@@ -296,29 +278,6 @@ public class Main extends AppCompatActivity
         }
     }
 
-    public void loadData(int page) {
-        NetUtils.get("?data=phone&limit=10&page=" + (page+1), null, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                JSONArray posters = response;
-                try {
-                    for (int i = 0; i < posters.length(); i++) { // تمامی داده ها را میگیرم و به لیست اضافه می کنیم
-                        array.add(new Poster(posters.getJSONObject(i)));
-                    }
-                    adapter.update(array); // به اداپتر لیست با داده های جدید را میفرستیم و آپدیت میکنیم.
-                    swipeRefreshLayout.setRefreshing(false);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Toast.makeText(getBaseContext(), "Error on request", Toast.LENGTH_LONG).show();
-            }
-
-        });
-    }
 
 
 }
