@@ -7,13 +7,13 @@
         >
         <item
             android:id="@+id/nav_camera"
-            android:icon="@android:drawable/ic_menu_camera"
+            android:icon="@mipmap/avatar"
             android:title="آگهی های من"
             android:orderInCategory="100"
            />
         <item
             android:id="@+id/nav_gallery"
-            android:icon="@android:drawable/ic_menu_camera"
+            android:icon="@mipmap/bookmark"
             android:title="نشان شده ها"
             />
         <item
@@ -24,15 +24,15 @@
 
         <item
             android:id="@+id/nav_rules"
-            android:icon="@android:drawable/ic_menu_camera"
+            android:icon="@mipmap/rules"
             android:title="قوانین" />
         <item
             android:id="@+id/nav_about"
-            android:icon="@android:drawable/ic_menu_camera"
+            android:icon="@mipmap/about"
             android:title="درباره ناردون" />
         <item
             android:id="@+id/nav_exit"
-            android:icon="@android:drawable/ic_menu_camera"
+            android:icon="@mipmap/exit"
             android:title="خروج" />
 
     </group>

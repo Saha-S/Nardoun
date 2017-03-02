@@ -36,20 +36,21 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
                 .inflate(R.layout.item_poster, parent, false); // توجه کنید در این قسمت اسم item_phone موجود هست. در پروژه های دیگر هم این قسمت نیازمند تغییر هست فقط.
         PosterHolder dataObjectHolder = new PosterHolder(view);
         return dataObjectHolder;
-        
+
     }
 
     @Override
     public void onBindViewHolder(PosterHolder holder, int position) { // تابعی که برای مقدار دهی به ویو های ظاهری فراخوانی میشود.
 // در این قسمت holder از نوع PhoneHolder می باشد که در پایین بصورت کلاس داخلی تعریف کرده ایم.
         holder.title.setText(mDataset.get(position).title);  // به ویو title موجود در holder مقدار ست می کنیم.
-
+        Log.i("LOGIMG",holder.image.toString());
+        Log.i("LOGTLT",holder.title.toString());
 
 // در صورتی که ویو سطر های شما عکس داشته باشد به کمک کتابخانه پیکاسو به این شکل لود می کنیم.
-        Glide.with(context)
-                .load("http://nardoun.ir/upload/"+mDataset.get(position).image) // دریافت آدرس از داده ها
-                .placeholder(R.mipmap.bookmark)
-                .into(holder.image); // img از holder
+    //    Glide.with(context)
+      //          .load("http://nardoun.ir/upload/"+mDataset.get(position).image) // دریافت آدرس از داده ها
+      //          .placeholder(R.mipmap.bookmark)
+      //          .into(holder.image); // img از holder
     }
 
     public void update(List<Poster> list) { // تابعی اضافی که خودمان برای تغییر داده های اداپتر ساخته ایم.
