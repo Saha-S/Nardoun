@@ -1,7 +1,6 @@
 package com.appmagazine.nardoon.fragments;
 
-import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -18,6 +17,7 @@ import com.appmagazine.nardoon.NetUtils;
 import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
 import com.appmagazine.nardoon.RecyclerItemClickListener;
+import com.appmagazine.nardoon.activities.Details;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -75,7 +75,11 @@ public class Main extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
 // در این قسمت کارهایی که وقتی کلیک می شود را تعریف می کنیم
-                Toast.makeText(getContext(), "آیتم شماره " + array.get(position).id + " را کلیک کردید!", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(), "آیتم شماره " + array.get(position).id + " را کلیک کردید!", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getContext() , Details.class);
+                int positionID = array.get(position).id;
+                intent.putExtra("ID", positionID);
+                startActivity(intent);
             }
         }));
 

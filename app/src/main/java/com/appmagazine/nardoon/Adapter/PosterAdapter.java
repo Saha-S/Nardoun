@@ -60,7 +60,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
         PosterHolder dataObjectHolder = new PosterHolder(view);
         return dataObjectHolder;
 
-    }
+    } 
 
     @Override
     public void onBindViewHolder(PosterHolder holder, int position) { // تابعی که برای مقدار دهی به ویو های ظاهری فراخوانی میشود.
