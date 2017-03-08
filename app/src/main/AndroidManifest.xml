@@ -3,6 +3,8 @@
     package="com.appmagazine.nardoon">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
 
     <application
         android:name=".App"
@@ -24,13 +26,14 @@
         <activity
             android:name=".activities.Filter"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
-        <activity android:name=".activities.Details"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.appmagazine.nardoon.activities.Main" />
+        <activity
+            android:name=".activities.Call"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
 
-        </activity>
+        <activity android:name=".activities.Details"></activity>
+        <activity android:name=".activities.SubCat"
+            android:theme="@style/AppTheme.NoActionBar"
+            ></activity>
     </application>
 
 </manifest>

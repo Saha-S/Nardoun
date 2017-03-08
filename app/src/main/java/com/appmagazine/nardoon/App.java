@@ -1,6 +1,7 @@
 package com.appmagazine.nardoon;
 
 import android.app.Application;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,7 +27,7 @@ public class App extends Application {
     public static Context context;
     public static SharedPreferences preferences;
     public static Typeface appfont;
-
+    public static String urlApi;
 
     public void             onCreate() {
 
@@ -34,6 +35,8 @@ public class App extends Application {
         appfont = getFont();
         overrideFont(context,"SERIF", "Sansfarsi.ttf");
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        urlApi                 ="http://nardoun.ir/api/";
+
 
     }
 

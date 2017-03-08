@@ -7,6 +7,8 @@
         <item name="colorPrimaryDark">#371635</item>
         <item name="colorAccent">#FF4081</item>
         <item name="android:typeface">serif</item>
+        <item name="windowNoTitle">true</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar">

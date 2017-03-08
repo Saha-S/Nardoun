@@ -1,10 +1,14 @@
 package com.appmagazine.nardoon.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,9 +27,11 @@ import cz.msebera.android.httpclient.Header;
 
 public class Details extends AppCompatActivity {
     int positionID;
-    TextView tvtitle,tvcontent;
-    String url ;
+    TextView tvtitle,tvcontent,tvprice,tvlocation;
+    String url, catname , mobile , email ;
     ImageView ivtitle;
+    CollapsingToolbarLayout collapsingToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,27 +39,45 @@ public class Details extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         tvtitle = (TextView) findViewById(R.id.txtTitle);
+        tvlocation = (TextView) findViewById(R.id.txtLocation);
+        tvprice = (TextView) findViewById(R.id.txtPrice);
         tvcontent = (TextView) findViewById(R.id.txtContent);
         ivtitle=(ImageView) findViewById(R.id.iv_title);
+        FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab_call);
+
+        myFab.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(App.context , Call.class);
+                intent.putExtra("mobile", mobile);
+                intent.putExtra("email", email);
+                startActivity(intent);
+
+            }
+        });
+
+
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle("Second Activity");
 
         Intent intent=getIntent();
 
 
         tvtitle               .setText(intent.getStringExtra("title"));
-        collapsingToolbar   .setTitle(intent.getStringExtra("title"));
-        url                 ="http://nardoun.ir/api/agahis/"+intent.getStringExtra("id");
+        tvprice               .setText(intent.getStringExtra("price")+" تومان ");
+        tvlocation               .setText(intent.getStringExtra("location"));
+       // collapsingToolbar   .setTitle(intent.getStringExtra("catname"));
+        url                 =App.urlApi+"agahis/"+intent.getStringExtra("id");
         Glide.with(this)
                 .load("http://nardoun.ir/upload/"+intent.getStringExtra("image"))
                 .placeholder(R.mipmap.nopic)
                 .into(ivtitle);
-
         webServiceGetAgahi();
+
+
     }
 
 
@@ -89,10 +113,12 @@ public class Details extends AppCompatActivity {
 
                     String content= obj.getString("content");
                     String type= obj.getString("type");
-                    String catname= obj.getString("category_name");
-                    String email= obj.getString("email");
-                    String mobile= obj.getString("mobile");
-                    App.CustomToast(content+" - "+type+" - "+catname+" - "+email+" - "+mobile);
+                    catname= obj.getString("category_name");
+                    email= obj.getString("email");
+                    mobile= obj.getString("mobile");
+                    collapsingToolbar.setTitle(catname);
+
+                    //  App.CustomToast(content+" - "+type+" - "+catname+" - "+email+" - "+mobile);
 
                     tvcontent.setText(content);
 

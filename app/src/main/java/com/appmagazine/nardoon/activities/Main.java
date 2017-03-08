@@ -53,7 +53,6 @@ public class Main extends AppCompatActivity
     TextView tvtitle;
     Typeface tfmorvarid;
     LinearLayout llnewagahi;
-    LinearLayout llFilter;
 
 
     @Override
@@ -66,7 +65,6 @@ public class Main extends AppCompatActivity
         ibmenu=(ImageButton) findViewById(R.id.ib_menu);
         tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
         llnewagahi=(LinearLayout) findViewById(R.id.ll_new_agahi);
-        llFilter=(LinearLayout) findViewById(R.id.ll_Filter);
         tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
         tvtitle.setTypeface(tfmorvarid);
 
@@ -157,15 +155,6 @@ public class Main extends AppCompatActivity
             }
         });
 
-        llFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(Main.this , Filter.class);
-                startActivity(intent);
-
-            }
-        });
 
     }
 

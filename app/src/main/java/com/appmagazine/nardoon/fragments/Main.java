@@ -3,12 +3,15 @@ package com.appmagazine.nardoon.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.appmagazine.nardoon.Adapter.PosterAdapter;
@@ -19,6 +22,7 @@ import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
 import com.appmagazine.nardoon.RecyclerItemClickListener;
 import com.appmagazine.nardoon.activities.Details;
+import com.appmagazine.nardoon.activities.Filter;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -36,6 +40,7 @@ public class Main extends Fragment {
     List<Poster> array;
     SwipeRefreshLayout swipeRefreshLayout;
     EndlessRecyclerViewScrollListener scrollListener; // تعریف اسکرول لیسنر
+    LinearLayout llFilter;
 
 
     @Override
@@ -49,6 +54,19 @@ public class Main extends Fragment {
 
         recyclerView.setLayoutManager(linearLayoutManager); //  ست کردن لیوت منیجر به ریسایکلر ویو
         recyclerView.setAdapter(adapter); // ست کردن آداپتر به ریسایکلر ویو
+
+        llFilter=(LinearLayout) view.findViewById(R.id.ll_Filter);
+
+
+        llFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(App.context , Filter.class);
+                startActivity(intent);
+
+            }
+        });
 
 
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) { // مقدار دهی اسکرول لیسنتر
@@ -72,7 +90,7 @@ public class Main extends Fragment {
             }
         });
 
-        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(App.context, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 // در این قسمت کارهایی که وقتی کلیک می شود را تعریف می کنیم
@@ -83,7 +101,6 @@ public class Main extends Fragment {
                 intent.putExtra("image", array.get(position).image);
                 intent.putExtra("location", array.get(position).location);
                 intent.putExtra("price", array.get(position).price);
-
                 startActivity(intent);
             }
         }));
