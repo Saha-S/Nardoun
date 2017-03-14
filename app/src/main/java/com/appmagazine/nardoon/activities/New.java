@@ -84,7 +84,7 @@ package com.appmagazine.nardoon.activities;
                 params.put("devicemodel","jja");
                 params.put("location","ولی عصر");
 
-                client.post(App.urlApi+"/agahis/", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+                client.post(App.urlApi+"agahis/", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
                     @Override
                     public void onStart() {
                         // called before request is started
