@@ -1,18 +1,14 @@
 package com.appmagazine.nardoon.activities;
 
-import android.annotation.TargetApi;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,31 +16,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.appmagazine.nardoon.Adapter.PagerAdapter;
-import com.appmagazine.nardoon.Adapter.PosterAdapter;
 import com.appmagazine.nardoon.App;
-import com.appmagazine.nardoon.NetUtils;
-import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import cz.msebera.android.httpclient.Header;
+import com.appmagazine.nardoon.fragments.test;
+import com.appmagazine.nardoon.fragments.test2;
 
 public class Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -150,7 +132,12 @@ public class Main extends AppCompatActivity
             @Override
             public void onClick(View view) {
 
-                App.CustomToast("آگهی جدید");
+
+                Intent intent = new Intent(App.context ,New.class );
+                startActivity(intent);
+               // App.CustomToast("آگهی جدید");
+               // getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new test()).commit();
+
 
             }
         });

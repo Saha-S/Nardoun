@@ -5,7 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
-
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -27,13 +26,21 @@
             android:name=".activities.Filter"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <activity
-            android:name=".activities.Call"
+            android:name=".activities.Categorys"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
 
-        <activity android:name=".activities.Details"></activity>
-        <activity android:name=".activities.SubCat"
-            android:theme="@style/AppTheme.NoActionBar"
-            ></activity>
+        <activity
+            android:name=".activities.Call"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
+        <activity android:name=".activities.Details" />
+        <activity
+            android:name=".activities.SubCat"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.SubCatAgahis"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.New"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

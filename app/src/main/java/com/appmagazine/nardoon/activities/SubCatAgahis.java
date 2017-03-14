@@ -1,11 +1,12 @@
 package com.appmagazine.nardoon.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -37,7 +38,7 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
-public class SubCat extends AppCompatActivity {
+public class SubCatAgahis extends AppCompatActivity {
     RecyclerView recyclerView;
     PosterAdapter adapter;
     LinearLayoutManager linearLayoutManager;
@@ -46,26 +47,21 @@ public class SubCat extends AppCompatActivity {
     EndlessRecyclerViewScrollListener scrollListener;
     LinearLayout llFilter;
     public static String catID ;
-    public static ArrayList<String> subs = new ArrayList<>();
-    public static ArrayList<Integer> subsid = new ArrayList<>();
-    ArrayAdapter<String> adapterSub;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sub_cat);
+        setContentView(R.layout.activity_sub_cat_agahis);
 
-        subs.clear();
 
         Intent intent=getIntent();
-        catID = intent.getStringExtra("id");
+        catID = intent.getStringExtra("POSITION");
+        Log.i("subid" ,"id ;" + catID);
 
-        TextView txtSub = (TextView) findViewById(R.id.txt_sub);
-        txtSub.setText("زیردسته های "+intent.getStringExtra("name"));
-        TextView txtAgahi = (TextView) findViewById(R.id.txt_agahi);
-        txtAgahi.setText("آگهی های "+intent.getStringExtra("name"));
+       // TextView txtAgahi = (TextView) findViewById(R.id.txt_agahi);
+        //txtAgahi.setText("آگهی های "+intent.getStringExtra("name"));
 
 
 
@@ -82,26 +78,7 @@ public class SubCat extends AppCompatActivity {
 
         llFilter=(LinearLayout) findViewById(R.id.ll_Filter);
 
-        webServiceGetCategory();
-        ListView listView = (ListView) findViewById(R.id.listv);
-        adapterSub = new ArrayAdapter(this, R.layout.item_subcat, R.id.txt, subs);
-        listView.setAdapter(adapterSub);
-
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                // TODO Auto-generated method stub
-                Intent intent = new Intent(App.context, SubCatAgahis.class);
-              //  intent.putExtra("POSITION", id);
-                intent.putExtra("POSITION", subsid.get(position)+"");
-                startActivity(intent);
-                 }
-        });
-
-
+        loadData(0);
 
         llFilter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,7 +132,7 @@ public class SubCat extends AppCompatActivity {
 
 
     public void loadData(int page) {
-        NetUtilsCatsAgahi.get("http://nardoun.ir/api/agahisbycat/"+catID+"?data=phone&limit=10&page=" + (page+1) , null, new JsonHttpResponseHandler() {
+        NetUtilsCatsAgahi.get("http://nardoun.ir/api/agahisbysubcat/"+catID+"?data=phone&limit=10&page=" + (page+1) , null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 JSONArray posters = response;
@@ -178,95 +155,7 @@ public class SubCat extends AppCompatActivity {
         });
     }
 
-    public  void webServiceGetCategory()
-    {
-        AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
 
-        client.get(App.urlApi+"categories/"+catID, params, new AsyncHttpResponseHandler() {
-
-            @Override
-            public void onStart() {
-            }
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-
-                loadData(0);
-                String value = new String(response);
-                try {
-                    for (int i = 0; i < value.length(); i++) {
-
-                        JSONObject obj = new JSONArray(value).getJSONObject(i);
-                        String subname = obj.getString("name");
-                        int subid = obj.getInt("id");
-                        subs.add(subname);
-                        subsid.add(subid);
-
-                    }
-                    adapterSub.notifyDataSetChanged();
-
-                } catch (JSONException e1) {
-
-                    e1.printStackTrace();
-                }
-
-
-            }
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-                if(statusCode==404)
-                {
-                    App.CustomToast("آگهی با این شماره وجود ندارد !");
-
-                }else{
-                    App.CustomToast("fail "+statusCode);
-                    App.CustomToast(" لطفا دوباره سعی کنید ");
-                }
-            }
-
-
-            @Override
-            public void onRetry(int retryNo) {
-                subs.clear();
-            }
-        });
-
-
-    }
-    public static boolean setListViewHeightBasedOnItems(ListView listView) {
-
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter != null) {
-
-            int numberOfItems = listAdapter.getCount();
-
-            // Get total height of all items.
-            int totalItemsHeight = 0;
-            for (int itemPos = 0; itemPos < numberOfItems; itemPos++) {
-                View item = listAdapter.getView(itemPos, null, listView);
-                float px = 500 * (listView.getResources().getDisplayMetrics().density);
-                item.measure(View.MeasureSpec.makeMeasureSpec((int)px, View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                totalItemsHeight += item.getMeasuredHeight();
-            }
-
-            // Get total height of all item dividers.
-            int totalDividersHeight = listView.getDividerHeight() *
-                    (numberOfItems - 1);
-            // Get padding
-            int totalPadding = listView.getPaddingTop() + listView.getPaddingBottom();
-
-            // Set list height.
-            ViewGroup.LayoutParams params = listView.getLayoutParams();
-            params.height = totalItemsHeight + totalDividersHeight + totalPadding;
-            listView.setLayoutParams(params);
-            listView.requestLayout();
-            return true;
-
-        } else {
-            return false;
-        }
-
-    }
 
 
 

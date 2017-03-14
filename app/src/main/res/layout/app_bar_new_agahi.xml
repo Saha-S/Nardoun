@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.appmagazine.nardoon.activities.Main"
+    android:layout_height="80dp">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="right|center_vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:id="@+id/ll_ersal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ارسال"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="7dp"
+                    android:textColor="#fff" />
+
+                <ImageButton
+                    android:layout_marginLeft="4dp"
+                    android:background="@mipmap/ok"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:id="@+id/ll_save">
+
+                <ImageButton
+                    android:layout_marginLeft="15dp"
+                    android:background="@mipmap/save"
+                    android:layout_height="20dp"
+                    android:layout_width="20dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:id="@+id/ll_close"
+                android:layout_marginLeft="10dp">
+
+                <ImageButton
+                    android:layout_marginLeft="15dp"
+                android:background="@mipmap/close"
+                    android:layout_height="20dp"
+                    android:layout_width="20dp" />
+
+            </LinearLayout>
+
+            <TextView android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+
+            <TextView
+                android:id="@+id/tv_mainpage_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="درج آگهی"
+                android:textSize="18dp"
+                android:layout_marginRight="5dp"
+                android:textColor="#fff" />
+
+            <ImageButton
+                android:id="@+id/ib_menu"
+                android:layout_height="25dp"
+                android:background="@mipmap/back"
+                android:layout_marginRight="5dp"
+                android:layout_width="25dp" />
+
+
+
+
+
+
+
+        </TableRow>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

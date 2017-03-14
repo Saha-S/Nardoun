@@ -7,8 +7,8 @@
     android:background="#e6e6e6"
     android:orientation="vertical"
     android:weightSum="14"
-    android:layout_width="350dp"
-    android:layout_height="450dp">
+    android:layout_width="300dp"
+    android:layout_height="300dp">
 
     <LinearLayout
         android:orientation="vertical"
@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="10"
-        android:weightSum="10"
+        android:weightSum="3"
         android:layout_margin="15dp">
 
         <LinearLayout
@@ -41,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:gravity="right|center_vertical"
-            android:layout_weight="1.33"
+            android:layout_weight="1"
             android:id="@+id/ll_email">
 
             <TextView
@@ -56,8 +56,9 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_call"
-                android:id="@+id/imageView9" />
+                app:srcCompat="@mipmap/callic_launcher"
+                android:id="@+id/imageView9"
+                android:padding="10dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -65,7 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:gravity="right|center_vertical"
-            android:layout_weight="1.33"
+            android:layout_weight="1"
             android:id="@+id/ll_call">
 
             <TextView
@@ -80,8 +81,9 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_call"
-                android:id="@+id/imageView9" />
+                app:srcCompat="@mipmap/message"
+                android:id="@+id/imageView10"
+                android:padding="10dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -89,7 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:gravity="right|center_vertical"
-            android:layout_weight="1.33"
+            android:layout_weight="1"
             android:id="@+id/ll_message">
 
             <TextView
@@ -104,15 +106,10 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@android:drawable/ic_menu_call"
-                android:id="@+id/imageView9" />
+                app:srcCompat="@mipmap/email"
+                android:id="@+id/imageView11"
+                android:padding="10dp" />
         </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="6"></LinearLayout>
 
     </LinearLayout>
 
@@ -130,7 +127,8 @@
             android:id="@+id/button2"
             android:background="#e6e6e6"
             android:textColor="@color/colorPrimary"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"
+            android:textSize="16sp" />
     </LinearLayout>
 
 </LinearLayout>
