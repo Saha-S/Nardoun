@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.provider.Settings.Secure;
 
 import java.lang.reflect.Field;
 
@@ -28,6 +30,8 @@ public class App extends Application {
     public static SharedPreferences preferences;
     public static Typeface appfont;
     public static String urlApi;
+    public static String android_id;
+    public static String android_Model;
 
     public void             onCreate() {
 
@@ -36,6 +40,10 @@ public class App extends Application {
         overrideFont(context,"SERIF", "Sansfarsi.ttf");
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         urlApi                 ="http://nardoun.ir/api/";
+        android_id = Secure.getString(context.getContentResolver(),
+                Secure.ANDROID_ID);
+        android_Model = Build.MODEL;
+
 
 
     }

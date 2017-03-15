@@ -136,9 +136,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textPersonName"
-                            android:text="1000000 (یک میلیون تومان)"
                             android:ems="10"
-                            android:id="@+id/edt_price" />
+                            android:id="@+id/edt_price"
+                            android:hint="1000000 (یک میلیون تومان)" />
 
                     </LinearLayout>
 
@@ -170,21 +170,28 @@
                                 android:textColor="#3d3d3d"
                                 android:layout_width="wrap_content"
                                 android:layout_weight="1.40" />
-
-                            <RadioButton
-                                android:text="فروشی"
-                                android:layout_width="match_parent"
+                            <RadioGroup
+                                android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/radioButton2"
-                                android:layout_weight="1.40" />
+                                android:layout_below="@+id/textView"
+                                android:weightSum="1"
+                                android:id="@+id/radioType"
+                                android:textColor="#010101"
+                                >
+                                <RadioButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/rb1"
+                                    android:checked="false"
+                                    android:text="فروشی" />
+                                <RadioButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/rb2"
+                                    android:checked="false"
+                                    android:text="درخواستی" />
 
-                            <RadioButton
-                                android:text="درخواستی"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/radioButton"
-                                android:layout_weight="1.40" />
-
+                            </RadioGroup>
                         </LinearLayout>
 
                     </LinearLayout>
@@ -256,9 +263,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textPersonName"
-                            android:text="x@x.com"
                             android:ems="10"
-                            android:id="@+id/edt_email" />
+                            android:id="@+id/edt_email"
+                            android:hint="x@x.com" />
 
                     </LinearLayout>
 
@@ -286,9 +293,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textPersonName"
-                            android:text="0912123456"
                             android:ems="10"
-                            android:id="@+id/edt_phone" />
+                            android:id="@+id/edt_phone"
+                            android:hint="09121234567" />
 
                     </LinearLayout>
 

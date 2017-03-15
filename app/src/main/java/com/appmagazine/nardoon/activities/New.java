@@ -10,6 +10,8 @@ package com.appmagazine.nardoon.activities;
         import android.widget.Button;
         import android.widget.EditText;
         import android.widget.LinearLayout;
+        import android.widget.RadioButton;
+        import android.widget.RadioGroup;
 
         import com.appmagazine.nardoon.App;
         import com.appmagazine.nardoon.R;
@@ -33,7 +35,10 @@ package com.appmagazine.nardoon.activities;
         public class New extends AppCompatActivity {
 
             EditText price,email,phone , title , content;
-            String Price,Email,Phone , Title , Content;
+            String name , id , type;
+            RadioGroup radioTypeGroup;
+            RadioButton radioTypeButton;
+
             @Override
             protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
@@ -47,12 +52,13 @@ package com.appmagazine.nardoon.activities;
                 content = (EditText) findViewById(R.id.edt_content);
                 LinearLayout llForm = (LinearLayout) findViewById(R.id.ll_form);
                 LinearLayout llErsal = (LinearLayout) findViewById(R.id.ll_ersal);
+                radioTypeGroup = (RadioGroup) findViewById(R.id.radioType);
 
 
 
                 Intent intent=getIntent();
-                String name = intent.getStringExtra("NAME");
-                String id = intent.getStringExtra("ID");
+                name = intent.getStringExtra("NAME");
+                id = intent.getStringExtra("ID");
 
                 if (name!= null){
                     SelectCat.setText(name);
@@ -63,6 +69,17 @@ package com.appmagazine.nardoon.activities;
                 llErsal.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        int selectedId = radioTypeGroup.getCheckedRadioButtonId();
+
+                        // find the radiobutton by returned id
+                        radioTypeButton = (RadioButton) findViewById(selectedId);
+
+                        if(radioTypeButton!=null) {
+
+                            type = radioTypeButton.getText().toString();
+                        }
+                        Log.i("mytype" , "type  : "+type);
+
                         webServiceNewAgahi();
                     }
                 });
@@ -81,20 +98,20 @@ package com.appmagazine.nardoon.activities;
 
                 AsyncHttpClient client = new AsyncHttpClient();
                 RequestParams params = new RequestParams();
-                params.put("title", "فلفف"); //  ********** parametr  ersali dar surate niaz
-                params.put("content", "بابقتعقبعت");
-                params.put("price", "677488");
-                params.put("email", "s@ff.com");
-                params.put("mobile", "66463333");
-                params.put("type","فروشی");
-                params.put("category_id","1");
+                params.put("title", title.getText()); //  ********** parametr  ersali dar surate niaz
+                params.put("content", content.getText());
+                params.put("price", price.getText());
+                params.put("email", email.getText());
+                params.put("mobile", phone.getText());
+                params.put("type",type);
+                params.put("category_id",id);
                 params.put("subcategory_id","1");
                 params.put("image","jja");
-                params.put("deviceid","2463");
-                params.put("devicemodel","jja");
+                params.put("deviceid",App.android_id);
+                params.put("devicemodel",App.android_Model);
                 params.put("location","ولی عصر");
                 Log.i("myurl" , App.urlApi+"agahis/");
-                client.post(App.urlApi+"agahis/", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+                client.post(App.urlApi+"agahis", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
                     @Override
                     public void onStart() {
                         // called before request is started
@@ -105,11 +122,6 @@ package com.appmagazine.nardoon.activities;
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] response) {
                         // called when response HTTP status is "200 OK" ************** inja vaqti successful shod code 200 daryaft kard mituni json parse koni
-                     //   String value = new String(response);
-                     //   System.out.println("Product Head Json: "+value);
-                    //    productHeaderJsonParser JsonParse=new productHeaderJsonParser();
-                     //   JsonParse.productHeaderJsonParserInput(value);
-
                         // loginpb1.setVisibility(View.INVISIBLE);
 
 
@@ -132,32 +144,5 @@ package com.appmagazine.nardoon.activities;
                 });
             }
 
-            public static String makePostRequest(String stringUrl, String payload,
-                                                 Context context) throws IOException {
-                URL url = new URL(stringUrl);
-                HttpURLConnection uc = (HttpURLConnection) url.openConnection();
-                String line;
-                StringBuffer jsonString = new StringBuffer();
-
-                uc.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-                uc.setRequestMethod("POST");
-                uc.setDoInput(true);
-                uc.setInstanceFollowRedirects(false);
-                uc.connect();
-                OutputStreamWriter writer = new OutputStreamWriter(uc.getOutputStream(), "UTF-8");
-                writer.write(payload);
-                writer.close();
-                try {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(uc.getInputStream()));
-                    while((line = br.readLine()) != null){
-                        jsonString.append(line);
-                    }
-                    br.close();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                uc.disconnect();
-                return jsonString.toString();
-            }
 
         }
