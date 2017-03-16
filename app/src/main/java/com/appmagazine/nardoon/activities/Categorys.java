@@ -40,8 +40,7 @@ public class Categorys extends Activity {
         listView = (ListView) findViewById(R.id.listv2);
 
         webServiceGetCategory();
-        adapterSub = new ArrayAdapter(this, R.layout.item_cats, R.id.txt, subs);
-        listView.setAdapter(adapterSub);
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -81,17 +80,19 @@ public class Categorys extends Activity {
                 String value = new String(response);
                 try {
                     subs.clear();
-                    for (int i = 0; i < value.length(); i++) {
 
-                        JSONObject obj = new JSONArray(value).getJSONObject(i);
+                    JSONArray responcearray = new JSONArray(value);
+                    for (int i = 1; i < responcearray.length(); i++) {
+
+                        JSONObject obj = responcearray.getJSONObject(i);
                         String subname = obj.getString("name");
                         int subid = obj.getInt("id");
                         subs.add(subname);
                         subsid.add(subid);
 
                     }
-                    adapterSub.notifyDataSetChanged();
-
+                    adapterSub = new ArrayAdapter(getApplicationContext(), R.layout.item_cats, R.id.txt, subs);
+                    listView.setAdapter(adapterSub);
 
                 } catch (JSONException e1) {
 
