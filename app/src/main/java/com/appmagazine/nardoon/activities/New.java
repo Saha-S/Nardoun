@@ -22,6 +22,7 @@ package com.appmagazine.nardoon.activities;
         import android.widget.LinearLayout;
         import android.widget.RadioButton;
         import android.widget.RadioGroup;
+        import android.widget.Toast;
 
         import com.appmagazine.nardoon.App;
         import com.appmagazine.nardoon.R;
@@ -326,13 +327,14 @@ package com.appmagazine.nardoon.activities;
                 }
                 if (bm != null) { // sanity check
                     File outputDir = App.context.getCacheDir(); // Activity context
-                    File outputFile = File.createTempFile("image", "jpg", outputDir); // follow the API for createTempFile
+                    File outputFile = File.createTempFile("image", ".jpg", outputDir); // follow the API for createTempFile
 
                     FileOutputStream stream = new FileOutputStream (outputFile, false); // Add false here so we don't append an image to another image. That would be weird.
                     // This line actually writes a bitmap to the stream. If you use a ByteArrayOutputStream, you end up with a byte array. If you use a FileOutputStream, you end up with a file.
-                    bm.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    bm.compress(Bitmap.CompressFormat.JPEG, 90, stream);
                     stream.close(); // cleanup
-                     Log.i("myfile","file: "+outputFile.toString());
+
+                    destination = new File(outputFile.toURI());
 
                 }
 
