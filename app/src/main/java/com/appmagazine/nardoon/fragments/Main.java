@@ -39,21 +39,21 @@ public class Main extends Fragment {
     LinearLayoutManager linearLayoutManager;
     List<Poster> array;
     SwipeRefreshLayout swipeRefreshLayout;
-    EndlessRecyclerViewScrollListener scrollListener; // تعریف اسکرول لیسنر
+    EndlessRecyclerViewScrollListener scrollListener;
     LinearLayout llFilter;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_fragment, container, false);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe); // اشاره گر سوایپ ریفرش لیوت
-        recyclerView = (RecyclerView) view.findViewById(R.id.list); // اشاره گر ریسایکلر ویو
-        linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false); // تعریف لینیر لیوت منیجر به صورت عمودی
-        array = new ArrayList<>();// ایجاد لیست داده ها
-        adapter = new PosterAdapter(getContext(), array); //ساخت اداپتر از لیست داده ها
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe);
+        recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        array = new ArrayList<>();
+        adapter = new PosterAdapter(getContext(), array);
 
-        recyclerView.setLayoutManager(linearLayoutManager); //  ست کردن لیوت منیجر به ریسایکلر ویو
-        recyclerView.setAdapter(adapter); // ست کردن آداپتر به ریسایکلر ویو
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(adapter);
 
         llFilter=(LinearLayout) view.findViewById(R.id.ll_Filter);
 
@@ -69,13 +69,13 @@ public class Main extends Fragment {
         });
 
 
-        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) { // مقدار دهی اسکرول لیسنتر
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                loadData(page); // کارهایی که باید بعد از اسکرول اتفاق بیافتد. در اینجا لود دادهای دیگر می باشد.
+                loadData(page);
             }
         };
-        recyclerView.addOnScrollListener(scrollListener); // ست کردن اسکرول لیسنر به ریسایکلر ویو
+        recyclerView.addOnScrollListener(scrollListener);
 
         loadData(0);
 
@@ -83,17 +83,17 @@ public class Main extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-// دستورات در هنگامی که ریفرش می شود لیست.
-                array = new ArrayList<Poster>(); // لیست خالی می شود.
-                loadData(0); // در این مثال دستور لود داده های اول برنامه را اجرا می کنیم.
-                scrollListener.resetState(); // اسکرول لیسنر را ریست می کنیم
+
+                array = new ArrayList<Poster>();
+                loadData(0);
+                scrollListener.resetState();
             }
         });
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(App.context, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-// در این قسمت کارهایی که وقتی کلیک می شود را تعریف می کنیم
+
                 //Toast.makeText(getContext(), "آیتم شماره " + array.get(position).id + " را کلیک کردید!", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getContext() , Details.class);
                 intent.putExtra("id", array.get(position).id+"");
@@ -101,6 +101,7 @@ public class Main extends Fragment {
                 intent.putExtra("image", array.get(position).image);
                 intent.putExtra("location", array.get(position).location);
                 intent.putExtra("price", array.get(position).price);
+                intent.putExtra("time", array.get(position).created_at);
                 startActivity(intent);
             }
         }));
@@ -116,10 +117,10 @@ public class Main extends Fragment {
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 JSONArray posters = response;
                 try {
-                    for (int i = 0; i < posters.length(); i++) { // تمامی داده ها را میگیرم و به لیست اضافه می کنیم
+                    for (int i = 0; i < posters.length(); i++) {
                         array.add(new Poster(posters.getJSONObject(i)));
                     }
-                    adapter.update(array); // به اداپتر لیست با داده های جدید را میفرستیم و آپدیت میکنیم.
+                    adapter.update(array);
                     swipeRefreshLayout.setRefreshing(false);
                 } catch (JSONException e) {
                     e.printStackTrace();

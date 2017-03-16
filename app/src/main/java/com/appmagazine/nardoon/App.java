@@ -14,6 +14,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.provider.Settings.Secure;
@@ -32,6 +33,7 @@ public class App extends Application {
     public static String urlApi;
     public static String android_id;
     public static String android_Model;
+
 
     public void             onCreate() {
 

@@ -24,7 +24,8 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:id="@+id/ll_ersal">
+                android:id="@+id/ll_ersal"
+                android:visibility="invisible">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -47,7 +48,8 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:id="@+id/ll_save">
+                android:id="@+id/ll_save"
+                android:visibility="invisible">
 
                 <ImageButton
                     android:layout_marginLeft="15dp"
@@ -61,15 +63,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:gravity="center_vertical"
+                android:gravity="center_vertical|center_horizontal"
                 android:id="@+id/ll_close"
-                android:layout_marginLeft="10dp">
+                android:layout_marginLeft="10dp"
+                android:visibility="invisible">
 
                 <ImageButton
                     android:layout_marginLeft="15dp"
                 android:background="@mipmap/close"
                     android:layout_height="20dp"
-                    android:layout_width="20dp" />
+                    android:layout_width="20dp"
+                    android:id="@+id/close" />
 
             </LinearLayout>
 
@@ -78,26 +82,31 @@
                 android:layout_weight="1"/>
 
 
-            <TextView
-                android:id="@+id/tv_mainpage_title"
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="درج آگهی"
-                android:textSize="18dp"
-                android:layout_marginRight="5dp"
-                android:textColor="#fff" />
+                android:id="@+id/ll_back">
 
-            <ImageButton
-                android:id="@+id/ib_menu"
-                android:layout_height="25dp"
-                android:background="@mipmap/back"
-                android:layout_marginRight="5dp"
-                android:layout_width="25dp" />
+                <TextView
+                    android:id="@+id/tv_mainpage_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="درج آگهی"
+                    android:textSize="18dp"
+                    android:layout_marginRight="5dp"
+                    android:textColor="#fff"
+                    android:layout_weight="1" />
 
+                <ImageButton
+                    android:id="@+id/ib_menu"
+                    android:layout_height="25dp"
+                    android:background="@mipmap/back"
+                    android:layout_marginRight="5dp"
+                    android:layout_width="25dp"
+                    android:layout_weight="1" />
 
-
-
-
+            </LinearLayout>
 
 
         </TableRow>

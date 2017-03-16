@@ -1,7 +1,5 @@
 package com.appmagazine.nardoon.activities;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -16,7 +14,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
@@ -25,8 +22,6 @@ import android.widget.TextView;
 import com.appmagazine.nardoon.Adapter.PagerAdapter;
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.R;
-import com.appmagazine.nardoon.fragments.test;
-import com.appmagazine.nardoon.fragments.test2;
 
 public class Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 public class Poster {
     public int id;
-    public String title, price, location , image;
+    public String title, price, location , image,created_at;
 
     public Poster(JSONObject jsonObject) { // تابع سازنده برای دریافت مقادیر از JsonObject
         try {
@@ -17,6 +17,7 @@ public class Poster {
             this.title = jsonObject.getString("title");
             this.price = jsonObject.getString("price");
             this.location = jsonObject.getString("location");
+            this.created_at = jsonObject.getString("created_at");
             this.image = jsonObject.getString("image");
         } catch (JSONException e) {
             e.printStackTrace();

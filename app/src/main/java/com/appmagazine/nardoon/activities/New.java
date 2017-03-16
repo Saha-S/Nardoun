@@ -1,14 +1,18 @@
 package com.appmagazine.nardoon.activities;
 
+        import android.app.ProgressDialog;
         import android.content.Context;
         import android.content.Intent;
+        import android.media.Image;
         import android.os.AsyncTask;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
         import android.util.Log;
         import android.view.View;
+        import android.view.Window;
         import android.widget.Button;
         import android.widget.EditText;
+        import android.widget.ImageButton;
         import android.widget.LinearLayout;
         import android.widget.RadioButton;
         import android.widget.RadioGroup;
@@ -35,9 +39,11 @@ package com.appmagazine.nardoon.activities;
         public class New extends AppCompatActivity {
 
             EditText price,email,phone , title , content;
-            String name , id , type;
+            String name , id , type,subid;
             RadioGroup radioTypeGroup;
             RadioButton radioTypeButton;
+            public static ProgressDialog dialog;
+
 
             @Override
             protected void onCreate(Bundle savedInstanceState) {
@@ -52,23 +58,55 @@ package com.appmagazine.nardoon.activities;
                 content = (EditText) findViewById(R.id.edt_content);
                 LinearLayout llForm = (LinearLayout) findViewById(R.id.ll_form);
                 LinearLayout llErsal = (LinearLayout) findViewById(R.id.ll_ersal);
+                LinearLayout llSave = (LinearLayout) findViewById(R.id.ll_save);
+                LinearLayout llClose = (LinearLayout) findViewById(R.id.ll_close);
+                ImageButton close = (ImageButton) findViewById(R.id.close);
+                LinearLayout llBack = (LinearLayout) findViewById(R.id.ll_back);
                 radioTypeGroup = (RadioGroup) findViewById(R.id.radioType);
+
 
 
 
                 Intent intent=getIntent();
                 name = intent.getStringExtra("NAME");
-                id = intent.getStringExtra("ID");
+                id = intent.getStringExtra("CATID");
+                subid = intent.getStringExtra("SUBID");
 
                 if (name!= null){
                     SelectCat.setText(name);
                     llForm.setVisibility(LinearLayout.VISIBLE);
-
+                    llClose.setVisibility(LinearLayout.VISIBLE);
+                    llErsal.setVisibility(LinearLayout.VISIBLE);
+                    llSave.setVisibility(LinearLayout.VISIBLE);
                 }
+
+                close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
+                llClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                      finish();
+
+                    }
+                });
+                llBack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
 
                 llErsal.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        dialog = ProgressDialog.show(New.this, null, null,true, false);
+                        dialog.setContentView(R.layout.progress_layout_small);
+
                         int selectedId = radioTypeGroup.getCheckedRadioButtonId();
 
                         // find the radiobutton by returned id
@@ -105,7 +143,7 @@ package com.appmagazine.nardoon.activities;
                 params.put("mobile", phone.getText());
                 params.put("type",type);
                 params.put("category_id",id);
-                params.put("subcategory_id","1");
+                params.put("subcategory_id",subid);
                 params.put("image","jja");
                 params.put("deviceid",App.android_id);
                 params.put("devicemodel",App.android_Model);
@@ -123,6 +161,8 @@ package com.appmagazine.nardoon.activities;
                     public void onSuccess(int statusCode, Header[] headers, byte[] response) {
                         // called when response HTTP status is "200 OK" ************** inja vaqti successful shod code 200 daryaft kard mituni json parse koni
                         // loginpb1.setVisibility(View.INVISIBLE);
+                        dialog.hide();
+                        App.CustomToast("آگهی شما با موفقیت ثبت شد و پس از بررسی منتشر خواهد شد");
 
 
 

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,7 +11,6 @@ import android.widget.ListView;
 
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.R;
-import com.appmagazine.nardoon.fragments.Category;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -25,17 +23,21 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
-public class Categorys extends Activity {
+public class subs extends Activity {
     public static ArrayList<String> subs = new ArrayList<>();
     public static ArrayList<Integer> subsid = new ArrayList<>();
     ArrayAdapter<String> adapterSub;
     public static ProgressDialog dialog;
     ListView listView;
+    String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categorys);
+
+        Intent intent=getIntent();
+        id = intent.getStringExtra("ID");
 
         listView = (ListView) findViewById(R.id.listv2);
 
@@ -49,10 +51,11 @@ public class Categorys extends Activity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 // TODO Auto-generated method stub
-                Intent intent = new Intent(App.context, subs.class);
+                Intent intent = new Intent(App.context, New.class);
                // intent.putExtra("POSITION", id);
-                intent.putExtra("ID", subsid.get(position)+"");
-               // intent.putExtra("NAME", subs.get(position)+"");
+                intent.putExtra("SUBID", subsid.get(position)+"");
+                intent.putExtra("CATID", id+"");
+                intent.putExtra("NAME", subs.get(position)+"");
                 startActivity(intent);
             }
         });
@@ -67,7 +70,7 @@ public class Categorys extends Activity {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
 
-        client.get(App.urlApi+"categories", params, new AsyncHttpResponseHandler() {
+        client.get(App.urlApi+"categories/"+id, params, new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {

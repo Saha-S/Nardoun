@@ -27,21 +27,26 @@ import cz.msebera.android.httpclient.Header;
 
 public class Details extends AppCompatActivity {
     int positionID;
-    TextView tvtitle,tvcontent,tvprice,tvlocation;
+    TextView tvtitle,tvcontent,tvprice,tvlocation , tvtime;
     String url, catname , mobile , email ;
     ImageView ivtitle;
     CollapsingToolbarLayout collapsingToolbar;
+    public static ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+        dialog = ProgressDialog.show(Details.this, null, null,true, false);
+        dialog.setContentView(R.layout.progress_layout_small);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         tvtitle = (TextView) findViewById(R.id.txtTitle);
         tvlocation = (TextView) findViewById(R.id.txtLocation);
         tvprice = (TextView) findViewById(R.id.txtPrice);
         tvcontent = (TextView) findViewById(R.id.txtContent);
+        tvtime = (TextView) findViewById(R.id.txtTime);
         ivtitle=(ImageView) findViewById(R.id.iv_title);
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab_call);
 
@@ -69,6 +74,8 @@ public class Details extends AppCompatActivity {
         tvtitle               .setText(intent.getStringExtra("title"));
         tvprice               .setText(intent.getStringExtra("price")+" تومان ");
         tvlocation               .setText(intent.getStringExtra("location"));
+        tvtime               .setText(intent.getStringExtra("time"));
+
        // collapsingToolbar   .setTitle(intent.getStringExtra("catname"));
         url                 =App.urlApi+"agahis/"+intent.getStringExtra("id");
         Glide.with(this)
@@ -108,9 +115,6 @@ public class Details extends AppCompatActivity {
                 try {
                     JSONObject obj =new JSONArray(value).getJSONObject(0);  //********* chon ye json array ba 1 json objecte injur migirimesh
 
-
-
-
                     String content= obj.getString("content");
                     String type= obj.getString("type");
                     catname= obj.getString("category_name");
@@ -118,9 +122,8 @@ public class Details extends AppCompatActivity {
                     mobile= obj.getString("mobile");
                     collapsingToolbar.setTitle(catname);
 
-                    //  App.CustomToast(content+" - "+type+" - "+catname+" - "+email+" - "+mobile);
-
                     tvcontent.setText(content);
+                    dialog.hide();
 
                 } catch (JSONException e1) {
 
