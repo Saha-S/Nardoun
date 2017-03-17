@@ -80,6 +80,42 @@ public class Category extends Fragment {
                 startActivity(intent);
             }
         });
+        llPersonal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(App.context , SubCat.class);
+                intent.putExtra("id", "5");
+                intent.putExtra("name", "وسایل شخصی");
+                startActivity(intent);
+            }
+        });
+        llWork.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(App.context , SubCat.class);
+                intent.putExtra("id", "6");
+                intent.putExtra("name", "خدمات");
+                startActivity(intent);
+            }
+        });
+        llGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(App.context , SubCat.class);
+                intent.putExtra("id", "7");
+                intent.putExtra("name", "سرگرمی و فراغت");
+                startActivity(intent);
+            }
+        });
+        llOther.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(App.context , SubCat.class);
+                intent.putExtra("id", "8");
+                intent.putExtra("name", "متفرقه");
+                startActivity(intent);
+            }
+        });
 
 
         return view;

@@ -1,5 +1,6 @@
 package com.appmagazine.nardoon.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,7 @@ import com.appmagazine.nardoon.NetUtils;
 import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
 import com.appmagazine.nardoon.RecyclerItemClickListener;
+import com.appmagazine.nardoon.activities.Categorys;
 import com.appmagazine.nardoon.activities.Details;
 import com.appmagazine.nardoon.activities.Filter;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -41,6 +43,8 @@ public class Main extends Fragment {
     SwipeRefreshLayout swipeRefreshLayout;
     EndlessRecyclerViewScrollListener scrollListener;
     LinearLayout llFilter;
+    public static ProgressDialog dialog;
+
 
 
     @Override
@@ -76,6 +80,8 @@ public class Main extends Fragment {
             }
         };
         recyclerView.addOnScrollListener(scrollListener);
+       // dialog = ProgressDialog.show(Main.this.getContext(), null, null,true, false);
+       // dialog.setContentView(R.layout.progress_layout_small);
 
         loadData(0);
 
@@ -115,6 +121,7 @@ public class Main extends Fragment {
         NetUtils.get("?data=phone&limit=10&page=" + (page+1), null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+               // dialog.hide();
                 JSONArray posters = response;
                 try {
                     for (int i = 0; i < posters.length(); i++) {

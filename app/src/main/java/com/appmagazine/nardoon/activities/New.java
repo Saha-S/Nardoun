@@ -28,6 +28,8 @@ package com.appmagazine.nardoon.activities;
         import org.json.JSONObject;
 
         import java.io.BufferedReader;
+        import java.io.File;
+        import java.io.FileNotFoundException;
         import java.io.IOException;
         import java.io.InputStreamReader;
         import java.io.OutputStreamWriter;
@@ -108,16 +110,12 @@ package com.appmagazine.nardoon.activities;
                         dialog.setContentView(R.layout.progress_layout_small);
 
                         int selectedId = radioTypeGroup.getCheckedRadioButtonId();
-
-                        // find the radiobutton by returned id
                         radioTypeButton = (RadioButton) findViewById(selectedId);
 
                         if(radioTypeButton!=null) {
 
                             type = radioTypeButton.getText().toString();
                         }
-                        Log.i("mytype" , "type  : "+type);
-
                         webServiceNewAgahi();
                     }
                 });
@@ -136,6 +134,8 @@ package com.appmagazine.nardoon.activities;
 
                 AsyncHttpClient client = new AsyncHttpClient();
                 RequestParams params = new RequestParams();
+                File myFile = new File("/path/to/file.png");
+
                 params.put("title", title.getText()); //  ********** parametr  ersali dar surate niaz
                 params.put("content", content.getText());
                 params.put("price", price.getText());
@@ -148,7 +148,9 @@ package com.appmagazine.nardoon.activities;
                 params.put("deviceid",App.android_id);
                 params.put("devicemodel",App.android_Model);
                 params.put("location","ولی عصر");
-                Log.i("myurl" , App.urlApi+"agahis/");
+                try {
+                    params.put("image", myFile);
+                } catch(FileNotFoundException e) {}
                 client.post(App.urlApi+"agahis", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
                     @Override
                     public void onStart() {

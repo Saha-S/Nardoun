@@ -41,7 +41,7 @@
                     android:id="@+id/imageView6" />
 
                 <TextView
-                    android:text="TextView"
+                    android:text="وسایل نقلیه"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView4"
@@ -68,7 +68,7 @@
                     android:id="@+id/imageView7" />
 
                 <TextView
-                    android:text="TextView"
+                    android:text="املاک"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView7"
@@ -101,7 +101,7 @@
                     android:id="@+id/imageView6" />
 
                 <TextView
-                    android:text="TextView"
+                    android:text="مربوط به خانه"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView4"
@@ -127,7 +127,7 @@
                     android:id="@+id/imageView7" />
 
                 <TextView
-                    android:text="TextView"
+                    android:text="لوازم الکترونیکی"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView7"
@@ -160,7 +160,7 @@
                     android:id="@+id/imageView6" />
 
                 <TextView
-                    android:text="TextView"
+                    android:text="وسایل شخصی"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView4"
@@ -186,7 +186,7 @@
                     android:id="@+id/imageView7" />
 
                 <TextView
-                    android:text="TextView"
+                    android:text="خدمات"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView7"
@@ -220,7 +220,7 @@
                     android:id="@+id/imageView6" />
 
                 <TextView
-                    android:text="TextView"
+                    android:text="سرگرمی و فراغت"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView4"
@@ -247,7 +247,7 @@
                     android:id="@+id/imageView7" />
 
                 <TextView
-                    android:text="TextView"
+                    android:text="متفرقه"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView7"

@@ -67,7 +67,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
 
         holder.title.setText(mDataset.get(position).title);
         holder.price.setText(mDataset.get(position).price+" تومان ");
-        holder.location.setText(mDataset.get(position).created_at+" در" +mDataset.get(position).location);
+        holder.location.setText(mDataset.get(position).created_at+" در " +mDataset.get(position).location);
 
 
         Glide.with(context)

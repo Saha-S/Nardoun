@@ -50,8 +50,8 @@ public class Categorys extends Activity {
                 // TODO Auto-generated method stub
                 Intent intent = new Intent(App.context, subs.class);
                // intent.putExtra("POSITION", id);
-                intent.putExtra("ID", subsid.get(position)+"");
-               // intent.putExtra("NAME", subs.get(position)+"");
+                intent.putExtra("CATID", subsid.get(position)+"");
+                intent.putExtra("CATNAME", subs.get(position)+"");
                 startActivity(intent);
             }
         });
@@ -70,19 +70,19 @@ public class Categorys extends Activity {
 
             @Override
             public void onStart() {
-             //   dialog = ProgressDialog.show(Categorys.this, null, null,true, false);
-             //   dialog.setContentView(R.layout.progress_layout_small);
+                dialog = ProgressDialog.show(Categorys.this, null, null,true, false);
+                dialog.setContentView(R.layout.progress_layout_small);
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
-              //  dialog.hide();
+                dialog.hide();
                 String value = new String(response);
                 try {
                     subs.clear();
 
                     JSONArray responcearray = new JSONArray(value);
-                    for (int i = 1; i < responcearray.length(); i++) {
+                    for (int i = 0; i < responcearray.length(); i++) {
 
                         JSONObject obj = responcearray.getJSONObject(i);
                         String subname = obj.getString("name");
@@ -103,6 +103,7 @@ public class Categorys extends Activity {
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                dialog.hide();
                 if(statusCode==404)
                 {
                     App.CustomToast("آگهی با این شماره وجود ندارد !");

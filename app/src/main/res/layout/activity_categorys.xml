@@ -2,27 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_filter"
+    android:id="@+id/activity_categorys"
     tools:context="com.appmagazine.nardoon.activities.Filter"
     android:background="#e6e6e6"
     android:orientation="vertical"
     android:weightSum="12"
     android:layout_width="270dp"
-    android:layout_height="320dp">
+    android:layout_height="300dp">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/listv2"
-            android:dividerHeight="2dp"
-            android:addStatesFromChildren="false"
-            android:layout_weight="1"
-            style="@style/Widget.AppCompat.ListView" />
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:id="@+id/listv2"
+        android:dividerHeight="2dp"
+        android:layout_weight="1"
+        style="@style/Widget.AppCompat.ListView" />
 
 </LinearLayout>
