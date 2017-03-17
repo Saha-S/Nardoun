@@ -279,7 +279,11 @@ package com.appmagazine.nardoon.activities;
 
                 if (resultCode == Activity.RESULT_OK) {
                     if (requestCode == SELECT_FILE)
-                        onSelectFromGalleryResult(data);
+                        try {
+                            onSelectFromGalleryResult(data);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     else if (requestCode == REQUEST_CAMERA)
                         onCaptureImageResult(data);
                 }
@@ -309,7 +313,7 @@ package com.appmagazine.nardoon.activities;
             }
 
             @SuppressWarnings("deprecation")
-            private void onSelectFromGalleryResult(Intent data) {
+            private void onSelectFromGalleryResult(Intent data) throws IOException {
 
                 Bitmap bm=null;
                 if (data != null) {
@@ -317,9 +321,19 @@ package com.appmagazine.nardoon.activities;
                     try {
                         bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    }catch (IOException e){}
+
+                }
+                if (bm != null) { // sanity check
+                    File outputDir = App.context.getCacheDir(); // Activity context
+                    File outputFile = File.createTempFile("image", "jpg", outputDir); // follow the API for createTempFile
+
+                    FileOutputStream stream = new FileOutputStream (outputFile, false); // Add false here so we don't append an image to another image. That would be weird.
+                    // This line actually writes a bitmap to the stream. If you use a ByteArrayOutputStream, you end up with a byte array. If you use a FileOutputStream, you end up with a file.
+                    bm.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    stream.close(); // cleanup
+                     Log.i("myfile","file: "+outputFile.toString());
+
                 }
 
                 ivImage.setVisibility(View.VISIBLE);
