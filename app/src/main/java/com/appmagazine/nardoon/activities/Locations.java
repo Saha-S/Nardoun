@@ -28,6 +28,7 @@ public class Locations extends Activity {
     public static ArrayList<Integer> subsid = new ArrayList<>();
     ArrayAdapter<String> adapterSub;
     public static ProgressDialog dialog;
+    public static String id_location;
     ListView listView;
 
     @Override
@@ -52,6 +53,7 @@ public class Locations extends Activity {
               //  intent.putExtra("NAME", subs.get(position)+"");
               //  startActivity(intent);
                 New.SelectLocation.setText(subs.get(position)+"");
+                id_location = subsid.get(position).toString();
                 finish();
             }
         });
@@ -66,7 +68,7 @@ public class Locations extends Activity {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
 
-        client.get(App.urlApi+"categories", params, new AsyncHttpResponseHandler() {
+        client.get(App.urlApi+"locations", params, new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {

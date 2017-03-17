@@ -1,10 +1,22 @@
 package com.appmagazine.nardoon.activities;
 
+        import android.Manifest;
+        import android.annotation.TargetApi;
+        import android.app.Activity;
         import android.app.ProgressDialog;
         import android.content.Context;
+        import android.content.DialogInterface;
         import android.content.Intent;
+        import android.content.pm.PackageManager;
+        import android.graphics.Bitmap;
         import android.media.Image;
         import android.os.AsyncTask;
+        import android.os.Build;
+        import android.os.Environment;
+        import android.provider.MediaStore;
+        import android.support.v4.app.ActivityCompat;
+        import android.support.v4.content.ContextCompat;
+        import android.support.v7.app.AlertDialog;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
         import android.util.Log;
@@ -13,12 +25,14 @@ package com.appmagazine.nardoon.activities;
         import android.widget.Button;
         import android.widget.EditText;
         import android.widget.ImageButton;
+        import android.widget.ImageView;
         import android.widget.LinearLayout;
         import android.widget.RadioButton;
         import android.widget.RadioGroup;
 
         import com.appmagazine.nardoon.App;
         import com.appmagazine.nardoon.R;
+        import com.appmagazine.nardoon.Utility;
         import com.loopj.android.http.AsyncHttpClient;
         import com.loopj.android.http.AsyncHttpResponseHandler;
         import com.loopj.android.http.RequestParams;
@@ -28,8 +42,10 @@ package com.appmagazine.nardoon.activities;
         import org.json.JSONObject;
 
         import java.io.BufferedReader;
+        import java.io.ByteArrayOutputStream;
         import java.io.File;
         import java.io.FileNotFoundException;
+        import java.io.FileOutputStream;
         import java.io.IOException;
         import java.io.InputStreamReader;
         import java.io.OutputStreamWriter;
@@ -41,11 +57,17 @@ package com.appmagazine.nardoon.activities;
         public class New extends AppCompatActivity {
 
             EditText price,email,phone , title , content;
-            String name , id , type,subid;
+            String name , id , type,subid,location_id;
             RadioGroup radioTypeGroup;
             RadioButton radioTypeButton;
             public static ProgressDialog dialog;
             public static Button SelectLocation;
+            public static Button SelectImage;
+            private ImageView ivImage;
+            private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
+            private String userChoosenTask;
+            File destination;
+
 
 
             @Override
@@ -55,6 +77,7 @@ package com.appmagazine.nardoon.activities;
 
                 Button SelectCat = (Button) findViewById(R.id.btn_cats);
                 SelectLocation = (Button) findViewById(R.id.btn_location);
+                SelectImage = (Button) findViewById(R.id.btn_select_image);
                 price = (EditText) findViewById(R.id.edt_price);
                 email = (EditText) findViewById(R.id.edt_email);
                 phone = (EditText) findViewById(R.id.edt_phone);
@@ -67,6 +90,7 @@ package com.appmagazine.nardoon.activities;
                 ImageButton close = (ImageButton) findViewById(R.id.close);
                 LinearLayout llBack = (LinearLayout) findViewById(R.id.ll_back);
                 radioTypeGroup = (RadioGroup) findViewById(R.id.radioType);
+                ivImage = (ImageView) findViewById(R.id.ivImage);
 
 
 
@@ -75,6 +99,7 @@ package com.appmagazine.nardoon.activities;
                 name = intent.getStringExtra("NAME");
                 id = intent.getStringExtra("CATID");
                 subid = intent.getStringExtra("SUBID");
+                location_id = intent.getStringExtra("location_id");
 
                 if (name!= null){
                     SelectCat.setText(name);
@@ -137,6 +162,12 @@ package com.appmagazine.nardoon.activities;
                         startActivity(intent);
                     }
                 });
+             /*   SelectImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                       // selectImage();
+                    }
+                });*/
 
             }
 
@@ -145,7 +176,7 @@ package com.appmagazine.nardoon.activities;
 
                 AsyncHttpClient client = new AsyncHttpClient();
                 RequestParams params = new RequestParams();
-                File myFile = new File("/path/to/file.png");
+               // File myFile = new File("/path/to/file.png");
 
                 params.put("title", title.getText()); //  ********** parametr  ersali dar surate niaz
                 params.put("content", content.getText());
@@ -158,17 +189,14 @@ package com.appmagazine.nardoon.activities;
                 params.put("image","jja");
                 params.put("deviceid",App.android_id);
                 params.put("devicemodel",App.android_Model);
-                params.put("location",SelectLocation.getText());
-                try {
-                    params.put("image", myFile);
-                } catch(FileNotFoundException e) {}
+                params.put("location_id",Locations.id_location);
+          //      try {
+                //    params.put("image", destination);
+               // } catch(FileNotFoundException e) {}
+
                 client.post(App.urlApi+"agahis", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
                     @Override
                     public void onStart() {
-                        // called before request is started
-
-
-                        // loginpb1.setVisibility(View.VISIBLE);      *************** inja  progressbar faal mishe
                     }
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] response) {
@@ -182,6 +210,8 @@ package com.appmagazine.nardoon.activities;
                     }
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                        dialog.hide();
+
                         // called when response HTTP status is "4XX" (eg. 401, 403, 404)
 
                         // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
@@ -196,6 +226,116 @@ package com.appmagazine.nardoon.activities;
                     }
                 });
             }
+/*
+            @Override
+            public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+                switch (requestCode) {
+                    case Utility.MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
+                        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                            if(userChoosenTask.equals("دوربین"))
+                                cameraIntent();
+                            else if(userChoosenTask.equals("گالری"))
+                                galleryIntent();
+                        } else {
+                            //code for deny
+                        }
+                        break;
+                }
+            }
 
+            private void selectImage() {
+                final CharSequence[] items = { "دوربین", "گالری",
+                        "انصراف" };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(New.this);
+                builder.setTitle("اضافه کردن تصویر");
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+                        boolean result=Utility.checkPermission(New.this);
+
+                        if (items[item].equals("دوربین")) {
+                            userChoosenTask ="دوربین";
+                            if(result)
+                                cameraIntent();
+
+                        } else if (items[item].equals("گالری")) {
+                            userChoosenTask ="گالری";
+                            if(result)
+                                galleryIntent();
+
+                        } else if (items[item].equals("انصراف")) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                builder.show();
+            }
+
+            private void galleryIntent()
+            {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);//
+                startActivityForResult(Intent.createChooser(intent, "انتخاب فایل"),SELECT_FILE);
+            }
+
+            private void cameraIntent()
+            {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, REQUEST_CAMERA);
+            }
+
+            @Override
+            public void onActivityResult(int requestCode, int resultCode, Intent data) {
+                super.onActivityResult(requestCode, resultCode, data);
+               // Log.i("myfile",data.toString());
+
+                if (resultCode == Activity.RESULT_OK) {
+                    if (requestCode == SELECT_FILE)
+                        onSelectFromGalleryResult(data);
+                    else if (requestCode == REQUEST_CAMERA)
+                        onCaptureImageResult(data);
+                }
+            }
+
+            private void onCaptureImageResult(Intent data) {
+                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+
+                destination = new File(Environment.getExternalStorageDirectory(),
+                        System.currentTimeMillis() + ".jpg");
+
+                FileOutputStream fo;
+                try {
+                    destination.createNewFile();
+                    fo = new FileOutputStream(destination);
+                    fo.write(bytes.toByteArray());
+                    fo.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                ivImage.setImageBitmap(thumbnail);
+            }
+
+            @SuppressWarnings("deprecation")
+            private void onSelectFromGalleryResult(Intent data) {
+
+                Bitmap bm=null;
+                if (data != null) {
+                    try {
+                        bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                ivImage.setVisibility(View.VISIBLE);
+                ivImage.setImageBitmap(bm);
+            }
+            */
 
         }
