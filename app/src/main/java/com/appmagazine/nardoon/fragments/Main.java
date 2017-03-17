@@ -111,10 +111,7 @@ public class Main extends Fragment {
                 startActivity(intent);
             }
         }));
-
-
         return view;
-
     }
 
     public void loadData(int page) {
@@ -141,6 +138,5 @@ public class Main extends Fragment {
 
         });
     }
-
 
 }

@@ -31,6 +31,10 @@
             android:name=".activities.Categorys"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <activity
+            android:name=".activities.Locations"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
+
+        <activity
             android:name=".activities.subs"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
 

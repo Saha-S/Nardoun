@@ -47,10 +47,12 @@ public class Locations extends Activity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 // TODO Auto-generated method stub
-                Intent intent = new Intent(App.context, subs.class);
+              //  Intent intent = new Intent(App.context, subs.class);
                // intent.putExtra("POSITION", id);
-                intent.putExtra("NAME", subs.get(position)+"");
-                startActivity(intent);
+              //  intent.putExtra("NAME", subs.get(position)+"");
+              //  startActivity(intent);
+                New.SelectLocation.setText(subs.get(position)+"");
+                finish();
             }
         });
 
@@ -68,26 +70,29 @@ public class Locations extends Activity {
 
             @Override
             public void onStart() {
-             //   dialog = ProgressDialog.show(Categorys.this, null, null,true, false);
-             //   dialog.setContentView(R.layout.progress_layout_small);
+                dialog = ProgressDialog.show(Locations.this, null, null,true, false);
+                dialog.setContentView(R.layout.progress_layout_small);
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
-              //  dialog.hide();
+                dialog.hide();
                 String value = new String(response);
                 try {
                     subs.clear();
-                    for (int i = 0; i < value.length(); i++) {
 
-                        JSONObject obj = new JSONArray(value).getJSONObject(i);
+                    JSONArray responcearray = new JSONArray(value);
+                    for (int i = 0; i < responcearray.length(); i++) {
+
+                        JSONObject obj = responcearray.getJSONObject(i);
                         String subname = obj.getString("name");
                         int subid = obj.getInt("id");
                         subs.add(subname);
                         subsid.add(subid);
 
                     }
-                    adapterSub.notifyDataSetChanged();
+                    adapterSub = new ArrayAdapter(getApplicationContext(), R.layout.item_cats, R.id.txt, subs);
+                    listView.setAdapter(adapterSub);
 
 
                 } catch (JSONException e1) {
@@ -99,6 +104,7 @@ public class Locations extends Activity {
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                dialog.hide();
                 if(statusCode==404)
                 {
                     App.CustomToast("آگهی با این شماره وجود ندارد !");

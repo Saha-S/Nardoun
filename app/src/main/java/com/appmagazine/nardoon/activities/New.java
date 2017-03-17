@@ -45,6 +45,7 @@ package com.appmagazine.nardoon.activities;
             RadioGroup radioTypeGroup;
             RadioButton radioTypeButton;
             public static ProgressDialog dialog;
+            public static Button SelectLocation;
 
 
             @Override
@@ -53,6 +54,7 @@ package com.appmagazine.nardoon.activities;
                 setContentView(R.layout.activity_new);
 
                 Button SelectCat = (Button) findViewById(R.id.btn_cats);
+                SelectLocation = (Button) findViewById(R.id.btn_location);
                 price = (EditText) findViewById(R.id.edt_price);
                 email = (EditText) findViewById(R.id.edt_email);
                 phone = (EditText) findViewById(R.id.edt_phone);
@@ -127,6 +129,15 @@ package com.appmagazine.nardoon.activities;
                         startActivity(intent);
                     }
                 });
+
+                SelectLocation.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(App.context , Locations.class);
+                        startActivity(intent);
+                    }
+                });
+
             }
 
             public  void webServiceNewAgahi()
@@ -147,7 +158,7 @@ package com.appmagazine.nardoon.activities;
                 params.put("image","jja");
                 params.put("deviceid",App.android_id);
                 params.put("devicemodel",App.android_Model);
-                params.put("location","ولی عصر");
+                params.put("location",SelectLocation.getText());
                 try {
                     params.put("image", myFile);
                 } catch(FileNotFoundException e) {}
