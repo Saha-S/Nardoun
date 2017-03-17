@@ -1,27 +1,20 @@
 package com.appmagazine.nardoon.activities;
 
-        import android.Manifest;
-        import android.annotation.TargetApi;
         import android.app.Activity;
         import android.app.ProgressDialog;
-        import android.content.Context;
         import android.content.DialogInterface;
         import android.content.Intent;
         import android.content.pm.PackageManager;
+        import android.database.Cursor;
         import android.graphics.Bitmap;
-        import android.media.Image;
-        import android.os.AsyncTask;
-        import android.os.Build;
+        import android.net.Uri;
         import android.os.Environment;
         import android.provider.MediaStore;
-        import android.support.v4.app.ActivityCompat;
-        import android.support.v4.content.ContextCompat;
         import android.support.v7.app.AlertDialog;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
         import android.util.Log;
         import android.view.View;
-        import android.view.Window;
         import android.widget.Button;
         import android.widget.EditText;
         import android.widget.ImageButton;
@@ -37,20 +30,11 @@ package com.appmagazine.nardoon.activities;
         import com.loopj.android.http.AsyncHttpResponseHandler;
         import com.loopj.android.http.RequestParams;
 
-        import org.json.JSONArray;
-        import org.json.JSONException;
-        import org.json.JSONObject;
-
-        import java.io.BufferedReader;
         import java.io.ByteArrayOutputStream;
         import java.io.File;
         import java.io.FileNotFoundException;
         import java.io.FileOutputStream;
         import java.io.IOException;
-        import java.io.InputStreamReader;
-        import java.io.OutputStreamWriter;
-        import java.net.HttpURLConnection;
-        import java.net.URL;
 
         import cz.msebera.android.httpclient.Header;
 
@@ -162,12 +146,12 @@ package com.appmagazine.nardoon.activities;
                         startActivity(intent);
                     }
                 });
-             /*   SelectImage.setOnClickListener(new View.OnClickListener() {
+                SelectImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       // selectImage();
+                        selectImage();
                     }
-                });*/
+                });
 
             }
 
@@ -186,13 +170,14 @@ package com.appmagazine.nardoon.activities;
                 params.put("type",type);
                 params.put("category_id",id);
                 params.put("subcategory_id",subid);
-                params.put("image","jja");
+               // params.put("image","jja");
                 params.put("deviceid",App.android_id);
                 params.put("devicemodel",App.android_Model);
                 params.put("location_id",Locations.id_location);
-          //      try {
-                //    params.put("image", destination);
-               // } catch(FileNotFoundException e) {}
+                try {
+                    params.put("file", destination);
+                } catch(FileNotFoundException e) {}
+                Log.i("locaaa" , "loca:" + destination);
 
                 client.post(App.urlApi+"agahis", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
                     @Override
@@ -222,11 +207,12 @@ package com.appmagazine.nardoon.activities;
                         }else{
                             App.CustomToast("fail "+statusCode);
                             App.CustomToast(" لطفا دوباره سعی کنید ");
+                            Log.i("myerror" , errorResponse.toString());
                         }
                     }
                 });
             }
-/*
+
             @Override
             public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
                 switch (requestCode) {
@@ -252,7 +238,7 @@ package com.appmagazine.nardoon.activities;
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int item) {
-                        boolean result=Utility.checkPermission(New.this);
+                        boolean result= Utility.checkPermission(New.this);
 
                         if (items[item].equals("دوربین")) {
                             userChoosenTask ="دوربین";
@@ -318,7 +304,7 @@ package com.appmagazine.nardoon.activities;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
+                ivImage.setVisibility(View.VISIBLE);
                 ivImage.setImageBitmap(thumbnail);
             }
 
@@ -327,15 +313,18 @@ package com.appmagazine.nardoon.activities;
 
                 Bitmap bm=null;
                 if (data != null) {
+
                     try {
                         bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
+
                 ivImage.setVisibility(View.VISIBLE);
                 ivImage.setImageBitmap(bm);
             }
-            */
+
 
         }
