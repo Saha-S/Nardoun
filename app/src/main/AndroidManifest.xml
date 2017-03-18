@@ -52,7 +52,8 @@
             android:name=".activities.SubCatAgahis"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.New"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan"></activity>
     </application>
 
 </manifest>

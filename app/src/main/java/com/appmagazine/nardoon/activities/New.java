@@ -97,13 +97,20 @@ package com.appmagazine.nardoon.activities;
                 close.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        finish();
+                        New.this.finish();
+                        Intent intent = new Intent(App.context, Main.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+
                     }
                 });
                 llClose.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                      finish();
+                        New.this.finish();
+                        Intent intent = new Intent(App.context, Main.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
 
                     }
                 });
@@ -186,21 +193,18 @@ package com.appmagazine.nardoon.activities;
                     }
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                        // called when response HTTP status is "200 OK" ************** inja vaqti successful shod code 200 daryaft kard mituni json parse koni
-                        // loginpb1.setVisibility(View.INVISIBLE);
                         dialog.hide();
                         App.CustomToast("آگهی شما با موفقیت ثبت شد و پس از بررسی منتشر خواهد شد");
-
-
+                        Intent intent = new Intent(App.context, Main.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
 
                     }
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
                         dialog.hide();
 
-                        // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-
-                        // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
                         if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                         {
                             App.CustomToast("آگهی با این شماره وجود ندارد !");
