@@ -1,5 +1,6 @@
 package com.appmagazine.nardoon.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -49,6 +50,7 @@ public class SubCat extends AppCompatActivity {
     public static ArrayList<String> subs = new ArrayList<>();
     public static ArrayList<Integer> subsid = new ArrayList<>();
     ArrayAdapter<String> adapterSub;
+    public static ProgressDialog dialog;
 
 
 
@@ -58,6 +60,9 @@ public class SubCat extends AppCompatActivity {
         setContentView(R.layout.activity_sub_cat);
 
         subs.clear();
+        dialog = ProgressDialog.show(SubCat.this, null, null,true, false);
+        dialog.setContentView(R.layout.progress_layout_small);
+
 
         Intent intent=getIntent();
         catID = intent.getStringExtra("id");
@@ -120,7 +125,6 @@ public class SubCat extends AppCompatActivity {
                 loadData(page);
             }
         };
-        recyclerView.addOnScrollListener(scrollListener);
 
 
 
@@ -165,14 +169,17 @@ public class SubCat extends AppCompatActivity {
                     }
                     adapter.update(array);
                     swipeRefreshLayout.setRefreshing(false);
+                    dialog.hide();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    dialog.hide();
+
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Toast.makeText(App.context, "http://nardoun.ir/api/categories/"+catID+"/", Toast.LENGTH_LONG).show();
+                dialog.hide();
             }
 
         });
@@ -206,7 +213,7 @@ public class SubCat extends AppCompatActivity {
                     adapterSub.notifyDataSetChanged();
 
                 } catch (JSONException e1) {
-
+                    dialog.hide();
                     e1.printStackTrace();
                 }
 
@@ -216,9 +223,12 @@ public class SubCat extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
                 if(statusCode==404)
                 {
+                    dialog.hide();
                     App.CustomToast("آگهی با این شماره وجود ندارد !");
 
+
                 }else{
+                    dialog.hide();
                     App.CustomToast("fail "+statusCode);
                     App.CustomToast(" لطفا دوباره سعی کنید ");
                 }

@@ -25,6 +25,7 @@ import com.appmagazine.nardoon.RecyclerItemClickListener;
 import com.appmagazine.nardoon.activities.Categorys;
 import com.appmagazine.nardoon.activities.Details;
 import com.appmagazine.nardoon.activities.Filter;
+import com.appmagazine.nardoon.activities.SubCat;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -51,6 +52,10 @@ public class Main extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_fragment, container, false);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe);
+
+        dialog = ProgressDialog.show(getActivity(), null, null,true, false);
+        dialog.setContentView(R.layout.progress_layout_small);
+
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         array = new ArrayList<>();
@@ -79,9 +84,6 @@ public class Main extends Fragment {
                 loadData(page);
             }
         };
-        recyclerView.addOnScrollListener(scrollListener);
-       // dialog = ProgressDialog.show(Main.this.getContext(), null, null,true, false);
-       // dialog.setContentView(R.layout.progress_layout_small);
 
         loadData(0);
 
@@ -118,7 +120,6 @@ public class Main extends Fragment {
         NetUtils.get("?data=phone&limit=10&page=" + (page+1), null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-               // dialog.hide();
                 JSONArray posters = response;
                 try {
                     for (int i = 0; i < posters.length(); i++) {
@@ -126,13 +127,17 @@ public class Main extends Fragment {
                     }
                     adapter.update(array);
                     swipeRefreshLayout.setRefreshing(false);
+                    dialog.hide();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    dialog.hide();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                dialog.show();
                 Toast.makeText(getContext(), "Error on request", Toast.LENGTH_LONG).show();
             }
 
