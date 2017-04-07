@@ -7,6 +7,8 @@ package com.appmagazine.nardoon.activities;
         import android.content.pm.PackageManager;
         import android.database.Cursor;
         import android.graphics.Bitmap;
+        import android.graphics.Color;
+        import android.graphics.drawable.ColorDrawable;
         import android.net.Uri;
         import android.os.Environment;
         import android.provider.MediaStore;
@@ -22,6 +24,7 @@ package com.appmagazine.nardoon.activities;
         import android.widget.LinearLayout;
         import android.widget.RadioButton;
         import android.widget.RadioGroup;
+        import android.widget.TextView;
         import android.widget.Toast;
 
         import com.appmagazine.nardoon.App;
@@ -74,6 +77,8 @@ package com.appmagazine.nardoon.activities;
                 LinearLayout llClose = (LinearLayout) findViewById(R.id.ll_close);
                 ImageButton close = (ImageButton) findViewById(R.id.close);
                 LinearLayout llBack = (LinearLayout) findViewById(R.id.ll_back);
+                ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
+                TextView tvBack = (TextView) findViewById(R.id.tv_back);
                 radioTypeGroup = (RadioGroup) findViewById(R.id.radioType);
                 ivImage = (ImageView) findViewById(R.id.ivImage);
 
@@ -120,12 +125,26 @@ package com.appmagazine.nardoon.activities;
                         finish();
                     }
                 });
+                ibBack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
+                tvBack.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
 
                 llErsal.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
                         dialog = ProgressDialog.show(New.this, null, null,true, false);
+                        dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
+
                         dialog.setContentView(R.layout.progress_layout_small);
 
                         int selectedId = radioTypeGroup.getCheckedRadioButtonId();

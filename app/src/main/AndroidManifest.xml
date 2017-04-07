@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -19,8 +18,7 @@
             android:name=".activities.Main"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"
-            >
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,11 +34,9 @@
         <activity
             android:name=".activities.Locations"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
-
         <activity
             android:name=".activities.subs"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
-
         <activity
             android:name=".activities.Call"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
@@ -51,9 +47,11 @@
         <activity
             android:name=".activities.SubCatAgahis"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.New"
+        <activity
+            android:name=".activities.New"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".activities.MyAgahis"></activity>
     </application>
 
 </manifest>

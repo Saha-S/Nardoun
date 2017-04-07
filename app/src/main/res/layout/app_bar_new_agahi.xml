@@ -89,7 +89,7 @@
                 android:id="@+id/ll_back">
 
                 <TextView
-                    android:id="@+id/tv_mainpage_title"
+                    android:id="@+id/tv_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="درج آگهی"
@@ -99,7 +99,7 @@
                     android:layout_weight="1" />
 
                 <ImageButton
-                    android:id="@+id/ib_menu"
+                    android:id="@+id/ib_back"
                     android:layout_height="25dp"
                     android:background="@mipmap/back"
                     android:layout_marginRight="5dp"

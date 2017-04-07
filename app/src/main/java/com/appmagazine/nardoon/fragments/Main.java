@@ -2,6 +2,8 @@ package com.appmagazine.nardoon.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -54,6 +56,7 @@ public class Main extends Fragment {
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe);
 
         dialog = ProgressDialog.show(getActivity(), null, null,true, false);
+        dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
         dialog.setContentView(R.layout.progress_layout_small);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.list);

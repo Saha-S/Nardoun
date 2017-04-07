@@ -2,12 +2,17 @@ package com.appmagazine.nardoon.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,6 +31,7 @@ import org.json.JSONObject;
 import cz.msebera.android.httpclient.Header;
 
 public class Details extends AppCompatActivity {
+    boolean FLAG_COLLAPSED = true;
     int positionID;
     TextView tvtitle,tvcontent,tvprice,tvlocation , tvtime;
     String url, catname , mobile , email ;
@@ -39,7 +45,9 @@ public class Details extends AppCompatActivity {
         setContentView(R.layout.activity_details);
 
         dialog = ProgressDialog.show(Details.this, null, null,true, false);
+        dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
         dialog.setContentView(R.layout.progress_layout_small);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         tvtitle = (TextView) findViewById(R.id.txtTitle);
@@ -61,12 +69,21 @@ public class Details extends AppCompatActivity {
         });
 
 
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("??");
+                finish();
+            }
+        });
+
 
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle("Second Activity");
+        collapsingToolbar.setTitle("");
 
         Intent intent=getIntent();
 
@@ -89,7 +106,46 @@ public class Details extends AppCompatActivity {
 
 
 
+    @Override
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.main_activity_menu, menu);
+
+        return super.onCreateOptionsMenu(menu);
+
+    }
+    @Override
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.mShare:
+
+                Intent  i = new Intent(
+
+                        android.content.Intent.ACTION_SEND);
+
+                i.setType("text/plain");
+
+                i.putExtra(
+
+                        android.content.Intent.EXTRA_TEXT, "The string you want to share, which can include URLs");
+
+                startActivity(Intent.createChooser(
+
+                        i,
+
+                        "Title of your share dialog"));
+
+                break;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+
+    }
 
     public  void webServiceGetAgahi()
     {

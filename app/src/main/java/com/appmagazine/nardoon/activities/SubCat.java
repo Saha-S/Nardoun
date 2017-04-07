@@ -2,20 +2,28 @@ package com.appmagazine.nardoon.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.ActionBar.LayoutParams;
 
 import com.appmagazine.nardoon.Adapter.PosterAdapter;
 import com.appmagazine.nardoon.App;
@@ -28,6 +36,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import android.view.View.OnClickListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +46,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+
+import static android.view.Gravity.RIGHT;
 
 public class SubCat extends AppCompatActivity {
     RecyclerView recyclerView;
@@ -51,6 +62,7 @@ public class SubCat extends AppCompatActivity {
     public static ArrayList<Integer> subsid = new ArrayList<>();
     ArrayAdapter<String> adapterSub;
     public static ProgressDialog dialog;
+    public static int subsNumber;
 
 
 
@@ -61,6 +73,7 @@ public class SubCat extends AppCompatActivity {
 
         subs.clear();
         dialog = ProgressDialog.show(SubCat.this, null, null,true, false);
+        dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
         dialog.setContentView(R.layout.progress_layout_small);
 
 
@@ -88,24 +101,6 @@ public class SubCat extends AppCompatActivity {
         llFilter=(LinearLayout) findViewById(R.id.ll_Filter);
 
         webServiceGetCategory();
-        ListView listView = (ListView) findViewById(R.id.listv);
-        adapterSub = new ArrayAdapter(this, R.layout.item_subcat, R.id.txt, subs);
-        listView.setAdapter(adapterSub);
-
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                // TODO Auto-generated method stub
-                Intent intent = new Intent(App.context, SubCatAgahis.class);
-              //  intent.putExtra("POSITION", id);
-                intent.putExtra("POSITION", subsid.get(position)+"");
-                startActivity(intent);
-                 }
-        });
-
 
 
         llFilter.setOnClickListener(new View.OnClickListener() {
@@ -201,7 +196,9 @@ public class SubCat extends AppCompatActivity {
                 loadData(0);
                 String value = new String(response);
                 try {
-                    for (int i = 0; i < value.length(); i++) {
+                    JSONArray responcearray = new JSONArray(value);
+                    subsNumber = responcearray.length();
+                    for (int i = 0; i < responcearray.length(); i++) {
 
                         JSONObject obj = new JSONArray(value).getJSONObject(i);
                         String subname = obj.getString("name");
@@ -209,8 +206,53 @@ public class SubCat extends AppCompatActivity {
                         subs.add(subname);
                         subsid.add(subid);
 
-                    }
-                    adapterSub.notifyDataSetChanged();
+                        final LinearLayout lm = (LinearLayout ) findViewById(R.id.linearMain);
+                        LinearLayout .LayoutParams params = new LinearLayout.LayoutParams(
+                                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+                        params.setMargins(5,5,5,0);
+                        params.height = 70;
+                        params.gravity = Gravity.CENTER_VERTICAL;
+
+
+                            LinearLayout ll = new LinearLayout(App.context);
+                            ll.setOrientation(LinearLayout.HORIZONTAL);
+
+                            LinearLayout layout = new LinearLayout(App.context);
+                            layout.setBackgroundColor(Color.parseColor("#ffffff"));
+                            ll.addView(layout);
+
+                            TextView tv = new TextView(App.context);
+                           // ImageView iv = new ImageView(App.context);
+                        tv.setLayoutParams(params);
+                        tv.setText(subname);
+                            tv.setTextColor(Color.parseColor("#4f4f4f"));
+                           // iv.setBackgroundResource(R.mipmap.left);
+
+
+                        layout.addView(tv);
+                         //   layout.addView(iv);
+
+
+
+                        layout.setLayoutParams(params);
+
+                            final int index = i;
+                            layout.setOnClickListener(new OnClickListener() {
+                                public void onClick(View v) {
+
+                                    Log.i("TAG", "index :" + index);
+                                    Intent intent = new Intent(App.context, SubCatAgahis.class);
+                                    intent.putExtra("POSITION", subsid.get(index)+"");
+                                    startActivity(intent);
+                                }
+                            });
+
+                        if(layout.getParent()!=null)
+                            ((ViewGroup)layout.getParent()).removeView(layout);
+
+                        ll.addView(layout);
+                            lm.addView(ll);
+                        }
 
                 } catch (JSONException e1) {
                     dialog.hide();
