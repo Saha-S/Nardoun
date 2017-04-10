@@ -1,12 +1,8 @@
 package com.appmagazine.nardoon.fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +10,7 @@ import android.widget.LinearLayout;
 
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.R;
-import com.appmagazine.nardoon.activities.SubCat;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import cz.msebera.android.httpclient.Header;
+import com.appmagazine.nardoon.activities.CatAgahis;
 
 public class Category extends Fragment {
     LinearLayout llCar , llHouse , llLamp , llPersonal, llWork,llGame, llOther,llPc;
@@ -47,7 +34,7 @@ public class Category extends Fragment {
         llCar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                  Intent intent = new Intent(App.context , SubCat.class);
+                  Intent intent = new Intent(App.context , CatAgahis.class);
                 intent.putExtra("id", "1");
                 intent.putExtra("name", "وسایل نقلیه");
                 startActivity(intent);
@@ -56,7 +43,7 @@ public class Category extends Fragment {
         llHouse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(App.context , SubCat.class);
+                Intent intent = new Intent(App.context , CatAgahis.class);
                 intent.putExtra("id", "2");
                 intent.putExtra("name", "املاک");
                 startActivity(intent);
@@ -65,7 +52,7 @@ public class Category extends Fragment {
         llLamp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(App.context , SubCat.class);
+                Intent intent = new Intent(App.context , CatAgahis.class);
                 intent.putExtra("id", "3");
                 intent.putExtra("name", "مربوط به خانه");
                 startActivity(intent);
@@ -74,7 +61,7 @@ public class Category extends Fragment {
         llPc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(App.context , SubCat.class);
+                Intent intent = new Intent(App.context , CatAgahis.class);
                 intent.putExtra("id", "4");
                 intent.putExtra("name", "لوازم الکترونیکی");
                 startActivity(intent);
@@ -83,7 +70,7 @@ public class Category extends Fragment {
         llPersonal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(App.context , SubCat.class);
+                Intent intent = new Intent(App.context , CatAgahis.class);
                 intent.putExtra("id", "5");
                 intent.putExtra("name", "وسایل شخصی");
                 startActivity(intent);
@@ -92,7 +79,7 @@ public class Category extends Fragment {
         llWork.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(App.context , SubCat.class);
+                Intent intent = new Intent(App.context , CatAgahis.class);
                 intent.putExtra("id", "6");
                 intent.putExtra("name", "خدمات");
                 startActivity(intent);
@@ -101,7 +88,7 @@ public class Category extends Fragment {
         llGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(App.context , SubCat.class);
+                Intent intent = new Intent(App.context , CatAgahis.class);
                 intent.putExtra("id", "7");
                 intent.putExtra("name", "سرگرمی و فراغت");
                 startActivity(intent);
@@ -110,7 +97,7 @@ public class Category extends Fragment {
         llOther.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(App.context , SubCat.class);
+                Intent intent = new Intent(App.context , CatAgahis.class);
                 intent.putExtra("id", "8");
                 intent.putExtra("name", "متفرقه");
                 startActivity(intent);

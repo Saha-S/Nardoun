@@ -13,16 +13,11 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.app.ActionBar.LayoutParams;
 
 import com.appmagazine.nardoon.Adapter.PosterAdapter;
@@ -47,9 +42,7 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
-import static android.view.Gravity.RIGHT;
-
-public class SubCat extends AppCompatActivity {
+public class CatAgahis extends AppCompatActivity {
     RecyclerView recyclerView;
     PosterAdapter adapter;
     LinearLayoutManager linearLayoutManager;
@@ -69,10 +62,10 @@ public class SubCat extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sub_cat);
+        setContentView(R.layout.activity_cat_agahis);
 
         subs.clear();
-        dialog = ProgressDialog.show(SubCat.this, null, null,true, false);
+        dialog = ProgressDialog.show(CatAgahis.this, null, null,true, false);
         dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
         dialog.setContentView(R.layout.progress_layout_small);
 
