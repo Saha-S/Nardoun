@@ -12,6 +12,7 @@ package com.appmagazine.nardoon.activities;
         import android.net.Uri;
         import android.os.Environment;
         import android.provider.MediaStore;
+        import android.provider.SyncStateContract;
         import android.support.v7.app.AlertDialog;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
@@ -27,6 +28,7 @@ package com.appmagazine.nardoon.activities;
         import android.widget.TextView;
         import android.widget.Toast;
 
+        import com.android.camera.CropImageIntentBuilder;
         import com.appmagazine.nardoon.App;
         import com.appmagazine.nardoon.R;
         import com.appmagazine.nardoon.Utility;
@@ -55,6 +57,9 @@ package com.appmagazine.nardoon.activities;
             private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
             private String userChoosenTask;
             File destination;
+            private static int REQUEST_PICTURE = 1;
+            private static int REQUEST_CROP_PICTURE = 2;
+
 
 
 
@@ -287,7 +292,17 @@ package com.appmagazine.nardoon.activities;
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);//
-                startActivityForResult(Intent.createChooser(intent, "انتخاب فایل"),SELECT_FILE);
+                startActivityForResult(Intent.createChooser(getCropIntent(intent), "انتخاب فایل"),SELECT_FILE);
+
+            }
+            private Intent getCropIntent(Intent intent) {
+                intent.putExtra("crop", "true");
+                intent.putExtra("aspectX", 1);
+                intent.putExtra("aspectY", 1);
+                intent.putExtra("outputX", 320);
+                intent.putExtra("outputY", 320);
+                intent.putExtra("return-data", true);
+                return intent;
             }
 
             private void cameraIntent()

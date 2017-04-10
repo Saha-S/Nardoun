@@ -4,10 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -35,7 +33,7 @@ public class Details extends AppCompatActivity {
     int positionID;
     TextView tvtitle,tvcontent,tvprice,tvlocation , tvtime;
     String url, catname , mobile , email ;
-    ImageView ivtitle;
+    ImageView ivtitle , ivshare , ivFavorites;
     CollapsingToolbarLayout collapsingToolbar;
     public static ProgressDialog dialog;
 
@@ -56,6 +54,9 @@ public class Details extends AppCompatActivity {
         tvcontent = (TextView) findViewById(R.id.txtContent);
         tvtime = (TextView) findViewById(R.id.txtTime);
         ivtitle=(ImageView) findViewById(R.id.iv_title);
+        ivshare=(ImageView) findViewById(R.id.iv_share);
+        ivFavorites=(ImageView) findViewById(R.id.iv_favorites);
+
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab_call);
 
         myFab.setOnClickListener(new View.OnClickListener() {
@@ -67,11 +68,30 @@ public class Details extends AppCompatActivity {
 
             }
         });
+        ivshare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent  i = new Intent(
 
+                        android.content.Intent.ACTION_SEND);
+
+                i.setType("text/plain");
+
+                i.putExtra(
+
+                        android.content.Intent.EXTRA_TEXT, "The string you want to share, which can include URLs");
+
+                startActivity(Intent.createChooser(
+
+                        i,
+
+                        "Title of your share dialog"));
+            }
+        });
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+      //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+      //  getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,46 +126,11 @@ public class Details extends AppCompatActivity {
 
 
 
-    @Override
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        getMenuInflater().inflate(R.menu.main_activity_menu, menu);
-
-        return super.onCreateOptionsMenu(menu);
-
-    }
-    @Override
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-
-            case R.id.mShare:
-
-                Intent  i = new Intent(
-
-                        android.content.Intent.ACTION_SEND);
-
-                i.setType("text/plain");
-
-                i.putExtra(
-
-                        android.content.Intent.EXTRA_TEXT, "The string you want to share, which can include URLs");
-
-                startActivity(Intent.createChooser(
-
-                        i,
-
-                        "Title of your share dialog"));
-
-                break;
-
-        }
-
-        return super.onOptionsItemSelected(item);
-
-    }
+   // @Override
+ //   public void onBackPressed() {
+   //         super.onBackPressed();
+  //  }
 
     public  void webServiceGetAgahi()
     {
@@ -210,6 +195,51 @@ public class Details extends AppCompatActivity {
             }
         });
 
+
+    }
+    @Override
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+     //   getMenuInflater().inflate(R.menu.menu_share, menu);
+        getMenuInflater().inflate(R.menu.menu_back, menu);
+
+        return super.onCreateOptionsMenu(menu);
+
+    }
+
+    @Override
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+        /*    case R.id.mShare:
+
+                Intent  i = new Intent(
+
+                        android.content.Intent.ACTION_SEND);
+
+                i.setType("text/plain");
+
+                i.putExtra(
+
+                        android.content.Intent.EXTRA_TEXT, "The string you want to share, which can include URLs");
+
+                startActivity(Intent.createChooser(
+
+                        i,
+
+                        "Title of your share dialog"));
+                        */
+            case R.id.mBack:
+                finish();
+
+                break;
+
+        }
+
+        return super.onOptionsItemSelected(item);
 
     }
 

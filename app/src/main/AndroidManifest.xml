@@ -36,7 +36,8 @@
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <activity
             android:name=".activities.subs"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
+            android:theme="@style/Theme.AppCompat"
+        />
         <activity
             android:name=".activities.Call"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
@@ -52,6 +53,8 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activities.MyAgahis"></activity>
+        <activity android:name="com.android.camera.CropImage" />
+
     </application>
 
 </manifest>

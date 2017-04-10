@@ -6,9 +6,9 @@
     tools:context="com.appmagazine.nardoon.activities.Filter"
     android:background="#e6e6e6"
     android:orientation="vertical"
-    android:weightSum="14"
-    android:layout_width="300dp"
-    android:layout_height="300dp">
+    android:weightSum="13"
+    android:layout_height="300dp"
+    android:layout_width="290dp">
 
     <LinearLayout
         android:orientation="vertical"
@@ -26,6 +26,15 @@
             android:textColor="@color/colorPrimary"
             android:textSize="16sp" />
 
+        <View
+            android:id="@+id/vVerticalLine"
+            android:background="@drawable/horizontal_shape"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/title"
+            android:layout_height="1dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -42,31 +51,6 @@
             android:layout_height="0dp"
             android:gravity="right|center_vertical"
             android:layout_weight="1"
-            android:id="@+id/ll_email">
-
-            <TextView
-                android:text="TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_email"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:textColor="#000" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/callic_launcher"
-                android:id="@+id/imageView9"
-                android:padding="10dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:gravity="right|center_vertical"
-            android:layout_weight="1"
             android:id="@+id/ll_call">
 
             <TextView
@@ -74,16 +58,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_call"
-                android:layout_weight="1"
                 android:gravity="right"
                 android:textColor="#000" />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/message"
-                android:id="@+id/imageView10"
-                android:padding="10dp" />
+                android:src="@mipmap/callic_launcher"
+                android:id="@+id/iv_call"
+                android:padding="10dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -99,36 +83,43 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_message"
-                android:layout_weight="1"
                 android:gravity="right"
                 android:textColor="#000" />
 
             <ImageView
+                android:src="@mipmap/message"
+                android:id="@+id/iv_message"
+                android:padding="10dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="right|center_vertical"
+            android:layout_weight="1"
+            android:id="@+id/ll_email">
+
+            <TextView
+                android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/email"
-                android:id="@+id/imageView11"
-                android:padding="10dp" />
+                android:id="@+id/tv_email"
+                android:gravity="right"
+                android:textColor="#000" />
+
+            <ImageView
+                android:src="@mipmap/email"
+                android:id="@+id/iv_email"
+                android:padding="10dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
         </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:gravity="center_vertical">
-
-        <Button
-            android:text="بی خیال"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button2"
-            android:background="#e6e6e6"
-            android:textColor="@color/colorPrimary"
-            android:layout_gravity="center_vertical"
-            android:textSize="16sp" />
-    </LinearLayout>
 
 </LinearLayout>

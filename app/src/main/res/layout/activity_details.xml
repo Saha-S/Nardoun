@@ -25,14 +25,40 @@
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_menu_gallery"
-                app:layout_collapseMode="parallax"/>
+                app:layout_collapseMode="pin"/>
+
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                android:layout_marginRight="12dp" />
+                android:layout_marginRight="12dp" >
+
+                <ImageView
+                    android:id="@+id/iv_favorites"
+                    android:layout_width="30dip"
+                    android:layout_height="30dip"
+                    android:src="@mipmap/favorites"
+                    app:layout_collapseMode="pin"
+                    android:scaleType="centerCrop"
+                    app:showAsAction="always"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="10dp"
+                    />
+                <ImageView
+                    android:id="@+id/iv_share"
+                    android:layout_width="30dip"
+                    android:layout_height="30dip"
+                    android:src="@mipmap/share"
+                    app:layout_collapseMode="pin"
+                    android:scaleType="centerCrop"
+                    app:showAsAction="always"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="5dp"
+                    />
+
+            </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -40,7 +66,7 @@
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
