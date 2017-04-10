@@ -39,7 +39,7 @@
                     android:id="@+id/iv_favorites"
                     android:layout_width="30dip"
                     android:layout_height="30dip"
-                    android:src="@mipmap/favorites1"
+                    android:src="@mipmap/favorit"
                     app:layout_collapseMode="pin"
                     android:scaleType="centerCrop"
                     app:showAsAction="always"
