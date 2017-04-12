@@ -1,15 +1,18 @@
 package com.appmagazine.nardoon.activities;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.R;
@@ -38,13 +41,13 @@ public class Locations extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categorys);
 
-        listView = (ListView) findViewById(R.id.listv2);
+   //     listView = (ListView) findViewById(R.id.listv2);
 
         webServiceGetCategory();
-        adapterSub = new ArrayAdapter(this, R.layout.item_cats, R.id.txt, subs);
-        listView.setAdapter(adapterSub);
+     //   adapterSub = new ArrayAdapter(this, R.layout.item_cats, R.id.txt, subs);
+     //   listView.setAdapter(adapterSub);
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+     /*   listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -54,13 +57,13 @@ public class Locations extends Activity {
                // intent.putExtra("POSITION", id);
               //  intent.putExtra("NAME", subs.get(position)+"");
               //  startActivity(intent);
-                New.SelectLocation.setText(subs.get(position)+"");
+                NewAgahi.SelectLocation.setText(subs.get(position)+"");
                 id_location = subsid.get(position).toString();
                 finish();
             }
         });
 
-
+*/
 
 
 
@@ -81,7 +84,7 @@ public class Locations extends Activity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
-                dialog.hide();
+               /* dialog.hide();
                 String value = new String(response);
                 try {
                     subs.clear();
@@ -98,16 +101,75 @@ public class Locations extends Activity {
                     }
                     adapterSub = new ArrayAdapter(getApplicationContext(), R.layout.item_cats, R.id.txt, subs);
                     listView.setAdapter(adapterSub);
+*/
+                dialog.hide();
+                String value = new String(response);
+                try {
+                    JSONArray responcearray = new JSONArray(value);
+                    for (int i = 0; i < responcearray.length(); i++) {
 
+                        JSONObject obj = new JSONArray(value).getJSONObject(i);
+                        String subname = obj.getString("name");
+                        int subid = obj.getInt("id");
+                        subs.add(subname);
+                        subsid.add(subid);
+
+                        final LinearLayout lm = (LinearLayout ) findViewById(R.id.linearMain);
+                        LinearLayout .LayoutParams params = new LinearLayout.LayoutParams(
+                                ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
+                        params.setMargins(5,5,5,0);
+                        params.height = 70;
+                        params.gravity = Gravity.CENTER_VERTICAL;
+
+
+                        LinearLayout ll = new LinearLayout(App.context);
+                        ll.setOrientation(LinearLayout.HORIZONTAL);
+
+                        LinearLayout layout = new LinearLayout(App.context);
+                        layout.setBackgroundColor(Color.parseColor("#ffffff"));
+                        ll.addView(layout);
+
+                        TextView tv = new TextView(App.context);
+                        // ImageView iv = new ImageView(App.context);
+                        tv.setLayoutParams(params);
+                        tv.setText(subname);
+                        tv.setTextColor(Color.parseColor("#4f4f4f"));
+                        // iv.setBackgroundResource(R.mipmap.left);
+
+
+                        layout.addView(tv);
+                        //   layout.addView(iv);
+
+
+
+                        layout.setLayoutParams(params);
+
+                        final int index = i;
+                        layout.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+
+                                com.appmagazine.nardoon.activities.NewAgahi.SelectLocation.setText(subs.get(index)+"");
+                                id_location = subsid.get(index).toString();
+                                finish();
+
+                            }
+                        });
+
+                        if(layout.getParent()!=null)
+                            ((ViewGroup)layout.getParent()).removeView(layout);
+
+                        ll.addView(layout);
+                        lm.addView(ll);
+
+                    }
 
                 } catch (JSONException e1) {
-
+                    dialog.hide();
                     e1.printStackTrace();
                 }
 
-
-            }
-            @Override
+                }
+                @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
                 dialog.hide();
                 if(statusCode==404)

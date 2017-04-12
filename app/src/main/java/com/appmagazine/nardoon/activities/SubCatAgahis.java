@@ -1,7 +1,12 @@
 package com.appmagazine.nardoon.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -47,6 +53,8 @@ public class SubCatAgahis extends AppCompatActivity {
     EndlessRecyclerViewScrollListener scrollListener;
     LinearLayout llFilter;
     public static String catID ;
+    public static ProgressDialog dialog;
+
 
 
 
@@ -55,6 +63,9 @@ public class SubCatAgahis extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub_cat_agahis);
 
+        dialog = ProgressDialog.show(SubCatAgahis.this, null, null, true, false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(R.layout.progress_layout_small);
 
         Intent intent=getIntent();
         catID = intent.getStringExtra("POSITION");
@@ -64,6 +75,20 @@ public class SubCatAgahis extends AppCompatActivity {
         //txtAgahi.setText("آگهی های "+intent.getStringExtra("name"));
 
 
+        ImageButton ibmenu=(ImageButton) findViewById(R.id.ib_menu);
+
+        ibmenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                if (drawer.isDrawerOpen(GravityCompat.END)) {
+                    drawer.closeDrawer(GravityCompat.END);
+                } else {
+                    drawer.openDrawer(GravityCompat.END);
+                }
+
+            }
+        });
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
         recyclerView = (RecyclerView) findViewById(R.id.list);
@@ -134,28 +159,28 @@ public class SubCatAgahis extends AppCompatActivity {
         NetUtilsCatsAgahi.get("http://nardoun.ir/api/agahisbysubcat/"+catID+"?data=phone&limit=10&page=" + (page+1) , null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                dialog.hide();
                 JSONArray posters = response;
                 try {
                     for (int i = 0; i < posters.length(); i++) {
+                        dialog.hide();
                         array.add(new Poster(posters.getJSONObject(i)));
                     }
                     adapter.update(array);
                     swipeRefreshLayout.setRefreshing(false);
                 } catch (JSONException e) {
+                    dialog.hide();
                     e.printStackTrace();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Toast.makeText(App.context, "http://nardoun.ir/api/categories/"+catID+"/", Toast.LENGTH_LONG).show();
+                dialog.hide();
+                Toast.makeText(App.context, "آگهی وجود ندارد !", Toast.LENGTH_LONG).show();
             }
 
         });
     }
-
-
-
-
 
 }

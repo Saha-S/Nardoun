@@ -6,6 +6,9 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
 
     <application
         android:name=".App"
@@ -29,15 +32,14 @@
             android:name=".activities.Filter"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <activity
-            android:name=".activities.Categorys"
+            android:name=".activities.cats"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <activity
             android:name=".activities.Locations"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <activity
             android:name=".activities.subs"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
-        />
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <activity
             android:name=".activities.Call"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
@@ -49,15 +51,16 @@
             android:name=".activities.SubCatAgahis"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.New"
+            android:name=".activities.NewAgahi"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".activities.MyAgahis"></activity>
+
+            />
+        <activity android:name=".activities.MyAgahis" />
         <activity android:name="com.android.camera.CropImage" />
         <activity
             android:name=".activities.DetailsSms"
             android:theme="@style/AppTheme.NoActionBar" />
-
+        <activity android:name=".activities.SuccessSendSms"></activity>
     </application>
 
 </manifest>

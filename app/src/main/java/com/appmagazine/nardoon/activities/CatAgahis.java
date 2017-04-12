@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -50,13 +53,12 @@ public class CatAgahis extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
     EndlessRecyclerViewScrollListener scrollListener;
     LinearLayout llFilter;
-    public static String catID ;
+    public static String catID;
     public static ArrayList<String> subs = new ArrayList<>();
     public static ArrayList<Integer> subsid = new ArrayList<>();
     ArrayAdapter<String> adapterSub;
     public static ProgressDialog dialog;
     public static int subsNumber;
-
 
 
     @Override
@@ -65,19 +67,33 @@ public class CatAgahis extends AppCompatActivity {
         setContentView(R.layout.activity_cat_agahis);
 
         subs.clear();
-        dialog = ProgressDialog.show(CatAgahis.this, null, null,true, false);
-        dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
+        dialog = ProgressDialog.show(CatAgahis.this, null, null, true, false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.progress_layout_small);
 
+        ImageButton ibmenu = (ImageButton) findViewById(R.id.ib_menu);
 
-        Intent intent=getIntent();
+        ibmenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                if (drawer.isDrawerOpen(GravityCompat.END)) {
+                    drawer.closeDrawer(GravityCompat.END);
+                } else {
+                    drawer.openDrawer(GravityCompat.END);
+                }
+
+            }
+        });
+
+
+        Intent intent = getIntent();
         catID = intent.getStringExtra("id");
 
         TextView txtSub = (TextView) findViewById(R.id.txt_sub);
-        txtSub.setText("زیردسته های "+intent.getStringExtra("name"));
+        txtSub.setText("زیردسته های " + intent.getStringExtra("name"));
         TextView txtAgahi = (TextView) findViewById(R.id.txt_agahi);
-        txtAgahi.setText("آگهی های "+intent.getStringExtra("name"));
-
+        txtAgahi.setText("آگهی های " + intent.getStringExtra("name"));
 
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
@@ -91,7 +107,7 @@ public class CatAgahis extends AppCompatActivity {
         recyclerView.setNestedScrollingEnabled(false);
 
 
-        llFilter=(LinearLayout) findViewById(R.id.ll_Filter);
+        llFilter = (LinearLayout) findViewById(R.id.ll_Filter);
 
         webServiceGetCategory();
 
@@ -100,7 +116,7 @@ public class CatAgahis extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(App.context , Filter.class);
+                Intent intent = new Intent(App.context, Filter.class);
                 startActivity(intent);
 
             }
@@ -113,7 +129,6 @@ public class CatAgahis extends AppCompatActivity {
                 loadData(page);
             }
         };
-
 
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -129,25 +144,22 @@ public class CatAgahis extends AppCompatActivity {
             @Override
             public void onItemClick(View view, int position) {
                 //Toast.makeText(getContext(), "آیتم شماره " + array.get(position).id + " را کلیک کردید!", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(App.context , Details.class);
-                intent.putExtra("id", array.get(position).id+"");
+                Intent intent = new Intent(App.context, Details.class);
+                intent.putExtra("id", array.get(position).id + "");
                 intent.putExtra("title", array.get(position).title);
                 intent.putExtra("image", array.get(position).image);
                 intent.putExtra("location", array.get(position).location);
                 intent.putExtra("price", array.get(position).price);
                 startActivity(intent);
             }
-      }));
-
+        }));
 
 
     }
 
 
-
-
     public void loadData(int page) {
-        NetUtilsCatsAgahi.get("http://nardoun.ir/api/agahisbycat/"+catID+"?data=phone&limit=10&page=" + (page+1) , null, new JsonHttpResponseHandler() {
+        NetUtilsCatsAgahi.get("http://nardoun.ir/api/agahisbycat/" + catID + "?data=phone&limit=10&page=" + (page + 1), null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 JSONArray posters = response;
@@ -173,19 +185,20 @@ public class CatAgahis extends AppCompatActivity {
         });
     }
 
-    public  void webServiceGetCategory()
-    {
+    public void webServiceGetCategory() {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
 
-        client.get(App.urlApi+"categories/"+catID, params, new AsyncHttpResponseHandler() {
+        client.get(App.urlApi + "categories/" + catID, params, new AsyncHttpResponseHandler() {
 
             @Override
             public void onStart() {
             }
+
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
+                dialog.hide();
                 loadData(0);
                 String value = new String(response);
                 try {
@@ -199,53 +212,52 @@ public class CatAgahis extends AppCompatActivity {
                         subs.add(subname);
                         subsid.add(subid);
 
-                        final LinearLayout lm = (LinearLayout ) findViewById(R.id.linearMain);
-                        LinearLayout .LayoutParams params = new LinearLayout.LayoutParams(
+                        final LinearLayout lm = (LinearLayout) findViewById(R.id.linearMain);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-                        params.setMargins(5,5,5,0);
+                        params.setMargins(5, 5, 5, 0);
                         params.height = 70;
                         params.gravity = Gravity.CENTER_VERTICAL;
 
 
-                            LinearLayout ll = new LinearLayout(App.context);
-                            ll.setOrientation(LinearLayout.HORIZONTAL);
+                        LinearLayout ll = new LinearLayout(App.context);
+                        ll.setOrientation(LinearLayout.HORIZONTAL);
 
-                            LinearLayout layout = new LinearLayout(App.context);
-                            layout.setBackgroundColor(Color.parseColor("#ffffff"));
-                            ll.addView(layout);
+                        LinearLayout layout = new LinearLayout(App.context);
+                        layout.setBackgroundColor(Color.parseColor("#ffffff"));
+                        ll.addView(layout);
 
-                            TextView tv = new TextView(App.context);
-                           // ImageView iv = new ImageView(App.context);
+                        TextView tv = new TextView(App.context);
+                        // ImageView iv = new ImageView(App.context);
                         tv.setLayoutParams(params);
                         tv.setText(subname);
-                            tv.setTextColor(Color.parseColor("#4f4f4f"));
-                           // iv.setBackgroundResource(R.mipmap.left);
+                        tv.setTextColor(Color.parseColor("#4f4f4f"));
+                        // iv.setBackgroundResource(R.mipmap.left);
 
 
                         layout.addView(tv);
-                         //   layout.addView(iv);
-
+                        //   layout.addView(iv);
 
 
                         layout.setLayoutParams(params);
 
-                            final int index = i;
-                            layout.setOnClickListener(new OnClickListener() {
-                                public void onClick(View v) {
+                        final int index = i;
+                        layout.setOnClickListener(new OnClickListener() {
+                            public void onClick(View v) {
 
-                                    Log.i("TAG", "index :" + index);
-                                    Intent intent = new Intent(App.context, SubCatAgahis.class);
-                                    intent.putExtra("POSITION", subsid.get(index)+"");
-                                    startActivity(intent);
-                                }
-                            });
+                                Log.i("TAG", "index :" + index);
+                                Intent intent = new Intent(App.context, SubCatAgahis.class);
+                                intent.putExtra("POSITION", subsid.get(index) + "");
+                                startActivity(intent);
+                            }
+                        });
 
-                        if(layout.getParent()!=null)
-                            ((ViewGroup)layout.getParent()).removeView(layout);
+                        if (layout.getParent() != null)
+                            ((ViewGroup) layout.getParent()).removeView(layout);
 
                         ll.addView(layout);
-                            lm.addView(ll);
-                        }
+                        lm.addView(ll);
+                    }
 
                 } catch (JSONException e1) {
                     dialog.hide();
@@ -254,17 +266,18 @@ public class CatAgahis extends AppCompatActivity {
 
 
             }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-                if(statusCode==404)
-                {
+                dialog.hide();
+                if (statusCode == 404) {
                     dialog.hide();
-                    App.CustomToast("آگهی با این شماره وجود ندارد !");
+                    App.CustomToast("آگهی وجود ندارد !");
 
 
-                }else{
+                } else {
                     dialog.hide();
-                    App.CustomToast("fail "+statusCode);
+                    App.CustomToast("fail " + statusCode);
                     App.CustomToast(" لطفا دوباره سعی کنید ");
                 }
             }
@@ -273,46 +286,12 @@ public class CatAgahis extends AppCompatActivity {
             @Override
             public void onRetry(int retryNo) {
                 subs.clear();
+                dialog.hide();
             }
         });
 
 
     }
-    public static boolean setListViewHeightBasedOnItems(ListView listView) {
-
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter != null) {
-
-            int numberOfItems = listAdapter.getCount();
-
-            // Get total height of all items.
-            int totalItemsHeight = 0;
-            for (int itemPos = 0; itemPos < numberOfItems; itemPos++) {
-                View item = listAdapter.getView(itemPos, null, listView);
-                float px = 500 * (listView.getResources().getDisplayMetrics().density);
-                item.measure(View.MeasureSpec.makeMeasureSpec((int)px, View.MeasureSpec.AT_MOST), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                totalItemsHeight += item.getMeasuredHeight();
-            }
-
-            // Get total height of all item dividers.
-            int totalDividersHeight = listView.getDividerHeight() *
-                    (numberOfItems - 1);
-            // Get padding
-            int totalPadding = listView.getPaddingTop() + listView.getPaddingBottom();
-
-            // Set list height.
-            ViewGroup.LayoutParams params = listView.getLayoutParams();
-            params.height = totalItemsHeight + totalDividersHeight + totalPadding;
-            listView.setLayoutParams(params);
-            listView.requestLayout();
-            return true;
-
-        } else {
-            return false;
-        }
-
-    }
-
 
 
 }

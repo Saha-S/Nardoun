@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.appmagazine.nardoon.activities.Main">
+
+    <include layout="@layout/content_main" />
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+
+
+         <TableRow
+             android:layout_width="match_parent"
+             android:layout_height="60dp"
+             android:gravity="right|center_vertical">
+
+             <LinearLayout
+                 android:layout_width="wrap_content"
+                 android:layout_height="match_parent"
+                 android:orientation="horizontal"
+                 android:gravity="center_vertical"
+                 android:id="@+id/ll_history_kharid"
+                 >
+             <TextView android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="تاریخچه خرید"
+                 android:textSize="16dp"
+                 android:layout_marginLeft="7dp"/>
+
+             </LinearLayout>
+
+             <TextView android:layout_width="0dp"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="1"/>
+
+
+         <TextView
+             android:id="@+id/tv_mainpage_title"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="ناردون"
+             android:textColor="#ffffff"
+             android:textSize="30dp"
+             android:shadowColor="#180117"
+             android:shadowDx="-3"
+             android:shadowDy="3"
+             android:shadowRadius="3"
+             android:layout_marginRight="10dp"
+             />
+
+             <ImageButton
+                 android:id="@+id/ib_menu"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:background="@mipmap/ic_menu"
+                 android:layout_marginRight="5dp"
+                 />
+
+
+
+
+
+
+
+         </TableRow>
+
+
+    </android.support.design.widget.AppBarLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

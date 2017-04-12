@@ -128,7 +128,7 @@ public class Main extends AppCompatActivity
             public void onClick(View view) {
 
 
-                Intent intent = new Intent(App.context ,New.class );
+                Intent intent = new Intent(App.context ,NewAgahi.class );
                 startActivity(intent);
                // App.CustomToast("آگهی جدید");
                // getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new test()).commit();

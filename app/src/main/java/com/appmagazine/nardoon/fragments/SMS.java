@@ -43,7 +43,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class SMS extends Fragment {
     EditText daemi , etebari , irancell;
-    int Sdaemi,Setebari,Sirancell =0;
+    public static int Sdaemi,Setebari,Sirancell =0;
     Button price,pay;
     TextView txtPrice,txtWarning;
     int credit , number;

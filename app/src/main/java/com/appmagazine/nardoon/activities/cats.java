@@ -7,11 +7,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -19,7 +17,6 @@ import android.widget.TextView;
 
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.R;
-import com.appmagazine.nardoon.fragments.Category;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -32,7 +29,7 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
-public class Categorys extends Activity {
+public class cats extends Activity {
     public static ArrayList<String> subs = new ArrayList<>();
     public static ArrayList<Integer> subsid = new ArrayList<>();
     ArrayAdapter<String> adapterSub;
@@ -77,7 +74,7 @@ public class Categorys extends Activity {
 
             @Override
             public void onStart() {
-                dialog = ProgressDialog.show(Categorys.this, null, null,true, false);
+                dialog = ProgressDialog.show(cats.this, null, null,true, false);
                 dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
 
                 dialog.setContentView(R.layout.progress_layout_small);
@@ -136,6 +133,7 @@ public class Categorys extends Activity {
                                 intent.putExtra("CATID", subsid.get(index)+"");
                                 intent.putExtra("CATNAME", subs.get(index)+"");
                                 startActivity(intent);
+                                finish();
                             }
                         });
 

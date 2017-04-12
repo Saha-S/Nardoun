@@ -7,11 +7,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -57,7 +55,7 @@ public class subs extends Activity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 // TODO Auto-generated method stub
-                Intent intent = new Intent(App.context, New.class);
+                Intent intent = new Intent(App.context, NewAgahi.class);
                // intent.putExtra("POSITION", id);
                 intent.putExtra("CATID", CatId+"");
                 intent.putExtra("SUBID", subsid.get(position)+"");
@@ -133,12 +131,13 @@ public class subs extends Activity {
                         layout.setOnClickListener(new View.OnClickListener() {
                             public void onClick(View v) {
 
-                                Intent intent = new Intent(App.context, New.class);
+                                Intent intent = new Intent(App.context, NewAgahi.class);
                                 // intent.putExtra("POSITION", id);
                                 intent.putExtra("CATID", CatId+"");
                                 intent.putExtra("SUBID", subsid.get(index)+"");
                                 intent.putExtra("NAME", subs.get(index)+"");
                                 startActivity(intent);
+                                finish();
                             }
                         });
 
@@ -156,12 +155,19 @@ public class subs extends Activity {
 
 
             }
+
+            public void onBackPressed() {
+                Intent intent = new Intent(App.context, cats.class);
+                startActivity(intent);
+
+            }
+
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
                 dialog.hide();
                 if(statusCode==404)
                 {
-                    Intent intent = new Intent(App.context, New.class);
+                    Intent intent = new Intent(App.context, NewAgahi.class);
                     // intent.putExtra("POSITION", id);
                     intent.putExtra("CATID", CatId+"");
                     intent.putExtra("SUBID", "0");

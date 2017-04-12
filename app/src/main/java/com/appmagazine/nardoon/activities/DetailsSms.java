@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -33,6 +36,7 @@ import com.appmagazine.nardoon.NetUtilsCatsAgahi;
 import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
 import com.appmagazine.nardoon.RecyclerItemClickListener;
+import com.appmagazine.nardoon.fragments.SMS;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -68,7 +72,20 @@ public class DetailsSms extends AppCompatActivity {
         cnt1 = intent.getStringExtra("CNT1");
         cnt2 = intent.getStringExtra("CNT2");
         Log.i("mylog" ,cnt1 + " ,,, "  +cnt11 +",,,"+cnt2 );
+        ImageButton ibmenu=(ImageButton) findViewById(R.id.ib_menu);
 
+        ibmenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                if (drawer.isDrawerOpen(GravityCompat.END)) {
+                    drawer.closeDrawer(GravityCompat.END);
+                } else {
+                    drawer.openDrawer(GravityCompat.END);
+                }
+
+            }
+        });
 
     }
     public void open(View view){
@@ -103,9 +120,9 @@ public class DetailsSms extends AppCompatActivity {
 
         params.put("content", edtContent.getText()); //  ********** parametr  ersali dar surate niaz
       //  params.put("count", intent.getStringExtra("COUNT"));
-        params.put("cnt11", cnt11);
-        params.put("cnt1", cnt1);
-        params.put("cnt2", cnt2);
+        params.put("cnt11", SMS.Setebari);
+        params.put("cnt1", SMS.Sdaemi);
+        params.put("cnt2", SMS.Sirancell);
 
 
 
@@ -116,11 +133,15 @@ public class DetailsSms extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
                 //dialog.hide();
-                App.CustomToast("ارسال شد");
-                //Intent intent = new Intent(App.context, Main.class);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                //startActivity(intent);
-                //finish();
+                String value = new String(response);
+              //  App.CustomToast("ارسال شد");
+              //  App.CustomToast(value);
+               // Log.i("mylog3" ,"ersal"+value );
+
+                Intent intent = new Intent(App.context, SuccessSendSms.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
@@ -160,10 +181,6 @@ public class DetailsSms extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
                 //dialog.hide();
                 App.CustomToast("پیامک با موفقیت ارسال شد");
-              //  Intent intent = new Intent(App.context, Main.class);
-              //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-              //  startActivity(intent);
-               // finish();
 
             }
             @Override
