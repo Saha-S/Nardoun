@@ -43,7 +43,7 @@ public class cats extends Activity {
 
       //  listView = (ListView) findViewById(R.id.listv2);
 
-        webServiceGetCategory();
+        staticsetcategory();
 
 
 /*        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -65,6 +65,79 @@ public class cats extends Activity {
 
 
     }
+
+    public void staticsetcategory(){
+
+        String value = "[{\"id\":1,\"name\":\"\\u0645\\u062a\\u0641\\u0631\\u0642\\u0647\"},{\"id\":2,\"name\":\"\\u0627\\u0645\\u0644\\u0627\\u06a9\"},{\"id\":3,\"name\":\"\\u0645\\u0631\\u0628\\u0648\\u0637 \\u0628\\u0647 \\u062e\\u0627\\u0646\\u0647\"},{\"id\":4,\"name\":\"\\u0644\\u0648\\u0627\\u0632\\u0645 \\u0627\\u0644\\u06a9\\u062a\\u0631\\u0648\\u0646\\u06cc\\u06a9\\u06cc\"},{\"id\":5,\"name\":\"\\u0648\\u0633\\u0627\\u06cc\\u0644 \\u0634\\u062e\\u0635\\u06cc\"},{\"id\":6,\"name\":\"\\u062e\\u062f\\u0645\\u0627\\u062a\"},{\"id\":7,\"name\":\"\\u0633\\u0631\\u06af\\u0631\\u0645\\u06cc \\u0648 \\u0641\\u0631\\u0627\\u063a\\u062a\"},{\"id\":8,\"name\":\"\\u0648\\u0633\\u0627\\u06cc\\u0644 \\u0646\\u0642\\u0644\\u06cc\\u0647\"}]";
+        try {
+            JSONArray responcearray = new JSONArray(value);
+            for (int i = 0; i < responcearray.length(); i++) {
+
+                JSONObject obj = new JSONArray(value).getJSONObject(i);
+                String subname = obj.getString("name");
+                int subid = obj.getInt("id");
+                subs.add(subname);
+                subsid.add(subid);
+
+                final LinearLayout lm = (LinearLayout ) findViewById(R.id.linearMain);
+                LinearLayout .LayoutParams params = new LinearLayout.LayoutParams(
+                        ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
+                params.setMargins(5,5,5,0);
+                params.height = 70;
+                params.gravity = Gravity.CENTER_VERTICAL;
+
+
+                LinearLayout ll = new LinearLayout(App.context);
+                ll.setOrientation(LinearLayout.HORIZONTAL);
+
+                LinearLayout layout = new LinearLayout(App.context);
+                layout.setBackgroundColor(Color.parseColor("#ffffff"));
+                ll.addView(layout);
+
+                TextView tv = new TextView(App.context);
+                // ImageView iv = new ImageView(App.context);
+                tv.setLayoutParams(params);
+                tv.setText(subname);
+                tv.setTextColor(Color.parseColor("#4f4f4f"));
+                // iv.setBackgroundResource(R.mipmap.left);
+
+
+                layout.addView(tv);
+                //   layout.addView(iv);
+
+
+
+                layout.setLayoutParams(params);
+
+                final int index = i;
+                layout.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+
+                        Intent intent = new Intent(App.context, subs.class);
+                        // intent.putExtra("POSITION", id);
+                        intent.putExtra("CATID", subsid.get(index)+"");
+                        intent.putExtra("CATNAME", subs.get(index)+"");
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+
+                if(layout.getParent()!=null)
+                    ((ViewGroup)layout.getParent()).removeView(layout);
+
+                ll.addView(layout);
+                lm.addView(ll);
+            }
+
+        } catch (JSONException e1) {
+            dialog.hide();
+            e1.printStackTrace();
+        }
+
+
+    }
+
+
     public  void webServiceGetCategory()
     {
         AsyncHttpClient client = new AsyncHttpClient();
