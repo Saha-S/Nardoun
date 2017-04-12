@@ -1,5 +1,6 @@
 package com.appmagazine.nardoon.activities;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -64,9 +66,6 @@ public class SubCatAgahis extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub_cat_agahis);
 
-        dialog = ProgressDialog.show(SubCatAgahis.this, null, null, true, false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(R.layout.progress_layout_small);
         LinearLayout llnewagahi=(LinearLayout) findViewById(R.id.ll_new_agahi);
         llnewagahi.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,32 +168,53 @@ public class SubCatAgahis extends AppCompatActivity {
 
 
     public void loadData(int page) {
-        NetUtilsCatsAgahi.get("http://nardoun.ir/api/agahisbysubcat/"+catID+"?data=phone&limit=10&page=" + (page+1) , null, new JsonHttpResponseHandler() {
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+
+        client.get(App.urlApi+"agahisbysubcat/"+catID, params, new AsyncHttpResponseHandler() {
+
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+            public void onStart() {
+                dialog = ProgressDialog.show(SubCatAgahis.this, null, null,true, false);
+                dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
+                dialog.setContentView(R.layout.progress_layout_small);
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
                 dialog.hide();
-                JSONArray posters = response;
+                String value = new String(response);
+
                 try {
+
+                    JSONArray posters = new JSONArray(value);
                     for (int i = 0; i < posters.length(); i++) {
-                        dialog.hide();
                         array.add(new Poster(posters.getJSONObject(i)));
                     }
-                    dialog.hide();
                     adapter.update(array);
                     swipeRefreshLayout.setRefreshing(false);
                 } catch (JSONException e) {
-                    dialog.hide();
                     e.printStackTrace();
                 }
+
+
             }
 
+
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
                 dialog.hide();
                 Toast.makeText(App.context, "آگهی وجود ندارد !", Toast.LENGTH_LONG).show();
             }
 
+
+            @Override
+            public void onRetry(int retryNo) {
+
+            }
         });
+
+
     }
 
 }
