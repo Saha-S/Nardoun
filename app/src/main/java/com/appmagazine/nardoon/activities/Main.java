@@ -158,11 +158,21 @@ public class Main extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_about) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_favarit) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_my_agahi) {
+
+            Intent intent = new Intent(App.context , MyAgahis.class);
+            startActivity(intent);
+
+        }
+        else if (id == R.id.nav_recently) {
+
+        }else if (id == R.id.nav_my_agahi) {
+
+        }else if (id == R.id.nav_rules) {
 
         }
 

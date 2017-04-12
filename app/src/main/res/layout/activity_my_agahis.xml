@@ -32,7 +32,8 @@
             layout="@layout/app_bar_main"
             android:layout_above="@+id/ll_Filter"
             android:layout_weight="0.30"
-            android:layout_height="44dp" />
+            android:layout_height="60dp" />
+
         <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"

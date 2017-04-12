@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -20,6 +21,7 @@ import com.appmagazine.nardoon.Adapter.PosterAdapter;
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.EndlessRecyclerViewScrollListener;
 import com.appmagazine.nardoon.NetUtils;
+import com.appmagazine.nardoon.NetUtilsCatsAgahi;
 import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
 import com.appmagazine.nardoon.RecyclerItemClickListener;
@@ -42,6 +44,7 @@ public class MyAgahis extends AppCompatActivity {
     EndlessRecyclerViewScrollListener scrollListener;
     LinearLayout llFilter;
     public static ProgressDialog dialog;
+    String myDevice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,7 @@ public class MyAgahis extends AppCompatActivity {
 
             }
         });
+        myDevice=App.android_id;
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
 
@@ -129,17 +133,20 @@ public class MyAgahis extends AppCompatActivity {
     }
 
     public void loadData(int page) {
-        NetUtils.get("?data=phone&limit=10&page=" + (page+1), null, new JsonHttpResponseHandler() {
+        NetUtilsCatsAgahi.get("http://nardoun.ir/api/agahisbydevice/"+myDevice+"?data=phone&limit=10&page=" + (page+1), null, new JsonHttpResponseHandler() {
+
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 JSONArray posters = response;
                 try {
+                    dialog.hide();
                     for (int i = 0; i < posters.length(); i++) {
+                        dialog.hide();
                         array.add(new Poster(posters.getJSONObject(i)));
                     }
+                    dialog.hide();
                     adapter.update(array);
                     swipeRefreshLayout.setRefreshing(false);
-                    dialog.hide();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -149,7 +156,7 @@ public class MyAgahis extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                dialog.show();
+                dialog.hide();
                 Toast.makeText(App.context, "Error on request", Toast.LENGTH_LONG).show();
             }
 

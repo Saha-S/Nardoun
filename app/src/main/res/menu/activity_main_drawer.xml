@@ -7,18 +7,18 @@
 
         >
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_my_agahi"
             android:icon="@mipmap/avatar"
             android:title="آگهی های من"
             />
 
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_recently"
             android:icon="@android:drawable/ic_menu_camera"
             android:title="بازدید های اخیر" />
 
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_favarit"
             android:icon="@mipmap/bookmark"
             android:title="نشان شده ها"
             />

@@ -166,6 +166,7 @@ public class SubCatAgahis extends AppCompatActivity {
                         dialog.hide();
                         array.add(new Poster(posters.getJSONObject(i)));
                     }
+                    dialog.hide();
                     adapter.update(array);
                     swipeRefreshLayout.setRefreshing(false);
                 } catch (JSONException e) {

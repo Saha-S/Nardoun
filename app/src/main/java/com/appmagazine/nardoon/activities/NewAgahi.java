@@ -112,6 +112,8 @@ package com.appmagazine.nardoon.activities;
                 name = intent.getStringExtra("NAME");
                 id = intent.getStringExtra("CATID");
                 subid = intent.getStringExtra("SUBID");
+
+
                 location_id = intent.getStringExtra("location_id");
 
                 EnableRuntimePermission();
@@ -275,7 +277,14 @@ package com.appmagazine.nardoon.activities;
                 params.put("mobile", phone.getText());
                 params.put("type",type);
                 params.put("category_id",id);
-                params.put("subcategory_id",subid);
+                Intent intent=getIntent();
+                if(subid.toString() !=null){
+                    params.put("subcategory_id",subid);
+                }else {
+                    params.put("subcategory_id","1");
+                }
+
+
                // params.put("image","jja");
                 params.put("deviceid",App.android_id);
                 params.put("devicemodel",App.android_Model);
