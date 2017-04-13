@@ -1,5 +1,6 @@
 package com.appmagazine.nardoon.activities;
 
+import android.graphics.Typeface;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.R;
 import com.appmagazine.nardoon.fragments.SMS;
 
@@ -18,6 +20,10 @@ public class SuccessSendSms extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_success_send_sms);
+
+        Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
+        TextView tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
+        tvtitle.setTypeface(tfmorvarid);
 
         ImageButton ibmenu=(ImageButton) findViewById(R.id.ib_menu);
 

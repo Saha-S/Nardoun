@@ -3,6 +3,7 @@ package com.appmagazine.nardoon.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,11 +16,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appmagazine.nardoon.Adapter.MyAgahiAdapter;
 import com.appmagazine.nardoon.Adapter.PosterAdapter;
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.EndlessRecyclerViewScrollListener;
+import com.appmagazine.nardoon.MyAgahi;
 import com.appmagazine.nardoon.NetUtils;
 import com.appmagazine.nardoon.NetUtilsCatsAgahi;
 import com.appmagazine.nardoon.Poster;
@@ -37,9 +41,9 @@ import cz.msebera.android.httpclient.Header;
 
 public class MyAgahis extends AppCompatActivity {
     RecyclerView recyclerView;
-    PosterAdapter adapter;
+    MyAgahiAdapter adapter;
     LinearLayoutManager linearLayoutManager;
-    List<Poster> array;
+    List<MyAgahi> array;
     SwipeRefreshLayout swipeRefreshLayout;
     EndlessRecyclerViewScrollListener scrollListener;
     LinearLayout llFilter;
@@ -52,6 +56,10 @@ public class MyAgahis extends AppCompatActivity {
         setContentView(R.layout.activity_my_agahis);
 
         ImageButton ibmenu=(ImageButton) findViewById(R.id.ib_menu);
+        Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
+        TextView tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
+        tvtitle.setTypeface(tfmorvarid);
+
 
         ibmenu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,24 +84,10 @@ public class MyAgahis extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.list);
         linearLayoutManager = new LinearLayoutManager(App.context, LinearLayoutManager.VERTICAL, false);
         array = new ArrayList<>();
-        adapter = new PosterAdapter(App.context, array);
+        adapter = new MyAgahiAdapter(App.context, array);
 
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
-
-        llFilter=(LinearLayout) findViewById(R.id.ll_Filter);
-
-
-        llFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(App.context , Filter.class);
-                startActivity(intent);
-
-            }
-        });
-
 
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
@@ -109,7 +103,7 @@ public class MyAgahis extends AppCompatActivity {
             @Override
             public void onRefresh() {
 
-                array = new ArrayList<Poster>();
+                array = new ArrayList<MyAgahi>();
                 loadData(0);
                 scrollListener.resetState();
             }
@@ -142,7 +136,7 @@ public class MyAgahis extends AppCompatActivity {
                     dialog.hide();
                     for (int i = 0; i < posters.length(); i++) {
                         dialog.hide();
-                        array.add(new Poster(posters.getJSONObject(i)));
+                        array.add(new MyAgahi(posters.getJSONObject(i)));
                     }
                     dialog.hide();
                     adapter.update(array);

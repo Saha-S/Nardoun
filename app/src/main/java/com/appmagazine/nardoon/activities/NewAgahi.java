@@ -68,6 +68,7 @@ package com.appmagazine.nardoon.activities;
             public  static final int RequestPermissionCode  = 1 ;
             DisplayMetrics displayMetrics ;
             int width, height;
+            boolean flag1,flag2,flag3,flag4,flag5,flag6,flag7,flag8=false;
 
 
 
@@ -174,66 +175,88 @@ package com.appmagazine.nardoon.activities;
                     public void onClick(View v) {
 
 
-                        if(name!= null){
+
                             if(price.getText().toString().matches("")){
                                 txtPrice.setVisibility(View.VISIBLE);
+                                flag1=true;
+
                             }else {
                                 txtPrice.setVisibility(View.GONE);
+                                flag1 = false;
                             }
+
 
                             if(email.getText().toString().matches("")){
                                 txtEmail.setVisibility(View.VISIBLE);
+                                flag2=true;
                             }else {
                                 txtEmail.setVisibility(View.GONE);
+                                flag2 = false;
                             }
 
                             if(phone.getText().toString().matches("")){
                                 txtMobile.setVisibility(View.VISIBLE);
-                            }else {
-                                txtMobile.setVisibility(View.GONE);
+                                flag3=true;
+                            }else{
+                                 txtMobile.setVisibility(View.GONE);
+                                flag3=false;
                             }
+
+
 
                             if(SelectLocation.getText().toString().matches("انتخاب محل")){
                                 txtLocation.setVisibility(View.VISIBLE);
+                                flag4=true;
                             }else {
                                 txtLocation.setVisibility(View.GONE);
+                                flag4 = false;
                             }
+
 
                             if(title.getText().toString().matches("")){
                                 txtTitle.setVisibility(View.VISIBLE);
+                                flag5=true;
                             }else {
                                 txtTitle.setVisibility(View.GONE);
+                                flag5 = false;
                             }
+
 
                             if(content.getText().toString().matches("")){
                                 txtContent.setVisibility(View.VISIBLE);
+                                flag6=true;
                             }else {
                                 txtContent.setVisibility(View.GONE);
+                                flag6 = false;
                             }
+
 
                             if(radioTypeGroup.getCheckedRadioButtonId() == -1){
                                 txtType.setVisibility(View.VISIBLE);
-                            }else {
+                                flag7=true;
+                            }else{
                                 txtType.setVisibility(View.GONE);
+                                flag7=false;
                             }
 
-                        }else {
 
-                            dialog = ProgressDialog.show(NewAgahi.this, null, null,true, false);
-                            dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
+
+                        if (flag1 == false && flag2 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false) {
+                            dialog = ProgressDialog.show(NewAgahi.this, null, null, true, false);
+                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
                             dialog.setContentView(R.layout.progress_layout_small);
 
                             int selectedId = radioTypeGroup.getCheckedRadioButtonId();
                             radioTypeButton = (RadioButton) findViewById(selectedId);
 
-                            if(radioTypeButton!=null) {
+                            if (radioTypeButton != null) {
 
                                 type = radioTypeButton.getText().toString();
                             }
                             webServiceNewAgahi();
-
                         }
+
                     }
                 });
 
@@ -496,6 +519,7 @@ package com.appmagazine.nardoon.activities;
                         break;
                 }
             }
+
 
         }
 /*

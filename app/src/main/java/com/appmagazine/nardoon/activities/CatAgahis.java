@@ -3,6 +3,7 @@ package com.appmagazine.nardoon.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -59,7 +60,7 @@ public class CatAgahis extends AppCompatActivity {
     ArrayAdapter<String> adapterSub;
     public static ProgressDialog dialog;
     public static int subsNumber;
-
+    TextView txtSub;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,9 @@ public class CatAgahis extends AppCompatActivity {
         dialog = ProgressDialog.show(CatAgahis.this, null, null, true, false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.progress_layout_small);
+        Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
+        TextView tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
+        tvtitle.setTypeface(tfmorvarid);
 
         ImageButton ibmenu = (ImageButton) findViewById(R.id.ib_menu);
 
@@ -90,7 +94,7 @@ public class CatAgahis extends AppCompatActivity {
         Intent intent = getIntent();
         catID = intent.getStringExtra("id");
 
-        TextView txtSub = (TextView) findViewById(R.id.txt_sub);
+        txtSub = (TextView) findViewById(R.id.txt_sub);
         txtSub.setText("زیردسته های " + intent.getStringExtra("name"));
         TextView txtAgahi = (TextView) findViewById(R.id.txt_agahi);
         txtAgahi.setText("آگهی های " + intent.getStringExtra("name"));
@@ -260,8 +264,10 @@ public class CatAgahis extends AppCompatActivity {
                     }
 
                 } catch (JSONException e1) {
-                    dialog.hide();
+
+                    txtSub.setVisibility(View.GONE);
                     e1.printStackTrace();
+                    dialog.hide();
                 }
 
 
@@ -271,8 +277,9 @@ public class CatAgahis extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
                 dialog.hide();
                 if (statusCode == 404) {
+                    txtSub.setVisibility(View.GONE);
                     dialog.hide();
-                    App.CustomToast("آگهی وجود ندارد !");
+                    loadData(0);
 
 
                 } else {

@@ -35,7 +35,7 @@ public class Category extends Fragment {
             @Override
             public void onClick(View view) {
                   Intent intent = new Intent(App.context , CatAgahis.class);
-                intent.putExtra("id", "1");
+                intent.putExtra("id", "8");
                 intent.putExtra("name", "وسایل نقلیه");
                 startActivity(intent);
             }
@@ -98,7 +98,7 @@ public class Category extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(App.context , CatAgahis.class);
-                intent.putExtra("id", "8");
+                intent.putExtra("id", "1");
                 intent.putExtra("name", "متفرقه");
                 startActivity(intent);
             }

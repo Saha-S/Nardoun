@@ -170,7 +170,7 @@ public class subs extends Activity {
                     Intent intent = new Intent(App.context, NewAgahi.class);
                     // intent.putExtra("POSITION", id);
                     intent.putExtra("CATID", CatId+"");
-                    intent.putExtra("SUBID", "0");
+                   // intent.putExtra("SUBID", "0");
                     intent.putExtra("NAME", CatName+"");
                     startActivity(intent);
 

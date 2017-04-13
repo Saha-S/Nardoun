@@ -3,6 +3,7 @@ package com.appmagazine.nardoon.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
@@ -66,6 +67,10 @@ public class SubCatAgahis extends AppCompatActivity {
         dialog = ProgressDialog.show(SubCatAgahis.this, null, null, true, false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.progress_layout_small);
+
+        Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
+        TextView tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
+        tvtitle.setTypeface(tfmorvarid);
 
         Intent intent=getIntent();
         catID = intent.getStringExtra("POSITION");

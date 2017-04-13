@@ -28,7 +28,6 @@ public class Main extends AppCompatActivity
     TabHost tabs;
     ImageButton ibmenu;
     TextView tvtitle;
-    Typeface tfmorvarid;
     LinearLayout llnewagahi;
 
 
@@ -42,7 +41,7 @@ public class Main extends AppCompatActivity
         ibmenu=(ImageButton) findViewById(R.id.ib_menu);
         tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
         llnewagahi=(LinearLayout) findViewById(R.id.ll_new_agahi);
-        tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
+        Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
         tvtitle.setTypeface(tfmorvarid);
 
 

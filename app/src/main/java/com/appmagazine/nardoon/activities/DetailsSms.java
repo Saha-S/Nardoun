@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
@@ -64,6 +65,9 @@ public class DetailsSms extends AppCompatActivity {
         setContentView(R.layout.details_sms);
 
 
+        Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
+        TextView tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
+        tvtitle.setTypeface(tfmorvarid);
 
         edtContent = (EditText) findViewById(R.id.edt_content);
         edtMobile = (EditText) findViewById(R.id.edt_mobile);
