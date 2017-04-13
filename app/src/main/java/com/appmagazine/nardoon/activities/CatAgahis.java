@@ -61,6 +61,7 @@ public class CatAgahis extends AppCompatActivity {
     public static ProgressDialog dialog;
     public static int subsNumber;
     TextView txtSub;
+    Boolean isSubcatAvailable = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,6 +221,10 @@ public class CatAgahis extends AppCompatActivity {
                     for (int i = 0; i < responcearray.length(); i++) {
 
                         JSONObject obj = new JSONArray(value).getJSONObject(i);
+
+                        if (obj.getInt("id")!=1)
+                            isSubcatAvailable=true;
+
                         String subname = obj.getString("name");
                         int subid = obj.getInt("id");
                         subs.add(subname);
@@ -280,6 +285,12 @@ public class CatAgahis extends AppCompatActivity {
                 }
 
 
+                if (!isSubcatAvailable){
+
+                    txtSub.setVisibility(View.GONE);
+                    dialog.hide();
+                    loadData(0);
+                }
             }
 
             @Override
