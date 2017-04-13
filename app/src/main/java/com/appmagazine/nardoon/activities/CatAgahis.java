@@ -75,6 +75,15 @@ public class CatAgahis extends AppCompatActivity {
         TextView tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
         tvtitle.setTypeface(tfmorvarid);
 
+        LinearLayout llnewagahi=(LinearLayout) findViewById(R.id.ll_new_agahi);
+        llnewagahi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(App.context ,NewAgahi.class );
+                startActivity(intent);
+            }
+        });
         ImageButton ibmenu = (ImageButton) findViewById(R.id.ib_menu);
 
         ibmenu.setOnClickListener(new View.OnClickListener() {

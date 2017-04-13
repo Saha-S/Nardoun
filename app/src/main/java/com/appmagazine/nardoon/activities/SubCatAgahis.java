@@ -67,7 +67,15 @@ public class SubCatAgahis extends AppCompatActivity {
         dialog = ProgressDialog.show(SubCatAgahis.this, null, null, true, false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.progress_layout_small);
+        LinearLayout llnewagahi=(LinearLayout) findViewById(R.id.ll_new_agahi);
+        llnewagahi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                Intent intent = new Intent(App.context ,NewAgahi.class );
+                startActivity(intent);
+            }
+        });
         Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
         TextView tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
         tvtitle.setTypeface(tfmorvarid);

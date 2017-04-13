@@ -55,7 +55,8 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         android:textColor="@color/colorPrimary"
                         android:layout_marginTop="6dp"
-                        android:layout_marginRight="10dp" />
+                        android:layout_marginRight="10dp"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:text="موضوع آگهی"
@@ -108,7 +109,8 @@
                             android:textColor="@color/colorPrimary"
                             android:layout_marginTop="6dp"
                             android:layout_marginRight="10dp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            android:textSize="14sp" />
 
                         <LinearLayout
                             android:orientation="horizontal"
@@ -185,7 +187,8 @@
                                 android:textColor="@color/colorPrimary"
                                 android:layout_marginTop="6dp"
                                 android:layout_marginRight="10dp"
-                                android:visibility="gone" />
+                                android:visibility="gone"
+                                android:textSize="14sp" />
                             <RadioGroup
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
@@ -230,7 +233,8 @@
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textColor="@color/colorPrimary"
                             android:layout_marginTop="6dp"
-                            android:layout_marginRight="10dp" />
+                            android:layout_marginRight="10dp"
+                            android:textSize="14sp" />
 
                         <TextView
                             android:text="عکس"
@@ -287,7 +291,8 @@
                             android:textColor="@color/colorPrimary"
                             android:layout_marginTop="6dp"
                             android:layout_marginRight="10dp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            android:textSize="14sp" />
                         <TextView
                             android:text="ایمیل"
                             android:layout_width="match_parent"
@@ -327,7 +332,8 @@
                             android:textColor="@color/colorPrimary"
                             android:layout_marginTop="6dp"
                             android:layout_marginRight="10dp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            android:textSize="14sp" />
                         <TextView
                             android:text="تلفن"
                             android:layout_width="match_parent"
@@ -366,7 +372,8 @@
                             android:textColor="@color/colorPrimary"
                             android:layout_marginTop="6dp"
                             android:layout_marginRight="10dp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            android:textSize="14sp" />
                         <TextView
                             android:text="محل آگهی"
                             android:layout_width="match_parent"
@@ -408,7 +415,8 @@
                             android:textColor="@color/colorPrimary"
                             android:layout_marginTop="6dp"
                             android:layout_marginRight="10dp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            android:textSize="14sp" />
                         <TextView
                             android:text="عنوان"
                             android:layout_width="match_parent"
@@ -447,7 +455,8 @@
                             android:textColor="@color/colorPrimary"
                             android:layout_marginTop="6dp"
                             android:layout_marginRight="10dp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            android:textSize="14sp" />
                         <TextView
                             android:text="توضیح"
                             android:layout_width="match_parent"
