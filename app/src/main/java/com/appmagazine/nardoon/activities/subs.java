@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -35,6 +36,7 @@ public class subs extends Activity {
     ListView listView;
     String CatId ,CatName;
     Boolean ifsubcatavailable = false;
+    Typeface sansfarsi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class subs extends Activity {
         CatName = intent.getStringExtra("CATNAME");
 
 
+        sansfarsi= Typeface.createFromAsset(App.context.getAssets(), "Sansfarsi.ttf");
         staticsetsubcat();
        /* listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -87,8 +90,8 @@ public class subs extends Activity {
                     final LinearLayout lm = (LinearLayout ) findViewById(R.id.linearMain);
                     LinearLayout .LayoutParams params = new LinearLayout.LayoutParams(
                             ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
-                    params.setMargins(5,5,5,0);
-                    params.height = 70;
+                    params.setMargins(5,5,5,5);
+                    params.height = ActionBar.LayoutParams.WRAP_CONTENT;
                     params.gravity = Gravity.CENTER_VERTICAL;
 
 
@@ -103,6 +106,9 @@ public class subs extends Activity {
                     // ImageView iv = new ImageView(App.context);
                     tv.setLayoutParams(params);
                     tv.setText(subname);
+                    tv.setTextSize(17);
+                    tv.setPadding(5,5,5,5);
+                    tv.setTypeface(sansfarsi);
                     tv.setTextColor(Color.parseColor("#4f4f4f"));
                     // iv.setBackgroundResource(R.mipmap.left);
 
