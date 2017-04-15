@@ -302,12 +302,8 @@ package com.appmagazine.nardoon.activities;
                 params.put("mobile", phone.getText());
                 params.put("type",type);
                 params.put("category_id",id);
-                Intent intent=getIntent();
-                if(subid.toString() !=null){
                     params.put("subcategory_id",subid);
-                }else {
-                    params.put("subcategory_id","1");
-                }
+
 
 
                // params.put("image","jja");

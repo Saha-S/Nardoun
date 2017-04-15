@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -36,6 +37,8 @@ public class Locations extends Activity {
     public static String id_location;
     ListView listView;
 
+    Typeface sansfarsi;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +46,7 @@ public class Locations extends Activity {
 
    //     listView = (ListView) findViewById(R.id.listv2);
 
+        sansfarsi= Typeface.createFromAsset(App.context.getAssets(), "Sansfarsi.ttf");
         webServiceGetCategory();
      //   adapterSub = new ArrayAdapter(this, R.layout.item_cats, R.id.txt, subs);
      //   listView.setAdapter(adapterSub);
@@ -117,8 +121,8 @@ public class Locations extends Activity {
                         final LinearLayout lm = (LinearLayout ) findViewById(R.id.linearMain);
                         LinearLayout .LayoutParams params = new LinearLayout.LayoutParams(
                                 ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
-                        params.setMargins(5,5,5,0);
-                        params.height = 70;
+                        params.setMargins(5,5,5,5);
+                        params.height = ActionBar.LayoutParams.WRAP_CONTENT;
                         params.gravity = Gravity.CENTER_VERTICAL;
 
 
@@ -133,6 +137,9 @@ public class Locations extends Activity {
                         // ImageView iv = new ImageView(App.context);
                         tv.setLayoutParams(params);
                         tv.setText(subname);
+                        tv.setTextSize(17);
+                        tv.setPadding(5,5,5,5);
+                        tv.setTypeface(sansfarsi);
                         tv.setTextColor(Color.parseColor("#4f4f4f"));
                         // iv.setBackgroundResource(R.mipmap.left);
 
