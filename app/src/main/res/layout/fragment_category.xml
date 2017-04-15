@@ -37,14 +37,12 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@mipmap/car"
-                    android:id="@+id/imageView6" />
+                    app:srcCompat="@mipmap/car" />
 
                 <TextView
                     android:text="وسایل نقلیه"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView4"
                     android:gravity="center" />
             </LinearLayout>
 
@@ -64,14 +62,12 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@mipmap/house"
-                    android:id="@+id/imageView7" />
+                    app:srcCompat="@mipmap/house" />
 
                 <TextView
                     android:text="املاک"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView7"
                     android:gravity="center" />
             </LinearLayout>
         </LinearLayout>
@@ -97,14 +93,12 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@mipmap/lamp"
-                    android:id="@+id/imageView6" />
+                    app:srcCompat="@mipmap/lamp" />
 
                 <TextView
                     android:text="مربوط به خانه"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView4"
                     android:gravity="center" />
             </LinearLayout>
 
@@ -123,14 +117,12 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@mipmap/pc"
-                    android:id="@+id/imageView7" />
+                    app:srcCompat="@mipmap/pc" />
 
                 <TextView
                     android:text="لوازم الکترونیکی"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView7"
                     android:gravity="center" />
             </LinearLayout>
         </LinearLayout>
@@ -156,14 +148,12 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@mipmap/personal"
-                    android:id="@+id/imageView6" />
+                    app:srcCompat="@mipmap/personal" />
 
                 <TextView
                     android:text="وسایل شخصی"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView4"
                     android:gravity="center" />
             </LinearLayout>
 
@@ -182,14 +172,12 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@mipmap/work"
-                    android:id="@+id/imageView7" />
+                    app:srcCompat="@mipmap/work" />
 
                 <TextView
                     android:text="خدمات"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView7"
                     android:gravity="center" />
             </LinearLayout>
         </LinearLayout>
@@ -216,14 +204,12 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@mipmap/game"
-                    android:id="@+id/imageView6" />
+                    app:srcCompat="@mipmap/game" />
 
                 <TextView
                     android:text="سرگرمی و فراغت"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView4"
                     android:gravity="center" />
             </LinearLayout>
 
@@ -243,14 +229,12 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@mipmap/other"
-                    android:id="@+id/imageView7" />
+                    app:srcCompat="@mipmap/other" />
 
                 <TextView
                     android:text="متفرقه"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView7"
                     android:gravity="center" />
             </LinearLayout>
         </LinearLayout>
