@@ -65,7 +65,7 @@ package com.appmagazine.nardoon.activities;
             private static int REQUEST_CROP_PICTURE = 2;
 
             File file;
-            Uri uri;
+            Uri uri , uri2;
             Intent CamIntent, GalIntent, CropIntent ;
             public  static final int RequestPermissionCode  = 1 ;
             DisplayMetrics displayMetrics ;
@@ -389,8 +389,11 @@ package com.appmagazine.nardoon.activities;
 
                 file = new File(Environment.getExternalStorageDirectory(),
                         "file" + String.valueOf(System.currentTimeMillis()) + ".jpg");
-               uri = Uri.fromFile(file);
-             //   uri = FileProvider.getUriForFile(App.context, App.context.getApplicationContext().getPackageName() + ".provider", file);
+            //   uri = Uri.fromFile(file);
+                uri = FileProvider.getUriForFile(App.context, App.context.getApplicationContext().getPackageName() + ".provider", file);
+                App.context.grantUriPermission("com.android.camera",uri,
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                Log.i("myuri" , "aa  :  " + uri.toString()  );
 
                 CamIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
 
@@ -471,6 +474,8 @@ package com.appmagazine.nardoon.activities;
                     CropIntent = new Intent("com.android.camera.action.CROP");
 
                     CropIntent.setDataAndType(uri, "image/*");
+                    CropIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    CropIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
                     CropIntent.putExtra("crop", "true");
                     CropIntent.putExtra("outputX", 100);
