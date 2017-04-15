@@ -12,6 +12,7 @@ package com.appmagazine.nardoon.activities;
         import android.net.Uri;
         import android.os.Environment;
         import android.support.v4.app.ActivityCompat;
+        import android.support.v4.content.FileProvider;
         import android.support.v7.app.AlertDialog;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
@@ -35,6 +36,7 @@ package com.appmagazine.nardoon.activities;
         import com.appmagazine.nardoon.Utility;
         import com.loopj.android.http.AsyncHttpClient;
         import com.loopj.android.http.AsyncHttpResponseHandler;
+        import com.loopj.android.http.BuildConfig;
         import com.loopj.android.http.RequestParams;
 
         import java.io.ByteArrayOutputStream;
@@ -387,7 +389,8 @@ package com.appmagazine.nardoon.activities;
 
                 file = new File(Environment.getExternalStorageDirectory(),
                         "file" + String.valueOf(System.currentTimeMillis()) + ".jpg");
-                uri = Uri.fromFile(file);
+               uri = Uri.fromFile(file);
+             //   uri = FileProvider.getUriForFile(App.context, App.context.getApplicationContext().getPackageName() + ".provider", file);
 
                 CamIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
 
@@ -430,8 +433,9 @@ package com.appmagazine.nardoon.activities;
                        // Bundle bundle = data.getExtras();
                       //  Bitmap thumbnail = bundle.getParcelable("data");
 
-
+                      //  Log.i("lllll" ,"aaa"+(Bitmap) data.getExtras().get("data"));
                         Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+
                         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                         thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
 

@@ -289,7 +289,7 @@ public class CatAgahis extends AppCompatActivity {
                 if (!isSubcatAvailable){
 
                     txtSub.setVisibility(View.GONE);
-                    dialog.hide();
+                   // dialog.hide();
                     loadData(0);
                 }
             }
