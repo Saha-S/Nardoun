@@ -41,6 +41,7 @@ public class App extends Application {
     public static SharedPreferences preferences;
     public static Typeface appfont;
     public static String urlApi;
+    public static String urlimages;
     public static String android_id;
     public static String android_Model;
 
@@ -51,7 +52,8 @@ public class App extends Application {
         appfont = getFont();
         overrideFont(context,"SERIF", "Sansfarsi.ttf");
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        urlApi                 ="http://nardoun.ir/api/";
+        urlApi                 ="http://192.168.0.244/nardoon/public/api/";
+        urlimages              ="http://192.168.0.244/nardoon/public/upload/";
         android_id = Secure.getString(context.getContentResolver(),
                 Secure.ANDROID_ID);
         android_Model = Build.MODEL;

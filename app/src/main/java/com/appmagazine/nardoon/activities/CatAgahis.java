@@ -173,7 +173,7 @@ public class CatAgahis extends AppCompatActivity {
 
 
     public void loadData(int page) {
-        NetUtilsCatsAgahi.get("http://nardoun.ir/api/agahisbycat/" + catID + "?data=phone&limit=10&page=" + (page + 1), null, new JsonHttpResponseHandler() {
+        NetUtilsCatsAgahi.get(App.urlApi+"agahisbycat/"+catID, null, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 JSONArray posters = response;

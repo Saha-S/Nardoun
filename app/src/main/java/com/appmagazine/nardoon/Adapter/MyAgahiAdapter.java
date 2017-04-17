@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.MyAgahi;
 import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
@@ -76,7 +77,7 @@ public class MyAgahiAdapter extends RecyclerView.Adapter<MyAgahiAdapter.PosterHo
 
 
         Glide.with(context)
-                .load("http://nardoun.ir/upload/"+mDataset.get(position).image)
+                .load(App.urlimages+mDataset.get(position).image)
                 .placeholder(R.mipmap.nopic)
                 .into(holder.image);
 

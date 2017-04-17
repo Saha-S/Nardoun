@@ -1,11 +1,14 @@
 package com.appmagazine.nardoon.activities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -33,15 +36,16 @@ public class Details extends AppCompatActivity {
     int positionID;
     TextView tvtitle,tvcontent,tvprice,tvlocation , tvtime;
     String url, catname , mobile , email ;
-    ImageView ivtitle , ivshare , ivFavorites;
+    ImageView ivtitle , ivshare , ivFavorites , ivdelete , ivedit;
     CollapsingToolbarLayout collapsingToolbar;
     public static ProgressDialog dialog;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-
+        context = this;
         dialog = ProgressDialog.show(Details.this, null, null,true, false);
         dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
         dialog.setContentView(R.layout.progress_layout_small);
@@ -56,6 +60,8 @@ public class Details extends AppCompatActivity {
         ivtitle=(ImageView) findViewById(R.id.iv_title);
         ivshare=(ImageView) findViewById(R.id.iv_share);
         ivFavorites=(ImageView) findViewById(R.id.iv_favorites);
+        ivdelete=(ImageView) findViewById(R.id.iv_delete);
+        ivedit=(ImageView) findViewById(R.id.iv_edit);
 
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab_call);
 
@@ -89,6 +95,54 @@ public class Details extends AppCompatActivity {
             }
         });
 
+
+        ivdelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+
+//                // set title
+//                alertDialogBuilder.setTitle("-");
+
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage("آیا میخواهید آگهی خود را حذف کنید؟")
+                        .setCancelable(true)
+                        .setPositiveButton("بله",new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                // if this button is clicked, close
+                                webServiceDeleteAgahi();
+
+                            }
+                        })
+                        .setNegativeButton("خیر", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // if this button is clicked, just close
+                                // the dialog box and do nothing
+                                dialog.cancel();
+                            }
+                        });
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                alertDialog.show();
+
+                TextView msgtv = (TextView) alertDialog.findViewById(android.R.id.message);
+                alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextSize(20);
+                //alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTypeface(Font_Far_Koodak);
+                alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextSize(20);
+                //alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTypeface(Font_Far_Koodak);
+               // msgtv.setTypeface(Font_Far_Koodak);
+                msgtv.setTextSize(19);
+
+
+
+
+            }
+        });
+
+
         setSupportActionBar(toolbar);
       //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
       //  getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -107,6 +161,25 @@ public class Details extends AppCompatActivity {
 
         Intent intent=getIntent();
 
+        //////////// if mine //////////////
+
+        String validity =intent.getStringExtra("validity");
+        try {
+
+            if (!validity.equalsIgnoreCase("")){
+                ivdelete.setVisibility(View.VISIBLE);
+                ivedit.setVisibility(View.VISIBLE);
+            }
+
+        }catch (Exception e){
+
+            ivdelete.setVisibility(View.INVISIBLE);
+            ivedit.setVisibility(View.INVISIBLE);
+
+        }
+
+        ////////////////////////////////////
+
 
         tvtitle               .setText(intent.getStringExtra("title"));
         tvprice               .setText(intent.getStringExtra("price")+" تومان ");
@@ -116,7 +189,7 @@ public class Details extends AppCompatActivity {
        // collapsingToolbar   .setTitle(intent.getStringExtra("catname"));
         url                 =App.urlApi+"agahis/"+intent.getStringExtra("id");
         Glide.with(this)
-                .load("http://nardoun.ir/upload/"+intent.getStringExtra("image"))
+                .load(App.urlimages+intent.getStringExtra("image"))
                 .placeholder(R.mipmap.nopic)
                 .into(ivtitle);
         webServiceGetAgahi();
@@ -131,6 +204,55 @@ public class Details extends AppCompatActivity {
  //   public void onBackPressed() {
    //         super.onBackPressed();
   //  }
+
+    public  void webServiceDeleteAgahi()
+    {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+//        params.put("username", ""); //  ********** parametr  ersali dar surate niaz
+//        params.put("password", "");
+
+        client.delete(url, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+            @Override
+            public void onStart() {
+
+
+
+
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
+                App.CustomToast(" آگهی با موفقیت حذف شد. ");
+                finish();
+
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+
+                // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
+                if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
+                    App.CustomToast("آگهی با این شماره وجود ندارد !");
+
+                }else{
+                    App.CustomToast("fail "+statusCode);
+                    App.CustomToast(" لطفا دوباره سعی کنید ");
+                }
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+                // called when request is retried
+            }
+        });
+    }
+
+
+
+
 
     public  void webServiceGetAgahi()
     {
@@ -170,8 +292,6 @@ public class Details extends AppCompatActivity {
 
                     e1.printStackTrace();
                 }
-
-
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
@@ -188,14 +308,11 @@ public class Details extends AppCompatActivity {
                 }
             }
 
-
             @Override
             public void onRetry(int retryNo) {
                 // called when request is retried
             }
         });
-
-
     }
     @Override
 

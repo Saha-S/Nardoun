@@ -12,6 +12,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
 import com.bumptech.glide.Glide;
@@ -71,7 +72,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
 
 
         Glide.with(context)
-                .load("http://nardoun.ir/upload/"+mDataset.get(position).image)
+                .load(App.urlimages+mDataset.get(position).image)
                 .placeholder(R.mipmap.nopic)
                 .into(holder.image);
 

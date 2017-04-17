@@ -43,7 +43,7 @@
                     app:layout_collapseMode="pin"
                     android:scaleType="centerCrop"
                     app:showAsAction="always"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="7dp"
                     android:layout_marginRight="10dp"
                     />
                 <ImageView
@@ -55,7 +55,31 @@
                     android:scaleType="centerCrop"
                     app:showAsAction="always"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginRight="7dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_delete"
+                    android:layout_width="30dip"
+                    android:layout_height="30dip"
+                    android:src="@mipmap/delete"
+                    app:layout_collapseMode="pin"
+                    android:scaleType="centerCrop"
+                    app:showAsAction="always"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="10dp"
+                    android:visibility="invisible"
+                    />
+                <ImageView
+                    android:id="@+id/iv_edit"
+                    android:layout_width="30dip"
+                    android:layout_height="30dip"
+                    android:src="@mipmap/edit"
+                    app:layout_collapseMode="pin"
+                    android:scaleType="centerCrop"
+                    app:showAsAction="always"
                     android:layout_marginRight="5dp"
+                    android:visibility="invisible"
                     />
 
             </android.support.v7.widget.Toolbar>
