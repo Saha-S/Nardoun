@@ -24,8 +24,9 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
+
         <activity
             android:name=".activities.Main"
             android:label="@string/app_name"
@@ -44,16 +45,12 @@
             android:name=".activities.cats"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <activity
-            android:name=".activities.Locations"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
-        <activity
             android:name=".activities.subs"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <activity
             android:name=".activities.Call"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
-        <activity android:name=".activities.Details"
-            />
+        <activity android:name=".activities.Details" />
         <activity
             android:name=".activities.CatAgahis"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -63,16 +60,16 @@
         <activity
             android:name=".activities.NewAgahi"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"
-
-            />
-        <activity android:name=".activities.MyAgahis"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activities.MyAgahis"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name="com.android.camera.CropImage" />
         <activity
             android:name=".activities.DetailsSms"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.SuccessSendSms"></activity>
+        <activity android:name=".activities.SuccessSendSms" />
+        <activity android:name=".activities.EditAgahi"></activity>
     </application>
 
 </manifest>

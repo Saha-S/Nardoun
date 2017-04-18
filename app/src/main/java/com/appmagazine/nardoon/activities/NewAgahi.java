@@ -50,12 +50,11 @@ package com.appmagazine.nardoon.activities;
         public class NewAgahi extends AppCompatActivity {
 
             EditText price,email,phone , title , content;
-            TextView txtPrice,txtEmail,txtMobile , txtTitle, txtContent , txtType,txtLocation,txtCat;
-            String name , id , type,subid,location_id;
+            TextView txtPrice,txtEmail,txtMobile , txtTitle, txtContent , txtType,txtLocation,txtCat,location;
+            public static String name , id , type,subid ;
             RadioGroup radioTypeGroup;
             RadioButton radioTypeButton;
             public static ProgressDialog dialog;
-            public static Button SelectLocation;
             public static Button SelectImage;
             private ImageView ivImage;
             private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
@@ -81,10 +80,10 @@ package com.appmagazine.nardoon.activities;
                 setContentView(R.layout.activity_new);
 
                 Button SelectCat = (Button) findViewById(R.id.btn_cats);
-                SelectLocation = (Button) findViewById(R.id.btn_location);
                 SelectImage = (Button) findViewById(R.id.btn_select_image);
                 price = (EditText) findViewById(R.id.edt_price);
                 email = (EditText) findViewById(R.id.edt_email);
+                location = (EditText) findViewById(R.id.edt_location);
                 phone = (EditText) findViewById(R.id.edt_phone);
                 title = (EditText) findViewById(R.id.edt_title);
                 content = (EditText) findViewById(R.id.edt_content);
@@ -100,7 +99,6 @@ package com.appmagazine.nardoon.activities;
                 ivImage = (ImageView) findViewById(R.id.ivImage);
 
                 txtContent = (TextView) findViewById(R.id.txt_content);
-                txtEmail = (TextView) findViewById(R.id.txt_email);
                 txtLocation = (TextView) findViewById(R.id.txt_location);
                 txtMobile = (TextView) findViewById(R.id.txt_mobile);
                 txtPrice = (TextView) findViewById(R.id.txt_price);
@@ -116,8 +114,6 @@ package com.appmagazine.nardoon.activities;
                 id = intent.getStringExtra("CATID");
                 subid = intent.getStringExtra("SUBID");
 
-
-                location_id = intent.getStringExtra("location_id");
 
                 EnableRuntimePermission();
 
@@ -188,13 +184,6 @@ package com.appmagazine.nardoon.activities;
                             }
 
 
-                            if(email.getText().toString().matches("")){
-                                txtEmail.setVisibility(View.VISIBLE);
-                                flag2=true;
-                            }else {
-                                txtEmail.setVisibility(View.GONE);
-                                flag2 = false;
-                            }
 
                             if(phone.getText().toString().matches("")){
                                 txtMobile.setVisibility(View.VISIBLE);
@@ -206,7 +195,7 @@ package com.appmagazine.nardoon.activities;
 
 
 
-                            if(SelectLocation.getText().toString().matches("انتخاب محل")){
+                            if(location.getText().toString().matches("")){
                                 txtLocation.setVisibility(View.VISIBLE);
                                 flag4=true;
                             }else {
@@ -243,7 +232,7 @@ package com.appmagazine.nardoon.activities;
 
 
 
-                        if (flag1 == false && flag2 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false) {
+                        if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false) {
                             dialog = ProgressDialog.show(NewAgahi.this, null, null, true, false);
                             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
@@ -270,13 +259,6 @@ package com.appmagazine.nardoon.activities;
                     }
                 });
 
-                SelectLocation.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(App.context , Locations.class);
-                        startActivity(intent);
-                    }
-                });
                 SelectImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -309,7 +291,7 @@ package com.appmagazine.nardoon.activities;
                // params.put("image","jja");
                 params.put("deviceid",App.android_id);
                 params.put("devicemodel",App.android_Model);
-                params.put("location_id",Locations.id_location);
+                params.put("location_id",location.getText());
                 try {
                     params.put("file", destination);
                 } catch(FileNotFoundException e) {}

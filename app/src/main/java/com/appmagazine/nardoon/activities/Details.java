@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,11 +35,13 @@ import cz.msebera.android.httpclient.Header;
 public class Details extends AppCompatActivity {
     boolean FLAG_COLLAPSED = true;
     int positionID;
-    TextView tvtitle,tvcontent,tvprice,tvlocation , tvtime;
-    String url, catname , mobile , email ;
+    public static TextView tvtitle,tvcontent,tvprice,tvlocation , tvtime ,tvtype;
+    public static String url, catname , mobile , email , price  ;
+
     ImageView ivtitle , ivshare , ivFavorites , ivdelete , ivedit;
     CollapsingToolbarLayout collapsingToolbar;
     public static ProgressDialog dialog;
+    public static String idAgahi;
     Context context;
 
     @Override
@@ -55,6 +58,7 @@ public class Details extends AppCompatActivity {
         tvtitle = (TextView) findViewById(R.id.txtTitle);
         tvlocation = (TextView) findViewById(R.id.txtLocation);
         tvprice = (TextView) findViewById(R.id.txtPrice);
+        tvtype = (TextView) findViewById(R.id.txtType);
         tvcontent = (TextView) findViewById(R.id.txtContent);
         tvtime = (TextView) findViewById(R.id.txtTime);
         ivtitle=(ImageView) findViewById(R.id.iv_title);
@@ -141,6 +145,13 @@ public class Details extends AppCompatActivity {
 
             }
         });
+        ivedit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(App.context , EditAgahi.class);
+                startActivity(intent);
+            }
+        });
 
 
         setSupportActionBar(toolbar);
@@ -183,11 +194,13 @@ public class Details extends AppCompatActivity {
 
         tvtitle               .setText(intent.getStringExtra("title"));
         tvprice               .setText(intent.getStringExtra("price")+" تومان ");
+        price = intent.getStringExtra("price");
         tvlocation               .setText(intent.getStringExtra("location"));
         tvtime               .setText(intent.getStringExtra("time"));
 
        // collapsingToolbar   .setTitle(intent.getStringExtra("catname"));
         url                 =App.urlApi+"agahis/"+intent.getStringExtra("id");
+        idAgahi = intent.getStringExtra("id");
         Glide.with(this)
                 .load(App.urlimages+intent.getStringExtra("image"))
                 .placeholder(R.mipmap.nopic)
@@ -286,6 +299,7 @@ public class Details extends AppCompatActivity {
                     collapsingToolbar.setTitle(catname);
 
                     tvcontent.setText(content);
+                    tvtype.setText(type);
                     dialog.hide();
 
                 } catch (JSONException e1) {
