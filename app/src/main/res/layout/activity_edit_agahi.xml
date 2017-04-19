@@ -187,6 +187,7 @@
                                 android:layout_marginRight="10dp"
                                 android:visibility="gone"
                                 android:textSize="14sp" />
+
                             <RadioGroup
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"

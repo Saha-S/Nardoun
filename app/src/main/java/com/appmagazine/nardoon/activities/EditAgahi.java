@@ -98,6 +98,9 @@ public class EditAgahi extends AppCompatActivity {
         TextView tvBack = (TextView) findViewById(R.id.tv_back);
         radioTypeGroup = (RadioGroup) findViewById(R.id.radioType);
         ivImage = (ImageView) findViewById(R.id.ivImage);
+        final RadioButton radio1 = (RadioButton)findViewById(R.id.rb1);
+        final RadioButton radio2 = (RadioButton)findViewById(R.id.rb2);
+
 
         txtContent = (TextView) findViewById(R.id.txt_content);
         txtLocation = (TextView) findViewById(R.id.txt_location);
@@ -112,38 +115,33 @@ public class EditAgahi extends AppCompatActivity {
 
 
         title.setText(Details.tvtitle.getText());
+        location.setText(Details.tvlocation.getText());
         content.setText(Details.tvcontent.getText());
         phone.setText(Details.mobile);
         email.setText(Details.email);
         price.setText(Details.price);
-        Glide.with(this).load(Details.image).into(ivImage);
 
-        //  ivImage.setImageBitmap(Details.image);
+        if(Details.idRadio==0){
+            radio1.setChecked(true);
+        }
+        if(Details.idRadio==1){
+            radio2.setChecked(true);
+        }
+
         SelectCat.setText(Details.catname);
+
         if(Details.image!=null) {
             Glide.with(this).load(App.urlimages + Details.image).into(ivImage);
             ivImage.setVisibility(View.VISIBLE);
         }
 
-      //  Intent intent=getIntent();
-     //   name = intent.getStringExtra("NAME");
-     //   id = intent.getStringExtra("CATID");
-    //    subid = intent.getStringExtra("SUBID");
-
-
-        //location_id = intent.getStringExtra("location_id");
-
         EnableRuntimePermission();
-
-
 
             txtCat.setVisibility(View.GONE);
             llForm.setVisibility(LinearLayout.VISIBLE);
             llClose.setVisibility(LinearLayout.VISIBLE);
             llErsal.setVisibility(LinearLayout.VISIBLE);
             llSave.setVisibility(LinearLayout.VISIBLE);
-
-
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -289,19 +287,17 @@ public class EditAgahi extends AppCompatActivity {
         params.put("email", email.getText());
         params.put("mobile", phone.getText());
         params.put("type",type);
-        //     params.put("category_id",id);
-        //    params.put("subcategory_id",subid);
-
-
-
-        // params.put("image","jja");
         params.put("deviceid",App.android_id);
+        params.put("validity","0");
         params.put("devicemodel",App.android_Model);
-        params.put("location_id",location.getText());
-        try {
-            params.put("file", destination);
-        } catch(FileNotFoundException e) {}
-        Log.i("locaaa" , "loca:" + destination);
+        params.put("location",location.getText());
+        if(destination!=null){
+            try {
+                params.put("file", destination);
+                Log.i("fileeee" , "file:" + destination);
+            } catch(FileNotFoundException e) {}
+        }
+
 
         client.put(url, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
@@ -314,7 +310,12 @@ public class EditAgahi extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
-                App.CustomToast(" آگهی با موفقیت حذف شد. ");
+              //  dialog.hide();
+              //  Intent intent = new Intent(App.context , Details.class);
+              //  intent.putExtra("id", Details.idAgahi+"");
+               // startActivity(intent);
+                App.CustomToast("آگهی ویرایش شد !");
+
                 finish();
 
             }
@@ -325,9 +326,11 @@ public class EditAgahi extends AppCompatActivity {
                 // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
+                  //  dialog.hide();
                     App.CustomToast("آگهی با این شماره وجود ندارد !");
 
                 }else{
+                  //  dialog.hide();
                     App.CustomToast("fail "+statusCode);
                     App.CustomToast(" لطفا دوباره سعی کنید ");
                 }
@@ -377,7 +380,6 @@ public class EditAgahi extends AppCompatActivity {
 
         file = new File(Environment.getExternalStorageDirectory(),
                 "file" + String.valueOf(System.currentTimeMillis()) + ".jpg");
-        //   uri = Uri.fromFile(file);
         uri = FileProvider.getUriForFile(App.context, App.context.getApplicationContext().getPackageName() + ".provider", file);
         App.context.grantUriPermission("com.android.camera",uri,
                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -421,10 +423,6 @@ public class EditAgahi extends AppCompatActivity {
 
             if (data != null) {
 
-                // Bundle bundle = data.getExtras();
-                //  Bitmap thumbnail = bundle.getParcelable("data");
-
-                //  Log.i("lllll" ,"aaa"+(Bitmap) data.getExtras().get("data"));
                 Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
 
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -435,6 +433,7 @@ public class EditAgahi extends AppCompatActivity {
 
                 FileOutputStream fo;
                 try {
+
                     destination.createNewFile();
                     fo = new FileOutputStream(destination);
                     fo.write(bytes.toByteArray());
@@ -444,9 +443,6 @@ public class EditAgahi extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-
-
 
                 ivImage.setVisibility(View.VISIBLE);
                 ivImage.setImageBitmap(thumbnail);

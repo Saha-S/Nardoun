@@ -275,7 +275,6 @@ package com.appmagazine.nardoon.activities;
 
                 AsyncHttpClient client = new AsyncHttpClient();
                 RequestParams params = new RequestParams();
-               // File myFile = new File("/path/to/file.png");
 
                 params.put("title", title.getText()); //  ********** parametr  ersali dar surate niaz
                 params.put("content", content.getText());
@@ -284,14 +283,10 @@ package com.appmagazine.nardoon.activities;
                 params.put("mobile", phone.getText());
                 params.put("type",type);
                 params.put("category_id",id);
-                    params.put("subcategory_id",subid);
-
-
-
-               // params.put("image","jja");
+                params.put("subcategory_id",subid);
                 params.put("deviceid",App.android_id);
                 params.put("devicemodel",App.android_Model);
-                params.put("location_id",location.getText());
+                params.put("location",location.getText());
                 try {
                     params.put("file", destination);
                 } catch(FileNotFoundException e) {}
@@ -440,6 +435,8 @@ package com.appmagazine.nardoon.activities;
 
                         ivImage.setVisibility(View.VISIBLE);
                         ivImage.setImageBitmap(thumbnail);
+                        Log.i("filee4" ,"file : "+thumbnail.toString() );
+
 
                     }
                 }

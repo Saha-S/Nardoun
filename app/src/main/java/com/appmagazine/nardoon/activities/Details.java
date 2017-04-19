@@ -37,7 +37,7 @@ public class Details extends AppCompatActivity {
     int positionID;
     public static TextView tvtitle,tvcontent,tvprice,tvlocation , tvtime ,tvtype;
     public static String url, catname , mobile , email , price , image ;
-
+    public static int idRadio;
     ImageView ivtitle , ivshare , ivFavorites , ivdelete , ivedit;
     CollapsingToolbarLayout collapsingToolbar;
     public static ProgressDialog dialog;
@@ -68,6 +68,14 @@ public class Details extends AppCompatActivity {
         ivedit=(ImageView) findViewById(R.id.iv_edit);
 
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab_call);
+
+        String typetxt = tvtype.getText().toString();
+        if(typetxt=="فروشی"){
+            idRadio=0;
+        }
+        if(typetxt=="درخواستی"){
+            idRadio=1;
+        }
 
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
