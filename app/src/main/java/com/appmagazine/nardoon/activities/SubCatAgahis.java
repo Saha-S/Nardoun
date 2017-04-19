@@ -70,7 +70,6 @@ public class SubCatAgahis extends AppCompatActivity {
         llnewagahi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent intent = new Intent(App.context ,NewAgahi.class );
                 startActivity(intent);
             }
@@ -82,10 +81,6 @@ public class SubCatAgahis extends AppCompatActivity {
         Intent intent=getIntent();
         catID = intent.getStringExtra("POSITION");
         Log.i("subid" ,"id ;" + catID);
-
-       // TextView txtAgahi = (TextView) findViewById(R.id.txt_agahi);
-        //txtAgahi.setText("آگهی های "+intent.getStringExtra("name"));
-
 
         ImageButton ibmenu=(ImageButton) findViewById(R.id.ib_menu);
 

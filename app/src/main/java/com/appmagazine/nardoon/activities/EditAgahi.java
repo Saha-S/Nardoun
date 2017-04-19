@@ -110,9 +110,7 @@ public class EditAgahi extends AppCompatActivity {
         txtType = (TextView) findViewById(R.id.txt_type);
         txtCat = (TextView) findViewById(R.id.txt_cat);
 
-        ScrollView scroll = (ScrollView) findViewById(R.id.scroll) ;
         url                 =App.urlApi+"agahis/"+Details.idAgahi;
-
 
         title.setText(Details.tvtitle.getText());
         location.setText(Details.tvlocation.getText());
@@ -130,10 +128,10 @@ public class EditAgahi extends AppCompatActivity {
 
         SelectCat.setText(Details.catname);
 
-        if(Details.image!=null) {
+      /*  if(Details.image!=null) {
             Glide.with(this).load(App.urlimages + Details.image).into(ivImage);
             ivImage.setVisibility(View.VISIBLE);
-        }
+        }*/
 
         EnableRuntimePermission();
 
@@ -186,18 +184,13 @@ public class EditAgahi extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
-
                 if(price.getText().toString().matches("")){
                     txtPrice.setVisibility(View.VISIBLE);
                     flag1=true;
-
                 }else {
                     txtPrice.setVisibility(View.GONE);
                     flag1 = false;
                 }
-
-
 
                 if(phone.getText().toString().matches("")){
                     txtMobile.setVisibility(View.VISIBLE);
@@ -207,8 +200,6 @@ public class EditAgahi extends AppCompatActivity {
                     flag3=false;
                 }
 
-
-
                 if(location.getText().toString().matches("")){
                     txtLocation.setVisibility(View.VISIBLE);
                     flag4=true;
@@ -216,7 +207,6 @@ public class EditAgahi extends AppCompatActivity {
                     txtLocation.setVisibility(View.GONE);
                     flag4 = false;
                 }
-
 
                 if(title.getText().toString().matches("")){
                     txtTitle.setVisibility(View.VISIBLE);
@@ -226,7 +216,6 @@ public class EditAgahi extends AppCompatActivity {
                     flag5 = false;
                 }
 
-
                 if(content.getText().toString().matches("")){
                     txtContent.setVisibility(View.VISIBLE);
                     flag6=true;
@@ -234,7 +223,6 @@ public class EditAgahi extends AppCompatActivity {
                     txtContent.setVisibility(View.GONE);
                     flag6 = false;
                 }
-
 
                 if(radioTypeGroup.getCheckedRadioButtonId() == -1){
                     txtType.setVisibility(View.VISIBLE);
@@ -244,19 +232,13 @@ public class EditAgahi extends AppCompatActivity {
                     flag7=false;
                 }
 
-
-
                 if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false) {
                     dialog = ProgressDialog.show(EditAgahi.this, null, null, true, false);
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
                     dialog.setContentView(R.layout.progress_layout_small);
-
                     int selectedId = radioTypeGroup.getCheckedRadioButtonId();
                     radioTypeButton = (RadioButton) findViewById(selectedId);
-
                     if (radioTypeButton != null) {
-
                         type = radioTypeButton.getText().toString();
                     }
                     webServiceEditAgahi();
@@ -271,9 +253,6 @@ public class EditAgahi extends AppCompatActivity {
                 selectImage();
             }
         });
-
-        //this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
     }
 
     public  void webServiceEditAgahi()
