@@ -36,7 +36,7 @@ public class Details extends AppCompatActivity {
     boolean FLAG_COLLAPSED = true;
     int positionID;
     public static TextView tvtitle,tvcontent,tvprice,tvlocation , tvtime ,tvtype;
-    public static String url, catname , mobile , email , price  ;
+    public static String url, catname , mobile , email , price , image ;
 
     ImageView ivtitle , ivshare , ivFavorites , ivdelete , ivedit;
     CollapsingToolbarLayout collapsingToolbar;
@@ -197,10 +197,13 @@ public class Details extends AppCompatActivity {
         price = intent.getStringExtra("price");
         tvlocation               .setText(intent.getStringExtra("location"));
         tvtime               .setText(intent.getStringExtra("time"));
+        image = intent.getStringExtra("image");
+        Log.i("imageee","image : "+ App.urlimages+intent.getStringExtra("image"));
 
        // collapsingToolbar   .setTitle(intent.getStringExtra("catname"));
         url                 =App.urlApi+"agahis/"+intent.getStringExtra("id");
         idAgahi = intent.getStringExtra("id");
+
         Glide.with(this)
                 .load(App.urlimages+intent.getStringExtra("image"))
                 .placeholder(R.mipmap.nopic)

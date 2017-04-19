@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -32,15 +33,20 @@ import android.widget.TextView;
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.R;
 import com.appmagazine.nardoon.Utility;
+import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -110,6 +116,13 @@ public class EditAgahi extends AppCompatActivity {
         phone.setText(Details.mobile);
         email.setText(Details.email);
         price.setText(Details.price);
+
+        if(Details.image != null) {
+            Glide.with(this).load(Details.image).into(ivImage);
+            ivImage.setVisibility(View.VISIBLE);
+        }
+
+        //  ivImage.setImageBitmap(Details.image);
         SelectCat.setText(Details.catname);
 
       //  Intent intent=getIntent();
