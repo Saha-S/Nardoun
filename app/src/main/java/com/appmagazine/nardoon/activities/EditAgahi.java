@@ -116,9 +116,10 @@ public class EditAgahi extends AppCompatActivity {
         phone.setText(Details.mobile);
         email.setText(Details.email);
         price.setText(Details.price);
+        Log.i("imageee","image : "+ App.urlimages+Details.image);
 
         if(Details.image != null) {
-            Glide.with(this).load(Details.image).into(ivImage);
+            Glide.with(this).load(App.urlimages+Details.image).into(ivImage);
             ivImage.setVisibility(View.VISIBLE);
         }
 
