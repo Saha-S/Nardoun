@@ -96,6 +96,7 @@ public class MyAgahis extends AppCompatActivity {
             }
         };
 
+
         loadData(0);
 
 
@@ -121,13 +122,14 @@ public class MyAgahis extends AppCompatActivity {
                 intent.putExtra("location", array.get(position).location);
                 intent.putExtra("price", array.get(position).price);
                 intent.putExtra("time", array.get(position).created_at);
+                intent.putExtra("validity", array.get(position).validity);
                 startActivity(intent);
             }
         }));
     }
 
     public void loadData(int page) {
-        NetUtilsCatsAgahi.get("http://nardoun.ir/api/agahisbydevice/"+myDevice+"?data=phone&limit=10&page=" + (page+1), null, new JsonHttpResponseHandler() {
+        NetUtilsCatsAgahi.get(App.urlApi+"agahisbydevice/"+myDevice, null, new JsonHttpResponseHandler() {
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
