@@ -1,6 +1,7 @@
 package com.appmagazine.nardoon;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Application;
@@ -19,6 +20,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -41,11 +44,12 @@ public class App extends Application {
     public static SharedPreferences preferences;
     public static Typeface appfont;
     public static String urlApi;
-    public static String urlimages;
     public static String android_id;
     public static String android_Model;
+    public static int smsPrice;
 
 
+    @SuppressLint("MissingSuperCall")
     public void             onCreate() {
 
         context=getApplicationContext();
@@ -53,11 +57,10 @@ public class App extends Application {
         overrideFont(context,"SERIF", "Sansfarsi.ttf");
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
         urlApi                 ="http://nardoun.ir/api/";
-        urlimages              ="http://nardoun.ir/upload/";
         android_id = Secure.getString(context.getContentResolver(),
                 Secure.ANDROID_ID);
         android_Model = Build.MODEL;
-
+        smsPrice = 10;
 
 
     }

@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 public class MyAgahi {
     public int id;
-    public String title, price, location , image,created_at ,validity ;
+    public String title, price, location , image,created_at ,validity;
 
     public MyAgahi(JSONObject jsonObject) { // تابع سازنده برای دریافت مقادیر از JsonObject
         try {

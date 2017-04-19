@@ -1,32 +1,24 @@
 package com.appmagazine.nardoon.fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.appmagazine.nardoon.App;
-import com.appmagazine.nardoon.NetUtils;
-import com.appmagazine.nardoon.NetUtilsCatsAgahi;
-import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
-import com.appmagazine.nardoon.activities.Details;
 import com.appmagazine.nardoon.activities.DetailsSms;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -36,97 +28,144 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
-import java.util.Set;
-
-import cz.msebera.android.httpclient.Header;
 
 public class SMS extends Fragment {
-    EditText daemi , etebari , irancell;
     public static int Sdaemi,Setebari,Sirancell =0;
     Button price,pay;
-    TextView txtPrice,txtWarning;
-    int credit , number;
+    TextView txtPrice,txtWarning , txtCharacter;
+    int credit , number, operator;
+    int countSMS=1;
+    RadioGroup radioOperatorGroup;
+    RadioButton radioOperatorButton;
+    EditText matn , numberSMS;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.fragment_sm, container, false);
+        View view = inflater.inflate(R.layout.fragment_sms, container, false);
 
-        daemi = (EditText) view.findViewById(R.id.edt_daemi);
-        etebari = (EditText) view.findViewById(R.id.edt_etebari);
-        irancell = (EditText) view.findViewById(R.id.edt_irancell);
-        price = (Button) view.findViewById(R.id.btn_price);
         pay = (Button) view.findViewById(R.id.btn_pay);
-        txtPrice = (TextView) view.findViewById(R.id.tv_price);
+        txtCharacter = (TextView) view.findViewById(R.id.txt_character);
         txtWarning = (TextView) view.findViewById(R.id.txt_warning);
+        txtPrice = (TextView) view.findViewById(R.id.txt_price);
+        matn = (EditText) view.findViewById(R.id.edt_matn);
+        numberSMS = (EditText) view.findViewById(R.id.edt_number);
+        radioOperatorGroup = (RadioGroup) view.findViewById(R.id.radio_operator);
+
+        int selectedId = radioOperatorGroup.getCheckedRadioButtonId();
+        radioOperatorButton = (RadioButton) view.findViewById(selectedId);
+
+
         new GetData().execute();
+
+
+        TextWatcher inputTextWatcherMatn = new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                if(s.length()<=70){
+                    txtCharacter.setText("1 پیامک / "+s.length());
+                    countSMS=1;
+                }
+                else if(s.length()<=134 && s.length()> 70) {
+                    txtCharacter.setText("2 پیامک / "+s.length());
+                    countSMS = 2;
+                }
+                else if(s.length()<=201 && s.length()> 134) {
+                    txtCharacter.setText("3 پیامک / "+s.length());
+                    countSMS = 3;
+                }
+                else if(s.length()<=268 && s.length()> 201) {
+                    txtCharacter.setText("4 / "+s.length());
+                    countSMS = 4;
+                }
+                else if(s.length()<=335 && s.length()> 268) {
+                    txtCharacter.setText("5 / "+s.length());
+                    countSMS = 5;
+                }
+
+
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after){
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        };
+
+        matn.addTextChangedListener(inputTextWatcherMatn);
+
+        TextWatcher inputTextWatcher = new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                try {
+                    if (countSMS == 1) {
+                        txtPrice.setText(Integer.parseInt(s.toString()) * App.smsPrice + " تومان ");
+                        number=Integer.parseInt(s.toString()) * countSMS;
+                        Log.i("number" ,"aa"+number );
+
+                    } else {
+                        txtPrice.setText(Integer.parseInt(s.toString()) * App.smsPrice * countSMS + " تومان ");
+                        number=Integer.parseInt(s.toString()) * countSMS;
+                        Log.i("number" ,"aa"+number );
+
+
+                    }
+                }catch (NumberFormatException e){
+                    txtPrice.setText( " 0 تومان ");
+                }
+                try {
+                    if (Integer.parseInt(s.toString()) * countSMS >= credit) {
+                        pay.setVisibility(View.INVISIBLE);
+                        txtWarning.setVisibility(View.VISIBLE);
+                    } else {
+                        pay.setVisibility(View.VISIBLE);
+                        txtWarning.setVisibility(View.INVISIBLE);
+                    }
+                }catch (NumberFormatException e){}
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after){
+
+
+            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        };
+
+        numberSMS.addTextChangedListener(inputTextWatcher);
+
 
 
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(App.context , DetailsSms.class);
-                intent.putExtra("CNT1" ,  Sdaemi);
-                intent.putExtra("CNT11" ,  Setebari);
-                intent.putExtra("CNT2" ,  Sirancell);
-                Log.i("mylog2" ,Sdaemi + " ,,, "  +Setebari +",,,"+Sirancell );
+                intent.putExtra("MATN" , matn.getText().toString() );
+                Log.i("mylog3" ,radioOperatorButton.getText().toString() );
+                Log.i("mylog4" ,getString(R.string.daemi) );
+
+                if(radioOperatorButton.getText().toString()==getString(R.string.daemi)){
+                    Sdaemi=number;
+                    Setebari=0;
+                    Sirancell=0;
+                    Log.i("mylog2" ,Sdaemi + " ,,, "  +Setebari +",,,"+Sirancell );
+                }else if(radioOperatorButton.getText()==getString(R.string.etebari)){
+                    Sdaemi=0;
+                    Setebari=number;
+                    Sirancell=0;
+                }else if(radioOperatorButton.getText()==getString(R.string.daemi)){
+                    Sdaemi=0;
+                    Setebari=0;
+                    Sirancell=number;
+                }
+
 
                 startActivity(intent);
 
             }
         });
-        price.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    Sdaemi = Integer.parseInt(daemi.getText().toString());
-                } catch (NumberFormatException e) {
-                    Sdaemi=0;
-                }
-                try {
-                    Setebari = Integer.parseInt(etebari.getText().toString());
-                } catch (NumberFormatException e) {
-                    Setebari=0;
-                }
-                try {
-                    Sirancell = Integer.parseInt(irancell.getText().toString());
-                } catch (NumberFormatException e) {
-                    Sirancell=0;
-                }
-
-                     number = Sdaemi+Setebari+Sirancell;
-                    int sum = ((Sdaemi * 10) + (Setebari * 10) + (Sirancell * 10));
-                if(sum!=0 ){
-                    if(number<=credit){
-                        txtPrice.setVisibility(View.VISIBLE);
-                        txtPrice.setText(Integer.toString(sum) + " تومان ");
-                        pay.setVisibility(View.VISIBLE);
-                        txtWarning.setVisibility(View.INVISIBLE);
-                    }
-                    else {
-                        txtPrice.setVisibility(View.VISIBLE);
-                        txtPrice.setText(Integer.toString(sum) + " تومان ");
-                        pay.setVisibility(View.INVISIBLE);
-                        txtWarning.setVisibility(View.VISIBLE);
-                    }
-
-                }
-
-
-
-                if(sum==0){
-                    txtPrice.setVisibility(View.VISIBLE);
-                    txtPrice.setText(Integer.toString(sum) + " تومان ");
-                    pay.setVisibility(View.INVISIBLE);
-                    txtWarning.setVisibility(View.INVISIBLE);
-                }
-
-            }
-
-    });
 
         return view;
 
     }
+
 
     class GetData extends AsyncTask<String, Void, String> {
 

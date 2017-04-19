@@ -9,6 +9,16 @@
     <string name="this_is_tab_2">This is tab 2</string>
     <string name="this_is_tab_3">This is tab 3</string>
 
+    <string name="daemi">همراه اول دائمی (نور آباد و مصیری)</string>
+    <string name="etebari">همراه اول اعتباری (نور آباد و مصیری)</string>
+    <string name="irancell">ایرانسل (نور آباد و مصیری)</string>
+    <string name="numberOfSMS">تعداد پیامک های انتخابی شما: </string>
+    <string name="numberOfHorof">تعداد کارکتر:فارسی 70 (کارکتر یک پیامک) </string>
+    <string name="filterMatn">به دلیل فیلتر برخی از کلمات مانند قرعه کشی، جایزه، برنده و غیره از به کار بردن این کلمات در متن پیامک خودداری نمایید
+برای اطمینان قبل از ارسال یک پیامک تست به شماره خود ارسال کنید در صورت ارسال موفق میتوانید به صورت انبوه ارسال
+کنید. </string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_details">Details</string>

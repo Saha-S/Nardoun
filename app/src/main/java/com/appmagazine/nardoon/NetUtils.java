@@ -8,7 +8,7 @@ import com.loopj.android.http.RequestParams;
  * Created by nadia on 3/2/2017.
  */
 public class NetUtils {
-    private static final String BASE_URL = App.urlApi+"agahis"; // آدرس اصلی api
+    private static final String BASE_URL = "http://nardoun.ir/api/agahis"; // آدرس اصلی api
 
     private static AsyncHttpClient client = new AsyncHttpClient();
 

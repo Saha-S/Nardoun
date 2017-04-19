@@ -15,6 +15,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -56,8 +58,12 @@ import cz.msebera.android.httpclient.Header;
 
 public class DetailsSms extends AppCompatActivity {
 
-    EditText edtContent , edtMobile ;
-    String cnt1 , cnt2 , cnt11;
+    EditText edtContent , edtMobile,edtmatn ;
+    String cnt1 , cnt2 , cnt11,matn;
+    TextView txtCharacter;
+    int countSMS=1;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,13 +75,53 @@ public class DetailsSms extends AppCompatActivity {
         TextView tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
         tvtitle.setTypeface(tfmorvarid);
 
+        txtCharacter = (TextView) findViewById(R.id.txt_character);
+        edtmatn = (EditText) findViewById(R.id.edt_matn);
         edtContent = (EditText) findViewById(R.id.edt_content);
         edtMobile = (EditText) findViewById(R.id.edt_mobile);
+
         Intent intent=getIntent();
+        matn = intent.getStringExtra("MATN");
         cnt11 = intent.getStringExtra("CNT11");
         cnt1 = intent.getStringExtra("CNT1");
         cnt2 = intent.getStringExtra("CNT2");
         Log.i("mylog" ,cnt1 + " ,,, "  +cnt11 +",,,"+cnt2 );
+        edtmatn.setText(matn.toString());
+
+        TextWatcher inputTextWatcherMatn = new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                if(s.length()<=70){
+                    txtCharacter.setText("1 پیامک / "+s.length());
+                    countSMS=1;
+                }
+                else if(s.length()<=134 && s.length()> 70) {
+                    txtCharacter.setText("2 پیامک / "+s.length());
+                    countSMS = 2;
+                }
+                else if(s.length()<=201 && s.length()> 134) {
+                    txtCharacter.setText("3 پیامک / "+s.length());
+                    countSMS = 3;
+                }
+                else if(s.length()<=268 && s.length()> 201) {
+                    txtCharacter.setText("4 / "+s.length());
+                    countSMS = 4;
+                }
+                else if(s.length()<=335 && s.length()> 268) {
+                    txtCharacter.setText("5 / "+s.length());
+                    countSMS = 5;
+                }
+
+
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after){
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        };
+
+        edtmatn.addTextChangedListener(inputTextWatcherMatn);
+
         ImageButton ibmenu=(ImageButton) findViewById(R.id.ib_menu);
 
         ibmenu.setOnClickListener(new View.OnClickListener() {
@@ -130,7 +176,7 @@ public class DetailsSms extends AppCompatActivity {
 
 
 
-        client.post(App.urlApi+"sendsms", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+        client.post("http://nardoun.ir/api/sendsms", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
             }
@@ -177,7 +223,7 @@ public class DetailsSms extends AppCompatActivity {
 
 
 
-        client.post(App.urlApi+"testsms", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+        client.post("http://nardoun.ir/api/testsms", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
             }
