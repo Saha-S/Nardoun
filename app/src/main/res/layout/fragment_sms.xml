@@ -34,9 +34,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:shadowColor="#180117"
+                        android:shadowDx="3"
+                        android:shadowDy="3"
                         android:text="شهر در دستان شما"
                         android:textColor="#730099"
-                        android:textSize="16sp" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/textView14"
@@ -88,8 +91,11 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:checked="true"
+                                android:shadowColor="#000"
+                                android:shadowDx="1"
+                                android:shadowDy="1"
                                 android:text="@string/irancell"
-                                android:textColor="#ffcc00"
+                                android:textColor="#cc7a00"
                                 android:textSize="17sp" />
 
                             <RadioButton
@@ -97,16 +103,22 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:checked="true"
+                                android:shadowColor="#000"
+                                android:shadowDx="1"
+                                android:shadowDy="1"
                                 android:text="@string/daemi"
-                                android:textColor="#33bbff"
+                                android:textColor="#0066ff"
                                 android:textSize="17sp" />
 
                             <RadioButton
                                 android:id="@+id/radio_etebari"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:shadowColor="#000"
+                                android:shadowDx="1"
+                                android:shadowDy="1"
                                 android:text="@string/etebari"
-                                android:textColor="#33bbff"
+                                android:textColor="#0066ff"
                                 android:textSize="17sp" />
 
                         </RadioGroup>
@@ -117,21 +129,27 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="10dp"
+                        android:gravity="right"
                         android:orientation="horizontal"
                         android:weightSum="10">
 
                         <EditText
                             android:id="@+id/edt_number"
-                            android:layout_width="100dp"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="4"
                             android:background="#fff"
                             android:ems="10"
+                            android:foregroundGravity="center"
+                            android:gravity="center"
                             android:inputType="number" />
 
                         <TextView
                             android:id="@+id/textView16"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_weight="6"
                             android:text="@string/numberOfSMS"
                             android:textColor="#003399"
                             android:textSize="17sp" />

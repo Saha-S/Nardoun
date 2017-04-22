@@ -69,7 +69,8 @@
             android:name=".activities.DetailsSms"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.SuccessSendSms" />
-        <activity android:name=".activities.EditAgahi"></activity>
+        <activity android:name=".activities.EditAgahi"
+            android:windowSoftInputMode="adjustPan"></activity>
     </application>
 
 </manifest>

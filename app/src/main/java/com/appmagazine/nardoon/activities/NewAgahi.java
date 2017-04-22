@@ -19,8 +19,6 @@ package com.appmagazine.nardoon.activities;
         import android.util.DisplayMetrics;
         import android.util.Log;
         import android.view.View;
-        import android.view.WindowManager;
-        import android.view.inputmethod.InputMethodManager;
         import android.widget.Button;
         import android.widget.EditText;
         import android.widget.ImageButton;
@@ -36,7 +34,6 @@ package com.appmagazine.nardoon.activities;
         import com.appmagazine.nardoon.Utility;
         import com.loopj.android.http.AsyncHttpClient;
         import com.loopj.android.http.AsyncHttpResponseHandler;
-        import com.loopj.android.http.BuildConfig;
         import com.loopj.android.http.RequestParams;
 
         import java.io.ByteArrayOutputStream;
@@ -50,19 +47,21 @@ package com.appmagazine.nardoon.activities;
         public class NewAgahi extends AppCompatActivity {
 
             EditText price,email,phone , title , content;
-            TextView txtPrice,txtEmail,txtMobile , txtTitle, txtContent , txtType,txtLocation,txtCat,location;
+            TextView txtPrice,txtEmail,txtMobile , txtTitle, txtContent , txtType,txtLocation,txtCat,location,txtImg;
             public static String name , id , type,subid ;
             RadioGroup radioTypeGroup;
             RadioButton radioTypeButton;
             public static ProgressDialog dialog;
             public static Button SelectImage;
-            private ImageView ivImage;
+            private ImageView ivImageAsli, ivImage2, ivImage3;
+            private ImageButton imgDelete1, imgDelete2, imgDelete3;
+            LinearLayout imgAsli , img2,img3;
             private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
             private String userChoosenTask;
             File destination;
             private static int REQUEST_PICTURE = 1;
             private static int REQUEST_CROP_PICTURE = 2;
-
+            ImageView image;
             File file;
             Uri uri , uri2;
             Intent CamIntent, GalIntent, CropIntent ;
@@ -70,6 +69,7 @@ package com.appmagazine.nardoon.activities;
             DisplayMetrics displayMetrics ;
             int width, height;
             boolean flag1,flag2,flag3,flag4,flag5,flag6,flag7,flag8=false;
+            File file1 , file2,file3;
 
 
 
@@ -96,7 +96,18 @@ package com.appmagazine.nardoon.activities;
                 ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
                 TextView tvBack = (TextView) findViewById(R.id.tv_back);
                 radioTypeGroup = (RadioGroup) findViewById(R.id.radioType);
-                ivImage = (ImageView) findViewById(R.id.ivImage);
+
+                imgAsli = (LinearLayout) findViewById(R.id.img_asli);
+                img2 = (LinearLayout) findViewById(R.id.img2);
+                img3 = (LinearLayout) findViewById(R.id.img3);
+
+                ivImageAsli = (ImageView) findViewById(R.id.ivImage_asli);
+                ivImage2 = (ImageView) findViewById(R.id.ivImage2);
+                ivImage3 = (ImageView) findViewById(R.id.ivImage3);
+
+                imgDelete1 = (ImageButton) findViewById(R.id.img_del1);
+                imgDelete2 = (ImageButton) findViewById(R.id.img_del2);
+                imgDelete3 = (ImageButton) findViewById(R.id.img_del3);
 
                 txtContent = (TextView) findViewById(R.id.txt_content);
                 txtLocation = (TextView) findViewById(R.id.txt_location);
@@ -105,6 +116,7 @@ package com.appmagazine.nardoon.activities;
                 txtTitle = (TextView) findViewById(R.id.txt_title);
                 txtType = (TextView) findViewById(R.id.txt_type);
                 txtCat = (TextView) findViewById(R.id.txt_cat);
+                txtImg = (TextView) findViewById(R.id.txt_img_asli);
 
                 ScrollView scroll = (ScrollView) findViewById(R.id.scroll) ;
 
@@ -116,6 +128,25 @@ package com.appmagazine.nardoon.activities;
 
 
                 EnableRuntimePermission();
+
+                imgDelete1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        imgAsli.setVisibility(View.GONE);
+                    }
+                });
+                imgDelete2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        img2.setVisibility(View.GONE);
+                    }
+                });
+                imgDelete3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        img3.setVisibility(View.GONE);
+                    }
+                });
 
 
 
@@ -231,8 +262,17 @@ package com.appmagazine.nardoon.activities;
                             }
 
 
+                        if(imgAsli.getVisibility()==View.GONE && (img2.getVisibility()==View.VISIBLE || img3.getVisibility()==View.VISIBLE )){
+                            txtImg.setVisibility(View.VISIBLE);
+                            flag8=true;
+                        }else{
+                            txtImg.setVisibility(View.GONE);
+                            flag8=false;
+                        }
 
-                        if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false) {
+
+                        if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false && flag8 == false) {
+
                             dialog = ProgressDialog.show(NewAgahi.this, null, null, true, false);
                             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
@@ -262,7 +302,14 @@ package com.appmagazine.nardoon.activities;
                 SelectImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        selectImage();
+                        if(imgAsli.getVisibility()==View.GONE) {
+                            selectImage(ivImageAsli);
+                        } else if(imgAsli.getVisibility()==View.VISIBLE && img2.getVisibility()==View.GONE) {
+                            selectImage(ivImage2);
+                        }else if(img2.getVisibility()==View.VISIBLE && img3.getVisibility()==View.GONE) {
+                            selectImage(ivImage3);
+                        }
+
                     }
                 });
 
@@ -288,7 +335,13 @@ package com.appmagazine.nardoon.activities;
                 params.put("devicemodel",App.android_Model);
                 params.put("location",location.getText());
                 try {
-                    params.put("file", destination);
+                    params.put("file", file1);
+                } catch(FileNotFoundException e) {}
+                try {
+                    params.put("filei", file2);
+                } catch(FileNotFoundException e) {}
+                try {
+                    params.put("fileii", file3);
                 } catch(FileNotFoundException e) {}
                 Log.i("locaaa" , "loca:" + destination);
 
@@ -325,9 +378,10 @@ package com.appmagazine.nardoon.activities;
 
 
 
-            private void selectImage() {
+            private void selectImage(ImageView img) {
                 final CharSequence[] items = { "دوربین", "گالری",
                         "انصراف" };
+                image= img;
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(NewAgahi.this);
                 builder.setTitle("اضافه کردن تصویر");
@@ -432,12 +486,28 @@ package com.appmagazine.nardoon.activities;
 
 
 
+                        if(imgAsli.getVisibility()==View.GONE) {
+                            SelectImage.setText("افزودن عکس");
+                        }else if(imgAsli.getVisibility()==View.VISIBLE) {
+                            SelectImage.setText("افزودن عکسی دیگر");
+                        }
 
-                        ivImage.setVisibility(View.VISIBLE);
-                        ivImage.setImageBitmap(thumbnail);
-                        Log.i("filee4" ,"file : "+thumbnail.toString() );
+                        if(imgAsli.getVisibility()==View.GONE) {
+                            imgAsli.setVisibility(View.VISIBLE);
+                            file1 = destination;
+                            Log.i("file1" , "1: "+file1.toString());
+                        }else if(imgAsli.getVisibility()==View.VISIBLE && img2.getVisibility()==View.GONE){
+                            img2.setVisibility(View.VISIBLE);
+                            file2 = destination;
+                            Log.i("file2" , "2: "+file2.toString());
 
+                        }else if(img2.getVisibility()==View.VISIBLE && img3.getVisibility()==View.GONE) {
+                            img3.setVisibility(View.VISIBLE);
+                            file3 = destination;
+                            Log.i("file3" , "3: "+file3.toString());
 
+                        }
+                        image.setImageBitmap(thumbnail);
                     }
                 }
             }

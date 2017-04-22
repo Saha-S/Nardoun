@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -27,7 +26,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.appmagazine.nardoon.App;
@@ -38,35 +36,32 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 
 import cz.msebera.android.httpclient.Header;
 
 public class EditAgahi extends AppCompatActivity {
 
     EditText price,email,phone , title , content , location;
-    TextView txtPrice,txtEmail,txtMobile , txtTitle, txtContent , txtType,txtLocation,txtCat;
+    TextView txtPrice,txtEmail,txtMobile , txtTitle, txtContent , txtType,txtLocation,txtCat , txtImg;
    // String name , id , type,subid,location_id;
     String    type;
     RadioGroup radioTypeGroup;
     RadioButton radioTypeButton;
     public static ProgressDialog dialog;
     public static Button SelectImage;
-    private ImageView ivImage;
+    private ImageView ivImageAsli, ivImage2, ivImage3;
+    private ImageButton imgDelete1, imgDelete2, imgDelete3;
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
     private String url , userChoosenTask;
     File destination;
     private static int REQUEST_PICTURE = 1;
     private static int REQUEST_CROP_PICTURE = 2;
-
+    LinearLayout imgAsli , img2,img3;
     File file;
     Uri uri , uri2;
     Intent CamIntent, GalIntent, CropIntent ;
@@ -74,7 +69,8 @@ public class EditAgahi extends AppCompatActivity {
     DisplayMetrics displayMetrics ;
     int width, height;
     boolean flag1,flag2,flag3,flag4,flag5,flag6,flag7,flag8=false;
-
+    ImageView image;
+    File file1 , file2 , file3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,12 +88,24 @@ public class EditAgahi extends AppCompatActivity {
         LinearLayout llErsal = (LinearLayout) findViewById(R.id.ll_ersal);
         LinearLayout llSave = (LinearLayout) findViewById(R.id.ll_save);
         LinearLayout llClose = (LinearLayout) findViewById(R.id.ll_close);
+
+        imgAsli = (LinearLayout) findViewById(R.id.img_asli);
+        img2 = (LinearLayout) findViewById(R.id.img2);
+        img3 = (LinearLayout) findViewById(R.id.img3);
+
+        ivImageAsli = (ImageView) findViewById(R.id.ivImage_asli);
+        ivImage2 = (ImageView) findViewById(R.id.ivImage2);
+        ivImage3 = (ImageView) findViewById(R.id.ivImage3);
+
+        imgDelete1 = (ImageButton) findViewById(R.id.img_del1);
+        imgDelete2 = (ImageButton) findViewById(R.id.img_del2);
+        imgDelete3 = (ImageButton) findViewById(R.id.img_del3);
+
         ImageButton close = (ImageButton) findViewById(R.id.close);
         LinearLayout llBack = (LinearLayout) findViewById(R.id.ll_back);
         ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
         TextView tvBack = (TextView) findViewById(R.id.tv_back);
         radioTypeGroup = (RadioGroup) findViewById(R.id.radioType);
-        ivImage = (ImageView) findViewById(R.id.ivImage);
         final RadioButton radio1 = (RadioButton)findViewById(R.id.rb1);
         final RadioButton radio2 = (RadioButton)findViewById(R.id.rb2);
 
@@ -109,8 +117,9 @@ public class EditAgahi extends AppCompatActivity {
         txtTitle = (TextView) findViewById(R.id.txt_title);
         txtType = (TextView) findViewById(R.id.txt_type);
         txtCat = (TextView) findViewById(R.id.txt_cat);
+        txtImg = (TextView) findViewById(R.id.txt_img_asli);
 
-        url                 =App.urlApi+"agahis/"+Details.idAgahi;
+        url                 =App.urlApi+"updateagahi/"+Details.idAgahi;
 
         title.setText(Details.tvtitle.getText());
         location.setText(Details.tvlocation.getText());
@@ -118,6 +127,28 @@ public class EditAgahi extends AppCompatActivity {
         phone.setText(Details.mobile);
         email.setText(Details.email);
         price.setText(Details.price);
+
+
+        imgDelete1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imgAsli.setVisibility(View.GONE);
+            }
+        });
+        imgDelete2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                img2.setVisibility(View.GONE);
+            }
+        });
+        imgDelete3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                img3.setVisibility(View.GONE);
+            }
+        });
+
+
 
         if(Details.idRadio==0){
             radio1.setChecked(true);
@@ -128,10 +159,39 @@ public class EditAgahi extends AppCompatActivity {
 
         SelectCat.setText(Details.catname);
 
-      /*  if(Details.image!=null) {
-            Glide.with(this).load(App.urlimages + Details.image).into(ivImage);
-            ivImage.setVisibility(View.VISIBLE);
-        }*/
+
+        if (Details.image.equals("0")){
+            imgAsli.setVisibility(View.GONE);
+            SelectImage.setText("افزودن عکس");
+        }
+        if(!Details.image.equals("0")) {
+            Glide.with(this).load(App.urlimages + Details.image).into(ivImageAsli);
+            imgAsli.setVisibility(View.VISIBLE);
+            SelectImage.setText("افزودن عکسی دیگر");
+            Log.i("url" , "...:" +Details.image );
+        }
+        if (Details.url2.toString().equals("0")){
+            img2.setVisibility(View.GONE);
+        }
+        if(!Details.url2.toString().equals("0")) {
+            Glide.with(this).load(App.urlimages + Details.url2).into(ivImage2);
+            img2.setVisibility(View.VISIBLE);
+            SelectImage.setText("افزودن عکسی دیگر");
+            Log.i("url2" , "...:" +Details.url2 );
+
+        }
+
+        if (Details.url3.toString().equals("0")){
+            img3.setVisibility(View.GONE);
+        }
+        if(!Details.url3.toString().equals("0")) {
+            Glide.with(this).load(App.urlimages + Details.url3).into(ivImage3);
+            img3.setVisibility(View.VISIBLE);
+            SelectImage.setText("افزودن عکسی دیگر");
+            Log.i("url3" , "...:" +Details.url3 );
+        }
+
+
 
         EnableRuntimePermission();
 
@@ -231,8 +291,16 @@ public class EditAgahi extends AppCompatActivity {
                     txtType.setVisibility(View.GONE);
                     flag7=false;
                 }
+                if(imgAsli.getVisibility()==View.GONE && (img2.getVisibility()==View.VISIBLE || img3.getVisibility()==View.VISIBLE )){
+                    txtImg.setVisibility(View.VISIBLE);
+                    flag8=true;
+                }else{
+                    txtImg.setVisibility(View.GONE);
+                    flag8=false;
+                }
 
-                if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false) {
+
+                if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false && flag8 == false) {
                     dialog = ProgressDialog.show(EditAgahi.this, null, null, true, false);
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     dialog.setContentView(R.layout.progress_layout_small);
@@ -250,7 +318,14 @@ public class EditAgahi extends AppCompatActivity {
         SelectImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectImage();
+                if(imgAsli.getVisibility()==View.GONE) {
+                    selectImage(ivImageAsli);
+                } else if(imgAsli.getVisibility()==View.VISIBLE && img2.getVisibility()==View.GONE) {
+                    selectImage(ivImage2);
+                }else if(img2.getVisibility()==View.VISIBLE && img3.getVisibility()==View.GONE) {
+                    selectImage(ivImage3);
+                }
+
             }
         });
     }
@@ -260,36 +335,68 @@ public class EditAgahi extends AppCompatActivity {
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
+
         params.put("title", title.getText()); //  ********** parametr  ersali dar surate niaz
         params.put("content", content.getText());
+        params.put("deviceid", App.android_id);
+        params.put("devicemodel", App.android_Model);
         params.put("price", price.getText());
         params.put("email", email.getText());
         params.put("mobile", phone.getText());
         params.put("type",type);
-        params.put("deviceid",App.android_id);
         params.put("validity","0");
-        params.put("devicemodel",App.android_Model);
         params.put("location",location.getText());
-        if(destination!=null){
+        if(file1!=null){
             try {
-                params.put("file", destination);
-                Log.i("fileeee" , "file:" + destination);
+                Log.i("file: " ,"....:" + file1.toString());
+                params.put("file", file1);
             } catch(FileNotFoundException e) {}
+        }else if(file2!=null){
+        try {
+            Log.i("filei: " ,"....:" + file2.toString());
+            params.put("filei", file2);
+        } catch(FileNotFoundException e) {}
+    }
+    else if(file3!=null){
+        try {
+            Log.i("fileii: " ,"....:" + file1.toString());
+            params.put("fileii", file3);
+        } catch(FileNotFoundException e) {}
+    }
+         if(file1==null && imgAsli.getVisibility()==View.VISIBLE){
+            Log.i("file11: " ,"....:" + Details.image.toString());
+            params.put("image", Details.image);
+        }
+         if(file2==null && img2.getVisibility()==View.VISIBLE){
+            Log.i("file22: " ,"....:" + Details.url2.toString());
+            params.put("imagei", Details.url2);
+        }
+         if(file3==null && img3.getVisibility()==View.VISIBLE){
+            Log.i("file33: " ,"....:" + Details.url3.toString());
+            params.put("imageii", Details.url3);
+        }
+         if(file1==null && imgAsli.getVisibility()==View.GONE){
+            Log.i("file111: " ,"....:" + "delete");
+            params.put("image", "0");
+        }
+         if( img2.getVisibility()==View.GONE){
+            Log.i("file222: " ,"....:" + "delete");
+            params.put("imagei", "0");
+        }
+         if(img3.getVisibility()==View.GONE){
+            Log.i("file333: " ,"....:" + "delete");
+            params.put("imageii", "0");
         }
 
-
-        client.put(url, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+        client.post(url, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
-
-
-
 
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
-              //  dialog.hide();
+                dialog.hide();
               //  Intent intent = new Intent(App.context , Details.class);
               //  intent.putExtra("id", Details.idAgahi+"");
                // startActivity(intent);
@@ -305,11 +412,11 @@ public class EditAgahi extends AppCompatActivity {
                 // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
-                  //  dialog.hide();
+                    dialog.hide();
                     App.CustomToast("آگهی با این شماره وجود ندارد !");
 
                 }else{
-                  //  dialog.hide();
+                    dialog.hide();
                     App.CustomToast("fail "+statusCode);
                     App.CustomToast(" لطفا دوباره سعی کنید ");
                 }
@@ -322,10 +429,10 @@ public class EditAgahi extends AppCompatActivity {
         });
     }
 
-    private void selectImage() {
+    private void selectImage(ImageView img) {
         final CharSequence[] items = { "دوربین", "گالری",
                 "انصراف" };
-
+        image= img;
         AlertDialog.Builder builder = new AlertDialog.Builder(EditAgahi.this);
         builder.setTitle("اضافه کردن تصویر");
         builder.setItems(items, new DialogInterface.OnClickListener() {
@@ -422,9 +529,29 @@ public class EditAgahi extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                if(imgAsli.getVisibility()==View.GONE) {
+                    SelectImage.setText("افزودن عکس");
+                }else if(imgAsli.getVisibility()==View.VISIBLE) {
+                    SelectImage.setText("افزودن عکسی دیگر");
+                }
 
-                ivImage.setVisibility(View.VISIBLE);
-                ivImage.setImageBitmap(thumbnail);
+                if(imgAsli.getVisibility()==View.GONE) {
+                    imgAsli.setVisibility(View.VISIBLE);
+                    file1 = destination;
+                    Log.i("file1" , "1: "+file1.toString());
+                }else if(imgAsli.getVisibility()==View.VISIBLE && img2.getVisibility()==View.GONE){
+                    img2.setVisibility(View.VISIBLE);
+                    file2 = destination;
+                    Log.i("file2" , "2: "+file2.toString());
+
+                }else if(img2.getVisibility()==View.VISIBLE && img3.getVisibility()==View.GONE) {
+                    img3.setVisibility(View.VISIBLE);
+                    file3 = destination;
+                    Log.i("file3" , "3: "+file3.toString());
+
+                }
+
+                image.setImageBitmap(thumbnail);
 
             }
         }

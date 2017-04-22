@@ -214,59 +214,139 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:background="#fff"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
                         android:layout_marginTop="15dp"
-                        android:layout_height="match_parent">
+                        android:background="#fff"
+                        android:orientation="vertical">
 
 
                         <TextView
-                            android:text="انتخاب عکس برای آگهی باعث بیشتر دیده شدن آن میشود"
+                            android:id="@+id/txt_img_asli"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/textView10"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="6dp"
+                            android:text="لطفا عکس اصلی را انتخاب کنید"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textColor="@android:color/holo_red_dark"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginRight="10dp"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"
+                            android:visibility="gone" />
 
                         <TextView
-                            android:text="عکس"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp"
                             android:layout_marginRight="10dp"
-                            android:textSize="18sp"
-                            android:textColor="#3d3d3d" />
+                            android:layout_marginTop="6dp"
+                            android:text="عکس"
+                            android:textColor="#3d3d3d"
+                            android:textSize="18sp" />
 
                         <Button
+                            android:id="@+id/btn_select_image"
                             android:layout_width="144dp"
                             android:layout_height="wrap_content"
-                            android:id="@+id/btn_select_image"
                             android:layout_marginBottom="10dp"
                             android:layout_marginLeft="10dp"
                             android:background="#5A2456"
+                            android:text="افزودن عکس"
                             android:textColor="#fff"
-                            android:textSize="18sp"
-                            android:text="افزودن عکس" />
+                            android:textSize="18sp" />
 
-                        <LinearLayout
-                            android:orientation="vertical"
+                        <HorizontalScrollView
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center">
+                            android:layout_height="match_parent">
 
-                            <ImageView
-                                app:srcCompat="@mipmap/nopic"
-                                android:id="@+id/ivImage"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp"
-                                android:visibility="gone" />
-                        </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:id="@+id/img_asli"
+                                    android:layout_width="100dp"
+                                    android:layout_height="100dp"
+                                    android:layout_margin="5dp"
+                                    android:background="#c1c1c1"
+                                    android:gravity="center"
+                                    android:orientation="vertical"
+                                    android:visibility="gone">
+
+                                    <ImageButton
+                                        android:id="@+id/img_del1"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_gravity="top|left"
+                                        app:srcCompat="@mipmap/imgdelete" />
+
+                                    <ImageView
+                                        android:id="@+id/ivImage_asli"
+                                        android:layout_width="60dp"
+                                        android:layout_height="60dp"
+                                        app:srcCompat="@mipmap/nopic" />
+
+                                    <TextView
+                                        android:id="@+id/textView12"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center"
+                                        android:text="عکس اصلی"
+                                        android:textColor="#000" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/img2"
+                                    android:layout_width="100dp"
+                                    android:layout_height="100dp"
+                                    android:layout_margin="5dp"
+                                    android:background="#c1c1c1"
+                                    android:gravity="center"
+                                    android:orientation="vertical"
+                                    android:visibility="gone">
+
+                                    <ImageButton
+                                        android:id="@+id/img_del2"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_gravity="top|left"
+                                        app:srcCompat="@mipmap/imgdelete" />
+
+                                    <ImageView
+                                        android:id="@+id/ivImage2"
+                                        android:layout_width="60dp"
+                                        android:layout_height="60dp"
+                                        app:srcCompat="@mipmap/nopic" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/img3"
+                                    android:layout_width="100dp"
+                                    android:layout_height="100dp"
+                                    android:layout_margin="5dp"
+                                    android:background="#c1c1c1"
+                                    android:gravity="center"
+                                    android:orientation="vertical"
+                                    android:visibility="gone">
+
+                                    <ImageButton
+                                        android:id="@+id/img_del3"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_gravity="top|left"
+                                        app:srcCompat="@mipmap/imgdelete" />
+
+                                    <ImageView
+                                        android:id="@+id/ivImage3"
+                                        android:layout_width="60dp"
+                                        android:layout_height="60dp"
+                                        app:srcCompat="@mipmap/nopic" />
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+                        </HorizontalScrollView>
 
                     </LinearLayout>
 

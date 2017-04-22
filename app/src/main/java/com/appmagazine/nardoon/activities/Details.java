@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appmagazine.nardoon.App;
+import com.appmagazine.nardoon.MyCustomPagerAdapter;
 import com.appmagazine.nardoon.R;
 import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpClient;
@@ -38,11 +40,16 @@ public class Details extends AppCompatActivity {
     public static TextView tvtitle,tvcontent,tvprice,tvlocation , tvtime ,tvtype;
     public static String url, catname , mobile , email , price , image ;
     public static int idRadio;
-    ImageView ivtitle , ivshare , ivFavorites , ivdelete , ivedit;
+    ImageView  ivshare , ivFavorites , ivdelete , ivedit;
     CollapsingToolbarLayout collapsingToolbar;
     public static ProgressDialog dialog;
-    public static String idAgahi;
+    public static String idAgahi , url1 , url2 , url3;
     Context context;
+
+    ViewPager viewPager;
+
+    MyCustomPagerAdapter myCustomPagerAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +68,7 @@ public class Details extends AppCompatActivity {
         tvtype = (TextView) findViewById(R.id.txtType);
         tvcontent = (TextView) findViewById(R.id.txtContent);
         tvtime = (TextView) findViewById(R.id.txtTime);
-        ivtitle=(ImageView) findViewById(R.id.iv_title);
+       // ivtitle=(ImageView) findViewById(R.id.iv_title);
         ivshare=(ImageView) findViewById(R.id.iv_share);
         ivFavorites=(ImageView) findViewById(R.id.iv_favorites);
         ivdelete=(ImageView) findViewById(R.id.iv_delete);
@@ -77,15 +84,16 @@ public class Details extends AppCompatActivity {
             idRadio=1;
         }
 
+
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent(App.context , Call.class);
                 intent.putExtra("mobile", mobile);
                 intent.putExtra("email", email);
                 startActivity(intent);
-
             }
         });
+
         ivshare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,8 +185,8 @@ public class Details extends AppCompatActivity {
 
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle("");
-
         Intent intent=getIntent();
+
 
         //////////// if mine //////////////
 
@@ -197,26 +205,18 @@ public class Details extends AppCompatActivity {
 
         }
 
+
         ////////////////////////////////////
 
 
-        tvtitle               .setText(intent.getStringExtra("title"));
-        tvprice               .setText(intent.getStringExtra("price")+" تومان ");
-        price = intent.getStringExtra("price");
-        tvlocation               .setText(intent.getStringExtra("location"));
-        tvtime               .setText(intent.getStringExtra("time"));
-        image = intent.getStringExtra("image");
-        Log.i("imageee","image : "+ App.urlimages+intent.getStringExtra("image"));
-
-       // collapsingToolbar   .setTitle(intent.getStringExtra("catname"));
         url                 =App.urlApi+"agahis/"+intent.getStringExtra("id");
         idAgahi = intent.getStringExtra("id");
+        webServiceGetAgahi();
 
-        Glide.with(this)
+       /* Glide.with(this)
                 .load(App.urlimages+intent.getStringExtra("image"))
                 .placeholder(R.mipmap.nopic)
-                .into(ivtitle);
-        webServiceGetAgahi();
+                .into(ivtitle);*/
 
 
     }
@@ -307,10 +307,72 @@ public class Details extends AppCompatActivity {
                     catname= obj.getString("category_name");
                     email= obj.getString("email");
                     mobile= obj.getString("mobile");
+
+
+                    url2= obj.getString("imagei");
+                    url3= obj.getString("imageii");
                     collapsingToolbar.setTitle(catname);
 
                     tvcontent.setText(content);
                     tvtype.setText(type);
+
+                    Intent intent=getIntent();
+                    image = intent.getStringExtra("image");
+
+                    url1=App.urlimages+intent.getStringExtra("image");
+                    if(url2.equals("0") && url3.equals("0")){
+                        String images[] = {url1};
+                        myCustomPagerAdapter = new MyCustomPagerAdapter(Details.this, images);
+                        viewPager = (ViewPager)findViewById(R.id.viewPager);
+
+                        myCustomPagerAdapter = new MyCustomPagerAdapter(Details.this, images);
+                        viewPager.setAdapter(myCustomPagerAdapter);
+
+
+
+                    }
+                    if(url2.equals("0") && !url3.equals("0")){
+                        String images[] = {url1,App.urlimages+url3};
+                        myCustomPagerAdapter = new MyCustomPagerAdapter(Details.this, images);
+                        Log.i("lllll", "hideeeee2");
+
+
+                    }
+                    if(!url2.equals("0") && url3.equals("0")){
+                        String images[] = {url1,App.urlimages+url2};
+                        myCustomPagerAdapter = new MyCustomPagerAdapter(Details.this, images);
+                        viewPager = (ViewPager)findViewById(R.id.viewPager);
+
+                        myCustomPagerAdapter = new MyCustomPagerAdapter(Details.this, images);
+                        viewPager.setAdapter(myCustomPagerAdapter);
+
+                        Log.i("lllll", "hideeeee3");
+
+
+
+                    }
+                    if(!url2.equals("0") && !url3.equals("0")){
+                        final  String images[] = {url1,App.urlimages+url2,App.urlimages+url3};
+                        myCustomPagerAdapter = new MyCustomPagerAdapter(Details.this, images);
+                        viewPager = (ViewPager)findViewById(R.id.viewPager);
+
+                        myCustomPagerAdapter = new MyCustomPagerAdapter(Details.this, images);
+                        viewPager.setAdapter(myCustomPagerAdapter);
+
+                        Log.i("lllll", "hideeeee4");
+
+                    }
+
+                   // String images[] = {url1,App.urlimages+url2,App.urlimages+url3};
+
+                    tvtitle               .setText(intent.getStringExtra("title"));
+                    tvprice               .setText(intent.getStringExtra("price")+" تومان ");
+                    price = intent.getStringExtra("price");
+                    tvlocation               .setText(intent.getStringExtra("location"));
+                    tvtime               .setText(intent.getStringExtra("time"));
+                    Log.i("imageee","image : "+ App.urlimages+intent.getStringExtra("image"));
+
+
                     dialog.hide();
 
                 } catch (JSONException e1) {
