@@ -193,7 +193,7 @@
                                 android:id="@+id/radioType"
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_below="@+id/textView"
+                                android:layout_below="@+id/txt_mobile_number"
                                 android:padding="10dp"
                                 android:textColor="#010101"
                                 android:weightSum="1">

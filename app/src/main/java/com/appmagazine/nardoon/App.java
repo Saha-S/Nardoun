@@ -29,6 +29,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.provider.Settings.Secure;
 
+import com.appmagazine.nardoon.activities.Main;
+
 import java.lang.reflect.Field;
 
 /**

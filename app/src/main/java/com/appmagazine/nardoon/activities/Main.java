@@ -1,12 +1,15 @@
 package com.appmagazine.nardoon.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +17,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
@@ -107,6 +111,43 @@ public class Main extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        Menu nav_Menu = navigationView.getMenu();
+
+        View hView =  navigationView.getHeaderView(0);
+        final TextView nav_mobile = (TextView)hView.findViewById(R.id.txt_mobile_number);
+        final Button btnExit = (Button)hView.findViewById(R.id.btn_exit);
+        nav_mobile.setVisibility(View.GONE);
+        btnExit.setVisibility(View.GONE);
+
+
+        btnExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = getSharedPreferences("IS_LOGIN", MODE_PRIVATE).edit();
+                editor.putString("islogin", "0");
+                editor.commit();
+                Intent intent = new Intent(App.context , Main.class);
+                startActivity(intent);
+                finish();
+
+            }
+        });
+
+
+        SharedPreferences prefs = getSharedPreferences("LOGIN_ID", MODE_PRIVATE);
+        SharedPreferences prefs2 = getSharedPreferences("IS_LOGIN", MODE_PRIVATE);
+        String status = prefs2.getString("islogin", "0");
+        String mobile = prefs.getString("mobile", "0");
+        Log.i("aaa" , status + ":::" + mobile);
+        if (status.matches("1")) {
+            nav_Menu.findItem(R.id.nav_login).setVisible(false);
+            nav_mobile.setVisibility(View.VISIBLE);
+            btnExit.setVisibility(View.VISIBLE);
+            nav_mobile.setText(mobile);
+            Log.i("aaa" , status + "::::1111:::1111:::" + mobile);
+
+
+        }
 
 
         ibmenu.setOnClickListener(new View.OnClickListener() {
@@ -165,6 +206,14 @@ public class Main extends AppCompatActivity
 
             Intent intent = new Intent(App.context , MyAgahis.class);
             startActivity(intent);
+
+        }
+        else if (id == R.id.nav_login) {
+
+                Intent intent = new Intent(App.context , Login.class);
+                startActivity(intent);
+
+
 
         }
         else if (id == R.id.nav_recently) {

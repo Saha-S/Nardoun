@@ -64,6 +64,13 @@
         <activity
             android:name=".activities.MyAgahis"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.Login"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.Validation"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name="com.android.camera.CropImage" />
         <activity
             android:name=".activities.DetailsSms"
