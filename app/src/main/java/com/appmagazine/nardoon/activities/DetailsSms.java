@@ -32,9 +32,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.appmagazine.nardoon.Adapter.MyPanelAdapter;
 import com.appmagazine.nardoon.Adapter.PosterAdapter;
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.EndlessRecyclerViewScrollListener;
+import com.appmagazine.nardoon.MyPay;
 import com.appmagazine.nardoon.NetUtilsCatsAgahi;
 import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
@@ -55,14 +57,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.cookie.SM;
 
 public class DetailsSms extends AppCompatActivity {
 
-    EditText edtContent , edtMobile,edtmatn ;
+    EditText edtMobile,edtmatn ;
     String cnt1 , cnt2 , cnt11,matn;
     TextView txtCharacter;
     int countSMS=1;
-
+    int credit;
+    private String flag , id;
 
 
     @Override
@@ -77,17 +81,25 @@ public class DetailsSms extends AppCompatActivity {
 
         txtCharacter = (TextView) findViewById(R.id.txt_character);
         edtmatn = (EditText) findViewById(R.id.edt_matn);
-        edtContent = (EditText) findViewById(R.id.edt_content);
+       // edtContent = (EditText) findViewById(R.id.edt_content);
         edtMobile = (EditText) findViewById(R.id.edt_mobile);
 
         Intent intent=getIntent();
         matn = intent.getStringExtra("MATN");
+        flag = intent.getStringExtra("FLAG");
+        id = intent.getStringExtra("ID");
         cnt11 = intent.getStringExtra("CNT11");
         cnt1 = intent.getStringExtra("CNT1");
         cnt2 = intent.getStringExtra("CNT2");
         Log.i("mylog" ,cnt1 + " ,,, "  +cnt11 +",,,"+cnt2 );
-        edtmatn.setText(matn.toString());
-
+        if(matn!=null) {
+            edtmatn.setText(matn.toString());
+        }
+        if(flag.equals("sms")) {
+            credit = (SMS.Sdaemi + SMS.Setebari + SMS.Sirancell);
+        }if(flag.equals("panel")){
+            credit = (PayDetails.Sdaemi + PayDetails.Setebari + PayDetails.Sirancell);
+        }
         TextWatcher inputTextWatcherMatn = new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 if(s.length()<=70){
@@ -140,7 +152,7 @@ public class DetailsSms extends AppCompatActivity {
     }
     public void open(View view){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("ارسال انبوه پیامک ، آیا مطمئن هستید؟");
+        alertDialogBuilder.setMessage("ارسال انبوه به" +credit +" شماره، آیا مطمئن هستید؟");
                 alertDialogBuilder.setPositiveButton("بلی",
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -168,11 +180,42 @@ public class DetailsSms extends AppCompatActivity {
         RequestParams params = new RequestParams();
         // File myFile = new File("/path/to/file.png");
 
-        params.put("content", edtContent.getText()); //  ********** parametr  ersali dar surate niaz
+        params.put("content", edtmatn.getText()); //  ********** parametr  ersali dar surate niaz
       //  params.put("count", intent.getStringExtra("COUNT"));
-        params.put("cnt11", SMS.Setebari);
-        params.put("cnt1", SMS.Sdaemi);
-        params.put("cnt2", SMS.Sirancell);
+        if(flag.equals("sms")) {
+            if(SMS.Setebari!=0){
+                        params.put("cnt11", credit);
+                        params.put("cnt1", "0");
+                        params.put("cnt2", "0");
+            }
+            if(SMS.Sdaemi!=0){
+                params.put("cnt11", "0");
+                params.put("cnt1", credit);
+                params.put("cnt2", "0");
+            }
+            if(SMS.Sirancell!=0){
+                params.put("cnt11", "0");
+                params.put("cnt1", "0");
+                params.put("cnt2", credit);
+            }
+
+        }
+        if(flag.equals("panel")){
+            if(PayDetails.Setebari!=0){
+                params.put("cnt11", credit);
+                params.put("cnt1", "0");
+                params.put("cnt2", "0");
+            }
+            if(PayDetails.Sdaemi!=0){
+                params.put("cnt11", "0");
+                params.put("cnt1", credit);
+                params.put("cnt2", "0");
+            }
+            if(PayDetails.Sirancell!=0){
+                params.put("cnt11", "0");
+                params.put("cnt1", "0");
+                params.put("cnt2", credit);
+            }    }
 
 
 
@@ -184,11 +227,12 @@ public class DetailsSms extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
                 //dialog.hide();
                 String value = new String(response);
-              //  App.CustomToast("ارسال شد");
+                App.CustomToast("ارسال شد");
               //  App.CustomToast(value);
                // Log.i("mylog3" ,"ersal"+value );
+                webServiceUpdate("1");
 
-                Intent intent = new Intent(App.context, SuccessSendSms.class);
+                Intent intent = new Intent(App.context, MyPanel.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
@@ -218,7 +262,7 @@ public class DetailsSms extends AppCompatActivity {
         // File myFile = new File("/path/to/file.png");
 
         Intent intent=getIntent();
-        params.put("content", edtContent.getText()); //  ********** parametr  ersali dar surate niaz
+        params.put("content", edtmatn.getText()); //  ********** parametr  ersali dar surate niaz
         params.put("number", edtMobile.getText());
 
 
@@ -231,6 +275,9 @@ public class DetailsSms extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
                 //dialog.hide();
                 App.CustomToast("پیامک با موفقیت ارسال شد");
+                credit = credit - 1;
+                webServiceUpdate("0");
+
 
             }
             @Override
@@ -246,6 +293,56 @@ public class DetailsSms extends AppCompatActivity {
                     App.CustomToast(" لطفا دوباره سعی کنید ");
                     Log.i("myerror" , errorResponse.toString());
                 }
+            }
+        });
+    }
+
+
+    public  void webServiceUpdate(String isused)
+    {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+
+        params.put("credit",credit);
+        params.put("isused",isused);
+
+        client.put(App.urlApi+"buylog/"+id, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+            @Override
+            public void onStart() {
+
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
+                //  Intent intent = new Intent(App.context , Details.class);
+                //  intent.putExtra("id", Details.idAgahi+"");
+                // startActivity(intent);
+                App.CustomToast("اطلاعات خرید ثبت شد");
+
+                //  finish();
+
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+
+                // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
+                if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
+                    //dialog.hide();
+                    App.CustomToast("ثبت اطلاعات خرید با مشکل مواجه شد !");
+
+                }else{
+                    // dialog.hide();
+                    App.CustomToast("fail "+statusCode);
+                    App.CustomToast("اطلاعات خرید ثبت نشد ");
+                }
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+                // called when request is retried
             }
         });
     }

@@ -88,7 +88,6 @@ public class Login extends AppCompatActivity {
                 dialog = ProgressDialog.show(Login.this, null, null, true, false);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.setContentView(R.layout.progress_layout_small);
-
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
@@ -97,6 +96,7 @@ public class Login extends AppCompatActivity {
                 editor.putString("islogin", "1");
                 SharedPreferences.Editor editor2 = getSharedPreferences("LOGIN_ID", MODE_PRIVATE).edit();
                 editor2.putString("mobile", edtMobile.getText().toString());
+                editor2.putString("id_confirmaation", value.toString().replace("[{\"id\":", "").replace("}]" , ""));
 
                 editor.commit();
                 editor2.commit();
@@ -122,6 +122,8 @@ public class Login extends AppCompatActivity {
             }
         });
     }
+
+
     public  void confirmation()
     {
 
@@ -144,6 +146,7 @@ public class Login extends AppCompatActivity {
                 SharedPreferences.Editor editor = getSharedPreferences("LOGIN_ID", MODE_PRIVATE).edit();
                 editor.putString("id", value);
                 editor.putString("mobile", edtMobile.getText().toString());
+
                 editor.commit();
 
                 Intent intent = new Intent(App.context , Validation.class);

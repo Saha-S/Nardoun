@@ -20,6 +20,11 @@
     <string name="txtlogin">لطفا برای استفاده از امکانات ناردون شماره تلفن همراه خو را وارد کنید. کد فعال سازی از طریق پیام کوتاه برای شما ارسال خواهد شد.</string>
     <string name="txtvalidation">لطفا کد فعال سازی که از طریق پیامک برایتان ارسال میشود را وارد کنید:</string>
 
+    <string name="entezarpardakht">آگهی شما با موفقیت ثبت شد و در انتظار پرداخت می باشد. پس از پرداخت وجه آگهی شما مورد بررسی ناظر قرار میگیرد و منتشر خواهد شد.</string>
+    <string name="entezar">آگهی شما با موفقیت ثبت شد و پس از بررسی ناظر منتشر خواهد شد.</string>
+    <string name="montasher">آگهی شما منتشر شده است ، در صورت ویرایش ، آگهی شما مجددا بررسی شده و انتشار میابد.</string>
+    <string name="rad">متاسفانه آگهی شما تایید نشد.</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

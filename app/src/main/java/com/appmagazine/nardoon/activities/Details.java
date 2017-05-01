@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -17,13 +18,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appmagazine.nardoon.App;
-import com.appmagazine.nardoon.MyCustomPagerAdapter;
+import com.appmagazine.nardoon.DetailsImagePagerAdapter;
 import com.appmagazine.nardoon.R;
-import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -32,23 +34,37 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 import cz.msebera.android.httpclient.Header;
+import ir.moslem_deris.apps.zarinpal.PaymentBuilder;
+import ir.moslem_deris.apps.zarinpal.ZarinPal;
+import ir.moslem_deris.apps.zarinpal.enums.ZarinPalError;
+import ir.moslem_deris.apps.zarinpal.listeners.OnPaymentListener;
+import ir.moslem_deris.apps.zarinpal.models.Payment;
 
 public class Details extends AppCompatActivity {
     boolean FLAG_COLLAPSED = true;
-    int positionID;
-    public static TextView tvtitle,tvcontent,tvprice,tvlocation , tvtime ,tvtype;
-    public static String url, catname , mobile , email , price , image ;
-    public static int idRadio;
-    ImageView  ivshare , ivFavorites , ivdelete , ivedit;
+    String validity,permission;
+    public static TextView tvtitle,tvcontent,tvprice,tvlocation , tvtime ,tvtype  , txt;
+    public static String url, catname , mobile , email , price , image , location,time ,special , link ;
+    public static int idRadio  ;
+    ImageView  ivshare , ivFavorites ;
+    Button btnDelete, btnEdit;
     CollapsingToolbarLayout collapsingToolbar;
     public static ProgressDialog dialog;
-    public static String idAgahi , url1 , url2 , url3;
+    public static String idAgahi , url1 , url2 , url3 ;
     Context context;
-
+    private ArrayList<String> ids;
+    LinearLayout llVizhe;
     ViewPager viewPager;
+    Button pay;
+    int AgahiPrice,EstekhdamPrice , LinkPrice , SpecialPrice = 0;
+    String id_confirmaation , peygiri;
 
-    MyCustomPagerAdapter myCustomPagerAdapter;
+    DetailsImagePagerAdapter myCustomPagerAdapter;
 
 
     @Override
@@ -56,10 +72,14 @@ public class Details extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
         context = this;
-        dialog = ProgressDialog.show(Details.this, null, null,true, false);
-        dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
+        dialog = ProgressDialog.show(Details.this, null, null, true, false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.progress_layout_small);
 
+        final Intent intent = getIntent();
+        idAgahi=intent.getStringExtra("id");
+        location=intent.getStringExtra("location");
+        permission = intent.getStringExtra("permission");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         tvtitle = (TextView) findViewById(R.id.txtTitle);
@@ -68,36 +88,52 @@ public class Details extends AppCompatActivity {
         tvtype = (TextView) findViewById(R.id.txtType);
         tvcontent = (TextView) findViewById(R.id.txtContent);
         tvtime = (TextView) findViewById(R.id.txtTime);
-       // ivtitle=(ImageView) findViewById(R.id.iv_title);
-        ivshare=(ImageView) findViewById(R.id.iv_share);
-        ivFavorites=(ImageView) findViewById(R.id.iv_favorites);
-        ivdelete=(ImageView) findViewById(R.id.iv_delete);
-        ivedit=(ImageView) findViewById(R.id.iv_edit);
+        txt = (TextView) findViewById(R.id.txt);
+        // ivtitle=(ImageView) findViewById(R.id.iv_title);
+        ivshare = (ImageView) findViewById(R.id.iv_share);
+        ivFavorites = (ImageView) findViewById(R.id.iv_favorites);
+        btnDelete = (Button) findViewById(R.id.btn_delete);
+        btnEdit = (Button) findViewById(R.id.btn_edit);
+        llVizhe = (LinearLayout) findViewById(R.id.llVizhe);
+        pay = (Button) findViewById(R.id.btn_pay);
 
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab_call);
+        getValidity();
 
         String typetxt = tvtype.getText().toString();
-        if(typetxt=="فروشی"){
-            idRadio=0;
-        }
-        if(typetxt=="درخواستی"){
-            idRadio=1;
-        }
-
+        if (typetxt == "فروشی") {idRadio = 0;}
+        if (typetxt == "درخواستی") {idRadio = 1;}
 
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent intent = new Intent(App.context , Call.class);
+                Intent intent = new Intent(App.context, Call.class);
                 intent.putExtra("mobile", mobile);
                 intent.putExtra("email", email);
                 startActivity(intent);
+            }
+        });
+        pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences prefs = getSharedPreferences("LOGIN_ID", MODE_PRIVATE);
+                SharedPreferences prefs2 = getSharedPreferences("IS_LOGIN", MODE_PRIVATE);
+                String status = prefs2.getString("islogin", "0");
+                String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
+
+                if (status.matches("1")) {
+                    id_confirmaation=id_confirmaationSH.replace("[{\"id\":", "").replace("}]" , "");
+                    pay();
+                }else {
+                    Intent intent = new Intent(App.context, Login.class);
+                    startActivity(intent);
+                }
             }
         });
 
         ivshare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent  i = new Intent(
+                Intent i = new Intent(
 
                         android.content.Intent.ACTION_SEND);
 
@@ -116,7 +152,7 @@ public class Details extends AppCompatActivity {
         });
 
 
-        ivdelete.setOnClickListener(new View.OnClickListener() {
+        btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -129,8 +165,8 @@ public class Details extends AppCompatActivity {
                 alertDialogBuilder
                         .setMessage("آیا میخواهید آگهی خود را حذف کنید؟")
                         .setCancelable(true)
-                        .setPositiveButton("بله",new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                        .setPositiveButton("بله", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
                                 // if this button is clicked, close
                                 webServiceDeleteAgahi();
 
@@ -152,27 +188,40 @@ public class Details extends AppCompatActivity {
                 alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextSize(20);
                 //alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTypeface(Font_Far_Koodak);
                 alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextSize(20);
-                //alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTypeface(Font_Far_Koodak);
-               // msgtv.setTypeface(Font_Far_Koodak);
                 msgtv.setTextSize(19);
 
 
-
-
             }
         });
-        ivedit.setOnClickListener(new View.OnClickListener() {
+        btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(App.context , EditAgahi.class);
+                if(permission.equals("1")){
+                Intent intent = new Intent(App.context, EditAgahi.class);
                 startActivity(intent);
+                }else {
+                    App.CustomToast("ویرایش آگهی 2 روز پس از ایجاد آگهی ممکن میباشد.");
+                }
             }
         });
 
 
+        ivFavorites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ids.add(idAgahi);
+                SharedPreferences.Editor editor = getSharedPreferences("FAV_ID", MODE_PRIVATE).edit();
+                Set<String> set = new HashSet<String>();
+                set.addAll(ids);
+                editor.putStringSet("ID", set);
+                editor.commit();
+
+
+            }
+        });
+
         setSupportActionBar(toolbar);
-      //  getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-      //  getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,63 +234,25 @@ public class Details extends AppCompatActivity {
 
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle("");
-        Intent intent=getIntent();
 
 
-        //////////// if mine //////////////
 
-        String validity =intent.getStringExtra("validity");
-        try {
-
-            if (!validity.equalsIgnoreCase("")){
-                ivdelete.setVisibility(View.VISIBLE);
-                ivedit.setVisibility(View.VISIBLE);
-            }
-
-        }catch (Exception e){
-
-            ivdelete.setVisibility(View.INVISIBLE);
-            ivedit.setVisibility(View.INVISIBLE);
-
-        }
-
-
-        ////////////////////////////////////
-
-
-        url                 =App.urlApi+"agahis/"+intent.getStringExtra("id");
+        url = App.urlApi + "agahis/" + idAgahi;
+        Log.i("aaaaurl" , url);
         idAgahi = intent.getStringExtra("id");
         webServiceGetAgahi();
 
-       /* Glide.with(this)
-                .load(App.urlimages+intent.getStringExtra("image"))
-                .placeholder(R.mipmap.nopic)
-                .into(ivtitle);*/
-
 
     }
-
-
-
-
-   // @Override
- //   public void onBackPressed() {
-   //         super.onBackPressed();
-  //  }
 
     public  void webServiceDeleteAgahi()
     {
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-//        params.put("username", ""); //  ********** parametr  ersali dar surate niaz
-//        params.put("password", "");
-
         client.delete(url, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
-
-
 
 
             }
@@ -249,14 +260,13 @@ public class Details extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
                 App.CustomToast(" آگهی با موفقیت حذف شد. ");
+                Intent intent = new Intent(App.context, MyAgahis.class);
+                startActivity(intent);
                 finish();
 
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-
-                // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
                     App.CustomToast("آگهی با این شماره وجود ندارد !");
@@ -272,6 +282,8 @@ public class Details extends AppCompatActivity {
                 // called when request is retried
             }
         });
+
+
     }
 
 
@@ -283,21 +295,13 @@ public class Details extends AppCompatActivity {
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-//        params.put("username", ""); //  ********** parametr  ersali dar surate niaz
-//        params.put("password", "");
 
         client.get(url, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
-                // called before request is started
-
-                // loginpb1.setVisibility(View.VISIBLE);      *************** inja  progressbar faal mishe
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                // called when response HTTP status is "200 OK" ************** inja vaqti successful shod code 200 daryaft kard mituni json parse koni
-
-                // loginpb1.setVisibility(View.INVISIBLE);
                 String value = new String(response);
                 try {
                     JSONObject obj =new JSONArray(value).getJSONObject(0);  //********* chon ye json array ba 1 json objecte injur migirimesh
@@ -307,11 +311,13 @@ public class Details extends AppCompatActivity {
                     catname= obj.getString("category_name");
                     email= obj.getString("email");
                     mobile= obj.getString("mobile");
-
-
+                    special= obj.getString("special");
+                    link= obj.getString("link");
+                    url1= obj.getString("image");
                     url2= obj.getString("imagei");
                     url3= obj.getString("imageii");
-                    collapsingToolbar.setTitle(catname);
+                    validity= obj.getString("validity");
+                    collapsingToolbar.setTitle("");
 
                     tvcontent.setText(content);
                     tvtype.setText(type);
@@ -319,59 +325,45 @@ public class Details extends AppCompatActivity {
                     Intent intent=getIntent();
                     image = intent.getStringExtra("image");
 
-                    url1=App.urlimages+intent.getStringExtra("image");
                     if(url2.equals("0") && url3.equals("0")){
-                        String images[] = {url1};
-                        myCustomPagerAdapter = new MyCustomPagerAdapter(Details.this, images);
+                        String images[] = {App.urlimages+url1};
+                        myCustomPagerAdapter = new DetailsImagePagerAdapter(Details.this, images);
                         viewPager = (ViewPager)findViewById(R.id.viewPager);
-
-                        myCustomPagerAdapter = new MyCustomPagerAdapter(Details.this, images);
+                        myCustomPagerAdapter = new DetailsImagePagerAdapter(Details.this, images);
                         viewPager.setAdapter(myCustomPagerAdapter);
-
-
-
                     }
                     if(url2.equals("0") && !url3.equals("0")){
-                        String images[] = {url1,App.urlimages+url3};
-                        myCustomPagerAdapter = new MyCustomPagerAdapter(Details.this, images);
-                        Log.i("lllll", "hideeeee2");
-
-
+                        String images[] = {App.urlimages+url1,App.urlimages+url3};
+                        myCustomPagerAdapter = new DetailsImagePagerAdapter(Details.this, images);
                     }
                     if(!url2.equals("0") && url3.equals("0")){
-                        String images[] = {url1,App.urlimages+url2};
-                        myCustomPagerAdapter = new MyCustomPagerAdapter(Details.this, images);
+                        String images[] = {App.urlimages+url1,App.urlimages+url2};
+                        myCustomPagerAdapter = new DetailsImagePagerAdapter(Details.this, images);
                         viewPager = (ViewPager)findViewById(R.id.viewPager);
-
-                        myCustomPagerAdapter = new MyCustomPagerAdapter(Details.this, images);
+                        myCustomPagerAdapter = new DetailsImagePagerAdapter(Details.this, images);
                         viewPager.setAdapter(myCustomPagerAdapter);
-
-                        Log.i("lllll", "hideeeee3");
-
-
-
                     }
                     if(!url2.equals("0") && !url3.equals("0")){
-                        final  String images[] = {url1,App.urlimages+url2,App.urlimages+url3};
-                        myCustomPagerAdapter = new MyCustomPagerAdapter(Details.this, images);
+                        final  String images[] = {App.urlimages+url1,App.urlimages+url2,App.urlimages+url3};
+                        myCustomPagerAdapter = new DetailsImagePagerAdapter(Details.this, images);
                         viewPager = (ViewPager)findViewById(R.id.viewPager);
-
-                        myCustomPagerAdapter = new MyCustomPagerAdapter(Details.this, images);
+                        myCustomPagerAdapter = new DetailsImagePagerAdapter(Details.this, images);
                         viewPager.setAdapter(myCustomPagerAdapter);
-
-                        Log.i("lllll", "hideeeee4");
-
                     }
 
-                   // String images[] = {url1,App.urlimages+url2,App.urlimages+url3};
 
-                    tvtitle               .setText(intent.getStringExtra("title"));
-                    tvprice               .setText(intent.getStringExtra("price")+" تومان ");
                     price = intent.getStringExtra("price");
-                    tvlocation               .setText(intent.getStringExtra("location"));
-                    tvtime               .setText(intent.getStringExtra("time"));
+                    time = intent.getStringExtra("time");
+                    tvlocation               .setText(location);
+                    tvtime               .setText(time);
                     Log.i("imageee","image : "+ App.urlimages+intent.getStringExtra("image"));
+                    tvtitle               .setText(intent.getStringExtra("title"));
+                    tvprice               .setText(price+" تومان ");
 
+                    getValidity();
+
+                    /////////////////// if Vizheee ///////////////////////////
+                    ///////////////////END if Vizheee ////////////////////////
 
                     dialog.hide();
 
@@ -382,9 +374,6 @@ public class Details extends AppCompatActivity {
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-
-                // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
                     App.CustomToast("آگهی با این شماره وجود ندارد !");
@@ -405,7 +394,6 @@ public class Details extends AppCompatActivity {
 
     public boolean onCreateOptionsMenu(Menu menu) {
 
-     //   getMenuInflater().inflate(R.menu.menu_share, menu);
         getMenuInflater().inflate(R.menu.menu_back, menu);
 
         return super.onCreateOptionsMenu(menu);
@@ -447,7 +435,231 @@ public class Details extends AppCompatActivity {
 
     }
 
+    private void pay(){
+        Payment payment = new PaymentBuilder()
+                .setMerchantID("f1bd82da-273d-11e7-9b41-005056a205be")  //  This is an example, put your own merchantID here.
+                .setAmount(AgahiPrice)                                        //  In Toman
+                .setDescription("پرداخت تست پلاگین اندروید")
+                .setEmail("moslem.deris@gmail.com")                     //  This field is not necessary.
+                .setMobile("09123456789")                               //  This field is not necessary.
+                .create();
 
+        dialog = ProgressDialog.show(Details.this, null, null, true, false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(R.layout.progress_layout_small);
 
+        ZarinPal.pay(this, payment, new OnPaymentListener() {
+            @Override
+            public void onSuccess(String refID) {
+                dialog.hide();
+                webServiceEditAgahi();
+                Log.wtf("TAG", "::ZarinPal::  RefId: " + refID);
+                peygiri  = refID;
+                pay.setVisibility(View.GONE);
+            }
 
+            @Override
+            public void onFailure(ZarinPalError error) {
+                String errorMessage = "";
+                dialog.hide();
+                switch (error){
+                    case INVALID_PAYMENT: errorMessage = "پرداخت تایید نشد";           break;
+                    case USER_CANCELED:   errorMessage = "پرداخت توسط کاربر متوقف شد"; break;
+                    case NOT_ENOUGH_DATA: errorMessage = "اطلاعات پرداخت کافی نیست";    break;
+                    case UNKNOWN:         errorMessage = "خطای ناشناخته";              break;
+                }
+                Log.wtf("TAG", "::ZarinPal::  ERROR: " + errorMessage);
+                //   textView.setText("خطا!!!" + "\n" + errorMessage);
+            }
+        });
+    }
+
+    public  void webServiceEditAgahi()
+    {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+
+        params.put("validity","0");
+
+        if(url1.toString().equals("0")){
+            params.put("image", "0");
+            Log.i("aaaaa0" , url1);
+
+        }else {
+            params.put("image", url1);
+            Log.i("aaaaa" , url1);
+
+        }
+        if(url2.toString().equals("0")){
+            params.put("imagei", "0");
+            Log.i("aaaaa0" , url2);
+
+        }else {
+            params.put("imagei", url2);
+            Log.i("aaaaa" , url2);
+
+        }
+        if(url3.toString().equals("0")){
+            params.put("imageii", "0");
+            Log.i("aaaaa0" , url3);
+
+        }else {
+            params.put("imageii", url2);
+            Log.i("aaaaa" , url3);
+
+        }
+        client.post(App.urlApi+"updateagahi/"+idAgahi, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+            @Override
+            public void onStart() {
+                dialog = ProgressDialog.show(Details.this, null, null, true, false);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.setContentView(R.layout.progress_layout_small);
+
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
+                dialog.hide();
+                //  Intent intent = new Intent(App.context , Details.class);
+                //  intent.putExtra("id", Details.idAgahi+"");
+                // startActivity(intent);
+               // App.CustomToast("آگهی ویرایش شد !");
+                webServiceBuylog();
+              //  finish();
+
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+
+                // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
+                if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
+                    dialog.hide();
+                    App.CustomToast("ویرایش با خطا مواجه شد !");
+
+                }else{
+                    dialog.hide();
+                    App.CustomToast("fail "+statusCode);
+                    App.CustomToast(" ویرایش نشد ");
+                }
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+                // called when request is retried
+            }
+        });
+    }
+
+    public  void webServiceBuylog()
+    {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+
+        params.put("confirmation_id",id_confirmaation.toString());
+        params.put("type","2");
+        params.put("related_id",idAgahi);
+        params.put("description","آگهی ویژه و لینک");
+        params.put("price",String.valueOf(AgahiPrice));
+        params.put("traking_code",peygiri);
+        params.put("isused","1");
+
+        client.post(App.urlApi+"buylog", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+            @Override
+            public void onStart() {
+                dialog = ProgressDialog.show(Details.this, null, null, true, false);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.setContentView(R.layout.progress_layout_small);
+
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
+                dialog.hide();
+                //  Intent intent = new Intent(App.context , Details.class);
+                //  intent.putExtra("id", Details.idAgahi+"");
+                // startActivity(intent);
+                App.CustomToast("اطلاعات خرید ثبت شد");
+
+                //  finish();
+
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+
+                // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
+                if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
+                    dialog.hide();
+                    App.CustomToast("ثبت اطلاعات خرید با مشکل مواجه شد !");
+
+                }else{
+                    dialog.hide();
+                    App.CustomToast("fail "+statusCode);
+                    App.CustomToast("اطلاعات خرید ثبت نشد ");
+                }
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+                // called when request is retried
+            }
+        });
+    }
+    public  void getValidity(){
+        //////////////////////// if validity/////////////////////////
+        Intent intent = getIntent();
+        String status = intent.getStringExtra("statusbox");
+        try {
+
+            if (status.equals("1")) {
+
+                llVizhe.setVisibility(View.VISIBLE);
+
+                if(special.equals("1")){
+                    SpecialPrice=App.priceVizhe;
+                }
+
+                if(catname.toString().equals("استخدام و کاریابی")){
+                    Log.i("aaaa" , catname);
+                    EstekhdamPrice=App.priceEstekhdam;
+                }
+
+                if(!link.equals("")){
+                    LinkPrice=App.priceLink;
+                }
+                AgahiPrice=LinkPrice+SpecialPrice+EstekhdamPrice;
+
+                if(validity.equals("1")) {
+                    llVizhe.setBackgroundColor(Color.parseColor("#ccffdd"));
+                    txt.setText(R.string.montasher);
+                    pay.setVisibility(View.GONE);
+                }
+                if(validity.equals("0")) {
+                    llVizhe.setBackgroundColor(Color.parseColor("#ffe6cc"));
+                    txt.setText(R.string.entezar);
+                    pay.setVisibility(View.GONE);
+                }
+                if(validity.equals("2")) {
+                    llVizhe.setBackgroundColor(Color.parseColor("#ffc2b3"));
+                    txt.setText(R.string.rad);
+                    pay.setVisibility(View.GONE);
+                }
+                if(validity.equals("3")) {
+                    llVizhe.setBackgroundColor(Color.parseColor("#ffe6cc"));
+                    txt.setText(R.string.entezarpardakht);
+                    pay.setVisibility(View.VISIBLE);
+                }
+            }
+
+        } catch (Exception e) {
+            llVizhe.setVisibility(View.GONE);
+        }
+
+        ////////////////////////END if validity/////////////////////////
+    }
 }

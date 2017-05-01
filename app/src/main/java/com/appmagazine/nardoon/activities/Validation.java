@@ -109,6 +109,11 @@ public class Validation extends AppCompatActivity {
                 editor.putString("islogin", "1");
                 editor.commit();
 
+                SharedPreferences.Editor editor2 = getSharedPreferences("LOGIN_ID", MODE_PRIVATE).edit();
+                editor2.putString("id_confirmaation", value.toString().replace("[{\"id\":", "").replace("}]" , ""));
+                editor2.commit();
+
+
                 Intent intent = new Intent(App.context , Main.class);
                 startActivity(intent);
                 finish();
@@ -122,7 +127,7 @@ public class Validation extends AppCompatActivity {
 
                 if(statusCode==401)
                 {
-                    confirmation();
+                    App.CustomToast(" کد وارد شده اشتباه است ");
 
                 }else{
                     App.CustomToast(" لطفا دوباره سعی کنید ");
@@ -130,43 +135,6 @@ public class Validation extends AppCompatActivity {
             }
         });
     }
-    public  void confirmation()
-    {
 
-        AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-
-        params.put("deviceid",myDevice);
-        params.put("mobile", edtValidation.getText());
-
-        client.post(App.urlApi+"confirmation", params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onStart() {
-                dialog = ProgressDialog.show(Validation.this, null, null, true, false);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.setContentView(R.layout.progress_layout_small);
-
-            }
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                String value = new String(response);
-                dialog.hide();
-                App.CustomToast(value);
-
-            }
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-                dialog.hide();
-
-                if(statusCode==401)
-                {
-                    App.CustomToast("خطا");
-
-                }else{
-                    App.CustomToast(" لطفا دوباره سعی کنید ");
-                }
-            }
-        });
-    }
 
 }

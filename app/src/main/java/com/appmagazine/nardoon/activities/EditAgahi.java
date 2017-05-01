@@ -159,38 +159,38 @@ public class EditAgahi extends AppCompatActivity {
 
         SelectCat.setText(Details.catname);
 
+        try {
+            if (Details.image.equals("0")) {
+                imgAsli.setVisibility(View.GONE);
+                SelectImage.setText("افزودن عکس");
+            }
+            if (!Details.image.equals("0")) {
+                Glide.with(this).load(App.urlimages + Details.image).into(ivImageAsli);
+                imgAsli.setVisibility(View.VISIBLE);
+                SelectImage.setText("افزودن عکسی دیگر");
+                Log.i("url", "...:" + Details.image);
+            }
+            if (Details.url2.toString().equals("0")) {
+                img2.setVisibility(View.GONE);
+            }
+            if (!Details.url2.toString().equals("0")) {
+                Glide.with(this).load(App.urlimages + Details.url2).into(ivImage2);
+                img2.setVisibility(View.VISIBLE);
+                SelectImage.setText("افزودن عکسی دیگر");
+                Log.i("url2", "...:" + Details.url2);
 
-        if (Details.image.equals("0")){
-            imgAsli.setVisibility(View.GONE);
-            SelectImage.setText("افزودن عکس");
-        }
-        if(!Details.image.equals("0")) {
-            Glide.with(this).load(App.urlimages + Details.image).into(ivImageAsli);
-            imgAsli.setVisibility(View.VISIBLE);
-            SelectImage.setText("افزودن عکسی دیگر");
-            Log.i("url" , "...:" +Details.image );
-        }
-        if (Details.url2.toString().equals("0")){
-            img2.setVisibility(View.GONE);
-        }
-        if(!Details.url2.toString().equals("0")) {
-            Glide.with(this).load(App.urlimages + Details.url2).into(ivImage2);
-            img2.setVisibility(View.VISIBLE);
-            SelectImage.setText("افزودن عکسی دیگر");
-            Log.i("url2" , "...:" +Details.url2 );
+            }
 
-        }
-
-        if (Details.url3.toString().equals("0")){
-            img3.setVisibility(View.GONE);
-        }
-        if(!Details.url3.toString().equals("0")) {
-            Glide.with(this).load(App.urlimages + Details.url3).into(ivImage3);
-            img3.setVisibility(View.VISIBLE);
-            SelectImage.setText("افزودن عکسی دیگر");
-            Log.i("url3" , "...:" +Details.url3 );
-        }
-
+            if (Details.url3.toString().equals("0")) {
+                img3.setVisibility(View.GONE);
+            }
+            if (!Details.url3.toString().equals("0")) {
+                Glide.with(this).load(App.urlimages + Details.url3).into(ivImage3);
+                img3.setVisibility(View.VISIBLE);
+                SelectImage.setText("افزودن عکسی دیگر");
+                Log.i("url3", "...:" + Details.url3);
+            }
+        }catch (Exception e){}
 
 
         EnableRuntimePermission();
@@ -376,15 +376,12 @@ public class EditAgahi extends AppCompatActivity {
             params.put("imageii", Details.url3);
         }
          if(file1==null && imgAsli.getVisibility()==View.GONE){
-            Log.i("file111: " ,"....:" + "delete");
             params.put("image", "0");
         }
          if( img2.getVisibility()==View.GONE){
-            Log.i("file222: " ,"....:" + "delete");
             params.put("imagei", "0");
         }
          if(img3.getVisibility()==View.GONE){
-            Log.i("file333: " ,"....:" + "delete");
             params.put("imageii", "0");
         }
 

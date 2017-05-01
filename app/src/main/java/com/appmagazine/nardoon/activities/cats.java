@@ -43,34 +43,14 @@ public class cats extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categorys);
 
-      //  listView = (ListView) findViewById(R.id.listv2);
         sansfarsi= Typeface.createFromAsset(App.context.getAssets(), "Sansfarsi.ttf");
         staticsetcategory();
-
-
-/*        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                // TODO Auto-generated method stub
-                Intent intent = new Intent(App.context, subs.class);
-               // intent.putExtra("POSITION", id);
-                intent.putExtra("CATID", subsid.get(position)+"");
-                intent.putExtra("CATNAME", subs.get(position)+"");
-                startActivity(intent);
-            }
-        });
-*/
-
-
-
 
     }
 
     public void staticsetcategory(){
 
-        String value = "[{\"id\":1,\"name\":\"\\u0645\\u062a\\u0641\\u0631\\u0642\\u0647\"},{\"id\":2,\"name\":\"\\u0627\\u0645\\u0644\\u0627\\u06a9\"},{\"id\":3,\"name\":\"\\u0645\\u0631\\u0628\\u0648\\u0637 \\u0628\\u0647 \\u062e\\u0627\\u0646\\u0647\"},{\"id\":4,\"name\":\"\\u0644\\u0648\\u0627\\u0632\\u0645 \\u0627\\u0644\\u06a9\\u062a\\u0631\\u0648\\u0646\\u06cc\\u06a9\\u06cc\"},{\"id\":5,\"name\":\"\\u0648\\u0633\\u0627\\u06cc\\u0644 \\u0634\\u062e\\u0635\\u06cc\"},{\"id\":6,\"name\":\"\\u062e\\u062f\\u0645\\u0627\\u062a\"},{\"id\":7,\"name\":\"\\u0633\\u0631\\u06af\\u0631\\u0645\\u06cc \\u0648 \\u0641\\u0631\\u0627\\u063a\\u062a\"},{\"id\":8,\"name\":\"\\u0648\\u0633\\u0627\\u06cc\\u0644 \\u0646\\u0642\\u0644\\u06cc\\u0647\"}]";
+        String value = "[{\"id\":1,\"name\":\"\\u0645\\u062a\\u0641\\u0631\\u0642\\u0647\"},{\"id\":2,\"name\":\"\\u0627\\u0645\\u0644\\u0627\\u06a9\"},{\"id\":3,\"name\":\"\\u0645\\u0631\\u0628\\u0648\\u0637 \\u0628\\u0647 \\u062e\\u0627\\u0646\\u0647\"},{\"id\":4,\"name\":\"\\u0644\\u0648\\u0627\\u0632\\u0645 \\u0627\\u0644\\u06a9\\u062a\\u0631\\u0648\\u0646\\u06cc\\u06a9\\u06cc\"},{\"id\":5,\"name\":\"\\u0648\\u0633\\u0627\\u06cc\\u0644 \\u0634\\u062e\\u0635\\u06cc\"},{\"id\":6,\"name\":\"\\u062e\\u062f\\u0645\\u0627\\u062a\"},{\"id\":7,\"name\":\"\\u0633\\u0631\\u06af\\u0631\\u0645\\u06cc \\u0648 \\u0641\\u0631\\u0627\\u063a\\u062a\"},{\"id\":8,\"name\":\"\\u0648\\u0633\\u0627\\u06cc\\u0644 \\u0646\\u0642\\u0644\\u06cc\\u0647\"},{\"id\":9,\"name\":\"\\u0627\\u0633\\u062a\\u062e\\u062f\\u0627\\u0645 \\u0648 \\u06a9\\u0627\\u0631\\u06cc\\u0627\\u0628\\u06cc\"}]";
         try {
             JSONArray responcearray = new JSONArray(value);
             for (int i = 0; i < responcearray.length(); i++) {

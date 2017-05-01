@@ -49,6 +49,8 @@
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <activity
             android:name=".activities.Call"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" /><activity
+            android:name=".activities.PayDetails"
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar" />
         <activity android:name=".activities.Details" />
         <activity
@@ -65,6 +67,10 @@
             android:name=".activities.MyAgahis"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".activities.MyPanel"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
             android:name=".activities.Login"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -78,6 +84,8 @@
         <activity android:name=".activities.SuccessSendSms" />
         <activity android:name=".activities.EditAgahi"
             android:windowSoftInputMode="adjustPan"></activity>
+        <activity android:name="ir.moslem_deris.apps.zarinpal.PaymentActivity"/>
+
     </application>
 
 </manifest>

@@ -16,7 +16,11 @@
             android:icon="@mipmap/avatar"
             android:title="آگهی های من"
             />
-
+        <item
+            android:id="@+id/nav_my_panel"
+            android:icon="@mipmap/avatar"
+            android:title="حساب کاربری من"
+            android:visible="false" />
         <item
             android:id="@+id/nav_recently"
             android:icon="@android:drawable/ic_menu_camera"

@@ -1,6 +1,10 @@
 package com.appmagazine.nardoon.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,13 +16,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.R;
+import com.appmagazine.nardoon.activities.Details;
 import com.appmagazine.nardoon.activities.DetailsSms;
+import com.appmagazine.nardoon.activities.Login;
+import com.appmagazine.nardoon.activities.MyPanel;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -29,15 +41,29 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import cz.msebera.android.httpclient.Header;
+import ir.moslem_deris.apps.zarinpal.PaymentBuilder;
+import ir.moslem_deris.apps.zarinpal.ZarinPal;
+import ir.moslem_deris.apps.zarinpal.enums.ZarinPalError;
+import ir.moslem_deris.apps.zarinpal.listeners.OnPaymentListener;
+import ir.moslem_deris.apps.zarinpal.models.Payment;
+
 public class SMS extends Fragment {
     public static int Sdaemi,Setebari,Sirancell =0;
     Button price,pay;
     TextView txtPrice,txtWarning , txtCharacter;
-    int credit , number, operator;
+    int credit , number, operator , priceint;
     int countSMS=1;
     RadioGroup radioOperatorGroup;
     RadioButton radioOperatorButton;
     EditText matn , numberSMS;
+    private String id_confirmaation;
+    private String peygiri ;
+    int typeSMS=0;
+    private LinearLayout llnewagahi;
+
+//    public static ProgressDialog dialog;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -96,16 +122,16 @@ public class SMS extends Fragment {
             public void afterTextChanged(Editable s) {
                 try {
                     if (countSMS == 1) {
-                        txtPrice.setText(Integer.parseInt(s.toString()) * App.smsPrice + " تومان ");
+                        txtPrice.setText(Integer.parseInt(s.toString()) * App.priceSms + " تومان ");
                         number=Integer.parseInt(s.toString()) * countSMS;
+                        priceint = Integer.parseInt(s.toString()) * App.priceSms;
                         Log.i("number" ,"aa"+number );
 
                     } else {
-                        txtPrice.setText(Integer.parseInt(s.toString()) * App.smsPrice * countSMS + " تومان ");
+                        txtPrice.setText(Integer.parseInt(s.toString()) * App.priceSms * countSMS + " تومان ");
                         number=Integer.parseInt(s.toString()) * countSMS;
+                        priceint=Integer.parseInt(s.toString()) * App.priceSms * countSMS;
                         Log.i("number" ,"aa"+number );
-
-
                     }
                 }catch (NumberFormatException e){
                     txtPrice.setText( " 0 تومان ");
@@ -136,34 +162,82 @@ public class SMS extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(App.context , DetailsSms.class);
-                intent.putExtra("MATN" , matn.getText().toString() );
-                Log.i("mylog3" ,radioOperatorButton.getText().toString() );
-                Log.i("mylog4" ,getString(R.string.daemi) );
 
-                if(radioOperatorButton.getText().toString()==getString(R.string.daemi)){
-                    Sdaemi=number;
-                    Setebari=0;
-                    Sirancell=0;
-                    Log.i("mylog2" ,Sdaemi + " ,,, "  +Setebari +",,,"+Sirancell );
-                }else if(radioOperatorButton.getText()==getString(R.string.etebari)){
-                    Sdaemi=0;
-                    Setebari=number;
-                    Sirancell=0;
-                }else if(radioOperatorButton.getText()==getString(R.string.daemi)){
-                    Sdaemi=0;
-                    Setebari=0;
-                    Sirancell=number;
+//                dialog = ProgressDialog.show(App.context, null, null, true, false);
+//                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                //               dialog.setContentView(R.layout.progress_layout_small);
+                SharedPreferences prefs = App.context.getSharedPreferences("LOGIN_ID" , 0);
+                SharedPreferences prefs2 = App.context.getSharedPreferences("IS_LOGIN", 0);
+                String status = prefs2.getString("islogin", "0");
+                String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
+
+                if (status.matches("1")) {
+                    id_confirmaation=id_confirmaationSH.replace("[{\"id\":", "").replace("}]" , "");
+                    if(radioOperatorButton.getText().toString()==getString(R.string.daemi)){
+                        Sdaemi=number;
+                        Setebari=0;
+                        Sirancell=0;
+                        typeSMS= 1;
+                        Log.i("mylog2" ,Sdaemi + " ,,, "  +Setebari +",,,"+Sirancell );
+                    }else if(radioOperatorButton.getText()==getString(R.string.etebari)){
+                        Sdaemi=0;
+                        Setebari=number;
+                        Sirancell=0;
+                        typeSMS= 2;
+                    }else if(radioOperatorButton.getText()==getString(R.string.daemi)){
+                        Sdaemi=0;
+                        Setebari=0;
+                        Sirancell=number;
+                        typeSMS= 3;
+                    }
+
+                ///    pay();
+                    webServiceBuylog();
+                }else {
+                    Intent intent = new Intent(App.context, Login.class);
+                    startActivity(intent);
                 }
 
-
-                startActivity(intent);
 
             }
         });
 
         return view;
 
+    }
+
+
+    private void pay(){
+        Payment payment = new PaymentBuilder()
+                .setMerchantID("f1bd82da-273d-11e7-9b41-005056a205be")  //  This is an example, put your own merchantID here.
+                .setAmount(priceint)                                        //  In Toman
+                .setDescription("پرداخت تست پلاگین اندروید")
+                .setEmail("moslem.deris@gmail.com")                     //  This field is not necessary.
+                .setMobile("09123456789")                               //  This field is not necessary.
+                .create();
+             //   dialog.hide();
+
+        ZarinPal.pay(getActivity(), payment, new OnPaymentListener() {
+            @Override
+            public void onSuccess(String refID) {
+                peygiri=refID.toString();
+                Log.wtf("TAG", "::ZarinPal::  RefId: " + refID);
+                webServiceBuylog();
+
+            }
+            @Override
+            public void onFailure(ZarinPalError error) {
+                String errorMessage = "";
+                switch (error){
+                    case INVALID_PAYMENT: errorMessage = "پرداخت تایید نشد";           break;
+                    case USER_CANCELED:   errorMessage = "پرداخت توسط کاربر متوقف شد"; break;
+                    case NOT_ENOUGH_DATA: errorMessage = "اطلاعات پرداخت کافی نیست";    break;
+                    case UNKNOWN:         errorMessage = "خطای ناشناخته";              break;
+                }
+                Log.wtf("TAG", "::ZarinPal::  ERROR: " + errorMessage);
+             //   textView.setText("خطا!!!" + "\n" + errorMessage);
+            }
+        });
     }
 
 
@@ -210,6 +284,63 @@ public class SMS extends Fragment {
             credit=Integer.parseInt(result);
             super.onPostExecute(result);
         }
+    }
+
+    public  void webServiceBuylog()
+    {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+
+        params.put("confirmation_id",id_confirmaation.toString());
+        params.put("type",""+typeSMS);
+        params.put("related_id","1");
+        params.put("description", Sdaemi+Setebari+Sirancell+"");
+        params.put("price",priceint);
+        params.put("traking_code","123456");
+        params.put("isused","0");
+        params.put("credit",Sdaemi+Setebari+Sirancell+"");
+
+        client.post(App.urlApi+"buylog", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+            @Override
+            public void onStart() {
+
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                String value = new String(response);
+                App.CustomToast("اطلاعات خرید ثبت شد");
+                App.CustomToast(value.toString().replace("[{\"id\":", "").replace("}]" , ""));
+                Intent intent = new Intent(App.context , DetailsSms.class);
+                intent.putExtra("MATN" , matn.getText().toString() );
+                intent.putExtra("FLAG" , "sms" );
+                intent.putExtra("ID" , value.toString().replace("[{\"id\":", "").replace("}]" , "") );
+                startActivity(intent);
+                getActivity().finish();
+
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+
+                // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
+                if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
+                    //dialog.hide();
+                    App.CustomToast("ثبت اطلاعات خرید با مشکل مواجه شد !");
+
+                }else{
+                   // dialog.hide();
+                    App.CustomToast("fail "+statusCode);
+                    App.CustomToast("اطلاعات خرید ثبت نشد ");
+                }
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+                // called when request is retried
+            }
+        });
     }
 
 }

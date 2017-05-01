@@ -122,7 +122,8 @@ public class MyAgahis extends AppCompatActivity {
                 intent.putExtra("location", array.get(position).location);
                 intent.putExtra("price", array.get(position).price);
                 intent.putExtra("time", array.get(position).created_at);
-                intent.putExtra("validity", array.get(position).validity);
+                intent.putExtra("permission", array.get(position).permission);
+                intent.putExtra("statusbox", "1");
                 startActivity(intent);
             }
         }));

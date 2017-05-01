@@ -1,35 +1,21 @@
 package com.appmagazine.nardoon;
 
-import android.Manifest;
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.Application;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.provider.Settings.Secure;
-
-import com.appmagazine.nardoon.activities.Main;
 
 import java.lang.reflect.Field;
 
@@ -46,7 +32,8 @@ public class App extends Application {
     public static String urlimages;
     public static String android_id;
     public static String android_Model;
-    public static int smsPrice;
+    public static String confirm_id;
+    public static int priceSms, priceLink , priceVizhe , priceEstekhdam;
 
 
     public void             onCreate() {
@@ -60,7 +47,15 @@ public class App extends Application {
         android_id = Secure.getString(context.getContentResolver(),
                 Secure.ANDROID_ID);
         android_Model = Build.MODEL;
-        smsPrice=10;
+        priceSms =10;
+        priceLink =100;
+        priceVizhe =100;
+        priceEstekhdam =100;
+        SharedPreferences prefs = getSharedPreferences("LOGIN_ID", MODE_PRIVATE);
+        String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
+        if(id_confirmaationSH!="0"){
+            confirm_id=id_confirmaationSH.toString();
+        }
 
 
 

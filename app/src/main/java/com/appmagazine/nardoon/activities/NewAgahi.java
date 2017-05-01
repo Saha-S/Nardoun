@@ -20,6 +20,8 @@ package com.appmagazine.nardoon.activities;
         import android.util.Log;
         import android.view.View;
         import android.widget.Button;
+        import android.widget.CheckBox;
+        import android.widget.CompoundButton;
         import android.widget.EditText;
         import android.widget.ImageButton;
         import android.widget.ImageView;
@@ -46,7 +48,7 @@ package com.appmagazine.nardoon.activities;
 
         public class NewAgahi extends AppCompatActivity {
 
-            EditText price,email,phone , title , content;
+            EditText price,email,phone , title , content , link;
             TextView txtPrice,txtEmail,txtMobile , txtTitle, txtContent , txtType,txtLocation,txtCat,location,txtImg;
             public static String name , id , type,subid ;
             RadioGroup radioTypeGroup;
@@ -58,7 +60,7 @@ package com.appmagazine.nardoon.activities;
             LinearLayout imgAsli , img2,img3;
             private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
             private String userChoosenTask;
-            File destination;
+            File destination ;
             private static int REQUEST_PICTURE = 1;
             private static int REQUEST_CROP_PICTURE = 2;
             ImageView image;
@@ -69,8 +71,11 @@ package com.appmagazine.nardoon.activities;
             DisplayMetrics displayMetrics ;
             int width, height;
             boolean flag1,flag2,flag3,flag4,flag5,flag6,flag7,flag8=false;
-            File file1 , file2,file3;
-
+            File file1 , file2,file3,fileAsli;
+            CheckBox chkLink;
+            CheckBox chkSpecial;
+            int AgahiPrice ,linkPrice , specialPrice;
+            Button SelectCat;
 
 
 
@@ -79,7 +84,7 @@ package com.appmagazine.nardoon.activities;
                 super.onCreate(savedInstanceState);
                 setContentView(R.layout.activity_new);
 
-                Button SelectCat = (Button) findViewById(R.id.btn_cats);
+                SelectCat = (Button) findViewById(R.id.btn_cats);
                 SelectImage = (Button) findViewById(R.id.btn_select_image);
                 price = (EditText) findViewById(R.id.edt_price);
                 email = (EditText) findViewById(R.id.edt_email);
@@ -87,6 +92,10 @@ package com.appmagazine.nardoon.activities;
                 phone = (EditText) findViewById(R.id.edt_phone);
                 title = (EditText) findViewById(R.id.edt_title);
                 content = (EditText) findViewById(R.id.edt_content);
+                link = (EditText) findViewById(R.id.edt_link);
+                chkLink = (CheckBox) findViewById(R.id.chk_link);
+                chkSpecial = (CheckBox) findViewById(R.id.chk_special);
+
                 LinearLayout llForm = (LinearLayout) findViewById(R.id.ll_form);
                 LinearLayout llErsal = (LinearLayout) findViewById(R.id.ll_ersal);
                 LinearLayout llSave = (LinearLayout) findViewById(R.id.ll_save);
@@ -95,6 +104,8 @@ package com.appmagazine.nardoon.activities;
                 LinearLayout llBack = (LinearLayout) findViewById(R.id.ll_back);
                 ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
                 TextView tvBack = (TextView) findViewById(R.id.tv_back);
+
+
                 radioTypeGroup = (RadioGroup) findViewById(R.id.radioType);
 
                 imgAsli = (LinearLayout) findViewById(R.id.img_asli);
@@ -118,7 +129,19 @@ package com.appmagazine.nardoon.activities;
                 txtCat = (TextView) findViewById(R.id.txt_cat);
                 txtImg = (TextView) findViewById(R.id.txt_img_asli);
 
-                ScrollView scroll = (ScrollView) findViewById(R.id.scroll) ;
+
+                chkLink.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if(isChecked){
+                            link.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            link.setVisibility(View.GONE);
+                        }
+                    }
+                                                   });
+                    ScrollView scroll = (ScrollView) findViewById(R.id.scroll) ;
 
 
                 Intent intent=getIntent();
@@ -147,7 +170,6 @@ package com.appmagazine.nardoon.activities;
                         img3.setVisibility(View.GONE);
                     }
                 });
-
 
 
                 if (name!= null){
@@ -202,6 +224,7 @@ package com.appmagazine.nardoon.activities;
                 llErsal.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
 
 
 
@@ -322,7 +345,15 @@ package com.appmagazine.nardoon.activities;
 
                 AsyncHttpClient client = new AsyncHttpClient();
                 RequestParams params = new RequestParams();
+                if(chkSpecial.isChecked())
+                {
+                    params.put("special", "1");
+                }
+               if(chkLink.isChecked() || chkSpecial.isChecked() || SelectCat.getText().equals("استخدام و کاریابی")){
+                   params.put("validity","3");
+               }
 
+                params.put("link",link.getText());
                 params.put("title", title.getText()); //  ********** parametr  ersali dar surate niaz
                 params.put("content", content.getText());
                 params.put("price", price.getText());
@@ -352,8 +383,23 @@ package com.appmagazine.nardoon.activities;
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] response) {
                         dialog.hide();
-                        App.CustomToast("آگهی شما با موفقیت ثبت شد و پس از بررسی منتشر خواهد شد");
-                        Intent intent = new Intent(App.context, Main.class);
+                        String value = new String(response);
+                        Intent intent = new Intent(App.context, Details.class);
+                        intent.putExtra("id", value);
+                        intent.putExtra("statusbox", "1");
+                        intent.putExtra("title", title.getText().toString());
+                        try {
+                        if(file1.toString()!="") {
+                                intent.putExtra("image", App.urlimages + file1.toString());
+                            }
+                            }catch (RuntimeException e) {
+                        }
+                        intent.putExtra("location", location.getText().toString());
+                        intent.putExtra("price", price.getText().toString());
+
+                        intent.putExtra("time", "لحظاتی پیش");
+                        intent.putExtra("permission", "1");
+
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         finish();

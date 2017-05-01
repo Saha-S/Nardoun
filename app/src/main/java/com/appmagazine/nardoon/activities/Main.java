@@ -30,8 +30,8 @@ import com.appmagazine.nardoon.R;
 public class Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     TabHost tabs;
-    ImageButton ibmenu;
-    TextView tvtitle;
+    ImageButton ibmenu , ib;
+    TextView tvtitle , txt;
     LinearLayout llnewagahi;
 
 
@@ -40,10 +40,11 @@ public class Main extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       // forceRTLIfSupported();
 
         ibmenu=(ImageButton) findViewById(R.id.ib_menu);
+        ib=(ImageButton) findViewById(R.id.ib);
         tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
+        txt=(TextView) findViewById(R.id.txtNew);
         llnewagahi=(LinearLayout) findViewById(R.id.ll_new_agahi);
         Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
         tvtitle.setTypeface(tfmorvarid);
@@ -81,8 +82,54 @@ public class Main extends AppCompatActivity
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-            }
+                switch (tab.getPosition()) {
+                    case 1:
+                        ib.setVisibility(View.GONE);
+                        txt.setText("تاریخچه خرید");
+                        llnewagahi.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(App.context ,MyPanel.class );
+                                startActivity(intent);
+                            }
+                        });
+                        break;
+                    case 2:
+                        ib.setVisibility(View.VISIBLE);
+                        txt.setText("آگهی جدید");
+                        llnewagahi.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(App.context ,NewAgahi.class );
+                                startActivity(intent);
+                            }
+                        });
+                        break;
+                    case 3:
+                        ib.setVisibility(View.VISIBLE);
+                        txt.setText("آگهی جدید");
+                        llnewagahi.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(App.context ,NewAgahi.class );
+                                startActivity(intent);
+                            }
+                        });
+                        break;
 
+                    case 4:
+                        ib.setVisibility(View.VISIBLE);
+                        txt.setText("آگهی جدید");
+                        llnewagahi.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(App.context ,NewAgahi.class );
+                                startActivity(intent);
+                            }
+                        });
+                        break;
+                }
+            }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
 
@@ -138,14 +185,13 @@ public class Main extends AppCompatActivity
         SharedPreferences prefs2 = getSharedPreferences("IS_LOGIN", MODE_PRIVATE);
         String status = prefs2.getString("islogin", "0");
         String mobile = prefs.getString("mobile", "0");
-        Log.i("aaa" , status + ":::" + mobile);
+
         if (status.matches("1")) {
+
             nav_Menu.findItem(R.id.nav_login).setVisible(false);
             nav_mobile.setVisibility(View.VISIBLE);
             btnExit.setVisibility(View.VISIBLE);
             nav_mobile.setText(mobile);
-            Log.i("aaa" , status + "::::1111:::1111:::" + mobile);
-
 
         }
 
@@ -166,8 +212,6 @@ public class Main extends AppCompatActivity
         llnewagahi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 Intent intent = new Intent(App.context ,NewAgahi.class );
                 startActivity(intent);
                // App.CustomToast("آگهی جدید");
@@ -201,6 +245,9 @@ public class Main extends AppCompatActivity
         if (id == R.id.nav_about) {
             // Handle the camera action
         } else if (id == R.id.nav_favarit) {
+            Intent intent = new Intent(App.context , Favorite.class);
+            startActivity(intent);
+
 
         } else if (id == R.id.nav_my_agahi) {
 
@@ -212,9 +259,6 @@ public class Main extends AppCompatActivity
 
                 Intent intent = new Intent(App.context , Login.class);
                 startActivity(intent);
-
-
-
         }
         else if (id == R.id.nav_recently) {
 
