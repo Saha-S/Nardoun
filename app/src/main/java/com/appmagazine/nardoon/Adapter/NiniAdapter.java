@@ -10,6 +10,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.appmagazine.nardoon.App;
@@ -91,26 +92,30 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                 .load(App.urlimages + mDataset.get(position).image)
                 .placeholder(R.mipmap.nopic)
                 .into(holder.imageNini);
-        Log.i("llllll3" ,"fdd:"+ file.read("likes"));
+
+        try {
+
 
         String likestr =file.read("likes");
-        Log.i("llllll2" , likestr.toString());
 
-        String[] liksarray=likestr.split("-");
-        Log.i("llllll" , liksarray[0]);
+
+
+        String[] liksarray=likestr.split("\n-");
+
 
         if(Arrays.asList(liksarray).contains(mDataset.get(position).id+"")){
-            holder.like.isChecked();
+            Toast.makeText(context, "yes yes yesssss", Toast.LENGTH_SHORT).show();
+            holder.like.setChecked(true);
         }
 
         String dislikestr =file.read("dislikes");
-        String[] disliksarray=dislikestr.split("-");
+        String[] disliksarray=dislikestr.split("\n-");
 
         if(Arrays.asList(disliksarray).contains(mDataset.get(position).id+"")){
-            holder.dislike.isChecked();
+            holder.dislike.setChecked(true);
 
         }
-
+    }catch (Exception e){}
 
         holder.like.setOnClickListener(new View.OnClickListener() {
             @Override

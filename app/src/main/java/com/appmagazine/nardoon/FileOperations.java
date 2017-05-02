@@ -20,7 +20,7 @@ public class FileOperations {
         try {
 
 
-            String fpath = Environment.getExternalStorageDirectory()+"/Android/data/com.appmagazine.nardoon/files/"+fname+".nb";
+            String fpath = Environment.getExternalStorageDirectory()+"/Android/data/com.appmagazinenardoon/files/"+fname+".nb";
 
 
             File file = new File(fpath);
@@ -28,7 +28,7 @@ public class FileOperations {
             // If file does not exists, then create it
             if (!file.exists()) {
 
-                File folderu = new File(Environment.getExternalStorageDirectory()+"/Android/data/com.appmagazine.nardoon/files/");
+                File folderu = new File(Environment.getExternalStorageDirectory()+"/Android/data/com.appmagazinenardoon/files/");
                 folderu.mkdirs();
 
 
@@ -61,7 +61,7 @@ public class FileOperations {
         try {
 
             StringBuffer output = new StringBuffer();
-            String fpath = Environment.getExternalStorageDirectory()+"/Android/data/com.appmagazine.nardoon/files/"+fname+".nb";
+            String fpath = Environment.getExternalStorageDirectory()+"/Android/data/com.appmagazinenardoon/files/"+fname+".nb";
 
             br = new BufferedReader(new FileReader(fpath));
             String line = "";
@@ -72,7 +72,7 @@ public class FileOperations {
 
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            return "nofile";
 
         }
         return response;

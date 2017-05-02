@@ -59,20 +59,17 @@ public class App extends Application {
             confirm_id=id_confirmaationSH.toString();
         }
 
+        FileOperations file = new FileOperations();
 
-        SharedPreferences.Editor editor = getSharedPreferences("file", MODE_PRIVATE).edit();
-        editor.putString("file", "1");
-        editor.commit();
+            if (file.read("likes").equalsIgnoreCase("nofile")){
 
-        SharedPreferences prefsfile = getSharedPreferences("file", MODE_PRIVATE);
-        String restoredText = prefsfile.getString("file", "0");
-        fileCreated = restoredText;
+                file.write("likes" , "");
+                file.write("dislikes" , "");
+            }
 
-        if(fileCreated.equals("1")){
-            FileOperations file = new FileOperations();
-            file.write("likes" , "");
-            file.write("dislikes" , "");
-        }
+
+
+
 
     }
 
