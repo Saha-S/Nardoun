@@ -135,7 +135,7 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
         holder.pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pay();
+                pay(v);
             }
         });
 
@@ -157,7 +157,7 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
         return mDataset.size();
     }
 
-    private void pay(){
+    private void pay(View v ){
         Payment payment = new PaymentBuilder()
                 .setMerchantID("f1bd82da-273d-11e7-9b41-005056a205be")  //  This is an example, put your own merchantID here.
                 .setAmount(App.priceNini)                                        //  In Toman
@@ -165,12 +165,11 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
                 .setEmail("moslem.deris@gmail.com")                     //  This field is not necessary.
                 .setMobile("09123456789")                               //  This field is not necessary.
                 .create();
-
        // dialog = ProgressDialog.show(App.context, null, null, true, false);
       //  dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
       //  dialog.setContentView(R.layout.progress_layout_small);
 
-        ZarinPal.pay((Activity) App.context, payment, new OnPaymentListener() {
+        ZarinPal.pay((Activity) v.getContext(), payment, new OnPaymentListener() {
             @Override
             public void onSuccess(String refID ) {
                 dialog.hide();
