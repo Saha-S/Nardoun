@@ -64,8 +64,20 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
+            android:name=".activities.NewNini"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
             android:name=".activities.MyAgahis"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.MyNini"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.EditNini"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".activities.MyPanel"
             android:theme="@style/AppTheme.NoActionBar" />

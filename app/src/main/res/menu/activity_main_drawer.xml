@@ -17,6 +17,12 @@
             android:title="آگهی های من"
             />
         <item
+            android:id="@+id/nav_my_nini"
+            android:icon="@mipmap/avatar"
+            android:title="نی نی عکس های من"
+            />
+
+        <item
             android:id="@+id/nav_my_panel"
             android:icon="@mipmap/avatar"
             android:title="حساب کاربری من"

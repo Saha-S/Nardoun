@@ -47,7 +47,7 @@ import ir.moslem_deris.apps.zarinpal.models.Payment;
 
 public class Details extends AppCompatActivity {
     boolean FLAG_COLLAPSED = true;
-    String validity,permission;
+    public static String validity,permission;
     public static TextView tvtitle,tvcontent,tvprice,tvlocation , tvtime ,tvtype  , txt;
     public static String url, catname , mobile , email , price , image , location,time ,special , link ;
     public static int idRadio  ;
@@ -62,7 +62,7 @@ public class Details extends AppCompatActivity {
     ViewPager viewPager;
     Button pay;
     int AgahiPrice,EstekhdamPrice , LinkPrice , SpecialPrice = 0;
-    String id_confirmaation , peygiri;
+    String id_confirmaation , peygiri , linkPos, specialPos , catPos;
 
     DetailsImagePagerAdapter myCustomPagerAdapter;
 
@@ -309,10 +309,26 @@ public class Details extends AppCompatActivity {
                     String content= obj.getString("content");
                     String type= obj.getString("type");
                     catname= obj.getString("category_name");
+                    if(catname.equals("استخدام و کاریابی")){
+                        catPos = "1";
+                    }else{
+                        catPos = "0";
+                    }
                     email= obj.getString("email");
                     mobile= obj.getString("mobile");
                     special= obj.getString("special");
+                    if(special.equals("1")){
+                        specialPos = "1";
+                    }else{
+                        specialPos = "0";
+                    }
                     link= obj.getString("link");
+                    if(!link.equals("")){
+                        linkPos = "1";
+                    }else{
+                        linkPos = "0";
+                    }
+
                     url1= obj.getString("image");
                     url2= obj.getString("imagei");
                     url3= obj.getString("imageii");
@@ -560,7 +576,12 @@ public class Details extends AppCompatActivity {
         RequestParams params = new RequestParams();
 
         params.put("confirmation_id",id_confirmaation.toString());
-        params.put("type","2");
+        if(specialPos.equals("1")){        params.put("type","4"); }
+        if(linkPos.equals("1")){        params.put("type","5"); }
+        if(catPos.equals("1")){        params.put("type","6"); }
+        if(specialPos.equals("1") && linkPos.equals("1")){        params.put("type","45"); }
+        if(specialPos.equals("1") && catPos.equals("1")){        params.put("type","46"); }
+        if(specialPos.equals("1") && catPos.equals("1")&& linkPos.equals("1")){        params.put("type","456"); }
         params.put("related_id",idAgahi);
         params.put("description","آگهی ویژه و لینک");
         params.put("price",String.valueOf(AgahiPrice));
@@ -573,7 +594,6 @@ public class Details extends AppCompatActivity {
                 dialog = ProgressDialog.show(Details.this, null, null, true, false);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.setContentView(R.layout.progress_layout_small);
-
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {

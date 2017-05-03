@@ -33,7 +33,8 @@ public class App extends Application {
     public static String android_id;
     public static String android_Model;
     public static String confirm_id;
-    public static int priceSms, priceLink , priceVizhe , priceEstekhdam;
+    public static int priceSms, priceLink , priceVizhe , priceEstekhdam , priceNini;
+    String fileCreated = "0" ;
 
 
     public void             onCreate() {
@@ -51,6 +52,7 @@ public class App extends Application {
         priceLink =100;
         priceVizhe =100;
         priceEstekhdam =100;
+        priceNini =100;
         SharedPreferences prefs = getSharedPreferences("LOGIN_ID", MODE_PRIVATE);
         String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
         if(id_confirmaationSH!="0"){
@@ -58,6 +60,19 @@ public class App extends Application {
         }
 
 
+        SharedPreferences.Editor editor = getSharedPreferences("file", MODE_PRIVATE).edit();
+        editor.putString("file", "1");
+        editor.commit();
+
+        SharedPreferences prefsfile = getSharedPreferences("file", MODE_PRIVATE);
+        String restoredText = prefsfile.getString("file", "0");
+        fileCreated = restoredText;
+
+        if(fileCreated.equals("1")){
+            FileOperations file = new FileOperations();
+            file.write("likes" , "");
+            file.write("dislikes" , "");
+        }
 
     }
 

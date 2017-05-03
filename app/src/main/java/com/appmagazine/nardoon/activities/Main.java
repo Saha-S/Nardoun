@@ -117,16 +117,17 @@ public class Main extends AppCompatActivity
                         });
                         break;
 
-                    case 4:
+                    case 0:
                         ib.setVisibility(View.VISIBLE);
-                        txt.setText("آگهی جدید");
+                        txt.setText("افزودن نی نی");
                         llnewagahi.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(App.context ,NewAgahi.class );
+                                Intent intent = new Intent(App.context ,NewNini.class );
                                 startActivity(intent);
                             }
                         });
+
                         break;
                 }
             }
@@ -252,6 +253,12 @@ public class Main extends AppCompatActivity
         } else if (id == R.id.nav_my_agahi) {
 
             Intent intent = new Intent(App.context , MyAgahis.class);
+            startActivity(intent);
+
+        }
+        else if (id == R.id.nav_my_nini) {
+
+            Intent intent = new Intent(App.context , MyNini.class);
             startActivity(intent);
 
         }
