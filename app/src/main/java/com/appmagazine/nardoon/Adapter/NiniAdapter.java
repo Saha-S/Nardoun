@@ -22,6 +22,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import java.io.PipedInputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
     private int lastPosition = -1;
     private String likes;
+    private FileOperations file;
 
     public static class PosterHolder extends RecyclerView.ViewHolder {
 
@@ -79,19 +81,23 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
     @Override
     public void onBindViewHolder(final PosterHolder holder, final int position) {
 
+        file = new FileOperations();
+
         holder.name.setText(mDataset.get(position).name);
         holder.age.setText(mDataset.get(position).age + " ساله");
         holder.likes.setText(mDataset.get(position).point);
-        final FileOperations file = new FileOperations();
 
         Glide.with(context)
                 .load(App.urlimages + mDataset.get(position).image)
                 .placeholder(R.mipmap.nopic)
                 .into(holder.imageNini);
+        Log.i("llllll3" ,"fdd:"+ file.read("likes"));
 
         String likestr =file.read("likes");
+        Log.i("llllll2" , likestr.toString());
+
         String[] liksarray=likestr.split("-");
-      //  Log.i("llllll" , liksarray[0]);
+        Log.i("llllll" , liksarray[0]);
 
         if(Arrays.asList(liksarray).contains(mDataset.get(position).id+"")){
             holder.like.isChecked();
