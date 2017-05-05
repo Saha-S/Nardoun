@@ -30,8 +30,8 @@ public class Order extends AppCompatActivity {
     private JSONArray orderJsonArray = new JSONArray();
     private JSONObject jsnobject;
     private int num2;
-    int totalPrice=0;
     Button btnsabt;
+    TextView totalprice;
 
 
     @Override
@@ -41,6 +41,7 @@ public class Order extends AppCompatActivity {
 
         Intent intent = getIntent();
         btnsabt = (Button) findViewById(R.id.btn_sabt);
+        totalprice = (TextView) findViewById(R.id.txt_all_price);
         container = (LinearLayout) findViewById(R.id.container);
         menuOrder = intent.getStringExtra("menu");
         try {
@@ -59,7 +60,6 @@ public class Order extends AppCompatActivity {
             final TextView txtName = (TextView)addView.findViewById(R.id.txtName);
             final TextView txtPrice = (TextView)addView.findViewById(R.id.txtPrice);
             final TextView txtNumber = (TextView)addView.findViewById(R.id.txt_food_number);
-            final TextView txtindex = (TextView)addView.findViewById(R.id.txt_index);
             final TextView txtTotalPrice = (TextView)addView.findViewById(R.id.txt_all_price);
             final ImageView ivPlus = (ImageView)addView.findViewById(R.id.iv_plus);
             final ImageView ivMinus = (ImageView)addView.findViewById(R.id.iv_minus);
@@ -69,7 +69,6 @@ public class Order extends AppCompatActivity {
             final JSONObject oo = menuJsonArray.getJSONObject(i);
             Log.i("aaaaaaa12233113",oo.getString("name").toString() );
 
-            txtindex.setText(i+"");
             txtName.setText(oo.getString("name").toString());
             txtPrice.setText(oo.getString("price").toString()+" تومان ");
 
@@ -89,7 +88,7 @@ public class Order extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-                    final int index = Integer.parseInt(txtindex.getText().toString());
+                    final int index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
                     if(!ivSelect.isChecked()){
                         ivSelect.setChecked(false);
                         ivMinus.setClickable(false);
@@ -100,7 +99,7 @@ public class Order extends AppCompatActivity {
                         }catch (JSONException e) {
                             e.printStackTrace();
                         }
-
+                        settotalprice();
 
                     }else {
                         ivSelect.setChecked(true);
@@ -115,11 +114,12 @@ public class Order extends AppCompatActivity {
 
                         }catch (JSONException e) {e.printStackTrace();}
 
-
+                        settotalprice();
 
                         ivPlus.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                settotalprice();
                                     num2=num2+1;
 
                                 txtNumber.setText(String.valueOf(num2));
@@ -137,8 +137,7 @@ public class Order extends AppCompatActivity {
                             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                             @Override
                             public void onClick(View v) {
-                                int index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
-                           //     orderJsonArray.remove(index);
+                                settotalprice();
                                 if(num2>=1) {
 
                                     num2=num2-1;
@@ -196,6 +195,7 @@ public class Order extends AppCompatActivity {
                             finalJsonArray.put(orderJsonArray.getJSONObject(i));
                         }
 
+
                     }catch (JSONException e){e.printStackTrace();}
 
 
@@ -205,6 +205,32 @@ public class Order extends AppCompatActivity {
                 Log.i("0o0o0o0o0o0o0",finalJsonArray.toString() );
             }
         });
+
+    }
+
+    public void settotalprice(){
+
+
+
+        int allprice = 0;
+
+        for (int i=0; i<orderJsonArray.length(); i++){
+
+            try {
+
+                if(orderJsonArray.getJSONObject(i).getInt("number")>0){
+
+                    allprice +=orderJsonArray.getJSONObject(i).getInt("number") * orderJsonArray.getJSONObject(i).getInt("price");
+                }
+
+
+
+            }catch (JSONException e){e.printStackTrace();}
+
+
+        }
+
+        totalprice.setText(allprice+"");
 
     }
 }
