@@ -120,13 +120,13 @@ public class Order extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 try {
-                                index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
-                                num2=orderJsonArray.getJSONObject(index).getInt("number")+1;
-                                txtNumber.setText(String.valueOf(num2));
 
+                                    index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
+
+                                    num2=orderJsonArray.getJSONObject(index).getInt("number")+1;
+                                    txtNumber.setText(String.valueOf(num2));
                                     txtPrice.setText(num2* orderJsonArray.getJSONObject(index).getInt("price")+" تومان ");
                                     orderJsonArray.getJSONObject(index).put("number",num2+"");
-
 
                                 }catch (JSONException e) {e.printStackTrace();}
 
@@ -138,17 +138,21 @@ public class Order extends AppCompatActivity {
                             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                             @Override
                             public void onClick(View v) {
+                                try {
+                                    index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
+                                    num2=orderJsonArray.getJSONObject(index).getInt("number");
+                                }catch (Exception e){e.printStackTrace();};
+
 
                                 if(num2>=1) {
 
-                                    num2=num2-1;
-
-                                    txtNumber.setText(String.valueOf(num2));
-
                                         try {
+                                            index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
+                                            num2=orderJsonArray.getJSONObject(index).getInt("number")-1;
+                                            txtNumber.setText(String.valueOf(num2));
 
                                             if(num2>=1) {
-                                                index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
+
                                             txtPrice.setText(num2 * orderJsonArray.getJSONObject(index).getInt("price")+" تومان ");
                                             }
 

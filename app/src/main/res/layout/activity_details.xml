@@ -171,7 +171,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="5dp"
                         android:gravity="center"
-                        android:text="TextView"
+                        android:text=""
                         android:textColor="?attr/colorPrimary"
                         android:textSize="22sp" />
 
@@ -182,7 +182,7 @@
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="2dp"
                         android:gravity="center"
-                        android:text="TextView"
+                        android:text=""
                         android:textColor="#737373"
                         android:textSize="16sp" />
 
