@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.appmagazine.nardoon.App;
@@ -25,10 +27,11 @@ public class Order extends AppCompatActivity {
     private LinearLayout container;
     private String menuOrder;
     private JSONArray menuJsonArray;
-    private JSONArray orderJsonArray;
+    private JSONArray orderJsonArray = new JSONArray();
     private JSONObject jsnobject;
     private int num2;
     int totalPrice=0;
+    Button btnsabt;
 
 
     @Override
@@ -37,11 +40,11 @@ public class Order extends AppCompatActivity {
         setContentView(R.layout.activity_order);
 
         Intent intent = getIntent();
+        btnsabt = (Button) findViewById(R.id.btn_sabt);
         container = (LinearLayout) findViewById(R.id.container);
         menuOrder = intent.getStringExtra("menu");
         try {
             menuJsonArray = new JSONArray(menuOrder);
-            jsnobject = new JSONObject(menuOrder);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -49,11 +52,14 @@ public class Order extends AppCompatActivity {
         Log.i("aaaaaaa122333",menuJsonArray.toString() );
         try {
         for (int i = 0; i < menuJsonArray.length(); i++) {
+
+
             LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(App.context.LAYOUT_INFLATER_SERVICE);
             final View addView = layoutInflater.inflate(R.layout.order_row, null);
             final TextView txtName = (TextView)addView.findViewById(R.id.txtName);
             final TextView txtPrice = (TextView)addView.findViewById(R.id.txtPrice);
             final TextView txtNumber = (TextView)addView.findViewById(R.id.txt_food_number);
+            final TextView txtindex = (TextView)addView.findViewById(R.id.txt_index);
             final TextView txtTotalPrice = (TextView)addView.findViewById(R.id.txt_all_price);
             final ImageView ivPlus = (ImageView)addView.findViewById(R.id.iv_plus);
             final ImageView ivMinus = (ImageView)addView.findViewById(R.id.iv_minus);
@@ -63,26 +69,53 @@ public class Order extends AppCompatActivity {
             final JSONObject oo = menuJsonArray.getJSONObject(i);
             Log.i("aaaaaaa12233113",oo.getString("name").toString() );
 
+            txtindex.setText(i+"");
             txtName.setText(oo.getString("name").toString());
             txtPrice.setText(oo.getString("price").toString()+" تومان ");
 
 
+            //---
+
+            final JSONObject object = new JSONObject();
+
+            object.put("name", oo.getString("name").toString());
+            object.put("price", oo.getString("price").toString());
+            object.put("number", "0");
+
+            orderJsonArray.put(object);
+            //---
+
             ivSelect.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    final int index = Integer.parseInt(txtindex.getText().toString());
                     if(!ivSelect.isChecked()){
                         ivSelect.setChecked(false);
                         ivMinus.setClickable(false);
                         ivPlus.setClickable(false);
+
+                        try {
+                            orderJsonArray.getJSONObject(index).put("number","0");
+                        }catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
                     }else {
                         ivSelect.setChecked(true);
                         ivMinus.setClickable(true);
                         ivPlus.setClickable(true);
-                        final int num =0 ;
-                        txtNumber.setText(String.valueOf(num) );
 
+                        final int num = Integer.parseInt(txtNumber.getText().toString());
                         num2 = num;
-                        final JSONObject object = new JSONObject();
+                        try {
+
+                            orderJsonArray.getJSONObject(index).put("number",num+"");
+
+                        }catch (JSONException e) {e.printStackTrace();}
+
+
 
                         ivPlus.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -90,7 +123,13 @@ public class Order extends AppCompatActivity {
                                     num2=num2+1;
 
                                 txtNumber.setText(String.valueOf(num2));
-//                                txtTotalPrice.setText(String.valueOf(totalPrice));
+                                try {
+
+                                    txtPrice.setText(num2* orderJsonArray.getJSONObject(index).getInt("price")+" تومان ");
+                                    orderJsonArray.getJSONObject(index).put("number",num2+"");
+
+
+                                }catch (JSONException e) {e.printStackTrace();}
                             }
                         });
 
@@ -101,28 +140,30 @@ public class Order extends AppCompatActivity {
                                 int index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
                            //     orderJsonArray.remove(index);
                                 if(num2>=1) {
-                                    num2 = num2 - 1;
+
+                                    num2=num2-1;
+
+                                    txtNumber.setText(String.valueOf(num2));
+
+                                        try {
+
+                                            if(num2>=1) {
+                                            txtPrice.setText(num2 * orderJsonArray.getJSONObject(index).getInt("price")+" تومان ");
+                                            }
+
+                                            orderJsonArray.getJSONObject(index).put("number",num2+"");
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
+
 
                                 }
-                                txtNumber.setText(String.valueOf(num2));
 
 
                             }
                         });
 
-                        if(num2>0) {
-                            try {
-                                object.put("name", oo.getString("name").toString());
-                                object.put("price", oo.getString("price").toString());
-                                object.put("number", oo.getString("price").toString());
-                                txtNumber.setText(String.valueOf(num2));
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            orderJsonArray.put(object);
-                            Log.i("cccccccc2" ,orderJsonArray.toString());
-
-                        }
                     }
 
                 }
@@ -135,6 +176,35 @@ public class Order extends AppCompatActivity {
             e.printStackTrace();
         }
 
+
+
+
+
+
+        btnsabt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                JSONArray finalJsonArray = new JSONArray();
+
+                for (int i=0; i<orderJsonArray.length(); i++){
+
+                    try {
+
+                        if(orderJsonArray.getJSONObject(i).getInt("number")>0){
+
+                            finalJsonArray.put(orderJsonArray.getJSONObject(i));
+                        }
+
+                    }catch (JSONException e){e.printStackTrace();}
+
+
+                }
+
+
+                Log.i("0o0o0o0o0o0o0",finalJsonArray.toString() );
+            }
+        });
 
     }
 }
