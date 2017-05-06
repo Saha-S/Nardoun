@@ -15,9 +15,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_nardoon"
         android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        >
+        android:theme="@style/AppTheme">
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -31,9 +29,9 @@
         <activity
             android:name=".activities.Main"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait">
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,99 +40,100 @@
         </activity>
         <activity
             android:name=".activities.Filter"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.float" />
         <activity
             android:name=".activities.cats"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.float" />
         <activity
             android:name=".activities.subs"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.float" />
         <activity
             android:name=".activities.Call"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.float" />
         <activity
             android:name=".activities.PayDetails"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.float" />
         <activity
             android:name=".activities.AgahiOrderDetails"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activities.Details"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.float" />
+        <activity
+            android:name=".activities.Details"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.CatAgahis"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.SubCatAgahis"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.NewAgahi"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.NewNini"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.MyAgahis"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.MyNini"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.Favorite"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.EditNini"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.MyPanel"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.Login"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.Validation"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name="com.android.camera.CropImage" />
         <activity
             android:name=".activities.DetailsSms"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activities.SuccessSendSms"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".activities.AgahiOrders"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.SuccessSendSms"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.AgahiOrders"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.EditAgahi"
-            android:windowSoftInputMode="adjustPan"
-            android:screenOrientation="portrait"/>
-        <activity android:name="ir.moslem_deris.apps.zarinpal.PaymentActivity" />
-        <activity android:name=".activities.Order"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".activities.MyOrders"
             android:screenOrientation="portrait"
-             >
-            </activity>
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name="ir.moslem_deris.apps.zarinpal.PaymentActivity" />
+        <activity
+            android:name=".activities.Order"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.MyOrders"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".activities.Request"></activity>
     </application>
 
 </manifest>

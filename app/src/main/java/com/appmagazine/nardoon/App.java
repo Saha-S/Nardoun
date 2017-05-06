@@ -1,13 +1,16 @@
 package com.appmagazine.nardoon;
 
+import android.Manifest;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -16,6 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.provider.Settings.Secure;
+
+import com.appmagazine.nardoon.activities.Request;
 
 import java.lang.reflect.Field;
 
@@ -35,6 +40,7 @@ public class App extends Application {
     public static String confirm_id;
     public static int priceSms, priceLink , priceVizhe , priceEstekhdam , priceNini , priceRestaurant;
     String fileCreated = "0" ;
+
 
 
     public void             onCreate() {
@@ -60,15 +66,36 @@ public class App extends Application {
             confirm_id=id_confirmaationSH.toString();
         }
 
-        FileOperations file = new FileOperations();
+        if (Build.VERSION.SDK_INT >= 23) {
 
-            if (file.read("likes").equalsIgnoreCase("nofile")){
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 
-                file.write("likes" , "");
-                file.write("dislikes" , "");
-                file.write("favorite" , "");
+                //File write logic here
+            FileOperations file = new FileOperations();
+
+            if (file.read("likes").equalsIgnoreCase("nofile")) {
+
+                file.write("likes", "");
+                file.write("dislikes", "");
+                file.write("favorite", "");
             }
 
+        }else {
+
+            newactivity(context, Request.class);
+        }
+
+
+        }else {
+            FileOperations file = new FileOperations();
+
+            if (file.read("likes").equalsIgnoreCase("nofile")) {
+
+                file.write("likes", "");
+                file.write("dislikes", "");
+                file.write("favorite", "");
+            }
+        }
 
 
 

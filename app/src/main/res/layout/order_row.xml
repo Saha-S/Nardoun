@@ -13,14 +13,13 @@
         android:background="#fff"
         android:gravity="center"
         android:orientation="horizontal"
-        android:weightSum="18">
+        android:weightSum="12">
 
         <ToggleButton
 
             android:id="@+id/iv_select"
-            android:layout_width="0dp"
+            android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_weight="2"
             android:background="@drawable/select_toggle"
             android:textOff=""
             android:textOn="" />
@@ -28,11 +27,11 @@
 
         <ImageView
             android:id="@+id/iv_plus"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="2"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:clickable="true"
-            android:src="@mipmap/plus" />
+            android:src="@mipmap/plus"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
 
         <TextView
             android:id="@+id/txt_food_number"
@@ -50,11 +49,11 @@
 
         <ImageView
             android:id="@+id/iv_minus"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="2"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:clickable="true"
-            android:src="@mipmap/minus" />
+            android:src="@mipmap/minus"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
 
         <TextView
             android:id="@+id/txtPrice"

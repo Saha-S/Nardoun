@@ -1,5 +1,6 @@
 package com.appmagazine.nardoon.activities;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -64,12 +65,14 @@ public class CatAgahis extends AppCompatActivity {
     public static int subsNumber;
     TextView txtSub;
     Boolean isSubcatAvailable = false;
+    Typeface sansfarsi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cat_agahis);
 
+        sansfarsi= Typeface.createFromAsset(App.context.getAssets(), "Sansfarsi.ttf");
         subs.clear();
         dialog = ProgressDialog.show(CatAgahis.this, null, null, true, false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -235,8 +238,8 @@ public class CatAgahis extends AppCompatActivity {
                         final LinearLayout lm = (LinearLayout) findViewById(R.id.linearMain);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-                        params.setMargins(5, 5, 5, 0);
-                        params.height = 75;
+                            params.setMargins(5,5,5,5);
+                            params.height = ActionBar.LayoutParams.WRAP_CONTENT;
                         params.gravity = Gravity.CENTER_VERTICAL;
 
 
@@ -251,6 +254,9 @@ public class CatAgahis extends AppCompatActivity {
                         // ImageView iv = new ImageView(App.context);
                         tv.setLayoutParams(params);
                         tv.setText(subname);
+                            tv.setTextSize(17);
+                            tv.setPadding(5,5,5,5);
+                            tv.setTypeface(sansfarsi);
                         tv.setTextColor(Color.parseColor("#4f4f4f"));
                         // iv.setBackgroundResource(R.mipmap.left);
 
