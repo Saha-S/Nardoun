@@ -37,7 +37,7 @@ public class Request extends AppCompatActivity implements ActivityCompat.OnReque
 
             }else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-
+                App.CustomToast("لطفا به اپلیکیشن اجازه دسترسی به کارت حافظه را بدهید!");
             }
 
         }
@@ -59,6 +59,7 @@ public class Request extends AppCompatActivity implements ActivityCompat.OnReque
         }else {
             App.newactivity(Request.this,Request.class);
             finish();
+            App.CustomToast("لطفا به اپلیکیشن اجازه دسترسی به کارت حافظه را بدهید!");
         }
     }
 
