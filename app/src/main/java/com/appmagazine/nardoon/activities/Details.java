@@ -58,12 +58,13 @@ public class Details extends AppCompatActivity {
     public static String idAgahi , url1 , url2 , url3 ;
     Context context;
     private ArrayList<String> ids;
-    LinearLayout llVizhe;
+    LinearLayout llVizhe ,llPrice, llType , llMenu;
     ViewPager viewPager;
-    Button pay;
+    Button pay ,btnMenu;
     int AgahiPrice,EstekhdamPrice , LinkPrice , SpecialPrice = 0;
     String id_confirmaation , peygiri , linkPos, specialPos , catPos;
-
+    private String why;
+    private String menuOrder;
     DetailsImagePagerAdapter myCustomPagerAdapter;
 
 
@@ -95,7 +96,11 @@ public class Details extends AppCompatActivity {
         btnDelete = (Button) findViewById(R.id.btn_delete);
         btnEdit = (Button) findViewById(R.id.btn_edit);
         llVizhe = (LinearLayout) findViewById(R.id.llVizhe);
+        llPrice = (LinearLayout) findViewById(R.id.ll_price);
+        llType = (LinearLayout) findViewById(R.id.ll_type);
+        llMenu = (LinearLayout) findViewById(R.id.ll_menu);
         pay = (Button) findViewById(R.id.btn_pay);
+        btnMenu = (Button) findViewById(R.id.btn_menu);
 
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab_call);
         getValidity();
@@ -109,6 +114,14 @@ public class Details extends AppCompatActivity {
                 Intent intent = new Intent(App.context, Call.class);
                 intent.putExtra("mobile", mobile);
                 intent.putExtra("email", email);
+                startActivity(intent);
+            }
+        });
+        btnMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(App.context, Order.class);
+                intent.putExtra("menu" , menuOrder);
                 startActivity(intent);
             }
         });
@@ -197,8 +210,8 @@ public class Details extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(permission.equals("1")){
-                Intent intent = new Intent(App.context, EditAgahi.class);
-                startActivity(intent);
+                    Intent intent = new Intent(App.context, EditAgahi.class);
+                    startActivity(intent);
                 }else {
                     App.CustomToast("ویرایش آگهی 2 روز پس از ایجاد آگهی ممکن میباشد.");
                 }
@@ -314,6 +327,11 @@ public class Details extends AppCompatActivity {
                     }else{
                         catPos = "0";
                     }
+                    if(catname.equals("رستوران")){
+                        llPrice.setVisibility(View.GONE);
+                        llType.setVisibility(View.GONE);
+                        llMenu.setVisibility(View.VISIBLE);
+                    }
                     email= obj.getString("email");
                     mobile= obj.getString("mobile");
                     special= obj.getString("special");
@@ -338,8 +356,14 @@ public class Details extends AppCompatActivity {
                     tvcontent.setText(content);
                     tvtype.setText(type);
 
+
                     Intent intent=getIntent();
                     image = intent.getStringExtra("image");
+                    why = intent.getStringExtra("comment");
+                    try {
+                        menuOrder = obj.getString("menu");
+
+                    }catch (JSONException e){}
 
                     if(url2.equals("0") && url3.equals("0")){
                         String images[] = {App.urlimages+url1};
@@ -423,21 +447,13 @@ public class Details extends AppCompatActivity {
         switch (item.getItemId()) {
 
         /*    case R.id.mShare:
-
                 Intent  i = new Intent(
-
                         android.content.Intent.ACTION_SEND);
-
                 i.setType("text/plain");
-
                 i.putExtra(
-
                         android.content.Intent.EXTRA_TEXT, "The string you want to share, which can include URLs");
-
                 startActivity(Intent.createChooser(
-
                         i,
-
                         "Title of your share dialog"));
                         */
             case R.id.mBack:
@@ -540,9 +556,9 @@ public class Details extends AppCompatActivity {
                 //  Intent intent = new Intent(App.context , Details.class);
                 //  intent.putExtra("id", Details.idAgahi+"");
                 // startActivity(intent);
-               // App.CustomToast("آگهی ویرایش شد !");
+                // App.CustomToast("آگهی ویرایش شد !");
                 webServiceBuylog();
-              //  finish();
+                //  finish();
 
             }
             @Override

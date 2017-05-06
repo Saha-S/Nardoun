@@ -231,9 +231,7 @@ public class EditNini extends AppCompatActivity {
         SelectImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(imgAsli.getVisibility()==View.GONE) {
                     selectImage(ivImageAsli);
-                }
 
             }
         });
@@ -246,7 +244,7 @@ public class EditNini extends AppCompatActivity {
         RequestParams params = new RequestParams();
 
         if(MyNiniAdapter.status.equals("3")){
-            params.put("validity","2");
+            params.put("validity","3");
         }else{
             params.put("validity","0");
         }
@@ -408,17 +406,11 @@ public class EditNini extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                if(imgAsli.getVisibility()==View.GONE) {
-                    SelectImage.setText("افزودن عکس");
-                }else if(imgAsli.getVisibility()==View.VISIBLE) {
-                    SelectImage.setText("افزودن عکسی دیگر");
-                }
 
-                if(imgAsli.getVisibility()==View.GONE) {
-                    imgAsli.setVisibility(View.VISIBLE);
+
                     file1 = destination;
                     Log.i("file1" , "1: "+file1.toString());
-                }
+
                 image.setImageBitmap(thumbnail);
 
             }

@@ -67,7 +67,10 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
     public void onBindViewHolder(PosterHolder holder, int position) {
 
         holder.title.setText(mDataset.get(position).title);
-        holder.price.setText(mDataset.get(position).price+" تومان ");
+        if(!mDataset.get(position).price.toString().equals("0")) {
+            Log.i("aaaaa2" ,mDataset.get(position).price.toString() );
+            holder.price.setText(mDataset.get(position).price + " تومان ");
+        }
         holder.location.setText(mDataset.get(position).created_at+" در " +mDataset.get(position).location);
 
 
@@ -80,11 +83,11 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
 
 
 
-//        Animation animation = AnimationUtils.loadAnimation(context,
-//                (position > lastPosition) ? android.R.anim.slide_in_left
-//                        : android.R.anim.slide_out_right);
-//        holder.itemView.startAnimation(animation);
-//        lastPosition = position;
+        Animation animation = AnimationUtils.loadAnimation(context,
+                (position > lastPosition) ? android.R.anim.slide_in_left
+                        : android.R.anim.slide_out_right);
+        holder.itemView.startAnimation(animation);
+        lastPosition = position;
     }
 
     public void update(List<Poster> list) {

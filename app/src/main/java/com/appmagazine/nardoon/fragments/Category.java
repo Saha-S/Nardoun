@@ -13,7 +13,7 @@ import com.appmagazine.nardoon.R;
 import com.appmagazine.nardoon.activities.CatAgahis;
 
 public class Category extends Fragment {
-    LinearLayout llCar , llHouse , llLamp , llPersonal, llWork,llGame, llOther,llPc, llEstekhdam;
+    LinearLayout llCar , llHouse , llLamp , llPersonal, llWork,llGame, llOther,llPc, llEstekhdam ,llRestaurant;
     String url;
 
     @Override
@@ -31,6 +31,7 @@ public class Category extends Fragment {
         llPc = (LinearLayout) view.findViewById(R.id.llPc);
         llOther = (LinearLayout) view.findViewById(R.id.llOther);
         llEstekhdam = (LinearLayout) view.findViewById(R.id.llEstekhdam);
+        llRestaurant = (LinearLayout) view.findViewById(R.id.llRestaurant);
 
         llCar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +114,16 @@ public class Category extends Fragment {
                 startActivity(intent);
             }
         });
+        llRestaurant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(App.context , CatAgahis.class);
+                intent.putExtra("id", "10");
+                intent.putExtra("name", "رستوران");
+                startActivity(intent);
+            }
+        });
+
 
 
         return view;

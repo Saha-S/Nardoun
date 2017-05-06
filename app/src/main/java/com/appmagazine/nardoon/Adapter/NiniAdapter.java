@@ -42,6 +42,9 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
     private String likes;
     private FileOperations file;
 
+    String[] liksarray;
+    String[] disliksarray;
+
     public static class PosterHolder extends RecyclerView.ViewHolder {
 
         TextView name;
@@ -75,6 +78,8 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_nini, parent, false);
         PosterHolder dataObjectHolder = new PosterHolder(view);
+
+
         return dataObjectHolder;
 
     }
@@ -93,36 +98,44 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                 .placeholder(R.mipmap.nopic)
                 .into(holder.imageNini);
 
-        try {
-
 
         String likestr =file.read("likes");
-
-
-
-        String[] liksarray=likestr.split("\n-");
+            liksarray=likestr.split("\n-");
 
 
         if(Arrays.asList(liksarray).contains(mDataset.get(position).id+"")){
             Toast.makeText(context, "yes yes yesssss", Toast.LENGTH_SHORT).show();
             holder.like.setChecked(true);
+            holder.dislike.setEnabled(false);
+
         }
 
         String dislikestr =file.read("dislikes");
-        String[] disliksarray=dislikestr.split("\n-");
+            disliksarray=dislikestr.split("\n-");
 
         if(Arrays.asList(disliksarray).contains(mDataset.get(position).id+"")){
             holder.dislike.setChecked(true);
+            holder.like.setEnabled(false);
 
         }
-    }catch (Exception e){}
 
         holder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(holder.like.isChecked()== false) {
                     webServiceDislike(mDataset.get(position).id , holder ,position);
-                  //  holder.likes.setText(likes);
+
+                    String likes= "";
+                    for (int i=0;i<liksarray.length;i++) {
+                        if (!liksarray[i].equals( mDataset.get(position).id )) {
+                            if(likes.equals(""))
+                            likes+=liksarray[i];
+                         else
+                            likes+="\n-"+liksarray[i];
+
+                        }
+                    }
+                    file.write("likes" , likes);
                     holder.dislike.setEnabled(true);
 
                 }else{
@@ -145,6 +158,17 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             public void onClick(View v) {
                 if(holder.dislike.isChecked()== false) {
                     webServiceLike(mDataset.get(position).id , holder ,position);
+                    String dislikes= "";
+                    for (int i=0;i<disliksarray.length;i++) {
+                        if (!disliksarray[i].equals( mDataset.get(position).id )) {
+                            if(dislikes.equals(""))
+                                dislikes+=disliksarray[i];
+                            else
+                                dislikes+="\n-"+disliksarray[i];
+
+                        }
+                    }
+                    file.write("dislikes" , dislikes);
                     holder.like.setEnabled(true);
                 }else{
                     webServiceDislike(mDataset.get(position).id , holder ,position);

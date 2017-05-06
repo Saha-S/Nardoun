@@ -88,6 +88,7 @@
                     android:visibility="gone">
 
                     <LinearLayout
+                        android:id="@+id/ll_price"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="15dp"
@@ -196,6 +197,7 @@
                         android:background="#fff"
                         android:gravity="right"
                         android:orientation="vertical"
+                        android:visibility="visible"
                         android:weightSum="1">
 
 
@@ -247,6 +249,130 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_begin"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginTop="15dp"
+                        android:background="#fff"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+
+                        <TextView
+                            android:id="@+id/txt_begin"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="6dp"
+                            android:text="لطفا ساعت شروع سفارش گیری را مشخص کنید"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@android:color/holo_red_dark"
+                            android:textSize="14sp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="6dp"
+                            android:text="شروع سفارش گیری"
+                            android:textColor="#3d3d3d"
+                            android:textSize="18sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/btn_begin"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="#5A2456"
+                                android:text="انتخاب"
+                                android:textColor="#fff"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/txt_begin_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1"
+                                android:gravity="right" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_finish"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginTop="15dp"
+                        android:background="#fff"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+
+                        <TextView
+                            android:id="@+id/txt_finish"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="6dp"
+                            android:text="لطفا ساعت پایان سفارش گیری را مشخص کنید"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@android:color/holo_red_dark"
+                            android:textSize="14sp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="6dp"
+                            android:text="پایان سفارش گیری"
+                            android:textColor="#3d3d3d"
+                            android:textSize="18sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/btn_finish"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="#5A2456"
+                                android:text="انتخاب"
+                                android:textColor="#fff"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/txt_finish_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1"
+                                android:gravity="right" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/ll_type"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="15dp"
@@ -285,6 +411,7 @@
                                 android:textColor="@android:color/holo_red_dark"
                                 android:textSize="14sp"
                                 android:visibility="gone" />
+
 
                             <RadioGroup
                                 android:id="@+id/radioType"
@@ -624,7 +751,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"
                             android:layout_marginTop="6dp"
-                            android:text="توضیح"
+                            android:text="توضیحات"
                             android:textColor="#3d3d3d"
                             android:textSize="18sp" />
 
@@ -636,6 +763,74 @@
                             android:inputType="textMultiLine" />
 
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_menu"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginTop="15dp"
+                        android:background="#fff"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="6dp"
+                            android:gravity="center"
+                            android:text="منو غذایی"
+                            android:textColor="#3d3d3d"
+                            android:textSize="18sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:weightSum="12">
+
+                            <EditText
+                                android:id="@+id/edt_food_price"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="5"
+                                android:ems="10"
+                                android:hint="قیمت"
+                                android:inputType="number" />
+
+                            <EditText
+                                android:id="@+id/edt_food_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="5"
+                                android:ems="10"
+                                android:hint="نام غذا" />
+
+                            <ImageButton
+                                android:id="@+id/btn_add"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                app:srcCompat="@android:drawable/ic_input_add" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@color/cardview_dark_background"
+                        android:orientation="vertical"
+                        android:visibility="gone"></LinearLayout>
+
+
                 </LinearLayout>
 
             </LinearLayout>

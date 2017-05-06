@@ -29,6 +29,9 @@ public class Call extends Activity {
 
         mobile = intent.getStringExtra("mobile");
         email = intent.getStringExtra("email");
+        if(email.equals("")){
+            llEmail.setVisibility(View.GONE);
+        }
         tvCall               .setText("تماس با  "+ mobile);
         tvMessage               .setText("ارسال پیام به "+ mobile);
         tvEmail               .setText("ارسال ایمیل به "+email);

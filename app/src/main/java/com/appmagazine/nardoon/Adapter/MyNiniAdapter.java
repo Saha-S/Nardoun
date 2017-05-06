@@ -105,6 +105,9 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
         holder.age.setText(mDataset.get(position).age + " ساله");
         status = mDataset.get(position).validity;
         id_confirm = mDataset.get(position).confirmation_id;
+        image = mDataset.get(position).image;
+        idNini = mDataset.get(position).id;
+
 
         Glide.with(context)
                 .load(App.urlimages + mDataset.get(position).image)
@@ -114,7 +117,7 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
 
         if(status.matches("1")){StatusName =  "منتشر شده";holder.txt.setTextColor(Color.parseColor("#008542")); holder.edit.setVisibility(View.GONE); holder.pay.setVisibility(View.GONE);}
         if(status.matches("0")){StatusName =  "در انتظار تایید ناظر"; holder.txt.setTextColor(Color.parseColor("#ff9900")); holder.pay.setVisibility(View.GONE);}
-        if(status.matches("2")){StatusName =  "رد شده";holder.txt.setTextColor(Color.RED);holder.pay.setVisibility(View.GONE);}
+        if(status.matches("2")){StatusName =   "رد شده - "+ mDataset.get(position).comment ; holder.txt.setTextColor(Color.RED);holder.pay.setVisibility(View.GONE);}
         if(status.matches("3")){StatusName =  "درانتظار پرداخت";holder.txt.setTextColor(Color.parseColor("#ff9900"));}
         holder.txt.setText("وضعیت آگهی : "+StatusName.toString());
 
@@ -135,6 +138,10 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
         holder.pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialog = ProgressDialog.show(v.getContext(), null, null, true, false);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.setContentView(R.layout.progress_layout_small);
+
                 pay(v);
             }
         });
@@ -165,10 +172,6 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
                 .setEmail("moslem.deris@gmail.com")                     //  This field is not necessary.
                 .setMobile("09123456789")                               //  This field is not necessary.
                 .create();
-       // dialog = ProgressDialog.show(App.context, null, null, true, false);
-      //  dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-      //  dialog.setContentView(R.layout.progress_layout_small);
-
         ZarinPal.pay((Activity) v.getContext(), payment, new OnPaymentListener() {
             @Override
             public void onSuccess(String refID ) {
@@ -220,11 +223,15 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
-                dialog.hide();
+             //   dialog.hide();
                 //  Intent intent = new Intent(App.context , Details.class);
                 //  intent.putExtra("id", Details.idAgahi+"");
                 // startActivity(intent);
                 App.CustomToast("اطلاعات خرید ثبت شد");
+                update(mDataset);
+                Intent intent = new Intent(App.context, MyNini.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                App.context.startActivity(intent);
 
                 //  finish();
 
@@ -261,8 +268,8 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
 
         params.put("validity","0");
         params.put("image", image);
-
-
+        Log.i("asdasd" , image);
+        Log.i("asdasd2" , App.urlApi+"updatenini/"+ idNini);
 
         client.post(App.urlApi+"updatenini/"+ idNini, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
@@ -272,7 +279,7 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
-                dialog.hide();
+            //    dialog.hide();
                 webServiceBuylog();
                 //  Intent intent = new Intent(App.context , Details.class);
                 //  intent.putExtra("id", Details.idAgahi+"");
@@ -287,11 +294,11 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
                 // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
-                    dialog.hide();
+                //    dialog.hide();
                     App.CustomToast("آگهی با این شماره وجود ندارد !");
 
                 }else{
-                    dialog.hide();
+                  //  dialog.hide();
                     App.CustomToast("fail "+statusCode);
                     App.CustomToast(" لطفا دوباره سعی کنید ");
                 }

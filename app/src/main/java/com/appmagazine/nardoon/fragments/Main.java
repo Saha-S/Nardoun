@@ -109,6 +109,8 @@ public class Main extends Fragment {
                 intent.putExtra("location", array.get(position).location);
                 intent.putExtra("price", array.get(position).price);
                 intent.putExtra("time", array.get(position).created_at);
+                intent.putExtra("statusbox", "0");
+
                 startActivity(intent);
             }
         }));

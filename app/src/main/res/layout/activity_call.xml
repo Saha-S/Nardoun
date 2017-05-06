@@ -3,123 +3,140 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_filter"
-    tools:context="com.appmagazine.nardoon.activities.Filter"
+    android:layout_width="280dp"
+    android:layout_height="300dp"
     android:background="#e6e6e6"
     android:orientation="vertical"
     android:weightSum="13"
-    android:layout_height="300dp"
-    android:layout_width="290dp">
+    tools:context="com.appmagazine.nardoon.activities.Filter">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:text="اطلاعات تماس"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView3"
-            android:layout_margin="10dp"
-            android:textColor="@color/colorPrimary"
-            android:textSize="16sp" />
-
-        <View
-            android:id="@+id/vVerticalLine"
-            android:background="@drawable/horizontal_shape"
-            android:layout_width="match_parent"
-            android:layout_below="@+id/title"
-            android:layout_height="1dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"
-        android:weightSum="3"
-        android:layout_margin="15dp">
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="#e6e6e6">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:gravity="right|center_vertical"
-            android:layout_weight="1"
-            android:id="@+id/ll_call">
+            android:layout_height="match_parent"
+            android:layout_margin="12dp"
+            android:background="#fff"
+            android:orientation="vertical"
+            android:padding="15dp"
+            android:weightSum="13">
 
-            <TextView
-                android:text="TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_call"
-                android:gravity="right"
-                android:textColor="#000" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
-            <ImageView
-                android:src="@mipmap/callic_launcher"
-                android:id="@+id/iv_call"
-                android:padding="10dp"
-                android:layout_width="40dp"
-                android:layout_height="40dp" />
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="اطلاعات تماس"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp" />
 
+                <View
+                    android:id="@+id/vVerticalLine"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/title"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/horizontal_shape" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                android:layout_weight="10"
+                android:orientation="vertical"
+                android:weightSum="3">
+
+                <LinearLayout
+                    android:id="@+id/ll_call"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_call"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="TextView"
+                        android:textColor="#000" />
+
+                    <ImageView
+                        android:id="@+id/iv_call"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:padding="10dp"
+                        android:src="@mipmap/callic_launcher" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="TextView"
+                        android:textColor="#000" />
+
+                    <ImageView
+                        android:id="@+id/iv_message"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:padding="10dp"
+                        android:src="@mipmap/message" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:text="TextView"
+                        android:textColor="#000" />
+
+                    <ImageView
+                        android:id="@+id/iv_email"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:padding="10dp"
+                        android:src="@mipmap/email" />
+                </LinearLayout>
+
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:gravity="right|center_vertical"
-            android:layout_weight="1"
-            android:id="@+id/ll_message">
-
-            <TextView
-                android:text="TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_message"
-                android:gravity="right"
-                android:textColor="#000" />
-
-            <ImageView
-                android:src="@mipmap/message"
-                android:id="@+id/iv_message"
-                android:padding="10dp"
-                android:layout_width="40dp"
-                android:layout_height="40dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:gravity="right|center_vertical"
-            android:layout_weight="1"
-            android:id="@+id/ll_email">
-
-            <TextView
-                android:text="TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_email"
-                android:gravity="right"
-                android:textColor="#000" />
-
-            <ImageView
-                android:src="@mipmap/email"
-                android:id="@+id/iv_email"
-                android:padding="10dp"
-                android:layout_width="40dp"
-                android:layout_height="40dp" />
-        </LinearLayout>
-
-    </LinearLayout>
+    </android.support.v7.widget.CardView>
 
 
 </LinearLayout>
