@@ -114,20 +114,19 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Poster
 
             }
         });
-            if(Arrays.asList(favoritearray).contains(mDataset.get(position).id+"")) {
-                holder.title.setText(mDataset.get(position).title);
 
-                Log.i("aaaaa2", mDataset.get(position).price.toString());
-                holder.time.setText(mDataset.get(position).created_at);
+        holder.title.setText(mDataset.get(position).title);
+
+        Log.i("aaaaa2", mDataset.get(position).price.toString());
+        holder.time.setText(mDataset.get(position).created_at);
 
 
 
-                Glide.with(context)
-                        .load(App.urlimages + mDataset.get(position).image)
-                        .placeholder(R.mipmap.nopic)
-                        .into(holder.image);
+        Glide.with(context)
+                .load(App.urlimages + mDataset.get(position).image)
+                .placeholder(R.mipmap.nopic)
+                .into(holder.image);
 
-            }
 
 
 
