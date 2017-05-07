@@ -185,13 +185,10 @@ public class Favorite extends AppCompatActivity {
 
                 try {
 
-                    FileOperations file = new FileOperations();
-                    String favoritestr =file.read("favorite");
-                    String[] favoritea = favoritestr.split("-");
                     JSONArray posters = new JSONArray(value);
                     for (int i = 0; i < posters.length(); i++) {
 
-                        if (Arrays.asList(favoritea).contains(posters.getJSONObject(i).getString("id"))){
+                        if (Arrays.asList(favoritearray).contains(posters.getJSONObject(i).getString("id"))){
 
                             array.add(new Poster(posters.getJSONObject(i)));
                         }
