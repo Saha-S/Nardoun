@@ -66,36 +66,7 @@ public class App extends Application {
             confirm_id=id_confirmaationSH.toString();
         }
 
-        if (Build.VERSION.SDK_INT >= 23) {
 
-            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-
-                //File write logic here
-            FileOperations file = new FileOperations();
-
-            if (file.read("likes").equalsIgnoreCase("nofile")) {
-
-                file.write("likes", "");
-                file.write("dislikes", "");
-                file.write("favorite", "");
-            }
-
-        }else {
-
-            newactivity(context, Request.class);
-        }
-
-
-        }else {
-            FileOperations file = new FileOperations();
-
-            if (file.read("likes").equalsIgnoreCase("nofile")) {
-
-                file.write("likes", "");
-                file.write("dislikes", "");
-                file.write("favorite", "");
-            }
-        }
 
 
 

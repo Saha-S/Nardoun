@@ -1,8 +1,11 @@
 package com.appmagazine.nardoon.activities;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -26,6 +29,7 @@ import android.widget.TextView;
 
 import com.appmagazine.nardoon.Adapter.PagerAdapter;
 import com.appmagazine.nardoon.App;
+import com.appmagazine.nardoon.FileOperations;
 import com.appmagazine.nardoon.R;
 
 public class Main extends AppCompatActivity
@@ -40,6 +44,41 @@ public class Main extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+        if (Build.VERSION.SDK_INT >= 23) {
+
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+                //File write logic here
+                FileOperations file = new FileOperations();
+
+                if (file.read("likes").equalsIgnoreCase("nofile")) {
+
+                    file.write("likes", "");
+                    file.write("dislikes", "");
+                    file.write("favorite", "");
+                }
+
+            }else {
+
+                App.newactivity(Main.this, Request.class);
+                finish();
+            }
+
+
+        }else {
+            FileOperations file = new FileOperations();
+
+            if (file.read("likes").equalsIgnoreCase("nofile")) {
+
+                file.write("likes", "");
+                file.write("dislikes", "");
+                file.write("favorite", "");
+            }
+        }
+
 
 
         ibmenu=(ImageButton) findViewById(R.id.ib_menu);
