@@ -3,7 +3,6 @@ package com.appmagazine.nardoon.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
@@ -12,46 +11,58 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.appmagazine.nardoon.Adapter.MyAgahiAdapter;
+import com.appmagazine.nardoon.Adapter.FavoriteAdapter;
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.EndlessRecyclerViewScrollListener;
+import com.appmagazine.nardoon.FileOperations;
 import com.appmagazine.nardoon.MyAgahi;
-import com.appmagazine.nardoon.NetUtilsCatsAgahi;
+import com.appmagazine.nardoon.Nini;
+import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
 import com.appmagazine.nardoon.RecyclerItemClickListener;
-import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
 public class Favorite extends AppCompatActivity {
     RecyclerView recyclerView;
-    MyAgahiAdapter adapter;
+    FavoriteAdapter adapter;
     LinearLayoutManager linearLayoutManager;
-    List<MyAgahi> array;
+    List<Poster> array;
     SwipeRefreshLayout swipeRefreshLayout;
     EndlessRecyclerViewScrollListener scrollListener;
     LinearLayout llFilter;
     public static ProgressDialog dialog;
     String myDevice;
+    public static String[] favoritearray;
+    public static int numbers=0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_agahis);
+        setContentView(R.layout.activity_favorites);
 
         ImageButton ibmenu=(ImageButton) findViewById(R.id.ib_menu);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
+        FileOperations file = new FileOperations();
+        String favoritestr =file.read("favorite");
+        favoritearray = favoritestr.split("-");
+        numbers = favoritearray.length;
 
 
         ibmenu.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +85,7 @@ public class Favorite extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.list);
         linearLayoutManager = new LinearLayoutManager(App.context, LinearLayoutManager.VERTICAL, false);
         array = new ArrayList<>();
-        adapter = new MyAgahiAdapter(App.context, array);
+        adapter = new FavoriteAdapter(App.context, array);
 
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
@@ -82,20 +93,20 @@ public class Favorite extends AppCompatActivity {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                loadData(page);
+                webServiceGetFavorite();
             }
         };
 
 
-        loadData(0);
+        webServiceGetFavorite();
 
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 
-                array = new ArrayList<MyAgahi>();
-                loadData(0);
+                array = new ArrayList<Poster>();
+                webServiceGetFavorite();
                 scrollListener.resetState();
             }
         });
@@ -118,35 +129,61 @@ public class Favorite extends AppCompatActivity {
         }));
     }
 
-    public void loadData(int page) {
-        NetUtilsCatsAgahi.get(App.urlApi+"agahisbydevice/"+myDevice, null, new JsonHttpResponseHandler() {
+    public  void webServiceGetFavorite()
+    {
 
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        client.get(App.urlApi+"agahis" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                JSONArray posters = response;
-                try {
-                    dialog.hide();
-                    for (int i = 0; i < posters.length(); i++) {
-                        dialog.hide();
-                        array.add(new MyAgahi(posters.getJSONObject(i)));
-                    }
-                    dialog.hide();
-                    adapter.update(array);
-                    swipeRefreshLayout.setRefreshing(false);
+            public void onStart() {
+                // called before request is started
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                // loginpb1.setVisibility(View.VISIBLE);      *************** inja  progressbar faal mishe
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                dialog.hide();
+                String value = new String(response);
+
+                try {
+
+                    JSONArray posters = new JSONArray(value);
+                    for (int i = 0; i < posters.length(); i++) {
+                            array.add(new Poster(posters.getJSONObject(i)));
+                        Log.i("ssssss2" , array.toString());
+
+                    }
+                    adapter.update(array);
+                    Log.i("ssssss1" , array.toString());
+
+                    //  swipeRefreshLayout.setRefreshing(false);
+                } catch (JSONException e1) {
+
+                    e1.printStackTrace();
+                }
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+
+                // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
+                if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
                     dialog.hide();
+                    App.CustomToast("آگهی با این شماره وجود ندارد !");
+
+                }else{
+                    dialog.hide();
+                    App.CustomToast("fail "+statusCode);
+                    App.CustomToast(" لطفا دوباره سعی کنید ");
                 }
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                dialog.hide();
-                Toast.makeText(App.context, "Error on request", Toast.LENGTH_LONG).show();
+            public void onRetry(int retryNo) {
+                // called when request is retried
             }
-
         });
     }
-
 }

@@ -90,7 +90,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
         file = new FileOperations();
 
         holder.name.setText(mDataset.get(position).name);
-        holder.age.setText(mDataset.get(position).age + " ساله");
+        holder.age.setText(mDataset.get(position).age );
         holder.likes.setText(mDataset.get(position).point);
 
         Glide.with(context)
@@ -100,18 +100,16 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
 
         String likestr =file.read("likes");
-            liksarray=likestr.split("\n-");
+            liksarray=likestr.split("-");
 
 
         if(Arrays.asList(liksarray).contains(mDataset.get(position).id+"")){
-            Toast.makeText(context, "yes yes yesssss", Toast.LENGTH_SHORT).show();
             holder.like.setChecked(true);
             holder.dislike.setEnabled(false);
-
         }
 
         String dislikestr =file.read("dislikes");
-            disliksarray=dislikestr.split("\n-");
+            disliksarray=dislikestr.split("-");
 
         if(Arrays.asList(disliksarray).contains(mDataset.get(position).id+"")){
             holder.dislike.setChecked(true);
@@ -131,7 +129,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                             if(likes.equals(""))
                             likes+=liksarray[i];
                          else
-                            likes+="\n-"+liksarray[i];
+                            likes+="-"+liksarray[i];
 
                         }
                     }
@@ -164,7 +162,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                             if(dislikes.equals(""))
                                 dislikes+=disliksarray[i];
                             else
-                                dislikes+="\n-"+disliksarray[i];
+                                dislikes+="-"+disliksarray[i];
 
                         }
                     }

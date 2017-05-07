@@ -1,8 +1,15 @@
 package com.appmagazine.nardoon.activities;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,20 +19,24 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.R;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import cz.msebera.android.httpclient.Header;
+
 public class Order extends AppCompatActivity {
 
     private LinearLayout container;
-    private String menuOrder;
+    private String menuOrder , allPrice;
     private JSONArray menuJsonArray;
     private JSONArray orderJsonArray = new JSONArray();
     private JSONObject jsnobject;
@@ -33,6 +44,9 @@ public class Order extends AppCompatActivity {
     Button btnsabt;
     TextView totalprice;
     int index;
+    private ProgressDialog dialog;
+    private String id_confirmaation;
+    public static  JSONArray finalJson;
 
 
     @Override
@@ -190,7 +204,9 @@ public class Order extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                JSONArray finalJsonArray = new JSONArray();
+
+                final JSONArray finalJsonArray = new JSONArray();
+                finalJson= finalJsonArray;
 
                 for (int i=0; i<orderJsonArray.length(); i++){
 
@@ -207,6 +223,41 @@ public class Order extends AppCompatActivity {
 
                 }
 
+                SharedPreferences prefs = getSharedPreferences("LOGIN_ID", MODE_PRIVATE);
+                SharedPreferences prefs2 = getSharedPreferences("IS_LOGIN", MODE_PRIVATE);
+                String status = prefs2.getString("islogin", "0");
+                String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
+
+                if (status.matches("1")) {
+                    id_confirmaation = id_confirmaationSH.replace("[{\"id\":", "").replace("}]", "");
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Order.this);
+
+//                // set title
+//                alertDialogBuilder.setTitle("-");
+
+                    // set dialog message
+                    alertDialogBuilder
+                            .setMessage("سفارش شما قابل حذف یا ویرایش نیست . آیا مطمئن هستید؟")
+                            .setCancelable(true)
+                            .setPositiveButton("بله", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    webServiceNewOrder(finalJsonArray);
+
+                                }
+                            })
+                            .setNegativeButton("خیر", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+
+                    alertDialog.show();
+
+                }else {
+                    Intent intent = new Intent(App.context, Login.class);
+                    startActivity(intent);
+                }
 
                 Log.i("0o0o0o0o0o0o0",finalJsonArray.toString() );
             }
@@ -237,6 +288,59 @@ public class Order extends AppCompatActivity {
         }
 
         totalprice.setText(allprice+"");
+        allPrice= String.valueOf(allprice);
+
 
     }
+
+    public  void webServiceNewOrder(JSONArray j)
+    {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+
+        params.put("agahi_id",Details.idAgahi);
+        params.put("order", j);
+        params.put("price", allPrice);
+        params.put("confirmation_id", id_confirmaation);
+
+
+        client.post(App.urlApi+"factor", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+            @Override
+            public void onStart() {
+                dialog = ProgressDialog.show(Order.this, null, null, true, false);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.setContentView(R.layout.progress_layout_small);
+
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                dialog.hide();
+                //  String value = new String(response);
+                   Intent intent = new Intent(App.context, MyOrders.class);
+                   intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("confirmation_id",id_confirmaation);
+                intent.putExtra("order",finalJson.toString());
+                   startActivity(intent);
+                App.CustomToast("سفارش شما ثبت شد");
+
+                finish();
+
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                dialog.hide();
+
+                if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
+                    App.CustomToast("خطا");
+
+                }else{
+                    App.CustomToast(" لطفا دوباره سعی کنید ");
+                    Log.i("myerror" , errorResponse.toString());
+                }
+            }
+        });
+    }
+
 }

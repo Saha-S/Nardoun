@@ -102,7 +102,7 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
     public void onBindViewHolder(final PosterHolder holder, final int position) {
 
         holder.name.setText(mDataset.get(position).name);
-        holder.age.setText(mDataset.get(position).age + " ساله");
+        holder.age.setText(mDataset.get(position).age);
         status = mDataset.get(position).validity;
         id_confirm = mDataset.get(position).confirmation_id;
         image = mDataset.get(position).image;

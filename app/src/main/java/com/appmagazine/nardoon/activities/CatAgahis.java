@@ -24,8 +24,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.app.ActionBar.LayoutParams;
 
+import com.appmagazine.nardoon.Adapter.CatAdapter;
 import com.appmagazine.nardoon.Adapter.PosterAdapter;
 import com.appmagazine.nardoon.App;
+import com.appmagazine.nardoon.Cat;
 import com.appmagazine.nardoon.EndlessRecyclerViewScrollListener;
 import com.appmagazine.nardoon.NetUtilsCatsAgahi;
 import com.appmagazine.nardoon.Poster;
@@ -48,9 +50,9 @@ import cz.msebera.android.httpclient.Header;
 
 public class CatAgahis extends AppCompatActivity {
     RecyclerView recyclerView;
-    PosterAdapter adapter;
+    CatAdapter adapter;
     LinearLayoutManager linearLayoutManager;
-    List<Poster> array;
+    List<Cat> array;
     SwipeRefreshLayout swipeRefreshLayout;
     EndlessRecyclerViewScrollListener scrollListener;
     LinearLayout llFilter;
@@ -114,7 +116,7 @@ public class CatAgahis extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.list);
         linearLayoutManager = new LinearLayoutManager(App.context, LinearLayoutManager.VERTICAL, false);
         array = new ArrayList<>();
-        adapter = new PosterAdapter(App.context, array);
+        adapter = new CatAdapter(App.context, array);
 
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
@@ -148,7 +150,7 @@ public class CatAgahis extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                array = new ArrayList<Poster>();
+                array = new ArrayList<Cat>();
                 loadData(0);
                 scrollListener.resetState();
             }
@@ -179,7 +181,7 @@ public class CatAgahis extends AppCompatActivity {
                 JSONArray posters = response;
                 try {
                     for (int i = 0; i < posters.length(); i++) {
-                        array.add(new Poster(posters.getJSONObject(i)));
+                        array.add(new Cat(posters.getJSONObject(i)));
                     }
                     adapter.update(array);
                     swipeRefreshLayout.setRefreshing(false);
@@ -234,7 +236,7 @@ public class CatAgahis extends AppCompatActivity {
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
                         params.setMargins(5, 5, 5, 0);
-                        params.height = 70;
+                        params.height = 75;
                         params.gravity = Gravity.CENTER_VERTICAL;
 
 

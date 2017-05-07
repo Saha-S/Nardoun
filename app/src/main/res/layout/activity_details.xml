@@ -5,64 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/AppBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-
-            <android.support.v4.view.ViewPager
-                android:id="@+id/viewPager"
-                android:layout_width="match_parent"
-                android:layout_height="250dp">
-
-            </android.support.v4.view.ViewPager>
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_marginRight="12dp"
-                app:layout_collapseMode="pin">
-
-                <ImageView
-                    android:id="@+id/iv_favorites"
-                    android:layout_width="30dip"
-                    android:layout_height="30dip"
-                    android:layout_marginLeft="7dp"
-                    android:layout_marginRight="10dp"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/favorit"
-                    app:layout_collapseMode="pin"
-                    app:showAsAction="always" />
-
-                <ImageView
-                    android:id="@+id/iv_share"
-                    android:layout_width="30dip"
-                    android:layout_height="30dip"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="7dp"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/share"
-                    app:layout_collapseMode="pin"
-                    app:showAsAction="always" />
-
-            </android.support.v7.widget.Toolbar>
-
-        </android.support.design.widget.CollapsingToolbarLayout>
-
-    </android.support.design.widget.AppBarLayout>
-
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -395,5 +337,66 @@
         android:layout_marginLeft="22dp"
         android:layout_marginBottom="22dp"
         app:backgroundTint="?attr/colorPrimary" />
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/AppBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:titleEnabled="false"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="250dp">
+
+            </android.support.v4.view.ViewPager>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_marginRight="12dp"
+                app:layout_collapseMode="pin">
+
+                <ToggleButton
+                    android:id="@+id/iv_favorites"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/favoirte_toggle"
+                    android:scaleType="centerCrop"
+                    android:textOff=""
+                    android:textOn=""
+                    app:layout_collapseMode="pin"
+                    app:showAsAction="always" />
+
+                <ImageView
+                    android:id="@+id/iv_share"
+                    android:layout_width="30dip"
+                    android:layout_height="30dip"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="7dp"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/share"
+                    app:layout_collapseMode="pin"
+                    app:showAsAction="always" />
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
 
 </android.support.design.widget.CoordinatorLayout>

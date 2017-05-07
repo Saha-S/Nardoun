@@ -49,6 +49,8 @@ public class MyAgahis extends AppCompatActivity {
     LinearLayout llFilter;
     public static ProgressDialog dialog;
     String myDevice;
+    private TextView orders;
+    private String idAgahi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,8 @@ public class MyAgahis extends AppCompatActivity {
         Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
         TextView tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
         tvtitle.setTypeface(tfmorvarid);
+
+        orders = (TextView) findViewById(R.id.txt_orders);
 
 
         ibmenu.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +114,7 @@ public class MyAgahis extends AppCompatActivity {
             }
         });
 
-        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(App.context, new RecyclerItemClickListener.OnItemClickListener() {
+   /*     recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(App.context, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 
@@ -127,7 +131,7 @@ public class MyAgahis extends AppCompatActivity {
                 intent.putExtra("statusbox", "1");
                 startActivity(intent);
             }
-        }));
+        }));*/
     }
 
     public void loadData(int page) {

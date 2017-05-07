@@ -66,7 +66,7 @@ public class FileOperations {
             br = new BufferedReader(new FileReader(fpath));
             String line = "";
             while ((line = br.readLine()) != null) {
-                output.append(line +"\n");
+                output.append(line);
             }
             response = output.toString();
 

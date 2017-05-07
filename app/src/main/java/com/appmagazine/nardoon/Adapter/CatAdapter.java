@@ -1,19 +1,17 @@
 package com.appmagazine.nardoon.Adapter;
 
 import android.content.Context;
-import android.support.design.widget.NavigationView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appmagazine.nardoon.App;
+import com.appmagazine.nardoon.Cat;
 import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
 import com.bumptech.glide.Glide;
@@ -24,11 +22,11 @@ import java.util.List;
  * Created by nadia on 3/2/2017.
  */
 
-public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHolder> {
+public class CatAdapter extends RecyclerView.Adapter<CatAdapter.PosterHolder> {
 
-    List<Poster> mDataset;
+    List<Cat> mDataset;
     Context context;
-
+    String special;
     private int lastPosition = -1;
 
     public static class PosterHolder extends RecyclerView.ViewHolder {
@@ -37,6 +35,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
         TextView price;
         TextView location;
         ImageView image;
+        LinearLayout ll_vizhe;
 
 
         public PosterHolder(View itemView) {
@@ -46,11 +45,12 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
             price = (TextView) itemView.findViewById(R.id.price);
             location = (TextView) itemView.findViewById(R.id.location);
             image = (ImageView) itemView.findViewById(R.id.img);
+            ll_vizhe = (LinearLayout) itemView.findViewById(R.id.ll_vizhe);
 
         }
     }
 
-    public PosterAdapter(Context context, List<Poster> myDataset) {
+    public CatAdapter(Context context, List<Cat> myDataset) {
         this.mDataset = myDataset;
         this.context = context;
     }
@@ -74,6 +74,14 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
         }
         holder.location.setText(mDataset.get(position).created_at+" در " +mDataset.get(position).location);
 
+        special=mDataset.get(position).special;
+        if(special.equals("1")){
+            holder.ll_vizhe.setVisibility(View.VISIBLE);
+        }else{
+            holder.ll_vizhe.setVisibility(View.GONE);
+        }
+
+
 
         Glide.with(context)
                 .load(App.urlimages+mDataset.get(position).image)
@@ -92,7 +100,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
         */
     }
 
-    public void update(List<Poster> list) {
+    public void update(List<Cat> list) {
         mDataset = list;
         notifyDataSetChanged();
     }

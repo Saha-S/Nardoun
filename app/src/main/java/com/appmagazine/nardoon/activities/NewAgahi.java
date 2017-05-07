@@ -253,8 +253,10 @@ package com.appmagazine.nardoon.activities;
 
                 if (name!= null){
                     SelectCat.setText(name);
-                    if(SelectCat.getText().equals("رستوران")){
+                        if(SelectCat.getText().equals("رستوران")){
                         txtCat.setVisibility(View.GONE);
+                        txtCat.setText("ثبت آگهی در این بخش رایگان نمی باشد");
+                        txtCat.setVisibility(View.VISIBLE);
                         llType.setVisibility(View.GONE);
                         llPrice.setVisibility(View.GONE);
                         llBegin.setVisibility(View.VISIBLE);
@@ -266,7 +268,13 @@ package com.appmagazine.nardoon.activities;
                         llErsal.setVisibility(LinearLayout.VISIBLE);
                         llSave.setVisibility(LinearLayout.VISIBLE);
 
-                    }else {
+                    }else if(SelectCat.getText().equals("استخدام و کاریابی")) {
+                        Log.i("qqqqqq",SelectCat.getText().toString() );
+                          txtCat.setVisibility(View.GONE);
+                        txtCat.setText("ثبت آگهی در این بخش رایگان نمی باشد");
+                        txtCat.setVisibility(View.VISIBLE);
+                    }else
+                    {
                         txtCat.setVisibility(View.GONE);
                         llForm.setVisibility(LinearLayout.VISIBLE);
                         llClose.setVisibility(LinearLayout.VISIBLE);
@@ -547,7 +555,7 @@ package com.appmagazine.nardoon.activities;
                 {
                     params.put("special", "1");
                 }
-               if(chkLink.isChecked() || chkSpecial.isChecked() || SelectCat.getText().equals("استخدام و کاریابی")){
+               if(chkLink.isChecked() || chkSpecial.isChecked() || SelectCat.getText().equals("استخدام و کاریابی") || SelectCat.getText().equals("رستوران")){
                    params.put("validity","3");
                }
                 if(SelectCat.getText().equals("رستوران")) {

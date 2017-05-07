@@ -9,19 +9,22 @@ import org.json.JSONObject;
 
 public class MyAgahi {
     public int id;
-    public String title, price, location , image,created_at ,validity,permission ,comment ;
+    public String title, price, location , image,created_at ,validity,permission ,comment ,factors;
 
     public MyAgahi(JSONObject jsonObject) { // تابع سازنده برای دریافت مقادیر از JsonObject
         try {
             this.id = jsonObject.getInt("id");
             this.title = jsonObject.getString("title");
             this.price = jsonObject.getString("price");
+            this.validity = jsonObject.getString("validity");
             this.location = jsonObject.getString("location");
             this.created_at = jsonObject.getString("created_at");
-            this.validity = jsonObject.getString("validity");
-            this.comment = jsonObject.getString("comment");
-            this.permission = jsonObject.getString("permission");
             this.image = jsonObject.getString("image");
+            this.permission = jsonObject.getString("permission");
+            this.comment = jsonObject.getString("comment");
+            this.factors = jsonObject.getString("factors");
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

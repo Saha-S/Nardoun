@@ -22,9 +22,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.DetailsImagePagerAdapter;
+import com.appmagazine.nardoon.FileOperations;
 import com.appmagazine.nardoon.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -35,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -51,7 +55,8 @@ public class Details extends AppCompatActivity {
     public static TextView tvtitle,tvcontent,tvprice,tvlocation , tvtime ,tvtype  , txt;
     public static String url, catname , mobile , email , price , image , location,time ,special , link ;
     public static int idRadio  ;
-    ImageView  ivshare , ivFavorites ;
+    ImageView  ivshare ;
+    ToggleButton ivFavorites ;
     Button btnDelete, btnEdit;
     CollapsingToolbarLayout collapsingToolbar;
     public static ProgressDialog dialog;
@@ -61,11 +66,14 @@ public class Details extends AppCompatActivity {
     LinearLayout llVizhe ,llPrice, llType , llMenu;
     ViewPager viewPager;
     Button pay ,btnMenu;
-    int AgahiPrice,EstekhdamPrice , LinkPrice , SpecialPrice = 0;
+    int AgahiPrice,EstekhdamPrice , LinkPrice , SpecialPrice  , RestaurantPrice= 0;
     String id_confirmaation , peygiri , linkPos, specialPos , catPos;
     private String why;
     private String menuOrder;
     DetailsImagePagerAdapter myCustomPagerAdapter;
+    String[] favoritearray;
+    FileOperations file;
+
 
 
     @Override
@@ -81,6 +89,8 @@ public class Details extends AppCompatActivity {
         idAgahi=intent.getStringExtra("id");
         location=intent.getStringExtra("location");
         permission = intent.getStringExtra("permission");
+        file = new FileOperations();
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         tvtitle = (TextView) findViewById(R.id.txtTitle);
@@ -92,7 +102,7 @@ public class Details extends AppCompatActivity {
         txt = (TextView) findViewById(R.id.txt);
         // ivtitle=(ImageView) findViewById(R.id.iv_title);
         ivshare = (ImageView) findViewById(R.id.iv_share);
-        ivFavorites = (ImageView) findViewById(R.id.iv_favorites);
+        ivFavorites = (ToggleButton) findViewById(R.id.iv_favorites);
         btnDelete = (Button) findViewById(R.id.btn_delete);
         btnEdit = (Button) findViewById(R.id.btn_edit);
         llVizhe = (LinearLayout) findViewById(R.id.llVizhe);
@@ -102,9 +112,19 @@ public class Details extends AppCompatActivity {
         pay = (Button) findViewById(R.id.btn_pay);
         btnMenu = (Button) findViewById(R.id.btn_menu);
 
+
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab_call);
         getValidity();
 
+        /////////////////////////////////// FAVORITE
+        String favoritestr =file.read("favorite");
+        favoritearray=favoritestr.split("-");
+
+
+        if(Arrays.asList(favoritearray).contains(idAgahi+"")){
+            ivFavorites.setChecked(true);
+        }
+        //////////////////////////////////
         String typetxt = tvtype.getText().toString();
         if (typetxt == "فروشی") {idRadio = 0;}
         if (typetxt == "درخواستی") {idRadio = 1;}
@@ -222,16 +242,32 @@ public class Details extends AppCompatActivity {
         ivFavorites.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(ivFavorites.isChecked()== false) {
 
-                ids.add(idAgahi);
-                SharedPreferences.Editor editor = getSharedPreferences("FAV_ID", MODE_PRIVATE).edit();
-                Set<String> set = new HashSet<String>();
-                set.addAll(ids);
-                editor.putStringSet("ID", set);
-                editor.commit();
+                    String likes= "";
+                for (int i=0;i<favoritearray.length;i++) {
+                    if (!favoritearray[i].equals( idAgahi )) {
+                        if(likes.equals(""))
+                            likes+=favoritearray[i];
+                        else
+                            likes+="-"+favoritearray[i];
 
+                    }
+                }
+                file.write("favorite" , likes);
 
+            }else{
+                    Toast.makeText(App.context ,"آگهی نشان شد", Toast.LENGTH_SHORT).show();
+                    String likes = file.read("favorite");
+                if(likes.equals("")) {
+                    file.write("favorite", idAgahi);
+                }else {
+                    file.write("favorite",likes +"-"+idAgahi);
+                }
             }
+
+
+        }
         });
 
         setSupportActionBar(toolbar);
@@ -246,8 +282,7 @@ public class Details extends AppCompatActivity {
 
 
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle("");
-
+        collapsingToolbar.setTitleEnabled(false);
 
 
         url = App.urlApi + "agahis/" + idAgahi;
@@ -661,14 +696,16 @@ public class Details extends AppCompatActivity {
                 }
 
                 if(catname.toString().equals("استخدام و کاریابی")){
-                    Log.i("aaaa" , catname);
                     EstekhdamPrice=App.priceEstekhdam;
+                }
+                if(catname.toString().equals("رستوران")){
+                    RestaurantPrice=App.priceRestaurant;
                 }
 
                 if(!link.equals("")){
                     LinkPrice=App.priceLink;
                 }
-                AgahiPrice=LinkPrice+SpecialPrice+EstekhdamPrice;
+                AgahiPrice=LinkPrice+SpecialPrice+EstekhdamPrice+RestaurantPrice;
 
                 if(validity.equals("1")) {
                     llVizhe.setBackgroundColor(Color.parseColor("#ccffdd"));
