@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 public class MyAgahi {
     public int id;
-    public String title, price, location , image,created_at ,validity,permission ,comment ,factors;
+    public String title, price, location , image,created_at ,validity,permission ,comment ,factors,category_id;
 
     public MyAgahi(JSONObject jsonObject) { // تابع سازنده برای دریافت مقادیر از JsonObject
         try {
@@ -21,6 +21,7 @@ public class MyAgahi {
             this.created_at = jsonObject.getString("created_at");
             this.image = jsonObject.getString("image");
             this.permission = jsonObject.getString("permission");
+            this.category_id = jsonObject.getString("category_id");
             this.comment = jsonObject.getString("comment");
             this.factors = jsonObject.getString("factors");
 

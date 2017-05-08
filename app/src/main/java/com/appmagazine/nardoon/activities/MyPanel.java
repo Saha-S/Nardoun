@@ -2,6 +2,7 @@ package com.appmagazine.nardoon.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
@@ -51,30 +52,23 @@ public class MyPanel extends AppCompatActivity {
     LinearLayout llFilter;
     public static ProgressDialog dialog;
     String myDevice;
+    private String id_confirmaation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_agahis);
 
-        ImageButton ibmenu=(ImageButton) findViewById(R.id.ib_menu);
-        Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
-        TextView tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
-        tvtitle.setTypeface(tfmorvarid);
+        SharedPreferences prefs = App.context.getSharedPreferences("LOGIN_ID", 0);
+        SharedPreferences prefs2 = App.context.getSharedPreferences("IS_LOGIN", 0);
+        String status = prefs2.getString("islogin", "0");
+        String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
+
+        if (status.matches("1")) {
+            id_confirmaation = id_confirmaationSH.replace("[{\"id\":", "").replace("}]", "");
 
 
-        ibmenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                if (drawer.isDrawerOpen(GravityCompat.END)) {
-                    drawer.closeDrawer(GravityCompat.END);
-                } else {
-                    drawer.openDrawer(GravityCompat.END);
-                }
 
-            }
-        });
         myDevice=App.android_id;
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
@@ -110,23 +104,12 @@ public class MyPanel extends AppCompatActivity {
                 scrollListener.resetState();
             }
         });
+            
+        } else {
+            Intent intent = new Intent(App.context, Login.class);
+            startActivity(intent);
+        }
 
-        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(App.context, new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-
-                //Toast.makeText(getContext(), "آیتم شماره " + array.get(position).id + " را کلیک کردید!", Toast.LENGTH_LONG).show();
-             /*   Intent intent = new Intent(App.context , Details.class);
-                intent.putExtra("id", array.get(position).id+"");
-                intent.putExtra("title", array.get(position).title);
-                intent.putExtra("image", array.get(position).image);
-                intent.putExtra("location", array.get(position).location);
-                intent.putExtra("price", array.get(position).price);
-                intent.putExtra("time", array.get(position).created_at);
-                intent.putExtra("validity", array.get(position).validity);
-                startActivity(intent);*/
-            }
-        }));
     }
     public  void webServiceGetAgahi()
     {
@@ -135,8 +118,7 @@ public class MyPanel extends AppCompatActivity {
         RequestParams params = new RequestParams();
 //        params.put("username", ""); //  ********** parametr  ersali dar surate niaz
 //        params.put("password", "");
-     Log.i("aaaaaaaa" , App.urlApi+"buylog/"+App.confirm_id.replace("[{\"id\":", "").replace("}]" , ""));
-        client.get(App.urlApi+"buylog/"+App.confirm_id.replace("[{\"id\":", "").replace("}]" , ""), params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+        client.get(App.urlApi+"buylog/"+id_confirmaation , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
         @Override
         public void onStart() {
             // called before request is started
@@ -169,11 +151,10 @@ public class MyPanel extends AppCompatActivity {
             // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
             if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
             {
-                App.CustomToast("آگهی با این شماره وجود ندارد !");
+                App.CustomToast(" خطا.لطفا مجددا امتحان کنید ");
 
             }else{
-                App.CustomToast("fail "+statusCode);
-                App.CustomToast(" لطفا دوباره سعی کنید ");
+                App.CustomToast(" خطا.لطفا مجددا امتحان کنید ");
             }
         }
 

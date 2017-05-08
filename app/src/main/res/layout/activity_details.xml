@@ -244,12 +244,14 @@
                             android:id="@+id/btn_menu"
                             android:layout_width="wrap_content"
                             android:layout_height="30dp"
-                            android:layout_marginRight="2dp"
-                            android:background="@color/colorPrimary"
+                            android:layout_marginRight="10dp"
+                            android:background="#00000000"
                             android:gravity="center"
+                            android:padding="5dp"
                             android:text="مشاهده و سفارش"
-                            android:textColor="#fff"
-                            android:textSize="16sp" />
+                            android:textColor="@color/navy"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -305,7 +307,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/textView6"

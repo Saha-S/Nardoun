@@ -1,10 +1,13 @@
 package com.appmagazine.nardoon.fragments;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -37,6 +40,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -47,6 +51,8 @@ import ir.moslem_deris.apps.zarinpal.ZarinPal;
 import ir.moslem_deris.apps.zarinpal.enums.ZarinPalError;
 import ir.moslem_deris.apps.zarinpal.listeners.OnPaymentListener;
 import ir.moslem_deris.apps.zarinpal.models.Payment;
+
+import static android.content.Context.CONNECTIVITY_SERVICE;
 
 public class SMS extends Fragment {
     public static int Sdaemi,Setebari,Sirancell =0;
@@ -80,31 +86,128 @@ public class SMS extends Fragment {
         int selectedId = radioOperatorGroup.getCheckedRadioButtonId();
         radioOperatorButton = (RadioButton) view.findViewById(selectedId);
 
+        Object connectivityService = App.context.getSystemService(CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) connectivityService;
 
-        new GetData().execute();
+        //     ConnecivityMatnager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if (mWifi.isConnected() || isMobileDataEnabled()) {
+            new GetData().execute();
+        }else
+            App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
 
 
-        TextWatcher inputTextWatcherMatn = new TextWatcher() {
+
+        final TextWatcher inputTextWatcherMatn = new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 if(s.length()<=70){
                     txtCharacter.setText("1 پیامک / "+s.length());
                     countSMS=1;
+                    try {
+                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
+                        number = Integer.parseInt(numberSMS.getText().toString()) * countSMS;
+                        priceint = Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                    }catch (NumberFormatException e){}
+
                 }
-                else if(s.length()<=134 && s.length()> 70) {
+                if(s.length()<=134 && s.length()> 70) {
                     txtCharacter.setText("2 پیامک / "+s.length());
                     countSMS = 2;
+                    try{
+                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
+                        number=Integer.parseInt(numberSMS.getText().toString()) * countSMS;
+                        priceint=Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                    }catch (NumberFormatException e){}
+
                 }
-                else if(s.length()<=201 && s.length()> 134) {
+                if(s.length()<=201 && s.length()> 134) {
                     txtCharacter.setText("3 پیامک / "+s.length());
                     countSMS = 3;
+                    try{
+                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
+                        number=Integer.parseInt(numberSMS.getText().toString()) * countSMS;
+                        priceint=Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                    }catch (NumberFormatException e){}
                 }
-                else if(s.length()<=268 && s.length()> 201) {
-                    txtCharacter.setText("4 / "+s.length());
+                if(s.length()<=268 && s.length()> 201) {
+                    txtCharacter.setText("4 پیامک / "+s.length());
                     countSMS = 4;
+                    try{
+                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
+                        number=Integer.parseInt(numberSMS.getText().toString()) * countSMS;
+                        priceint=Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                    }catch (NumberFormatException e){}
+
                 }
-                else if(s.length()<=335 && s.length()> 268) {
-                    txtCharacter.setText("5 / "+s.length());
+                if(s.length()<=335 && s.length()> 268) {
+                    txtCharacter.setText("5 پیامک / "+s.length());
                     countSMS = 5;
+                    try{
+                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
+                        number=Integer.parseInt(numberSMS.getText().toString()) * countSMS;
+                        priceint=Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                    }catch (NumberFormatException e){}
+
+                }
+                if(s.length()<=402 && s.length()> 235) {
+                    txtCharacter.setText("6 پیامک / "+s.length());
+                    countSMS = 6;
+                    try{
+                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
+                        number=Integer.parseInt(numberSMS.getText().toString()) * countSMS;
+                        priceint=Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                    }catch (NumberFormatException e){}
+                }
+                if(s.length()<=469 && s.length()> 402) {
+                    txtCharacter.setText("7 پیامک / "+s.length());
+                    countSMS = 7;
+                    try{
+                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
+                        number=Integer.parseInt(numberSMS.getText().toString()) * countSMS;
+                        priceint=Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                    }catch (NumberFormatException e){}
+
+                }
+                if(s.length()<=536 && s.length()> 469) {
+                    txtCharacter.setText("8 پیامک / "+s.length());
+                    countSMS = 8;
+                    try{
+                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
+                        number=Integer.parseInt(numberSMS.getText().toString()) * countSMS;
+                        priceint=Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                    }catch (NumberFormatException e){}
+                }
+                if(s.length()<=603 && s.length()> 536) {
+                    txtCharacter.setText("9 پیامک / "+s.length());
+                    countSMS = 9;
+                    try{
+                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
+                        number=Integer.parseInt(numberSMS.getText().toString()) * countSMS;
+                        priceint=Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                    }catch (NumberFormatException e){}
+                }
+                if(s.length()<=670 && s.length()> 603) {
+                    txtCharacter.setText("10 پیامک / "+s.length());
+                    countSMS = 10;
+                    try{
+                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
+                        number=Integer.parseInt(numberSMS.getText().toString()) * countSMS;
+                        priceint=Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                    }catch (NumberFormatException e){}
+                }
+                if(s.length()<=737 && s.length()> 670) {
+                    txtCharacter.setText("10 پیامک / "+s.length());
+                    countSMS = 11;
+                    try{
+                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
+                        number=Integer.parseInt(numberSMS.getText().toString()) * countSMS;
+                        priceint=Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                    }catch (NumberFormatException e){}
+                }
+                if(s.length()>737){
+                    txtWarning.setVisibility(View.VISIBLE);
+                    pay.setVisibility(View.GONE);
                 }
 
 
@@ -120,6 +223,8 @@ public class SMS extends Fragment {
 
         TextWatcher inputTextWatcher = new TextWatcher() {
             public void afterTextChanged(Editable s) {
+                matn.addTextChangedListener(inputTextWatcherMatn);
+
                 try {
                     if (countSMS == 1) {
                         txtPrice.setText(Integer.parseInt(s.toString()) * App.priceSms + " تومان ");
@@ -140,11 +245,12 @@ public class SMS extends Fragment {
                     if (Integer.parseInt(s.toString()) * countSMS >= credit) {
                         pay.setVisibility(View.INVISIBLE);
                         txtWarning.setVisibility(View.VISIBLE);
-                    } else {
+                    }else{
                         pay.setVisibility(View.VISIBLE);
                         txtWarning.setVisibility(View.INVISIBLE);
                     }
-                }catch (NumberFormatException e){}
+                }catch (NumberFormatException e){
+                }
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after){
 
@@ -157,43 +263,47 @@ public class SMS extends Fragment {
         numberSMS.addTextChangedListener(inputTextWatcher);
 
 
-
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 
-//                dialog = ProgressDialog.show(App.context, null, null, true, false);
-//                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                //               dialog.setContentView(R.layout.progress_layout_small);
-                SharedPreferences prefs = App.context.getSharedPreferences("LOGIN_ID" , 0);
+                SharedPreferences prefs = App.context.getSharedPreferences("LOGIN_ID", 0);
                 SharedPreferences prefs2 = App.context.getSharedPreferences("IS_LOGIN", 0);
                 String status = prefs2.getString("islogin", "0");
                 String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
 
                 if (status.matches("1")) {
-                    id_confirmaation=id_confirmaationSH.replace("[{\"id\":", "").replace("}]" , "");
-                    if(radioOperatorButton.getText().toString()==getString(R.string.daemi)){
-                        Sdaemi=number;
-                        Setebari=0;
-                        Sirancell=0;
-                        typeSMS= 1;
-                        Log.i("mylog2" ,Sdaemi + " ,,, "  +Setebari +",,,"+Sirancell );
-                    }else if(radioOperatorButton.getText()==getString(R.string.etebari)){
-                        Sdaemi=0;
-                        Setebari=number;
-                        Sirancell=0;
-                        typeSMS= 2;
-                    }else if(radioOperatorButton.getText()==getString(R.string.daemi)){
-                        Sdaemi=0;
-                        Setebari=0;
-                        Sirancell=number;
-                        typeSMS= 3;
+                    id_confirmaation = id_confirmaationSH.replace("[{\"id\":", "").replace("}]", "");
+                    if (radioOperatorButton.getText().toString() == getString(R.string.daemi)) {
+                        Sdaemi = number;
+                        Setebari = 0;
+                        Sirancell = 0;
+                        typeSMS = 1;
+                        Log.i("mylog2", Sdaemi + " ,,, " + Setebari + ",,," + Sirancell);
+                    } else if (radioOperatorButton.getText() == getString(R.string.etebari)) {
+                        Sdaemi = 0;
+                        Setebari = number;
+                        Sirancell = 0;
+                        typeSMS = 2;
+                    } else if (radioOperatorButton.getText() == getString(R.string.daemi)) {
+                        Sdaemi = 0;
+                        Setebari = 0;
+                        Sirancell = number;
+                        typeSMS = 3;
                     }
+                    Object connectivityService = App.context.getSystemService(CONNECTIVITY_SERVICE);
+                    ConnectivityManager cm = (ConnectivityManager) connectivityService;
 
-                ///    pay();
-                    webServiceBuylog();
-                }else {
+               //     ConnecivityMatnager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo mWifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+                    if (mWifi.isConnected() || isMobileDataEnabled()) {
+                        pay();
+                    }else
+                        App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
+
+                } else {
                     Intent intent = new Intent(App.context, Login.class);
                     startActivity(intent);
                 }
@@ -281,7 +391,9 @@ public class SMS extends Fragment {
 
         @Override
         protected void onPostExecute(String result) {
-            credit=Integer.parseInt(result);
+            try {
+                credit = Integer.parseInt(result);
+            }catch (Exception e){}
             super.onPostExecute(result);
         }
     }
@@ -342,5 +454,21 @@ public class SMS extends Fragment {
             }
         });
     }
+
+    public Boolean isMobileDataEnabled(){
+        Object connectivityService = App.context.getSystemService(CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) connectivityService;
+
+        try {
+            Class<?> c = Class.forName(cm.getClass().getName());
+            Method m = c.getDeclaredMethod("getMobileDataEnabled");
+            m.setAccessible(true);
+            return (Boolean)m.invoke(cm);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 }

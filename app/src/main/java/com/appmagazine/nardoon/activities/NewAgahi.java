@@ -4,6 +4,7 @@ package com.appmagazine.nardoon.activities;
         import android.app.DialogFragment;
         import android.app.ProgressDialog;
         import android.content.ActivityNotFoundException;
+        import android.content.Context;
         import android.content.DialogInterface;
         import android.content.Intent;
         import android.content.pm.PackageManager;
@@ -19,10 +20,12 @@ package com.appmagazine.nardoon.activities;
         import android.support.v7.app.AlertDialog;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
+        import android.text.InputType;
         import android.util.DisplayMetrics;
         import android.util.Log;
         import android.view.LayoutInflater;
         import android.view.View;
+        import android.view.inputmethod.InputMethodManager;
         import android.widget.Button;
         import android.widget.CheckBox;
         import android.widget.CompoundButton;
@@ -168,7 +171,7 @@ package com.appmagazine.nardoon.activities;
                 txtBeginTime = (TextView) findViewById(R.id.txt_begin_time);
                 txtFinishTime = (TextView) findViewById(R.id.txt_finish_time);
 
-
+                content.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                 chkLink.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -225,6 +228,9 @@ package com.appmagazine.nardoon.activities;
                             }});
 
                         container.addView(addView);
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(foodName.getWindowToken(), 0);
+                        foodPrice.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
                         foodName.setText("");
                         foodPrice.setText("");
                     }});

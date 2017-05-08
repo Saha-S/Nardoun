@@ -8,7 +8,7 @@
         >
         <item
             android:id="@+id/nav_login"
-            android:icon="@mipmap/avatar"
+            android:icon="@mipmap/login"
             android:title="ورود"
             />
         <item
@@ -18,7 +18,7 @@
             />
         <item
             android:id="@+id/nav_my_nini"
-            android:icon="@mipmap/avatar"
+            android:icon="@mipmap/babypic"
             android:title="نی نی عکس های من"
             />
 
@@ -30,11 +30,12 @@
         <item
             android:id="@+id/nav_recently"
             android:icon="@android:drawable/ic_menu_camera"
-            android:title="بازدید های اخیر" />
+            android:title="بازدید های اخیر"
+            android:visible="false" />
 
         <item
             android:id="@+id/nav_favarit"
-            android:icon="@mipmap/bookmark"
+            android:icon="@mipmap/favorite"
             android:title="نشان شده ها"
             />
         <item

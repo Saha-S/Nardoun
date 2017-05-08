@@ -100,4 +100,13 @@
 
     </LinearLayout>
 
+    <FrameLayout
+        android:id="@+id/ll_border"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/orangeframe"
+        android:visibility="gone">
+
+    </FrameLayout>
+
 </android.support.v7.widget.CardView>

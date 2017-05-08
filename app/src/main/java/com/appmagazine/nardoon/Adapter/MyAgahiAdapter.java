@@ -80,13 +80,14 @@ public class MyAgahiAdapter extends RecyclerView.Adapter<MyAgahiAdapter.PosterHo
         String status = mDataset.get(position).validity;
         Log.i("lllll", status);
       //  Log.i("lllll", status+mDataset.get(position).factors.toString());
-
-        try {
-            String a = mDataset.get(position).factors.toString();
-            Log.i("lllll2", a);
+        String cat = mDataset.get(position).category_id;
+        if(cat.equals("10")){
             holder.orders.setVisibility(View.VISIBLE);
+        }else {
+            holder.orders.setVisibility(View.GONE);
+        }
 
-        }catch (Exception e){}
+
         holder.orders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

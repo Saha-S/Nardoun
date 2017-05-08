@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -38,10 +40,13 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+
+import static android.content.Context.CONNECTIVITY_SERVICE;
 
 public class NiniAx extends Fragment {
     RecyclerView recyclerView;
@@ -59,9 +64,6 @@ public class NiniAx extends Fragment {
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe);
 
-        dialog = ProgressDialog.show(getActivity(), null, null,true, false);
-        dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
-        dialog.setContentView(R.layout.progress_layout_small);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -76,11 +78,24 @@ public class NiniAx extends Fragment {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                webServiceGetNini();
+                ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+                if (mWifi.isConnected() || isMobileDataEnabled()) {
+                    webServiceGetNini();
+                }else
+                    App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
+
             }
         };
 
-        webServiceGetNini();
+        ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if (mWifi.isConnected() || isMobileDataEnabled()) {
+            webServiceGetNini();
+        }else
+            App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
 
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -88,7 +103,13 @@ public class NiniAx extends Fragment {
             public void onRefresh() {
 
                 array = new ArrayList<Nini>();
-                webServiceGetNini();
+                ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+                if (mWifi.isConnected() || isMobileDataEnabled()) {
+                    webServiceGetNini();
+                }else
+                    App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
                 scrollListener.resetState();
             }
         });
@@ -104,9 +125,9 @@ public class NiniAx extends Fragment {
         client.get(App.urlApi+"nini" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
-                // called before request is started
-
-                // loginpb1.setVisibility(View.VISIBLE);      *************** inja  progressbar faal mishe
+                dialog = ProgressDialog.show(getActivity(), null, null,true, false);
+                dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
+                dialog.setContentView(R.layout.progress_layout_small);
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
@@ -134,7 +155,7 @@ public class NiniAx extends Fragment {
                 // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
-                    App.CustomToast("آگهی با این شماره وجود ندارد !");
+                    App.CustomToast("آگهی موجود نیست");
 
                 }else{
                     App.CustomToast("fail "+statusCode);
@@ -148,5 +169,21 @@ public class NiniAx extends Fragment {
             }
         });
     }
+
+    public Boolean isMobileDataEnabled(){
+        Object connectivityService = App.context.getSystemService(CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) connectivityService;
+
+        try {
+            Class<?> c = Class.forName(cm.getClass().getName());
+            Method m = c.getDeclaredMethod("getMobileDataEnabled");
+            m.setAccessible(true);
+            return (Boolean)m.invoke(cm);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
 }

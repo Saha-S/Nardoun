@@ -2,6 +2,7 @@ package com.appmagazine.nardoon.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,10 @@ public class AgahiOrdersAdapter extends RecyclerView.Adapter<AgahiOrdersAdapter.
     public static String order;
     public static String time;
     public static String price;
+    public static String isdone;
+    public static String id;
+    public static String agahiMobile;
+    public static String mobile;
 
     private int lastPosition = -1;
 
@@ -40,6 +45,7 @@ public class AgahiOrdersAdapter extends RecyclerView.Adapter<AgahiOrdersAdapter.
         TextView id;
         TextView time;
         TextView isused;
+        TextView mobile;
         LinearLayout llRow;
 
 
@@ -49,6 +55,7 @@ public class AgahiOrdersAdapter extends RecyclerView.Adapter<AgahiOrdersAdapter.
             id = (TextView) itemView.findViewById(R.id.id);
             time = (TextView) itemView.findViewById(R.id.time);
             isused = (TextView) itemView.findViewById(R.id.isused);
+            mobile = (TextView) itemView.findViewById(R.id.mobile);
             llRow = (LinearLayout) itemView.findViewById(R.id.ll_row);
 
         }
@@ -73,16 +80,17 @@ public class AgahiOrdersAdapter extends RecyclerView.Adapter<AgahiOrdersAdapter.
 
         holder.id.setText(mDataset.get(position).id);
         holder.time.setText(mDataset.get(position).created_at);
-      /*  if(mDataset.get(position).done.equals("0")) {
-            holder.isused.setText("استفاده نشده");
-            holder.isused.setBackgroundColor(Color.parseColor("#ff471a"));
+        holder.mobile.setText(mDataset.get(position).confirmation_mobile);
+        if(mDataset.get(position).isdone.equals("0")) {
+            holder.isused.setText("تحویل داده نشده");
+            holder.isused.setTextColor(Color.parseColor("#ff471a"));
         }
-        if(mDataset.get(position).done.equals("1")) {
-            holder.isused.setText("استفاده شده");
-            holder.isused.setBackgroundColor(Color.parseColor("#008000"));
+        if(mDataset.get(position).isdone.equals("1")) {
+            holder.isused.setText("تحویل داده شده");
+            holder.isused.setTextColor(Color.parseColor("#008000"));
 
         }
-*/
+
         Log.i("aaaassss", mDataset.get(position).id);
         Log.i("aaaassss", mDataset.get(position).order.toString());
         Animation animation = AnimationUtils.loadAnimation(context,
@@ -90,7 +98,6 @@ public class AgahiOrdersAdapter extends RecyclerView.Adapter<AgahiOrdersAdapter.
                         : android.R.anim.slide_out_right);
         holder.itemView.startAnimation(animation);
         lastPosition = position;
-
         holder.llRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,9 +108,15 @@ public class AgahiOrdersAdapter extends RecyclerView.Adapter<AgahiOrdersAdapter.
                 intent.putExtra("ORDER" ,mDataset.get(position).order.toString() );
                 intent.putExtra("PRICE" ,mDataset.get(position).price.toString() );
                 intent.putExtra("AGAHIID" ,mDataset.get(position).agahi_id.toString() );
+                intent.putExtra("isdone" ,mDataset.get(position).isdone.toString() );
                 intent.putExtra("TIME" ,mDataset.get(position).created_at.toString() );
                 intent.putExtra("ID" ,mDataset.get(position).id.toString() );
-               // intent.putExtra("DONE" ,mDataset.get(position).done.toString() );
+                isdone = mDataset.get(position).isdone;
+                id = mDataset.get(position).id;
+                agahiMobile = mDataset.get(position).agahi_mobile;
+                mobile = mDataset.get(position).confirmation_mobile;
+
+                // intent.putExtra("DONE" ,mDataset.get(position).done.toString() );
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 App.context.startActivity(intent);
 

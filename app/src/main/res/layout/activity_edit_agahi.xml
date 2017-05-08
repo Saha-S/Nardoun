@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/scroll"
-            android:isScrollContainer="true"
+            android:isScrollContainer="false"
             >
 
             <LinearLayout
@@ -38,45 +38,45 @@
                 android:orientation="vertical" >
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
                     android:background="#fff"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginTop="15dp"
-                    android:layout_height="match_parent">
+                    android:orientation="vertical">
 
 
                     <TextView
-                        android:text="لطفا موضوع آگهی را انتخاب کنید."
+                        android:id="@+id/txt_cat"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/txt_cat"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="6dp"
+                        android:text="لطفا موضوع آگهی را انتخاب کنید."
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         android:textColor="@android:color/holo_red_dark"
-                        android:layout_marginTop="6dp"
-                        android:layout_marginRight="10dp"
                         android:textSize="14sp" />
 
                     <TextView
-                        android:text="موضوع آگهی"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dp"
                         android:layout_marginRight="10dp"
-                        android:textSize="18sp"
-                        android:textColor="#3d3d3d" />
+                        android:layout_marginTop="6dp"
+                        android:text="موضوع آگهی"
+                        android:textColor="#3d3d3d"
+                        android:textSize="18sp" />
 
                     <Button
+                        android:id="@+id/btn_cats"
                         android:layout_width="144dp"
                         android:layout_height="wrap_content"
-                        android:id="@+id/btn_cats"
                         android:layout_marginBottom="10dp"
                         android:layout_marginLeft="10dp"
                         android:background="#5A2456"
+                        android:text="انتخاب"
                         android:textColor="#fff"
-                        android:textSize="18sp"
-                        android:text="انتخاب" />
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
@@ -88,10 +88,11 @@
                     android:visibility="visible">
 
                     <LinearLayout
+                        android:id="@+id/ll_price"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
                         android:layout_marginTop="15dp"
                         android:background="#fff"
                         android:gravity="right"
@@ -116,18 +117,6 @@
                             android:layout_height="match_parent"
                             android:orientation="horizontal">
 
-                            <Button
-                                android:id="@+id/btn_catsss"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="10dp"
-                                android:layout_marginLeft="10dp"
-                                android:layout_weight="0.30"
-                                android:background="@color/cardview_shadow_start_color"
-                                android:text="انتخاب"
-                                android:textColor="#fff"
-                                android:textSize="18sp" />
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -144,6 +133,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:ems="10"
+                            android:focusableInTouchMode="true"
                             android:hint="1000000 (یک میلیون تومان)"
                             android:inputType="number" />
 
@@ -152,8 +142,243 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="15dp"
+                        android:background="#fff"
+                        android:gravity="right"
+                        android:orientation="vertical"
+                        android:weightSum="1">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="right"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginTop="6dp"
+                                android:text="آگهی ویژه"
+                                android:textColor="#3d3d3d"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginTop="6dp"
+                                android:text="با انتخاب آگهی ویژه به مدت 1 ماه آگهی شما در صدر دسته بندی ها نمایش داده میشود.(هزینه 15000 تومان)"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/green"
+                                android:textSize="12sp"
+                                android:visibility="visible" />
+
+                            <CheckBox
+                                android:id="@+id/chk_special"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginEnd="6dp"
+                                android:text="آگهی ویژه" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="15dp"
+                        android:background="#fff"
+                        android:gravity="right"
+                        android:orientation="vertical"
+                        android:visibility="visible"
+                        android:weightSum="1">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="right"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginTop="6dp"
+                                android:text="اضافه کردن لینک به آگهی"
+                                android:textColor="#3d3d3d"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:layout_marginTop="6dp"
+                                android:text="لینک وب سایت خود را به آگهی اضافه کنید (هزینه 10000 تومان)"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/green"
+                                android:textSize="12sp"
+                                android:visibility="visible" />
+
+                            <CheckBox
+                                android:id="@+id/chk_link"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginEnd="6dp"
+                                android:text="لینک" />
+
+                            <EditText
+                                android:id="@+id/edt_link"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:focusableInTouchMode="true"
+                                android:hint="www.example.com"
+                                android:inputType="textPersonName"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_begin"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="15dp"
+                        android:background="#fff"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+
+                        <TextView
+                            android:id="@+id/txt_begin"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="6dp"
+                            android:text="لطفا ساعت شروع سفارش گیری را مشخص کنید"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@android:color/holo_red_dark"
+                            android:textSize="14sp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="6dp"
+                            android:text="شروع سفارش گیری"
+                            android:textColor="#3d3d3d"
+                            android:textSize="18sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/btn_begin"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="#5A2456"
+                                android:text="انتخاب"
+                                android:textColor="#fff"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/txt_begin_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1"
+                                android:gravity="right" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_finish"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="15dp"
+                        android:background="#fff"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+
+                        <TextView
+                            android:id="@+id/txt_finish"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="6dp"
+                            android:text="لطفا ساعت پایان سفارش گیری را مشخص کنید"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@android:color/holo_red_dark"
+                            android:textSize="14sp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="6dp"
+                            android:text="پایان سفارش گیری"
+                            android:textColor="#3d3d3d"
+                            android:textSize="18sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/btn_finish"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginLeft="10dp"
+                                android:background="#5A2456"
+                                android:text="انتخاب"
+                                android:textColor="#fff"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/txt_finish_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:layout_weight="1"
+                                android:gravity="right" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/ll_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
                         android:layout_marginTop="15dp"
                         android:background="#fff"
                         android:gravity="right"
@@ -189,6 +414,7 @@
                                 android:textSize="14sp"
                                 android:visibility="gone" />
 
+
                             <RadioGroup
                                 android:id="@+id/radioType"
                                 android:layout_width="fill_parent"
@@ -220,8 +446,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
                         android:layout_marginTop="15dp"
                         android:background="#fff"
                         android:orientation="vertical">
@@ -348,123 +574,16 @@
                                         app:srcCompat="@mipmap/nopic" />
                                 </LinearLayout>
 
+
                             </LinearLayout>
                         </HorizontalScrollView>
 
                     </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginTop="15dp"
-                        android:background="#fff"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginTop="6dp"
-                            android:text="ایمیل"
-                            android:textColor="#3d3d3d"
-                            android:textSize="18sp" />
-
-                        <EditText
-                            android:id="@+id/edt_email"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:hint="x@x.com"
-                            android:inputType="textEmailAddress" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginTop="15dp"
-                        android:background="#fff"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/txt_mobile"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginTop="6dp"
-                            android:text="لطفا شماره تلفن خود را وارد کنید"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@android:color/holo_red_dark"
-                            android:textSize="14sp"
-                            android:visibility="gone" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginTop="6dp"
-                            android:text="تلفن"
-                            android:textColor="#3d3d3d"
-                            android:textSize="18sp" />
-
-                        <EditText
-                            android:id="@+id/edt_phone"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:hint="09121234567"
-                            android:inputType="phone" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginTop="15dp"
-                        android:background="#fff"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/txt_location"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginTop="6dp"
-                            android:text="لطفا محل آگهی را انتخاب کنید"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@android:color/holo_red_dark"
-                            android:textSize="14sp"
-                            android:visibility="gone" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginTop="6dp"
-                            android:text="محل آگهی"
-                            android:textColor="#3d3d3d"
-                            android:textSize="18sp" />
-
-                        <EditText
-                            android:id="@+id/edt_location"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:inputType="textPersonName" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
                         android:layout_marginTop="15dp"
                         android:background="#fff"
                         android:orientation="vertical">
@@ -495,6 +614,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:ems="10"
+                            android:focusableInTouchMode="true"
                             android:inputType="textPersonName" />
 
                     </LinearLayout>
@@ -502,8 +622,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
                         android:layout_marginTop="15dp"
                         android:background="#fff"
                         android:orientation="vertical">
@@ -526,7 +646,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"
                             android:layout_marginTop="6dp"
-                            android:text="توضیح"
+                            android:text="توضیحات"
                             android:textColor="#3d3d3d"
                             android:textSize="18sp" />
 
@@ -535,9 +655,195 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:ems="10"
-                            android:inputType="textMultiLine" />
+                            android:focusableInTouchMode="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
+                            />
 
                     </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="15dp"
+                        android:background="#fff"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="6dp"
+                            android:text="ایمیل"
+                            android:textColor="#3d3d3d"
+                            android:textSize="18sp" />
+
+                        <EditText
+                            android:id="@+id/edt_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:focusableInTouchMode="true"
+                            android:hint="x@x.com"
+                            android:inputType="textEmailAddress" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="15dp"
+                        android:background="#fff"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txt_mobile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="6dp"
+                            android:text="لطفا شماره تلفن خود را وارد کنید"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@android:color/holo_red_dark"
+                            android:textSize="14sp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="6dp"
+                            android:text="تلفن"
+                            android:textColor="#3d3d3d"
+                            android:textSize="18sp" />
+
+                        <EditText
+                            android:id="@+id/edt_phone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:focusableInTouchMode="true"
+                            android:hint="09121234567"
+                            android:inputType="phone" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="15dp"
+                        android:background="#fff"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/txt_location"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="6dp"
+                            android:text="لطفا محل آگهی را انتخاب کنید"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@android:color/holo_red_dark"
+                            android:textSize="14sp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="6dp"
+                            android:text="محل آگهی"
+                            android:textColor="#3d3d3d"
+                            android:textSize="18sp" />
+
+                        <EditText
+                            android:id="@+id/edt_location"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:focusableInTouchMode="true"
+                            android:inputType="textPersonName" />
+
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:id="@+id/ll_menu"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="15dp"
+                        android:background="#fff"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="6dp"
+                            android:gravity="center"
+                            android:text="منو غذایی"
+                            android:textColor="#3d3d3d"
+                            android:textSize="18sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:weightSum="12">
+
+                            <EditText
+                                android:id="@+id/edt_food_price"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="5"
+                                android:ems="10"
+                                android:focusableInTouchMode="true"
+                                android:hint="قیمت"
+                                 />
+
+                            <EditText
+                                android:id="@+id/edt_food_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="5"
+                                android:ems="10"
+                                android:focusableInTouchMode="true"
+                                android:hint="نام غذا" />
+
+                            <ImageButton
+                                android:id="@+id/btn_add"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                app:srcCompat="@android:drawable/ic_input_add" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginTop="15dp"
+                        android:background="@color/cardview_dark_background"
+                        android:orientation="vertical"
+                        android:visibility="gone"></LinearLayout>
+
+
                 </LinearLayout>
 
             </LinearLayout>

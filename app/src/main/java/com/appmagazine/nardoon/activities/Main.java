@@ -162,6 +162,7 @@ public class Main extends AppCompatActivity
         Menu nav_Menu = navigationView.getMenu();
 
         View hView =  navigationView.getHeaderView(0);
+
         final TextView nav_mobile = (TextView)hView.findViewById(R.id.txt_mobile_number);
         final Button btnExit = (Button)hView.findViewById(R.id.btn_exit);
         nav_mobile.setVisibility(View.GONE);

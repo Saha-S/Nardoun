@@ -1,8 +1,11 @@
 package com.appmagazine.nardoon.activities;
 
 import android.Manifest;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
+import android.app.Service;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,16 +13,25 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -29,12 +41,18 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.appmagazine.nardoon.App;
+import com.appmagazine.nardoon.BeginTimePickerFragment;
+import com.appmagazine.nardoon.FinishTimePickerFragment;
 import com.appmagazine.nardoon.R;
 import com.appmagazine.nardoon.Utility;
 import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -46,7 +64,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class EditAgahi extends AppCompatActivity {
 
-    EditText price,email,phone , title , content , location;
+    EditText price,email,phone , title , content , location ,link;
     TextView txtPrice,txtEmail,txtMobile , txtTitle, txtContent , txtType,txtLocation,txtCat , txtImg;
    // String name , id , type,subid,location_id;
     String    type;
@@ -71,12 +89,25 @@ public class EditAgahi extends AppCompatActivity {
     boolean flag1,flag2,flag3,flag4,flag5,flag6,flag7,flag8=false;
     ImageView image;
     File file1 , file2 , file3;
+    private LinearLayout container;
+    private LinearLayout llMenu;
+    private TextView txtBegin ,txtFinish ,txtBeginTime,txtFinishTime;
+    JSONArray menuJsonArray;
+    public static String startTime , endTime;
+    ImageButton btnAdd;
+    Button btnFinish , btnBegin ;
+    EditText foodName , foodPrice;
+    Button SelectCat;
+    CheckBox chkLink;
+    CheckBox chkSpecial;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_agahi);
 
-        Button SelectCat = (Button) findViewById(R.id.btn_cats);
+        SelectCat = (Button) findViewById(R.id.btn_cats);
         SelectImage = (Button) findViewById(R.id.btn_select_image);
         price = (EditText) findViewById(R.id.edt_price);
         email = (EditText) findViewById(R.id.edt_email);
@@ -106,8 +137,8 @@ public class EditAgahi extends AppCompatActivity {
         ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
         TextView tvBack = (TextView) findViewById(R.id.tv_back);
         radioTypeGroup = (RadioGroup) findViewById(R.id.radioType);
-        final RadioButton radio1 = (RadioButton)findViewById(R.id.rb1);
-        final RadioButton radio2 = (RadioButton)findViewById(R.id.rb2);
+        final RadioButton radio1 = (RadioButton) findViewById(R.id.rb1);
+        final RadioButton radio2 = (RadioButton) findViewById(R.id.rb2);
 
 
         txtContent = (TextView) findViewById(R.id.txt_content);
@@ -119,15 +150,79 @@ public class EditAgahi extends AppCompatActivity {
         txtCat = (TextView) findViewById(R.id.txt_cat);
         txtImg = (TextView) findViewById(R.id.txt_img_asli);
 
-        url                 =App.urlApi+"updateagahi/"+Details.idAgahi;
+        container = (LinearLayout) findViewById(R.id.container);
+        llMenu = (LinearLayout) findViewById(R.id.ll_menu);
+        LinearLayout llType = (LinearLayout) findViewById(R.id.ll_type);
+        LinearLayout llPrice = (LinearLayout) findViewById(R.id.ll_price);
+        LinearLayout llBegin = (LinearLayout) findViewById(R.id.ll_begin);
+        LinearLayout llFinish = (LinearLayout) findViewById(R.id.ll_finish);
+        txtBegin = (TextView) findViewById(R.id.txt_begin);
+        txtFinish = (TextView) findViewById(R.id.txt_finish);
+        txtBeginTime = (TextView) findViewById(R.id.txt_begin_time);
+        txtFinishTime = (TextView) findViewById(R.id.txt_finish_time);
+        btnFinish = (Button) findViewById(R.id.btn_finish);
+        btnBegin = (Button) findViewById(R.id.btn_begin);
+        btnAdd = (ImageButton) findViewById(R.id.btn_add);
+        foodName = (EditText) findViewById(R.id.edt_food_name);
+        foodPrice = (EditText) findViewById(R.id.edt_food_price);
 
+        link = (EditText) findViewById(R.id.edt_link);
+        chkLink = (CheckBox) findViewById(R.id.chk_link);
+        chkSpecial = (CheckBox) findViewById(R.id.chk_special);
+
+
+        url = App.urlApi + "updateagahi/" + Details.idAgahi;
+        menuJsonArray = new JSONArray();
+
+    /*    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(content.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(email.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(price.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(title.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(location.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(phone.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(link.getWindowToken(), 0);
+*/
+        content.setSingleLine(false);
+        content.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
         title.setText(Details.tvtitle.getText());
         location.setText(Details.tvlocation.getText());
         content.setText(Details.tvcontent.getText());
         phone.setText(Details.mobile);
         email.setText(Details.email);
-        price.setText(Details.price);
+        link.setText(Details.link);
 
+        try {
+            price.setText(Details.price);
+            if (Details.idRadio == 0) {
+                radio1.setChecked(true);
+            }
+            if (Details.idRadio == 1) {
+                radio2.setChecked(true);
+            }
+
+        } catch (Exception e) {
+        }
+
+
+        if (Details.special.equals("0")) {
+            chkLink.setChecked(false);
+        }
+        if (Details.special.equals("1")) {
+            chkLink.setChecked(true);
+            link.setVisibility(View.VISIBLE);
+        }
+
+        chkLink.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    link.setVisibility(View.VISIBLE);
+                } else {
+                    link.setVisibility(View.GONE);
+                }
+            }
+        });
 
         imgDelete1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,17 +242,49 @@ public class EditAgahi extends AppCompatActivity {
                 img3.setVisibility(View.GONE);
             }
         });
+        btnBegin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment newFragment = new BeginTimePickerFragment();
+                newFragment.show(getFragmentManager(),"TimePicker");
 
+            }
+        });
+        btnFinish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment newFragment = new FinishTimePickerFragment();
+                newFragment.show(getFragmentManager(),"TimePicker");
 
+            }
+        });
 
-        if(Details.idRadio==0){
-            radio1.setChecked(true);
-        }
-        if(Details.idRadio==1){
-            radio2.setChecked(true);
-        }
 
         SelectCat.setText(Details.catname);
+
+        Log.i("teeeeeeest"  ,SelectCat.getText().toString() );
+        if (SelectCat.getText().toString().equals("رستوران")) {
+            Log.i("teeeeeeest2"  ,SelectCat.getText().toString() );
+
+            txtCat.setVisibility(View.GONE);
+            llType.setVisibility(View.GONE);
+            llPrice.setVisibility(View.GONE);
+            llBegin.setVisibility(View.VISIBLE);
+            llFinish.setVisibility(View.VISIBLE);
+            container.setVisibility(View.VISIBLE);
+            llMenu.setVisibility(View.VISIBLE);
+            llForm.setVisibility(LinearLayout.VISIBLE);
+            llClose.setVisibility(LinearLayout.VISIBLE);
+            llErsal.setVisibility(LinearLayout.VISIBLE);
+            llSave.setVisibility(LinearLayout.VISIBLE);
+
+            startTime = Details.start;
+            endTime = Details.end;
+            txtBeginTime.setText(startTime);
+            txtFinishTime.setText(endTime);
+
+        }
+
 
         try {
             if (Details.image.equals("0")) {
@@ -190,16 +317,17 @@ public class EditAgahi extends AppCompatActivity {
                 SelectImage.setText("افزودن عکسی دیگر");
                 Log.i("url3", "...:" + Details.url3);
             }
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
 
 
         EnableRuntimePermission();
 
-            txtCat.setVisibility(View.GONE);
-            llForm.setVisibility(LinearLayout.VISIBLE);
-            llClose.setVisibility(LinearLayout.VISIBLE);
-            llErsal.setVisibility(LinearLayout.VISIBLE);
-            llSave.setVisibility(LinearLayout.VISIBLE);
+        txtCat.setVisibility(View.GONE);
+        llForm.setVisibility(LinearLayout.VISIBLE);
+        llClose.setVisibility(LinearLayout.VISIBLE);
+        llErsal.setVisibility(LinearLayout.VISIBLE);
+        llSave.setVisibility(LinearLayout.VISIBLE);
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,73 +371,154 @@ public class EditAgahi extends AppCompatActivity {
         llErsal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (SelectCat.getText().equals("رستوران")) {
 
-                if(price.getText().toString().matches("")){
-                    txtPrice.setVisibility(View.VISIBLE);
-                    flag1=true;
-                }else {
-                    txtPrice.setVisibility(View.GONE);
-                    flag1 = false;
-                }
-
-                if(phone.getText().toString().matches("")){
-                    txtMobile.setVisibility(View.VISIBLE);
-                    flag3=true;
-                }else{
-                    txtMobile.setVisibility(View.GONE);
-                    flag3=false;
-                }
-
-                if(location.getText().toString().matches("")){
-                    txtLocation.setVisibility(View.VISIBLE);
-                    flag4=true;
-                }else {
-                    txtLocation.setVisibility(View.GONE);
-                    flag4 = false;
-                }
-
-                if(title.getText().toString().matches("")){
-                    txtTitle.setVisibility(View.VISIBLE);
-                    flag5=true;
-                }else {
-                    txtTitle.setVisibility(View.GONE);
-                    flag5 = false;
-                }
-
-                if(content.getText().toString().matches("")){
-                    txtContent.setVisibility(View.VISIBLE);
-                    flag6=true;
-                }else {
-                    txtContent.setVisibility(View.GONE);
-                    flag6 = false;
-                }
-
-                if(radioTypeGroup.getCheckedRadioButtonId() == -1){
-                    txtType.setVisibility(View.VISIBLE);
-                    flag7=true;
-                }else{
-                    txtType.setVisibility(View.GONE);
-                    flag7=false;
-                }
-                if(imgAsli.getVisibility()==View.GONE && (img2.getVisibility()==View.VISIBLE || img3.getVisibility()==View.VISIBLE )){
-                    txtImg.setVisibility(View.VISIBLE);
-                    flag8=true;
-                }else{
-                    txtImg.setVisibility(View.GONE);
-                    flag8=false;
-                }
-
-
-                if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false && flag8 == false) {
-                    dialog = ProgressDialog.show(EditAgahi.this, null, null, true, false);
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    dialog.setContentView(R.layout.progress_layout_small);
-                    int selectedId = radioTypeGroup.getCheckedRadioButtonId();
-                    radioTypeButton = (RadioButton) findViewById(selectedId);
-                    if (radioTypeButton != null) {
-                        type = radioTypeButton.getText().toString();
+                    if (phone.getText().toString().matches("")) {
+                        txtMobile.setVisibility(View.VISIBLE);
+                        flag3 = true;
+                    } else {
+                        txtMobile.setVisibility(View.GONE);
+                        flag3 = false;
                     }
-                    webServiceEditAgahi();
+
+                    if (txtBeginTime.getText().toString().matches("")) {
+                        txtBegin.setVisibility(View.VISIBLE);
+                        flag1 = true;
+                    } else {
+                        txtBegin.setVisibility(View.GONE);
+                        flag1 = false;
+                    }
+
+                    if (txtFinishTime.getText().toString().matches("")) {
+                        txtFinish.setVisibility(View.VISIBLE);
+                        flag7 = true;
+                    } else {
+                        txtFinish.setVisibility(View.GONE);
+                        flag7 = false;
+                    }
+
+
+                    if (location.getText().toString().matches("")) {
+                        txtLocation.setVisibility(View.VISIBLE);
+                        flag4 = true;
+                    } else {
+                        txtLocation.setVisibility(View.GONE);
+                        flag4 = false;
+                    }
+
+
+                    if (title.getText().toString().matches("")) {
+                        txtTitle.setVisibility(View.VISIBLE);
+                        flag5 = true;
+                    } else {
+                        txtTitle.setVisibility(View.GONE);
+                        flag5 = false;
+                    }
+
+
+                    if (content.getText().toString().matches("")) {
+                        txtContent.setVisibility(View.VISIBLE);
+                        flag6 = true;
+                    } else {
+                        txtContent.setVisibility(View.GONE);
+                        flag6 = false;
+                    }
+
+
+                    if (imgAsli.getVisibility() == View.GONE && (img2.getVisibility() == View.VISIBLE || img3.getVisibility() == View.VISIBLE)) {
+                        txtImg.setVisibility(View.VISIBLE);
+                        flag8 = true;
+                    } else {
+                        txtImg.setVisibility(View.GONE);
+                        flag8 = false;
+                    }
+
+
+                    if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false && flag8 == false) {
+
+                        dialog = ProgressDialog.show(EditAgahi.this, null, null, true, false);
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                        dialog.setContentView(R.layout.progress_layout_small);
+
+                        int selectedId = radioTypeGroup.getCheckedRadioButtonId();
+                        radioTypeButton = (RadioButton) findViewById(selectedId);
+
+                        if (radioTypeButton != null) {
+
+                            type = radioTypeButton.getText().toString();
+                        }
+                        webServiceEditAgahi();
+
+                    }
+                } else {
+                    if (price.getText().toString().matches("")) {
+                        txtPrice.setVisibility(View.VISIBLE);
+                        flag1 = true;
+                    } else {
+                        txtPrice.setVisibility(View.GONE);
+                        flag1 = false;
+                    }
+
+                    if (phone.getText().toString().matches("")) {
+                        txtMobile.setVisibility(View.VISIBLE);
+                        flag3 = true;
+                    } else {
+                        txtMobile.setVisibility(View.GONE);
+                        flag3 = false;
+                    }
+
+                    if (location.getText().toString().matches("")) {
+                        txtLocation.setVisibility(View.VISIBLE);
+                        flag4 = true;
+                    } else {
+                        txtLocation.setVisibility(View.GONE);
+                        flag4 = false;
+                    }
+
+                    if (title.getText().toString().matches("")) {
+                        txtTitle.setVisibility(View.VISIBLE);
+                        flag5 = true;
+                    } else {
+                        txtTitle.setVisibility(View.GONE);
+                        flag5 = false;
+                    }
+
+                    if (content.getText().toString().matches("")) {
+                        txtContent.setVisibility(View.VISIBLE);
+                        flag6 = true;
+                    } else {
+                        txtContent.setVisibility(View.GONE);
+                        flag6 = false;
+                    }
+
+                    if (radioTypeGroup.getCheckedRadioButtonId() == -1) {
+                        txtType.setVisibility(View.VISIBLE);
+                        flag7 = true;
+                    } else {
+                        txtType.setVisibility(View.GONE);
+                        flag7 = false;
+                    }
+                    if (imgAsli.getVisibility() == View.GONE && (img2.getVisibility() == View.VISIBLE || img3.getVisibility() == View.VISIBLE)) {
+                        txtImg.setVisibility(View.VISIBLE);
+                        flag8 = true;
+                    } else {
+                        txtImg.setVisibility(View.GONE);
+                        flag8 = false;
+                    }
+
+
+                    if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false && flag8 == false) {
+                        dialog = ProgressDialog.show(EditAgahi.this, null, null, true, false);
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        dialog.setContentView(R.layout.progress_layout_small);
+                        int selectedId = radioTypeGroup.getCheckedRadioButtonId();
+                        radioTypeButton = (RadioButton) findViewById(selectedId);
+                        if (radioTypeButton != null) {
+                            type = radioTypeButton.getText().toString();
+                        }
+                        webServiceEditAgahi();
+                    }
                 }
 
             }
@@ -318,16 +527,161 @@ public class EditAgahi extends AppCompatActivity {
         SelectImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(imgAsli.getVisibility()==View.GONE) {
+                if (imgAsli.getVisibility() == View.GONE) {
                     selectImage(ivImageAsli);
-                } else if(imgAsli.getVisibility()==View.VISIBLE && img2.getVisibility()==View.GONE) {
+                } else if (imgAsli.getVisibility() == View.VISIBLE && img2.getVisibility() == View.GONE) {
                     selectImage(ivImage2);
-                }else if(img2.getVisibility()==View.VISIBLE && img3.getVisibility()==View.GONE) {
+                } else if (img2.getVisibility() == View.VISIBLE && img3.getVisibility() == View.GONE) {
                     selectImage(ivImage3);
                 }
 
             }
         });
+
+
+        //////////////////////////////////////
+
+        if(SelectCat.getText().equals("رستوران")) {
+
+
+        try {
+         //   Intent intent = getIntent();
+            String order = Details.order;
+            menuJsonArray = new JSONArray(order);
+       //     Log.i("aaaaaaa122322", order);
+            Log.i("aaaaaaa12234433", menuJsonArray.toString());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.i("aaaaaaa122333", menuJsonArray.toString());
+        try {
+            for (int i = 0; i < menuJsonArray.length(); i++) {
+
+                LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(App.context.LAYOUT_INFLATER_SERVICE);
+                final View addView = layoutInflater.inflate(R.layout.row, null);
+                final TextView txtName = (TextView) addView.findViewById(R.id.txtName);
+                final TextView txtPrice = (TextView) addView.findViewById(R.id.txtPrice);
+
+                final JSONObject oo = menuJsonArray.getJSONObject(i);
+                Log.i("aaaaaaa12233113", oo.getString("name").toString());
+
+                txtName.setText(oo.getString("name").toString());
+                txtPrice.setText(oo.getString("price").toString() + " تومان ");
+
+                ImageView buttonRemove = (ImageView) addView.findViewById(R.id.remove);
+
+                JSONObject object = new JSONObject();
+                final int finalI = i;
+                buttonRemove.setOnClickListener(new View.OnClickListener() {
+
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                    @Override
+                    public void onClick(View v) {
+                      //  int index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
+                        ((LinearLayout) addView.getParent()).removeView(addView);
+                        menuJsonArray.remove(finalI);
+                        Log.i("teeees", menuJsonArray.toString());
+
+
+                    }
+                });
+
+          /*      try {
+                    object.put("name", foodName.getText().toString());
+                    object.put("price", foodPrice.getText().toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                menuJsonArray.put(object);
+
+                buttonRemove.setOnClickListener(new View.OnClickListener() {
+
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                    @Override
+                    public void onClick(View v) {
+                        int index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
+                        ((LinearLayout) addView.getParent()).removeView(addView);
+                        menuJsonArray.remove(index);
+
+                    }
+                });
+*/
+
+                container.addView(addView);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        /////////////////////////////////////
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(App.context.LAYOUT_INFLATER_SERVICE);
+                final View addView = layoutInflater.inflate(R.layout.row, null);
+                TextView txtName = (TextView) addView.findViewById(R.id.txtName);
+                TextView txtPrice = (TextView) addView.findViewById(R.id.txtPrice);
+                txtName.setText(foodName.getText().toString());
+                txtPrice.setText(foodPrice.getText().toString() + " تومان ");
+                ImageView buttonRemove = (ImageView) addView.findViewById(R.id.remove);
+
+
+                JSONObject object = new JSONObject();
+                try {
+                    object.put("name", foodName.getText().toString());
+                    object.put("price", foodPrice.getText().toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                menuJsonArray.put(object);
+
+                buttonRemove.setOnClickListener(new View.OnClickListener() {
+
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                    @Override
+                    public void onClick(View v) {
+                        int index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
+                        ((LinearLayout) addView.getParent()).removeView(addView);
+                        menuJsonArray.remove(index);
+                        Log.i("teeees", menuJsonArray.toString());
+
+                    }
+                });
+
+                container.addView(addView);
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(foodName.getWindowToken(), 0);
+                foodPrice.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+
+                //  imm.hideSoftInputFromWindow(foodPrice.getWindowToken(), 0);
+
+                foodName.setText("");
+                foodPrice.setText("");
+            }
+        });
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     public  void webServiceEditAgahi()
@@ -335,15 +689,32 @@ public class EditAgahi extends AppCompatActivity {
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
+        if(chkSpecial.isChecked())
+        {
+            params.put("special", "1");
+        }
 
         params.put("title", title.getText()); //  ********** parametr  ersali dar surate niaz
         params.put("content", content.getText());
+        params.put("link", link.getText());
         params.put("deviceid", App.android_id);
         params.put("devicemodel", App.android_Model);
-        params.put("price", price.getText());
         params.put("email", email.getText());
         params.put("mobile", phone.getText());
-        params.put("type",type);
+        if(SelectCat.getText().equals("رستوران")) {
+            params.put("start",startTime);
+            params.put("end",endTime);
+            params.put("menu",menuJsonArray.toString());
+            Log.i("teeees22", menuJsonArray.toString());
+
+            params.put("type","0");
+            params.put("price","0");
+
+
+        }else {
+            params.put("price", price.getText());
+            params.put("type",type);
+        }
 
         if(Details.validity.equals("3")){
             params.put("validity","3");

@@ -2,10 +2,15 @@ package com.appmagazine.nardoon.activities;
 
 import android.app.ActionBar;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,9 +20,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -44,6 +52,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,9 +83,6 @@ public class CatAgahis extends AppCompatActivity {
 
         sansfarsi= Typeface.createFromAsset(App.context.getAssets(), "Sansfarsi.ttf");
         subs.clear();
-        dialog = ProgressDialog.show(CatAgahis.this, null, null, true, false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(R.layout.progress_layout_small);
         Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
         TextView tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
         tvtitle.setTypeface(tfmorvarid);
@@ -90,30 +96,15 @@ public class CatAgahis extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        ImageButton ibmenu = (ImageButton) findViewById(R.id.ib_menu);
-
-        ibmenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                if (drawer.isDrawerOpen(GravityCompat.END)) {
-                    drawer.closeDrawer(GravityCompat.END);
-                } else {
-                    drawer.openDrawer(GravityCompat.END);
-                }
-
-            }
-        });
 
 
         Intent intent = getIntent();
         catID = intent.getStringExtra("id");
 
         txtSub = (TextView) findViewById(R.id.txt_sub);
-        txtSub.setText("زیردسته های " + intent.getStringExtra("name"));
         TextView txtAgahi = (TextView) findViewById(R.id.txt_agahi);
         txtAgahi.setText("آگهی های " + intent.getStringExtra("name"));
-
+        txtSub.setVisibility(View.GONE);
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
         recyclerView = (RecyclerView) findViewById(R.id.list);
@@ -128,7 +119,14 @@ public class CatAgahis extends AppCompatActivity {
 
         llFilter = (LinearLayout) findViewById(R.id.ll_Filter);
 
-        webServiceGetCategory();
+        ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if (mWifi.isConnected() || isMobileDataEnabled()) {
+            webServiceGetCategory();
+        }else
+            App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
+
 
 
         llFilter.setOnClickListener(new View.OnClickListener() {
@@ -145,7 +143,15 @@ public class CatAgahis extends AppCompatActivity {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                loadData(page);
+                ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+                if (mWifi.isConnected() || isMobileDataEnabled()) {
+                    webServiceGetCatAgahi();
+                }else
+                    App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
+
+
             }
         };
 
@@ -154,7 +160,7 @@ public class CatAgahis extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 array = new ArrayList<Cat>();
-                loadData(0);
+                webServiceGetCatAgahi();
                 scrollListener.resetState();
             }
         });
@@ -177,32 +183,71 @@ public class CatAgahis extends AppCompatActivity {
     }
 
 
-    public void loadData(int page) {
-        NetUtilsCatsAgahi.get(App.urlApi+"agahisbycat/"+catID, null, new JsonHttpResponseHandler() {
+
+    public  void webServiceGetCatAgahi()
+    {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        client.get(App.urlApi+"agahisbycat/"+catID, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                JSONArray posters = response;
+            public void onStart() {
+                dialog = ProgressDialog.show(CatAgahis.this, null, null,true, false);
+                dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
+                dialog.setContentView(R.layout.progress_layout_small);
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                dialog.hide();
+
+                String value = new String(response);
+
                 try {
+                    JSONArray posters = new JSONArray(value);
+
                     for (int i = 0; i < posters.length(); i++) {
                         array.add(new Cat(posters.getJSONObject(i)));
                     }
                     adapter.update(array);
                     swipeRefreshLayout.setRefreshing(false);
                     dialog.hide();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                     dialog.hide();
+                }
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
 
+                // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
+                if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
+                    App.CustomToast("آگهی موجود نیست");
+
+                }else{
+                    App.CustomToast("fail "+statusCode);
+                    App.CustomToast(" لطفا دوباره سعی کنید ");
                 }
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                dialog.hide();
+            public void onRetry(int retryNo) {
+                // called when request is retried
             }
-
         });
     }
+
+
+
+
+
+
+
+
+
+
 
     public void webServiceGetCategory() {
         AsyncHttpClient client = new AsyncHttpClient();
@@ -212,17 +257,23 @@ public class CatAgahis extends AppCompatActivity {
 
             @Override
             public void onStart() {
+                dialog = ProgressDialog.show(CatAgahis.this, null, null, true, false);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.setContentView(R.layout.progress_layout_small);
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
                 dialog.hide();
-                loadData(0);
+                webServiceGetCatAgahi();
                 String value = new String(response);
                 try {
                     JSONArray responcearray = new JSONArray(value);
                     subsNumber = responcearray.length();
+                    Intent intent = getIntent();
+                    txtSub.setVisibility(View.VISIBLE);
+                    txtSub.setText("زیردسته های " + intent.getStringExtra("name"));
                     for (int i = 0; i < responcearray.length(); i++) {
 
                         JSONObject obj = new JSONArray(value).getJSONObject(i);
@@ -298,7 +349,7 @@ public class CatAgahis extends AppCompatActivity {
 
                     txtSub.setVisibility(View.GONE);
                    // dialog.hide();
-                    loadData(0);
+                    webServiceGetCatAgahi();
                 }
             }
 
@@ -308,7 +359,7 @@ public class CatAgahis extends AppCompatActivity {
                 if (statusCode == 404) {
                     txtSub.setVisibility(View.GONE);
                     dialog.hide();
-                    loadData(0);
+                    webServiceGetCatAgahi();
 
 
                 } else {
@@ -328,6 +379,19 @@ public class CatAgahis extends AppCompatActivity {
 
 
     }
+    public Boolean isMobileDataEnabled(){
+        Object connectivityService = App.context.getSystemService(CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) connectivityService;
 
+        try {
+            Class<?> c = Class.forName(cm.getClass().getName());
+            Method m = c.getDeclaredMethod("getMobileDataEnabled");
+            m.setAccessible(true);
+            return (Boolean)m.invoke(cm);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }

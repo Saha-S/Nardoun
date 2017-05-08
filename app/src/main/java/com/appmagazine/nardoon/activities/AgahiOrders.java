@@ -2,6 +2,7 @@ package com.appmagazine.nardoon.activities;
 
 import android.app.ProgressDialog;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -9,7 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.appmagazine.nardoon.Adapter.AgahiOrdersAdapter;
 import com.appmagazine.nardoon.Adapter.MyAgahiAdapter;
@@ -45,14 +49,29 @@ public class AgahiOrders extends AppCompatActivity {
         setContentView(R.layout.activity_agahi_order);
 
 
+        TextView tvtitle = (TextView) findViewById(R.id.tv_mainpage_title);
+        TextView appbarTitle = (TextView) findViewById(R.id.tv_appbar_title);
+        ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
+        appbarTitle.setText("سفارشات دریافت شده");
+        Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
+        tvtitle.setTypeface(tfmorvarid);
+        ibBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        appbarTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         myDevice=App.android_id;
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
 
-        dialog = ProgressDialog.show(AgahiOrders.this, null, null,true, false);
-        dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
-        dialog.setContentView(R.layout.progress_layout_small);
 
         recyclerView = (RecyclerView) findViewById(R.id.list);
         linearLayoutManager = new LinearLayoutManager(App.context, LinearLayoutManager.VERTICAL, false);
@@ -93,9 +112,9 @@ Log.i("aassaass", App.urlApi+"factorsbyagahi/"+ MyAgahiAdapter.idAgahi);
         client.get(App.urlApi+"factorsbyagahi/"+ MyAgahiAdapter.idAgahi, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
         @Override
         public void onStart() {
-            // called before request is started
-
-            // loginpb1.setVisibility(View.VISIBLE);      *************** inja  progressbar faal mishe
+            dialog = ProgressDialog.show(AgahiOrders.this, null, null,true, false);
+            dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
+            dialog.setContentView(R.layout.progress_layout_small);
         }
         @Override
         public void onSuccess(int statusCode, Header[] headers, byte[] response) {

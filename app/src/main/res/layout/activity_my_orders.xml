@@ -19,7 +19,7 @@ android:fitsSystemWindows="true"
         android:orientation="vertical">
 
         <include
-            layout="@layout/app_bar_login"
+            layout="@layout/app_bar_my_agahi"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize" />
 
@@ -30,14 +30,25 @@ android:fitsSystemWindows="true"
             android:weightSum="10">
 
             <TextView
+                android:id="@+id/textView8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/yourOrder"
+                android:textColor="@color/green"
+                android:textSize="17sp" />
+
+            <TextView
                 android:id="@+id/textView20"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:gravity="center"
                 android:padding="5dp"
-                android:text="سفارش شما با موفقیت ثبت شد"
-                android:textColor="@color/green"
+                android:text="@string/screenshot"
+                android:textColor="@color/maroon"
                 android:textSize="17sp" />
 
             <TextView

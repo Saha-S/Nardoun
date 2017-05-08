@@ -1,11 +1,14 @@
 package com.appmagazine.nardoon.activities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -37,6 +40,7 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,30 +65,8 @@ public class MyNini extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_nini);
 
-        ImageButton ibmenu=(ImageButton) findViewById(R.id.ib_menu);
-        Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
-        TextView tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
-        tvtitle.setTypeface(tfmorvarid);
-
-
-        ibmenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                if (drawer.isDrawerOpen(GravityCompat.END)) {
-                    drawer.closeDrawer(GravityCompat.END);
-                } else {
-                    drawer.openDrawer(GravityCompat.END);
-                }
-
-            }
-        });
-
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
 
-        dialog = ProgressDialog.show(MyNini.this, null, null,true, false);
-        dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
-        dialog.setContentView(R.layout.progress_layout_small);
 
         recyclerView = (RecyclerView) findViewById(R.id.list);
         linearLayoutManager = new LinearLayoutManager(App.context, LinearLayoutManager.VERTICAL, false);
@@ -102,7 +84,13 @@ public class MyNini extends AppCompatActivity {
         if (status.matches("1")) {
             id_confirmaation=id_confirmaationSH.replace("[{\"id\":", "").replace("}]" , "");
             Log.i("aaaaaaa" , App.urlApi+"nini/"+id_confirmaation);
-            webServiceGetNini();
+            ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+            if (mWifi.isConnected() || isMobileDataEnabled()) {
+                webServiceGetNini();
+            }else
+                App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
         }else {
             Intent intent = new Intent(App.context, Login.class);
             startActivity(intent);
@@ -113,7 +101,13 @@ public class MyNini extends AppCompatActivity {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 if (status.matches("1")) {
-                    webServiceGetNini();
+                    ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+                    if (mWifi.isConnected() || isMobileDataEnabled()) {
+                        webServiceGetNini();
+                    }else
+                        App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
                 }else {
                     Intent intent = new Intent(App.context, Login.class);
                     startActivity(intent);
@@ -128,7 +122,13 @@ public class MyNini extends AppCompatActivity {
 
                 array = new ArrayList<Nini>();
                 if (status.matches("1")) {
-                    webServiceGetNini();
+                    ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+                    if (mWifi.isConnected() || isMobileDataEnabled()) {
+                        webServiceGetNini();
+                    }else
+                        App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
                 }else {
                     Intent intent = new Intent(App.context, Login.class);
                     startActivity(intent);
@@ -147,9 +147,9 @@ public class MyNini extends AppCompatActivity {
         client.get(App.urlApi+"nini/"+id_confirmaation , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
-                // called before request is started
-
-                // loginpb1.setVisibility(View.VISIBLE);      *************** inja  progressbar faal mishe
+                dialog = ProgressDialog.show(MyNini.this, null, null,true, false);
+                dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
+                dialog.setContentView(R.layout.progress_layout_small);
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
@@ -177,10 +177,10 @@ public class MyNini extends AppCompatActivity {
                 // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
-                    App.CustomToast("آگهی با این شماره وجود ندارد !");
+                    dialog.hide();
+                    App.CustomToast(" نی نی عکسی موجود نیست");
 
                 }else{
-                    App.CustomToast("fail "+statusCode);
                     App.CustomToast(" لطفا دوباره سعی کنید ");
                 }
             }
@@ -190,6 +190,20 @@ public class MyNini extends AppCompatActivity {
                 // called when request is retried
             }
         });
+    }
+    public Boolean isMobileDataEnabled(){
+        Object connectivityService = App.context.getSystemService(CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) connectivityService;
+
+        try {
+            Class<?> c = Class.forName(cm.getClass().getName());
+            Method m = c.getDeclaredMethod("getMobileDataEnabled");
+            m.setAccessible(true);
+            return (Boolean)m.invoke(cm);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

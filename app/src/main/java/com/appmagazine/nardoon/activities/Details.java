@@ -53,7 +53,7 @@ public class Details extends AppCompatActivity {
     boolean FLAG_COLLAPSED = true;
     public static String validity,permission;
     public static TextView tvtitle,tvcontent,tvprice,tvlocation , tvtime ,tvtype  , txt;
-    public static String url, catname , mobile , email , price , image , location,time ,special , link ;
+    public static String url, catname , mobile , email , price , image , location,time ,special , link , start , end  , order;
     public static int idRadio  ;
     ImageView  ivshare ;
     ToggleButton ivFavorites ;
@@ -67,7 +67,7 @@ public class Details extends AppCompatActivity {
     ViewPager viewPager;
     Button pay ,btnMenu;
     int AgahiPrice,EstekhdamPrice , LinkPrice , SpecialPrice  , RestaurantPrice= 0;
-    String id_confirmaation , peygiri , linkPos, specialPos , catPos;
+    String id_confirmaation , peygiri , linkPos, specialPos , catPos , foodPos;
     private String why;
     private String menuOrder;
     DetailsImagePagerAdapter myCustomPagerAdapter;
@@ -366,6 +366,9 @@ public class Details extends AppCompatActivity {
                         llPrice.setVisibility(View.GONE);
                         llType.setVisibility(View.GONE);
                         llMenu.setVisibility(View.VISIBLE);
+                        foodPos = "1";
+                    }else{
+                        foodPos = "0";
                     }
                     email= obj.getString("email");
                     mobile= obj.getString("mobile");
@@ -397,6 +400,9 @@ public class Details extends AppCompatActivity {
                     why = intent.getStringExtra("comment");
                     try {
                         menuOrder = obj.getString("menu");
+                        order = menuOrder.toString();
+                        start = obj.getString("start");
+                        end = obj.getString("end");
 
                     }catch (JSONException e){}
 
@@ -630,6 +636,11 @@ public class Details extends AppCompatActivity {
         if(specialPos.equals("1")){        params.put("type","4"); }
         if(linkPos.equals("1")){        params.put("type","5"); }
         if(catPos.equals("1")){        params.put("type","6"); }
+        if(foodPos.equals("1")){        params.put("type","8"); }
+        if(foodPos.equals("1") && linkPos.equals("1")){        params.put("type","85"); }
+        if(specialPos.equals("1") && foodPos.equals("1")){        params.put("type","84"); }
+        if(specialPos.equals("1") && foodPos.equals("1")&& linkPos.equals("1")){        params.put("type","845"); }
+
         if(specialPos.equals("1") && linkPos.equals("1")){        params.put("type","45"); }
         if(specialPos.equals("1") && catPos.equals("1")){        params.put("type","46"); }
         if(specialPos.equals("1") && catPos.equals("1")&& linkPos.equals("1")){        params.put("type","456"); }

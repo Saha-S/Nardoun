@@ -25,6 +25,10 @@
     <string name="montasher">آگهی شما منتشر شده است ، در صورت ویرایش ، آگهی شما مجددا بررسی شده و انتشار میابد.</string>
     <string name="rad">متاسفانه آگهی شما تایید نشد.</string>
     <string name="callplease">لطفا قبل از ثبت سفارش با آگهی دهنده تماس گرفته و هماهنگی لازم را بعمل آورید.</string>
+    <string name="tedadMojaz">امکان ارسال وجود ندارد . تعداد پیامک های شما بیشتر از اعتبارتان می باشد.</string>
+    <string name="failSend">پیامک ارسال نشد . لطفا لحظاتی بعد مجددا اممتحان کنید.</string>
+    <string name="yourOrder">سفارش شما با موفقیت ثبت شد</string>
+    <string name="screenshot">لطفا از سفارش خود اسکرین شات گرفته و تا زمان دریافت سفارش آن رو نزد خود نگه دارید.</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

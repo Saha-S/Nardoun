@@ -1,10 +1,15 @@
 package com.appmagazine.nardoon.activities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,9 +17,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.appmagazine.nardoon.Adapter.FavoriteAdapter;
 import com.appmagazine.nardoon.App;
@@ -32,6 +41,7 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -57,7 +67,6 @@ public class Favorite extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
 
-        ImageButton ibmenu=(ImageButton) findViewById(R.id.ib_menu);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
         FileOperations file = new FileOperations();
         String favoritestr =file.read("favorite");
@@ -65,22 +74,11 @@ public class Favorite extends AppCompatActivity {
         numbers = favoritearray.length;
 
 
-        ibmenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                if (drawer.isDrawerOpen(GravityCompat.END)) {
-                    drawer.closeDrawer(GravityCompat.END);
-                } else {
-                    drawer.openDrawer(GravityCompat.END);
-                }
+        SharedPreferences prefs = getSharedPreferences("LOGIN_ID", MODE_PRIVATE);
+        SharedPreferences prefs2 = getSharedPreferences("IS_LOGIN", MODE_PRIVATE);
+        String status = prefs2.getString("islogin", "0");
+        String mobile = prefs.getString("mobile", "0");
 
-            }
-        });
-
-        dialog = ProgressDialog.show(Favorite.this, null, null,true, false);
-        dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
-        dialog.setContentView(R.layout.progress_layout_small);
 
         recyclerView = (RecyclerView) findViewById(R.id.list);
         linearLayoutManager = new LinearLayoutManager(App.context, LinearLayoutManager.VERTICAL, false);
@@ -93,12 +91,24 @@ public class Favorite extends AppCompatActivity {
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                webServiceGetFavorite();
+                ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+                if (mWifi.isConnected() || isMobileDataEnabled()) {
+                    webServiceGetFavorite();
+                }else
+                    App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
             }
         };
 
 
-        webServiceGetFavorite();
+        ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if (mWifi.isConnected() || isMobileDataEnabled()) {
+            webServiceGetFavorite();
+        }else
+            App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
 
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -106,7 +116,13 @@ public class Favorite extends AppCompatActivity {
             public void onRefresh() {
 
                 array = new ArrayList<Poster>();
-                webServiceGetFavorite();
+                ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+                if (mWifi.isConnected() || isMobileDataEnabled()) {
+                    webServiceGetFavorite();
+                }else
+                    App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
                 scrollListener.resetState();
             }
         });
@@ -137,9 +153,9 @@ public class Favorite extends AppCompatActivity {
         client.get(App.urlApi+"agahis" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
-                // called before request is started
-
-                // loginpb1.setVisibility(View.VISIBLE);      *************** inja  progressbar faal mishe
+                dialog = ProgressDialog.show(Favorite.this, null, null,true, false);
+                dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
+                dialog.setContentView(R.layout.progress_layout_small);
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
@@ -186,4 +202,19 @@ public class Favorite extends AppCompatActivity {
             }
         });
     }
+    public Boolean isMobileDataEnabled(){
+        Object connectivityService = App.context.getSystemService(CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) connectivityService;
+
+        try {
+            Class<?> c = Class.forName(cm.getClass().getName());
+            Method m = c.getDeclaredMethod("getMobileDataEnabled");
+            m.setAccessible(true);
+            return (Boolean)m.invoke(cm);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

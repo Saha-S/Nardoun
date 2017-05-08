@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,6 +37,7 @@ public class CatAdapter extends RecyclerView.Adapter<CatAdapter.PosterHolder> {
         TextView location;
         ImageView image;
         LinearLayout ll_vizhe;
+        FrameLayout ll_border;
 
 
         public PosterHolder(View itemView) {
@@ -46,6 +48,7 @@ public class CatAdapter extends RecyclerView.Adapter<CatAdapter.PosterHolder> {
             location = (TextView) itemView.findViewById(R.id.location);
             image = (ImageView) itemView.findViewById(R.id.img);
             ll_vizhe = (LinearLayout) itemView.findViewById(R.id.ll_vizhe);
+            ll_border = (FrameLayout) itemView.findViewById(R.id.ll_border);
 
         }
     }
@@ -77,8 +80,10 @@ public class CatAdapter extends RecyclerView.Adapter<CatAdapter.PosterHolder> {
         special=mDataset.get(position).special;
         if(special.equals("1")){
             holder.ll_vizhe.setVisibility(View.VISIBLE);
+            holder.ll_border.setVisibility(View.VISIBLE);
         }else{
             holder.ll_vizhe.setVisibility(View.GONE);
+            holder.ll_border.setVisibility(View.GONE);
         }
 
 

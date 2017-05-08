@@ -7,58 +7,73 @@
     android:fitsSystemWindows="true"
     tools:context="com.appmagazine.nardoon.activities.Main">
 
-    <include layout="@layout/content_main" />
+    <include layout="@layout/content_main"
+        android:id="@+id/include" />
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        android:gravity="center_vertical"
         android:theme="@style/AppTheme.AppBarOverlay">
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
 
-         <TableRow
-             android:layout_width="match_parent"
-             android:layout_height="60dp"
-             android:gravity="right|center_vertical">
-
-
-             <TextView
-                 android:text="آگهی های من"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:id="@+id/textView13"
-                 android:layout_marginTop="5dp"
-                 android:layout_marginRight="5dp" />
-
-             <TextView
-             android:id="@+id/tv_mainpage_title"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:text="ناردون"
-             android:textColor="#ffffff"
-             android:textSize="30dp"
-             android:shadowColor="#180117"
-             android:shadowDx="-3"
-             android:shadowDy="3"
-             android:shadowRadius="3"
-             android:layout_marginRight="10dp"
-             />
-
-             <ImageButton
-                 android:id="@+id/ib_menu"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:background="@mipmap/ic_menu"
-                 android:layout_marginRight="5dp"
-                 />
+            <TableRow
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical">
 
 
+                <TextView
+                    android:id="@+id/tv_mainpage_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:shadowColor="#180117"
+                    android:shadowDx="-3"
+                    android:shadowDy="3"
+                    android:shadowRadius="3"
+                    android:text="ناردون"
+                    android:textColor="#ffffff"
+                    android:textSize="30dp"
+                    android:visibility="visible" />
 
 
+            </TableRow>
+
+            <TableRow
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical">
 
 
+                <TextView
+                    android:id="@+id/tv_appbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="3dp"
+                    android:text=" "
+                    android:textColor="#fff" />
 
-         </TableRow>
+                <ImageButton
+                    android:id="@+id/ib_back"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@mipmap/backic" />
+
+
+            </TableRow>
+        </LinearLayout>
 
 
     </android.support.design.widget.AppBarLayout>

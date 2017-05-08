@@ -258,7 +258,9 @@
                                 android:text="پرداخت"
                                 android:textColor="#fff"
                                 android:textSize="16sp"
-                                android:visibility="visible" />
+                                android:visibility="visible"
+                                android:layout_above="@id/txt_warning"
+                                />
                         </LinearLayout>
 
                     </LinearLayout>

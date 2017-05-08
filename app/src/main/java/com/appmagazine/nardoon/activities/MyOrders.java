@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -53,6 +55,24 @@ public class MyOrders extends AppCompatActivity {
 
         txtTime = (TextView) findViewById(R.id.txt_time);
         container = (LinearLayout) findViewById(R.id.container);
+        TextView tvtitle = (TextView) findViewById(R.id.tv_mainpage_title);
+        TextView appbarTitle = (TextView) findViewById(R.id.tv_appbar_title);
+        ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
+        appbarTitle.setText("سفارش من");
+        Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
+        tvtitle.setTypeface(tfmorvarid);
+        ibBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        appbarTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
         SharedPreferences prefs = getSharedPreferences("LOGIN_ID", MODE_PRIVATE);

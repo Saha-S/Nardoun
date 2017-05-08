@@ -63,10 +63,14 @@ public class DetailsSms extends AppCompatActivity {
 
     EditText edtMobile,edtmatn ;
     String cnt1 , cnt2 , cnt11,matn;
-    TextView txtCharacter;
+    TextView txtCharacter , txtTedadMojaz;
     int countSMS=1;
     int credit;
     private String flag , id;
+    int eteber;
+    int tedadMojaz;
+    private ProgressDialog dialog;
+    Button send , test;
 
 
     @Override
@@ -77,10 +81,13 @@ public class DetailsSms extends AppCompatActivity {
 
         Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
         TextView tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
+        txtTedadMojaz=(TextView) findViewById(R.id.txt_tedad_mojaz);
         tvtitle.setTypeface(tfmorvarid);
 
         txtCharacter = (TextView) findViewById(R.id.txt_character);
         edtmatn = (EditText) findViewById(R.id.edt_matn);
+        send = (Button) findViewById(R.id.btn_send);
+        test = (Button) findViewById(R.id.btn_test);
        // edtContent = (EditText) findViewById(R.id.edt_content);
         edtMobile = (EditText) findViewById(R.id.edt_mobile);
 
@@ -105,22 +112,52 @@ public class DetailsSms extends AppCompatActivity {
                 if(s.length()<=70){
                     txtCharacter.setText("1 پیامک / "+s.length());
                     countSMS=1;
+                    mojazSms();
                 }
-                else if(s.length()<=134 && s.length()> 70) {
+                if(s.length()<=134 && s.length()> 70) {
                     txtCharacter.setText("2 پیامک / "+s.length());
                     countSMS = 2;
+                    mojazSms();
                 }
-                else if(s.length()<=201 && s.length()> 134) {
+                if(s.length()<=201 && s.length()> 134) {
                     txtCharacter.setText("3 پیامک / "+s.length());
-                    countSMS = 3;
+                    countSMS = 3;mojazSms();
                 }
-                else if(s.length()<=268 && s.length()> 201) {
-                    txtCharacter.setText("4 / "+s.length());
-                    countSMS = 4;
+                if(s.length()<=268 && s.length()> 201) {
+                    txtCharacter.setText("4 پیامک / "+s.length());
+                    countSMS = 4;mojazSms();
                 }
-                else if(s.length()<=335 && s.length()> 268) {
-                    txtCharacter.setText("5 / "+s.length());
-                    countSMS = 5;
+                if(s.length()<=335 && s.length()> 268) {
+                    txtCharacter.setText("5 پیامک / "+s.length());
+                    countSMS = 5;mojazSms();
+                }
+                if(s.length()<=402 && s.length()> 335) {
+                    txtCharacter.setText("6 پیامک / "+s.length());
+                    countSMS = 6;mojazSms();
+                }
+                if(s.length()<=469 && s.length()> 402) {
+                    txtCharacter.setText("7 پیامک / "+s.length());
+                    countSMS = 7;mojazSms();
+                }
+                if(s.length()<=536 && s.length()> 469) {
+                    txtCharacter.setText("8 پیامک / "+s.length());
+                    countSMS = 8;mojazSms();
+                }
+                if(s.length()<=603 && s.length()> 536) {
+                    txtCharacter.setText("9 پیامک / "+s.length());
+                    countSMS = 9;mojazSms();
+                }
+                if(s.length()<=670 && s.length()> 603) {
+                    txtCharacter.setText("10 پیامک / "+s.length());
+                    countSMS = 10;mojazSms();
+                }
+                if(s.length()<=737 && s.length()> 670) {
+                    txtCharacter.setText("10 پیامک / "+s.length());
+                    countSMS = 11;mojazSms();
+
+                }
+                if(s.length()>737){
+                    send.setVisibility(View.GONE);
                 }
 
 
@@ -134,29 +171,34 @@ public class DetailsSms extends AppCompatActivity {
 
         edtmatn.addTextChangedListener(inputTextWatcherMatn);
 
-        ImageButton ibmenu=(ImageButton) findViewById(R.id.ib_menu);
 
-        ibmenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-                if (drawer.isDrawerOpen(GravityCompat.END)) {
-                    drawer.closeDrawer(GravityCompat.END);
-                } else {
-                    drawer.openDrawer(GravityCompat.END);
-                }
 
-            }
-        });
+    }
+
+    public  void  mojazSms(){
+        eteber = credit*App.priceSms;
+        tedadMojaz = eteber / (countSMS*App.priceSms);
+        if(tedadMojaz==0){
+            txtTedadMojaz.setVisibility(View.VISIBLE);
+            send.setClickable(false);
+            test.setClickable(false);
+
+
+        }else {
+            txtTedadMojaz.setVisibility(View.GONE);
+            send.setClickable(true);
+            test.setClickable(true);
+        }
 
     }
     public void open(View view){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("ارسال انبوه به" +credit +" شماره، آیا مطمئن هستید؟");
+        alertDialogBuilder.setMessage("ارسال انبوه به" +tedadMojaz +" شماره، آیا مطمئن هستید؟");
                 alertDialogBuilder.setPositiveButton("بلی",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
+                                send.setClickable(false);
                                 webServiceSendSMS();
 
                             }
@@ -184,37 +226,37 @@ public class DetailsSms extends AppCompatActivity {
       //  params.put("count", intent.getStringExtra("COUNT"));
         if(flag.equals("sms")) {
             if(SMS.Setebari!=0){
-                        params.put("cnt11", credit);
+                        params.put("cnt11", tedadMojaz);
                         params.put("cnt1", "0");
                         params.put("cnt2", "0");
             }
             if(SMS.Sdaemi!=0){
                 params.put("cnt11", "0");
-                params.put("cnt1", credit);
+                params.put("cnt1", tedadMojaz);
                 params.put("cnt2", "0");
             }
             if(SMS.Sirancell!=0){
                 params.put("cnt11", "0");
                 params.put("cnt1", "0");
-                params.put("cnt2", credit);
+                params.put("cnt2", tedadMojaz);
             }
 
         }
         if(flag.equals("panel")){
             if(PayDetails.Setebari!=0){
-                params.put("cnt11", credit);
+                params.put("cnt11", tedadMojaz);
                 params.put("cnt1", "0");
                 params.put("cnt2", "0");
             }
             if(PayDetails.Sdaemi!=0){
                 params.put("cnt11", "0");
-                params.put("cnt1", credit);
+                params.put("cnt1", tedadMojaz);
                 params.put("cnt2", "0");
             }
             if(PayDetails.Sirancell!=0){
                 params.put("cnt11", "0");
                 params.put("cnt1", "0");
-                params.put("cnt2", credit);
+                params.put("cnt2", tedadMojaz);
             }    }
 
 
@@ -222,10 +264,14 @@ public class DetailsSms extends AppCompatActivity {
         client.post("http://nardoun.ir/api/sendsms", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
+                dialog = ProgressDialog.show(DetailsSms.this, null, null,true, false);
+                dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
+                dialog.setContentView(R.layout.progress_layout_small);
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                //dialog.hide();
+                dialog.hide();
+
                 String value = new String(response);
                 App.CustomToast("ارسال شد");
               //  App.CustomToast(value);
@@ -243,11 +289,12 @@ public class DetailsSms extends AppCompatActivity {
 
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
-                    App.CustomToast("آگهی با این شماره وجود ندارد !");
+                    dialog.hide();
+                    App.CustomToast(String.valueOf(R.string.failSend));
 
                 }else{
-                    App.CustomToast("fail "+statusCode);
-                    App.CustomToast(" لطفا دوباره سعی کنید ");
+                    dialog.hide();
+                    App.CustomToast(String.valueOf(R.string.failSend));
                 //    Log.i("myerror" , errorResponse.toString());
                 }
             }
@@ -275,7 +322,7 @@ public class DetailsSms extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
                 //dialog.hide();
                 App.CustomToast("پیامک با موفقیت ارسال شد");
-                credit = credit - 1;
+                credit = credit - (1 * countSMS );
                 webServiceUpdate("0");
 
 
@@ -286,12 +333,10 @@ public class DetailsSms extends AppCompatActivity {
 
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
-                    App.CustomToast("آگهی با این شماره وجود ندارد !");
+                    App.CustomToast(String.valueOf(R.string.failSend));
 
                 }else{
-                    App.CustomToast("fail "+statusCode);
-                    App.CustomToast(" لطفا دوباره سعی کنید ");
-                    Log.i("myerror" , errorResponse.toString());
+                    App.CustomToast(String.valueOf(R.string.failSend));
                 }
             }
         });
