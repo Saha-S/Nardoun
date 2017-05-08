@@ -242,7 +242,6 @@ package com.appmagazine.nardoon.activities;
                     }});
 
 
-
                 imgDelete1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
