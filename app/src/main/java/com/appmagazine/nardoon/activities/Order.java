@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -47,12 +49,33 @@ public class Order extends AppCompatActivity {
     private ProgressDialog dialog;
     private String id_confirmaation;
     public static  JSONArray finalJson;
+    String[] factorarray;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
+
+        TextView tvtitle = (TextView) findViewById(R.id.tv_mainpage_title);
+        TextView appbarTitle = (TextView) findViewById(R.id.tv_appbar_title);
+        ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
+        appbarTitle.setText("مشاهده منو و سفارش");
+        Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
+        tvtitle.setTypeface(tfmorvarid);
+        ibBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        appbarTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         Intent intent = getIntent();
         btnsabt = (Button) findViewById(R.id.btn_sabt);
@@ -316,11 +339,17 @@ public class Order extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
                 dialog.hide();
-                //  String value = new String(response);
-                   Intent intent = new Intent(App.context, MyOrders.class);
+                String value = new String(response);
+                Log.i("myyyyyy",value.toString() );
+                factorarray = value.split("-");
+
+                Intent intent = new Intent(App.context, MyOrders.class);
                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("confirmation_id",id_confirmaation);
                 intent.putExtra("order",finalJson.toString());
+                intent.putExtra("factor_id",factorarray[0]);
+                intent.putExtra("factor_id",factorarray[1]);
+                intent.putExtra("price",allPrice);
                    startActivity(intent);
                 App.CustomToast("سفارش شما ثبت شد");
 

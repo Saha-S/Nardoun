@@ -21,41 +21,38 @@
             layout="@layout/app_bar_my_agahi"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-             />
+            />
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipe"
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp"
-            android:layout_marginBottom="?attr/actionBarSize"
-            android:visibility="visible">
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp">
 
-            <LinearLayout
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.30"
-                android:orientation="vertical"
-                >
+                android:layout_height="match_parent">
 
-                <TableRow
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/list"
+                    <TextView
+                        android:id="@+id/textView13"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="25dp"
-                        android:layout_weight="9" />
-                </TableRow>
-
-            </LinearLayout>
-
-
-        </android.support.v4.widget.SwipeRefreshLayout>
-
-    </LinearLayout>
-
+                        android:padding="15dp"
+                        android:text="@string/aboutus"
+                        android:textColor="@color/cardview_dark_background"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </ScrollView>
+        </LinearLayout>
+        </LinearLayout>
     </android.support.v4.widget.DrawerLayout>
+
+

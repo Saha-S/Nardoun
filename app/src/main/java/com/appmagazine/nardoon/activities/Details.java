@@ -73,6 +73,7 @@ public class Details extends AppCompatActivity {
     DetailsImagePagerAdapter myCustomPagerAdapter;
     String[] favoritearray;
     FileOperations file;
+    public static String catId;
 
 
 
@@ -385,6 +386,7 @@ public class Details extends AppCompatActivity {
                         linkPos = "0";
                     }
 
+                    catId=obj.getString("category_id");
                     url1= obj.getString("image");
                     url2= obj.getString("imagei");
                     url3= obj.getString("imageii");

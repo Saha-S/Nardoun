@@ -17,6 +17,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -65,6 +66,7 @@ public class MyAgahis extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_agahis);
 
+
         orders = (TextView) findViewById(R.id.txt_orders);
         TextView tvtitle = (TextView) findViewById(R.id.tv_mainpage_title);
         TextView appbarTitle = (TextView) findViewById(R.id.tv_appbar_title);
@@ -84,7 +86,6 @@ public class MyAgahis extends AppCompatActivity {
                 finish();
             }
         });
-
 
 
 

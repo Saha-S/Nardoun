@@ -90,7 +90,6 @@ public class NewNini extends AppCompatActivity {
         edtName = (EditText) findViewById(R.id.edt_name);
         edtAge = (EditText) findViewById(R.id.edt_age);
 
-        LinearLayout llSave = (LinearLayout) findViewById(R.id.ll_save);
         LinearLayout llErsal = (LinearLayout) findViewById(R.id.ll_ersal);
         LinearLayout llClose = (LinearLayout) findViewById(R.id.ll_close);
         ImageButton close = (ImageButton) findViewById(R.id.close);
@@ -109,7 +108,6 @@ public class NewNini extends AppCompatActivity {
 
         llClose.setVisibility(LinearLayout.VISIBLE);
         llErsal.setVisibility(LinearLayout.VISIBLE);
-        llSave.setVisibility(LinearLayout.VISIBLE);
 
 
         EnableRuntimePermission();

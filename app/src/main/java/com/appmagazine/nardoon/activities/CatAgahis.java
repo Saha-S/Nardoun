@@ -83,20 +83,24 @@ public class CatAgahis extends AppCompatActivity {
 
         sansfarsi= Typeface.createFromAsset(App.context.getAssets(), "Sansfarsi.ttf");
         subs.clear();
+        TextView tvtitle = (TextView) findViewById(R.id.tv_mainpage_title);
+        TextView appbarTitle = (TextView) findViewById(R.id.tv_appbar_title);
+        ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
+        appbarTitle.setText("دسته بندی ها");
         Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
-        TextView tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
         tvtitle.setTypeface(tfmorvarid);
-
-        LinearLayout llnewagahi=(LinearLayout) findViewById(R.id.ll_new_agahi);
-        llnewagahi.setOnClickListener(new View.OnClickListener() {
+        ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(App.context ,NewAgahi.class );
-                startActivity(intent);
+            public void onClick(View v) {
+                finish();
             }
         });
-
+        appbarTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         Intent intent = getIntent();
         catID = intent.getStringExtra("id");
@@ -224,9 +228,11 @@ public class CatAgahis extends AppCompatActivity {
                 // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
+                    dialog.hide();
                     App.CustomToast("آگهی موجود نیست");
 
                 }else{
+                    dialog.hide();
                     App.CustomToast("fail "+statusCode);
                     App.CustomToast(" لطفا دوباره سعی کنید ");
                 }

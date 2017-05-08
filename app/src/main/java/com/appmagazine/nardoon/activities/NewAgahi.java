@@ -17,6 +17,7 @@ package com.appmagazine.nardoon.activities;
         import android.support.annotation.RequiresApi;
         import android.support.v4.app.ActivityCompat;
         import android.support.v4.content.FileProvider;
+        import android.support.v4.view.ViewPager;
         import android.support.v7.app.AlertDialog;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
@@ -39,6 +40,7 @@ package com.appmagazine.nardoon.activities;
         import android.widget.TextView;
 
         import com.appmagazine.nardoon.App;
+        import com.appmagazine.nardoon.DetailsImagePagerAdapter;
         import com.appmagazine.nardoon.FinishTimePickerFragment;
         import com.appmagazine.nardoon.R;
         import com.appmagazine.nardoon.BeginTimePickerFragment;
@@ -83,7 +85,7 @@ package com.appmagazine.nardoon.activities;
             public  static final int RequestPermissionCode  = 1 ;
             DisplayMetrics displayMetrics ;
             int width, height;
-            boolean flag1,flag2,flag3,flag4,flag5,flag6,flag7,flag8=false;
+            boolean flag1,flag2,flag3,flag4,flag5,flag6,flag7,flag8 , flag10=false;
             File file1 , file2,file3,fileAsli;
             CheckBox chkLink;
             CheckBox chkSpecial;
@@ -95,6 +97,7 @@ package com.appmagazine.nardoon.activities;
             LinearLayout container , llMenu;
             JSONArray menuJsonArray;
             public static String startTime , endTime;
+            private int countSpecial;
 
 
             @Override
@@ -127,7 +130,6 @@ package com.appmagazine.nardoon.activities;
 
                 LinearLayout llForm = (LinearLayout) findViewById(R.id.ll_form);
                 LinearLayout llErsal = (LinearLayout) findViewById(R.id.ll_ersal);
-                LinearLayout llSave = (LinearLayout) findViewById(R.id.ll_save);
                 LinearLayout llClose = (LinearLayout) findViewById(R.id.ll_close);
 
                 LinearLayout llType = (LinearLayout) findViewById(R.id.ll_type);
@@ -191,7 +193,7 @@ package com.appmagazine.nardoon.activities;
                 id = intent.getStringExtra("CATID");
                 subid = intent.getStringExtra("SUBID");
 
-
+                webServiceCountSpecial();
                 EnableRuntimePermission();
 
 
@@ -272,7 +274,6 @@ package com.appmagazine.nardoon.activities;
                         llForm.setVisibility(LinearLayout.VISIBLE);
                         llClose.setVisibility(LinearLayout.VISIBLE);
                         llErsal.setVisibility(LinearLayout.VISIBLE);
-                        llSave.setVisibility(LinearLayout.VISIBLE);
 
                     }else if(SelectCat.getText().equals("استخدام و کاریابی")) {
                         Log.i("qqqqqq",SelectCat.getText().toString() );
@@ -285,7 +286,6 @@ package com.appmagazine.nardoon.activities;
                         llForm.setVisibility(LinearLayout.VISIBLE);
                         llClose.setVisibility(LinearLayout.VISIBLE);
                         llErsal.setVisibility(LinearLayout.VISIBLE);
-                        llSave.setVisibility(LinearLayout.VISIBLE);
                         llBegin.setVisibility(View.GONE);
                         llFinish.setVisibility(View.GONE);
                         container.setVisibility(View.GONE);
@@ -359,6 +359,15 @@ package com.appmagazine.nardoon.activities;
 
                         if(SelectCat.getText().equals("رستوران")){
 
+                            if(chkSpecial.isChecked()){
+                                webServiceCountSpecial();
+                                if(countSpecial>=5) {
+                                    flag10 = true;
+                                    App.CustomToast("در حال حاضر امکان انتخاب آگهی ویژه برای این دسته بندی وجود ندارد .");
+                                }
+                            } else {
+                                flag10 = false;
+                            }
                             if (phone.getText().toString().matches("")) {
                                 txtMobile.setVisibility(View.VISIBLE);
                                 flag3 = true;
@@ -420,7 +429,7 @@ package com.appmagazine.nardoon.activities;
                             }
 
 
-                            if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false && flag8 == false) {
+                            if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false && flag8 == false && flag10 == false) {
 
                                 dialog = ProgressDialog.show(NewAgahi.this, null, null, true, false);
                                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -438,6 +447,22 @@ package com.appmagazine.nardoon.activities;
 
                             }
                         }else{
+
+                            if(chkSpecial.isChecked()){
+                                webServiceCountSpecial();
+                                Log.i("lklklklklklklk" , String.valueOf(countSpecial));
+                                if(countSpecial>=5) {
+                                    flag10 = true;
+                                    Log.i("lklklklklklklk" , "shoood");
+
+                                    App.CustomToast("در حال حاضر امکان انتخاب آگهی ویژه برای این دسته بندی وجود ندارد .");
+                                }
+                                else {
+                                    flag10 = false;
+                                }
+                            } else {
+                                flag10 = false;
+                            }
 
                             if (price.getText().toString().matches("")) {
                                 txtPrice.setVisibility(View.VISIBLE);
@@ -502,7 +527,7 @@ package com.appmagazine.nardoon.activities;
                             }
 
 
-                            if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false && flag8 == false) {
+                            if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false && flag8 == false && flag10 == false)  {
 
                                 dialog = ProgressDialog.show(NewAgahi.this, null, null, true, false);
                                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -555,8 +580,6 @@ package com.appmagazine.nardoon.activities;
                 AsyncHttpClient client = new AsyncHttpClient();
                 RequestParams params = new RequestParams();
 
-                Log.i("aaaa1" , startTime);
-                Log.i("aaaa2" , endTime);
                 if(chkSpecial.isChecked())
                 {
                     params.put("special", "1");
@@ -842,6 +865,46 @@ package com.appmagazine.nardoon.activities;
                         }
                         break;
                 }
+            }
+
+
+            public  void webServiceCountSpecial()
+            {
+
+                AsyncHttpClient client = new AsyncHttpClient();
+                RequestParams params = new RequestParams();
+
+                client.get(App.urlApi+"specialcount/"+id, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+                    @Override
+                    public void onStart() {
+                        Log.i("jjjjjjjjjjjjjjjj" , "sdfgh   "+id);
+                    }
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                        String value = new String(response);
+                        countSpecial = Integer.parseInt(value);
+                        Log.i("jjjjjjjjjjjjjjjj" , "222   "+value);
+                        Log.i("jjjjjjjjjjjjjjjj" , "333   "+countSpecial);
+                        Log.i("jjjjjjjjjjjjjjjj" , "444   "+App.urlApi+"specialcount/"+id);
+
+
+                    }
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                        if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                        {
+                            App.CustomToast(" لطفا دوباره سعی کنید ");
+
+                        }else{
+                            App.CustomToast(" لطفا دوباره سعی کنید ");
+                        }
+                    }
+
+                    @Override
+                    public void onRetry(int retryNo) {
+                        // called when request is retried
+                    }
+                });
             }
 
 

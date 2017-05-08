@@ -70,18 +70,25 @@ public class SubCatAgahis extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sub_cat_agahis);
 
-        LinearLayout llnewagahi=(LinearLayout) findViewById(R.id.ll_new_agahi);
-        llnewagahi.setOnClickListener(new View.OnClickListener() {
+        TextView tvtitle = (TextView) findViewById(R.id.tv_mainpage_title);
+        TextView appbarTitle = (TextView) findViewById(R.id.tv_appbar_title);
+        ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
+
+        appbarTitle.setText("زیردسته بندی ها");
+        Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
+        tvtitle.setTypeface(tfmorvarid);
+        ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(App.context ,NewAgahi.class );
-                startActivity(intent);
+            public void onClick(View v) {
+                finish();
             }
         });
-        Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
-        TextView tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
-        tvtitle.setTypeface(tfmorvarid);
-
+        appbarTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         Intent intent=getIntent();
         catID = intent.getStringExtra("POSITION");
         Log.i("subid" ,"id ;" + catID);

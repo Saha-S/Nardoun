@@ -19,7 +19,7 @@ android:fitsSystemWindows="true"
         android:orientation="vertical">
 
         <include
-            layout="@layout/app_bar_login"
+            layout="@layout/app_bar_my_agahi"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize" />
 
@@ -55,18 +55,23 @@ android:fitsSystemWindows="true"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="5dp"
-                        android:background="@color/cardview_dark_background"
+                        android:background="#fff"
                         android:orientation="vertical"
                         tools:layout_editor_absoluteX="8dp"
                         tools:layout_editor_absoluteY="0dp"></LinearLayout>
                 </LinearLayout>
             </ScrollView>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/list_devider" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1.5"
-                android:background="@color/silver"
+                android:background="#fff"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:weightSum="5">
@@ -98,7 +103,7 @@ android:fitsSystemWindows="true"
                     android:gravity="center"
                     android:text="جمع کل : "
                     android:textColor="@color/navy"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
 

@@ -83,7 +83,6 @@ public class EditNini extends AppCompatActivity {
 
         LinearLayout llForm = (LinearLayout) findViewById(R.id.ll_form);
         LinearLayout llErsal = (LinearLayout) findViewById(R.id.ll_ersal);
-        LinearLayout llSave = (LinearLayout) findViewById(R.id.ll_save);
         LinearLayout llClose = (LinearLayout) findViewById(R.id.ll_close);
 
         imgAsli = (LinearLayout) findViewById(R.id.img_asli);
@@ -137,7 +136,6 @@ public class EditNini extends AppCompatActivity {
             llForm.setVisibility(LinearLayout.VISIBLE);
             llClose.setVisibility(LinearLayout.VISIBLE);
             llErsal.setVisibility(LinearLayout.VISIBLE);
-            llSave.setVisibility(LinearLayout.VISIBLE);
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override

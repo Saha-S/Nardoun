@@ -43,6 +43,7 @@ import android.widget.TextView;
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.BeginTimePickerFragment;
 import com.appmagazine.nardoon.FinishTimePickerFragment;
+import com.appmagazine.nardoon.MyAgahi;
 import com.appmagazine.nardoon.R;
 import com.appmagazine.nardoon.Utility;
 import com.bumptech.glide.Glide;
@@ -86,7 +87,7 @@ public class EditAgahi extends AppCompatActivity {
     public  static final int RequestPermissionCode  = 1 ;
     DisplayMetrics displayMetrics ;
     int width, height;
-    boolean flag1,flag2,flag3,flag4,flag5,flag6,flag7,flag8=false;
+    boolean flag1,flag2,flag3,flag4,flag5,flag6,flag7,flag8 ,flag10=false;
     ImageView image;
     File file1 , file2 , file3;
     private LinearLayout container;
@@ -100,6 +101,8 @@ public class EditAgahi extends AppCompatActivity {
     Button SelectCat;
     CheckBox chkLink;
     CheckBox chkSpecial;
+    private int countSpecial;
+
 
 
     @Override
@@ -117,7 +120,6 @@ public class EditAgahi extends AppCompatActivity {
         content = (EditText) findViewById(R.id.edt_content);
         LinearLayout llForm = (LinearLayout) findViewById(R.id.ll_form);
         LinearLayout llErsal = (LinearLayout) findViewById(R.id.ll_ersal);
-        LinearLayout llSave = (LinearLayout) findViewById(R.id.ll_save);
         LinearLayout llClose = (LinearLayout) findViewById(R.id.ll_close);
 
         imgAsli = (LinearLayout) findViewById(R.id.img_asli);
@@ -136,6 +138,7 @@ public class EditAgahi extends AppCompatActivity {
         LinearLayout llBack = (LinearLayout) findViewById(R.id.ll_back);
         ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
         TextView tvBack = (TextView) findViewById(R.id.tv_back);
+        tvBack.setText("ویرایش آگهی");
         radioTypeGroup = (RadioGroup) findViewById(R.id.radioType);
         final RadioButton radio1 = (RadioButton) findViewById(R.id.rb1);
         final RadioButton radio2 = (RadioButton) findViewById(R.id.rb2);
@@ -169,7 +172,7 @@ public class EditAgahi extends AppCompatActivity {
         link = (EditText) findViewById(R.id.edt_link);
         chkLink = (CheckBox) findViewById(R.id.chk_link);
         chkSpecial = (CheckBox) findViewById(R.id.chk_special);
-
+        webServiceCountSpecial();
 
         url = App.urlApi + "updateagahi/" + Details.idAgahi;
         menuJsonArray = new JSONArray();
@@ -206,12 +209,19 @@ public class EditAgahi extends AppCompatActivity {
 
 
         if (Details.special.equals("0")) {
-            chkLink.setChecked(false);
+            chkSpecial.setChecked(false);
         }
         if (Details.special.equals("1")) {
+            chkSpecial.setChecked(true);
+        }
+        if (Details.link.equals("")) {
+            chkLink.setChecked(false);
+        }
+        else {
             chkLink.setChecked(true);
             link.setVisibility(View.VISIBLE);
         }
+
 
         chkLink.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -276,7 +286,6 @@ public class EditAgahi extends AppCompatActivity {
             llForm.setVisibility(LinearLayout.VISIBLE);
             llClose.setVisibility(LinearLayout.VISIBLE);
             llErsal.setVisibility(LinearLayout.VISIBLE);
-            llSave.setVisibility(LinearLayout.VISIBLE);
 
             startTime = Details.start;
             endTime = Details.end;
@@ -327,8 +336,6 @@ public class EditAgahi extends AppCompatActivity {
         llForm.setVisibility(LinearLayout.VISIBLE);
         llClose.setVisibility(LinearLayout.VISIBLE);
         llErsal.setVisibility(LinearLayout.VISIBLE);
-        llSave.setVisibility(LinearLayout.VISIBLE);
-
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -372,6 +379,21 @@ public class EditAgahi extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (SelectCat.getText().equals("رستوران")) {
+                    if(chkSpecial.isChecked()){
+                        webServiceCountSpecial();
+                        Log.i("lklklklklklklk" , String.valueOf(countSpecial));
+                        if(countSpecial>=5) {
+                            flag10 = true;
+                            Log.i("lklklklklklklk" , "shoood");
+
+                            App.CustomToast("در حال حاضر امکان انتخاب آگهی ویژه برای این دسته بندی وجود ندارد .");
+                        }
+                        else {
+                            flag10 = false;
+                        }
+                    } else {
+                        flag10 = false;
+                    }
 
                     if (phone.getText().toString().matches("")) {
                         txtMobile.setVisibility(View.VISIBLE);
@@ -434,7 +456,7 @@ public class EditAgahi extends AppCompatActivity {
                     }
 
 
-                    if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false && flag8 == false) {
+                    if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false && flag8 == false && flag10 == false) {
 
                         dialog = ProgressDialog.show(EditAgahi.this, null, null, true, false);
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -452,6 +474,22 @@ public class EditAgahi extends AppCompatActivity {
 
                     }
                 } else {
+                    if(chkSpecial.isChecked()){
+                        webServiceCountSpecial();
+                        Log.i("lklklklklklklk" , String.valueOf(countSpecial));
+                        if(countSpecial>=5) {
+                            flag10 = true;
+                            Log.i("lklklklklklklk" , "shoood");
+
+                            App.CustomToast("در حال حاضر امکان انتخاب آگهی ویژه برای این دسته بندی وجود ندارد .");
+                        }
+                        else {
+                            flag10 = false;
+                        }
+                    } else {
+                        flag10 = false;
+                    }
+
                     if (price.getText().toString().matches("")) {
                         txtPrice.setVisibility(View.VISIBLE);
                         flag1 = true;
@@ -508,7 +546,7 @@ public class EditAgahi extends AppCompatActivity {
                     }
 
 
-                    if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false && flag8 == false) {
+                    if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false && flag8 == false && flag10 == false) {
                         dialog = ProgressDialog.show(EditAgahi.this, null, null, true, false);
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         dialog.setContentView(R.layout.progress_layout_small);
@@ -587,26 +625,6 @@ public class EditAgahi extends AppCompatActivity {
                     }
                 });
 
-          /*      try {
-                    object.put("name", foodName.getText().toString());
-                    object.put("price", foodPrice.getText().toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                menuJsonArray.put(object);
-
-                buttonRemove.setOnClickListener(new View.OnClickListener() {
-
-                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                    @Override
-                    public void onClick(View v) {
-                        int index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
-                        ((LinearLayout) addView.getParent()).removeView(addView);
-                        menuJsonArray.remove(index);
-
-                    }
-                });
-*/
 
                 container.addView(addView);
             }
@@ -646,6 +664,7 @@ public class EditAgahi extends AppCompatActivity {
                     public void onClick(View v) {
                         int index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
                         ((LinearLayout) addView.getParent()).removeView(addView);
+                       // menuJsonArray.remove(index);
                         menuJsonArray.remove(index);
                         Log.i("teeees", menuJsonArray.toString());
 
@@ -666,21 +685,6 @@ public class EditAgahi extends AppCompatActivity {
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
 
@@ -716,12 +720,27 @@ public class EditAgahi extends AppCompatActivity {
             params.put("type",type);
         }
 
-        if(Details.validity.equals("3")){
-            params.put("validity","3");
-        }else {
-            params.put("validity", "0");
-        }
 
+        if((Details.catId.equals("10") || Details.catId.equals("9"))  ){
+            if(Details.validity.equals("3")) {
+                params.put("validity", "3");
+            }else{
+                if(chkSpecial.isChecked() || chkLink.isChecked()){
+                    params.put("validity","3");
+                }else {
+                    params.put("validity", "0");
+                }
+
+            }
+        }else{
+            if(chkSpecial.isChecked() || chkLink.isChecked()){
+                params.put("validity","3");
+            }else {
+                params.put("validity", "0");
+            }
+
+        }
+        
         params.put("location",location.getText());
         if(file1!=null){
             try {
@@ -771,9 +790,9 @@ public class EditAgahi extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
                 dialog.hide();
-              //  Intent intent = new Intent(App.context , Details.class);
-              //  intent.putExtra("id", Details.idAgahi+"");
-               // startActivity(intent);
+                Intent intent = new Intent(App.context , MyAgahis.class);
+               // intent.putExtra("id", Details.idAgahi+"");
+                startActivity(intent);
                 App.CustomToast("آگهی ویرایش شد !");
 
                 finish();
@@ -991,6 +1010,44 @@ public class EditAgahi extends AppCompatActivity {
                 }
                 break;
         }
+    }
+    public  void webServiceCountSpecial()
+    {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+
+        client.get(App.urlApi+"specialcount/"+Details.catId, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+            @Override
+            public void onStart() {
+                Log.i("jjjjjjjjjjjjjjjj" , "sdfgh   "+Details.catId);
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                String value = new String(response);
+                countSpecial = Integer.parseInt(value);
+                Log.i("jjjjjjjjjjjjjjjj" , "222   "+value);
+                Log.i("jjjjjjjjjjjjjjjj" , "333   "+countSpecial);
+                Log.i("jjjjjjjjjjjjjjjj" , "444   "+App.urlApi+"specialcount/"+Details.catId);
+
+
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
+                    App.CustomToast(" لطفا دوباره سعی کنید ");
+
+                }else{
+                    App.CustomToast(" لطفا دوباره سعی کنید ");
+                }
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+                // called when request is retried
+            }
+        });
     }
 
 

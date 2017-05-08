@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.AbsSavedState;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
@@ -245,11 +246,11 @@ public class Main extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_about) {
-            // Handle the camera action
+            Intent intent = new Intent(App.context , AboutUs.class);
+            startActivity(intent);
         } else if (id == R.id.nav_favarit) {
             Intent intent = new Intent(App.context , Favorite.class);
             startActivity(intent);
-
 
         } else if (id == R.id.nav_my_agahi) {
 

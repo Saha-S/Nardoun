@@ -42,28 +42,24 @@ public class Validation extends AppCompatActivity {
         edtValidation = (EditText) findViewById(R.id.edt_validation);
         btnLogin = (Button) findViewById(R.id.btn_login);
 
-        LinearLayout llBack = (LinearLayout) findViewById(R.id.ll_back);
+        TextView tvtitle = (TextView) findViewById(R.id.tv_mainpage_title);
+        TextView appbarTitle = (TextView) findViewById(R.id.tv_appbar_title);
         ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
-        TextView tvBack = (TextView) findViewById(R.id.tv_back);
-        llBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        appbarTitle.setText("تایید شماره");
+        Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
+        tvtitle.setTypeface(tfmorvarid);
         ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        tvBack.setOnClickListener(new View.OnClickListener() {
+        appbarTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-
 
 
 

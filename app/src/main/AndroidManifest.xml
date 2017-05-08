@@ -130,8 +130,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.MyOrders"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".activities.Request"></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".activities.Request" />
+        <activity android:name=".activities.AboutUs"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            ></activity>
     </application>
 
 </manifest>

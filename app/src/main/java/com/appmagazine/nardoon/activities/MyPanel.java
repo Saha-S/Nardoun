@@ -57,7 +57,26 @@ public class MyPanel extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_agahis);
+        setContentView(R.layout.activity_my_panel);
+
+        TextView tvtitle = (TextView) findViewById(R.id.tv_mainpage_title);
+        TextView appbarTitle = (TextView) findViewById(R.id.tv_appbar_title);
+        ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
+        appbarTitle.setText("تاریخچه خرید");
+        Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
+        tvtitle.setTypeface(tfmorvarid);
+        ibBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        appbarTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         SharedPreferences prefs = App.context.getSharedPreferences("LOGIN_ID", 0);
         SharedPreferences prefs2 = App.context.getSharedPreferences("IS_LOGIN", 0);
@@ -73,9 +92,6 @@ public class MyPanel extends AppCompatActivity {
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
 
-        dialog = ProgressDialog.show(MyPanel.this, null, null,true, false);
-        dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
-        dialog.setContentView(R.layout.progress_layout_small);
 
         recyclerView = (RecyclerView) findViewById(R.id.list);
         linearLayoutManager = new LinearLayoutManager(App.context, LinearLayoutManager.VERTICAL, false);
@@ -121,9 +137,9 @@ public class MyPanel extends AppCompatActivity {
         client.get(App.urlApi+"buylog/"+id_confirmaation , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
         @Override
         public void onStart() {
-            // called before request is started
-
-            // loginpb1.setVisibility(View.VISIBLE);      *************** inja  progressbar faal mishe
+            dialog = ProgressDialog.show(MyPanel.this, null, null,true, false);
+            dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
+            dialog.setContentView(R.layout.progress_layout_small);
         }
         @Override
         public void onSuccess(int statusCode, Header[] headers, byte[] response) {
