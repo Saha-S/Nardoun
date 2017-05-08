@@ -70,7 +70,6 @@ public class CatAgahis extends AppCompatActivity {
     public static ArrayList<String> subs = new ArrayList<>();
     public static ArrayList<Integer> subsid = new ArrayList<>();
     ArrayAdapter<String> adapterSub;
-    public static ProgressDialog dialog;
     public static int subsNumber;
     TextView txtSub;
     Boolean isSubcatAvailable = false;
@@ -127,7 +126,7 @@ public class CatAgahis extends AppCompatActivity {
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
         if (mWifi.isConnected() || isMobileDataEnabled()) {
-
+            swipeRefreshLayout.setRefreshing(true);
             if(Integer.parseInt(catID) == 1){
 
                 webServiceGetCatAgahi();
@@ -204,13 +203,11 @@ public class CatAgahis extends AppCompatActivity {
         client.get(App.urlApi+"agahisbycat/"+catID, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
-                dialog = ProgressDialog.show(CatAgahis.this, null, null,true, false);
-                dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
-                dialog.setContentView(R.layout.progress_layout_small);
+
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                dialog.hide();
+
 
                 String value = new String(response);
 
@@ -222,11 +219,11 @@ public class CatAgahis extends AppCompatActivity {
                     }
                     adapter.update(array);
                     swipeRefreshLayout.setRefreshing(false);
-                    dialog.hide();
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    dialog.hide();
+
                 }
             }
             @Override
@@ -236,11 +233,11 @@ public class CatAgahis extends AppCompatActivity {
                 // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
-                    dialog.hide();
+
                     App.CustomToast("آگهی موجود نیست");
 
                 }else{
-                    dialog.hide();
+
                     App.CustomToast("fail "+statusCode);
                     App.CustomToast(" لطفا دوباره سعی کنید ");
                 }
@@ -271,15 +268,13 @@ public class CatAgahis extends AppCompatActivity {
 
             @Override
             public void onStart() {
-                dialog = ProgressDialog.show(CatAgahis.this, null, null, true, false);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.setContentView(R.layout.progress_layout_small);
+
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
-                dialog.hide();
+
                 webServiceGetCatAgahi();
                 String value = new String(response);
                 try {
@@ -354,29 +349,27 @@ public class CatAgahis extends AppCompatActivity {
 
                     txtSub.setVisibility(View.GONE);
                     e1.printStackTrace();
-                    dialog.hide();
+
                 }
 
 
                 if (!isSubcatAvailable){
 
                     txtSub.setVisibility(View.GONE);
-                   // dialog.hide();
+
                     webServiceGetCatAgahi();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-                dialog.hide();
+
                 if (statusCode == 404) {
                     txtSub.setVisibility(View.GONE);
-                    dialog.hide();
                     webServiceGetCatAgahi();
 
 
                 } else {
-                    dialog.hide();
                     App.CustomToast("fail " + statusCode);
                     App.CustomToast(" لطفا دوباره سعی کنید ");
                 }
@@ -386,7 +379,6 @@ public class CatAgahis extends AppCompatActivity {
             @Override
             public void onRetry(int retryNo) {
                 subs.clear();
-                dialog.hide();
             }
         });
 
