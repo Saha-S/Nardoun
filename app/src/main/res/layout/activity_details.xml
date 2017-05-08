@@ -392,7 +392,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="7dp"
                     android:scaleType="centerCrop"
-                    android:src="@mipmap/share"
+                    android:src="@mipmap/sharen"
                     app:layout_collapseMode="pin"
                     app:showAsAction="always" />
 
