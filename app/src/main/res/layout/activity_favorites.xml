@@ -20,23 +20,15 @@
         <include
             layout="@layout/app_bar_my_agahi"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_weight="0.30" />
-
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipe"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp">
+            android:layout_height="?attr/actionBarSize"
+             />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="25dp" />
+                android:layout_marginBottom="?attr/actionBarSize" />
 
-        </android.support.v4.widget.SwipeRefreshLayout>
 
     </LinearLayout>
     </android.support.v4.widget.DrawerLayout>

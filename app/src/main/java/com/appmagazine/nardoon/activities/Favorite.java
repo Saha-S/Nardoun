@@ -88,7 +88,7 @@ public class Favorite extends AppCompatActivity {
         });
 
 
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
+    //    swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
         FileOperations file = new FileOperations();
         String favoritestr =file.read("favorite");
         favoritearray = favoritestr.split("-");
@@ -132,7 +132,7 @@ public class Favorite extends AppCompatActivity {
             App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
 
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+     /*   swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 
@@ -146,7 +146,7 @@ public class Favorite extends AppCompatActivity {
                     App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
                 scrollListener.resetState();
             }
-        });
+        });*/
 
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(App.context, new RecyclerItemClickListener.OnItemClickListener() {
             @Override

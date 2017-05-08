@@ -1,26 +1,19 @@
 package com.appmagazine.nardoon.activities;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.R;
@@ -42,7 +35,7 @@ public class MyOrders extends AppCompatActivity {
     private JSONArray orderJsonArray = new JSONArray();
     private JSONObject jsnobject;
     private int num2;
-    TextView txtTime;
+    TextView factorId, factorNum , price;
     int index;
     private ProgressDialog dialog;
     private String id_confirmaation;
@@ -53,7 +46,12 @@ public class MyOrders extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_orders);
 
-        txtTime = (TextView) findViewById(R.id.txt_time);
+        factorId = (TextView) findViewById(R.id.factor_id);
+        factorNum = (TextView) findViewById(R.id.factor_num);
+        price = (TextView) findViewById(R.id.price);
+
+
+
         container = (LinearLayout) findViewById(R.id.container);
         TextView tvtitle = (TextView) findViewById(R.id.tv_mainpage_title);
         TextView appbarTitle = (TextView) findViewById(R.id.tv_appbar_title);
@@ -92,6 +90,9 @@ public class MyOrders extends AppCompatActivity {
         try {
             Intent intent = getIntent();
             String order = intent.getStringExtra("order");
+            factorId.setText( "شماره فاکتور : "+intent.getStringExtra("factor_id"));
+            factorNum.setText("پیگیری : "+ intent.getStringExtra("factor_name"));
+            price.setText("قیمت کل : "+ intent.getStringExtra("price"));
             menuJsonArray = new JSONArray(order);
             Log.i("aaaaaaa122322",order );
             Log.i("aaaaaaa12234433",menuJsonArray.toString() );

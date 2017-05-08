@@ -52,7 +52,27 @@ android:fitsSystemWindows="true"
                 android:textSize="17sp" />
 
             <TextView
-                android:id="@+id/txt_time"
+                android:id="@+id/factor_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="center"
+                android:padding="5dp"
+                android:textColor="@color/teal"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/factor_num"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="center"
+                android:padding="5dp"
+                android:textColor="@color/teal"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"

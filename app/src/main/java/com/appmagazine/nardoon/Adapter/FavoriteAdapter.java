@@ -59,6 +59,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Poster
 
         TextView title;
         TextView time;
+        TextView price;
         ImageView image;
         LinearLayout remove;
 
@@ -68,8 +69,9 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Poster
 
             title = (TextView) itemView.findViewById(R.id.title);
             time = (TextView) itemView.findViewById(R.id.time);
+            price = (TextView) itemView.findViewById(R.id.price);
             image = (ImageView) itemView.findViewById(R.id.img);
-            remove = (LinearLayout) itemView.findViewById(R.id.ll_remove);
+        //    remove = (LinearLayout) itemView.findViewById(R.id.ll_remove);
 
         }
     }
@@ -94,7 +96,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Poster
         FileOperations file = new FileOperations();
         String favoritestr =file.read("favorite");
         favoritearray = favoritestr.split("-");
-
+/*
         holder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,8 +116,9 @@ public class FavoriteAdapter extends RecyclerView.Adapter<FavoriteAdapter.Poster
 
             }
         });
-
+*/
         holder.title.setText(mDataset.get(position).title);
+        holder.price.setText(mDataset.get(position).price + " تومان ");
 
         Log.i("aaaaa2", mDataset.get(position).price.toString());
         holder.time.setText(mDataset.get(position).created_at);

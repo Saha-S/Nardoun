@@ -347,10 +347,11 @@ public class Order extends AppCompatActivity {
                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("confirmation_id",id_confirmaation);
                 intent.putExtra("order",finalJson.toString());
-                intent.putExtra("factor_id",factorarray[0]);
                 intent.putExtra("factor_id",factorarray[1]);
+                intent.putExtra("factor_name",factorarray[0]);
                 intent.putExtra("price",allPrice);
-                   startActivity(intent);
+
+                startActivity(intent);
                 App.CustomToast("سفارش شما ثبت شد");
 
                 finish();
