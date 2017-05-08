@@ -12,7 +12,7 @@
 
             android:title="Back"
 
-            android:icon="@mipmap/backic"
+            android:icon="@mipmap/backicn"
 
             app:showAsAction="always" />
 
