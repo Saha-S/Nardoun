@@ -127,7 +127,15 @@ public class CatAgahis extends AppCompatActivity {
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
         if (mWifi.isConnected() || isMobileDataEnabled()) {
-            webServiceGetCategory();
+
+            if(Integer.parseInt(catID) == 1){
+
+                webServiceGetCatAgahi();
+            }else{
+
+                webServiceGetCategory();
+
+            }
         }else
             App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
 
@@ -284,8 +292,7 @@ public class CatAgahis extends AppCompatActivity {
 
                         JSONObject obj = new JSONArray(value).getJSONObject(i);
 
-                        if (obj.getInt("id") != 1) {
-                            isSubcatAvailable = true;
+                        isSubcatAvailable = true;
 
                         String subname = obj.getString("name");
                         int subid = obj.getInt("id");
@@ -340,7 +347,7 @@ public class CatAgahis extends AppCompatActivity {
 
                         ll.addView(layout);
                         lm.addView(ll);
-                    }
+
                     }
 
                 } catch (JSONException e1) {
