@@ -374,18 +374,18 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/AppBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="350dp"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:titleEnabled="false"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="false"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:titleEnabled="false">
 
 
             <android.support.v4.view.ViewPager
@@ -398,9 +398,9 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:title=""
                 android:layout_height="?attr/actionBarSize"
                 android:layout_marginRight="12dp"
+                android:title=""
                 app:layout_collapseMode="pin">
 
                 <ToggleButton
@@ -424,6 +424,7 @@
                     android:layout_marginRight="7dp"
                     android:scaleType="centerCrop"
                     android:src="@mipmap/sharen"
+                    android:visibility="visible"
                     app:layout_collapseMode="pin"
                     app:showAsAction="always" />
 
