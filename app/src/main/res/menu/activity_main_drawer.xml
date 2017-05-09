@@ -46,6 +46,11 @@
             android:id="@+id/nav_about"
             android:icon="@mipmap/about"
             android:title="درباره ناردون" />
+        <item
+            android:id="@+id/nav_support"
+            android:icon="@mipmap/support"
+            android:title="پشتیبانی" />
+
 
     </group>
 

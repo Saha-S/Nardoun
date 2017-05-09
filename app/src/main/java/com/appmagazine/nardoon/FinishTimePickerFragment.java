@@ -42,6 +42,7 @@ public class FinishTimePickerFragment extends DialogFragment implements TimePick
         TextView tv = (TextView) getActivity().findViewById(R.id.txt_finish_time);
         //Set a message for user
         //Display the user changed time on TextView
+
         tv.setText(   "پایان سفارش گیری " + String.valueOf(hourOfDay) + ":"+ String.valueOf(minute) );
         NewAgahi.endTime = String.valueOf(hourOfDay) + ":"+ String.valueOf(minute) + ":"+ "00";
 

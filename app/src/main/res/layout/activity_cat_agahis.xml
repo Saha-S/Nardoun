@@ -21,50 +21,29 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_above="@+id/ll_Filter" />
+
         <TableRow
 
+            android:id="@+id/ll_Filter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:background="#e6e6e6"
-            android:minHeight="50dp"
             android:gravity="right|center"
-            android:id="@+id/ll_Filter">
+            android:minHeight="50dp">
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="11"
-                android:gravity="right|center"
-                android:layout_marginRight="8dp">
 
-                <TextView
-                    android:text="فیلتر کردن با (برچسب، محل، عکس)"
-                    android:layout_width="280dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView2"
-                    android:layout_weight="1"
-                    android:textSize="16sp" />
-            </LinearLayout>
+            <EditText
+                android:id="@+id/editText_main_search"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/background_searchbar"
+                android:gravity="center_vertical"
+                android:hint="جست و جو و فیلتر ..."
+                android:maxLines="1"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp" />
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="right|center">
-
-                <ImageView
-                    app:srcCompat="@mipmap/filter"
-                    android:id="@+id/imageView2"
-                    android:minHeight="12dp"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_weight="1"
-                    />
-
-            </LinearLayout>
 
         </TableRow>
 
@@ -119,7 +98,8 @@
                         android:id="@+id/list"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:layout_above="@id/editText_main_search"/>
 
 
                 </LinearLayout>

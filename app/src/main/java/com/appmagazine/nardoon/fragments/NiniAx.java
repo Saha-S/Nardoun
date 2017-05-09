@@ -13,10 +13,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -48,7 +51,7 @@ import cz.msebera.android.httpclient.Header;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 
-public class NiniAx extends Fragment {
+public class NiniAx extends Fragment implements TextWatcher {
     RecyclerView recyclerView;
     NiniAdapter adapter;
     LinearLayoutManager linearLayoutManager;
@@ -64,6 +67,8 @@ public class NiniAx extends Fragment {
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe);
 
+        EditText editText=(EditText)view.findViewById(R.id.editText_main_search);
+        editText.addTextChangedListener(this);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -117,6 +122,22 @@ public class NiniAx extends Fragment {
 
         return view;
     }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        adapter.filter(charSequence.toString());
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
+    }
+
     public  void webServiceGetNini()
     {
 

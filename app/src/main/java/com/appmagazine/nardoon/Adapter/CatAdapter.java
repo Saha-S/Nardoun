@@ -2,7 +2,6 @@ package com.appmagazine.nardoon.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +12,10 @@ import android.widget.TextView;
 
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.Cat;
-import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +25,7 @@ import java.util.List;
 public class CatAdapter extends RecyclerView.Adapter<CatAdapter.PosterHolder> {
 
     List<Cat> mDataset;
+    static List<Cat> filterCat;
     Context context;
     String special;
     private int lastPosition = -1;
@@ -56,7 +56,27 @@ public class CatAdapter extends RecyclerView.Adapter<CatAdapter.PosterHolder> {
     public CatAdapter(Context context, List<Cat> myDataset) {
         this.mDataset = myDataset;
         this.context = context;
+        filterCat =new ArrayList<>(myDataset);
+
     }
+
+    public void filter(String searchKeyword){
+        searchKeyword=searchKeyword.toLowerCase();
+        if (searchKeyword.isEmpty()){
+            filterCat =new ArrayList<>(mDataset);
+        }else {
+            filterCat =new ArrayList<>();
+            for (int i = 0; i < mDataset.size(); i++) {
+                String title =mDataset.get(i).title;
+
+                if (title.toLowerCase().contains(searchKeyword)){
+                    filterCat.add(mDataset.get(i));
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public PosterHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -70,14 +90,13 @@ public class CatAdapter extends RecyclerView.Adapter<CatAdapter.PosterHolder> {
     @Override
     public void onBindViewHolder(PosterHolder holder, int position) {
 
-        holder.title.setText(mDataset.get(position).title);
+        holder.title.setText(filterCat.get(position).title);
         if(!mDataset.get(position).price.toString().equals("0")) {
-            Log.i("aaaaa2" ,mDataset.get(position).price.toString() );
-            holder.price.setText(mDataset.get(position).price + " تومان ");
+            holder.price.setText(filterCat.get(position).price + " تومان ");
         }
-        holder.location.setText(mDataset.get(position).created_at+" در " +mDataset.get(position).location);
+        holder.location.setText(filterCat.get(position).created_at+" در " + filterCat.get(position).location);
 
-        special=mDataset.get(position).special;
+        special= filterCat.get(position).special;
         if(special.equals("1")){
             holder.ll_vizhe.setVisibility(View.VISIBLE);
             holder.ll_border.setVisibility(View.VISIBLE);
@@ -89,7 +108,7 @@ public class CatAdapter extends RecyclerView.Adapter<CatAdapter.PosterHolder> {
 
 
         Glide.with(context)
-                .load(App.urlimages+mDataset.get(position).image)
+                .load(App.urlimages+ filterCat.get(position).image)
                 .placeholder(R.mipmap.nopic)
                 .into(holder.image);
 
@@ -106,13 +125,13 @@ public class CatAdapter extends RecyclerView.Adapter<CatAdapter.PosterHolder> {
     }
 
     public void update(List<Cat> list) {
-        mDataset = list;
+        filterCat = list;
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() { // از توابع خود اداپتر برای دریافت تعداد داده ها می باشد.
-        return mDataset.size();
+        return filterCat.size();
     }
 
 

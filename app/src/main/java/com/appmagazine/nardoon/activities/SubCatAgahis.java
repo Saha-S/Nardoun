@@ -15,6 +15,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -23,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -51,7 +54,7 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
-public class SubCatAgahis extends AppCompatActivity {
+public class SubCatAgahis extends AppCompatActivity implements TextWatcher {
     RecyclerView recyclerView;
     PosterAdapter adapter;
     LinearLayoutManager linearLayoutManager;
@@ -73,8 +76,9 @@ public class SubCatAgahis extends AppCompatActivity {
         TextView tvtitle = (TextView) findViewById(R.id.tv_mainpage_title);
         TextView appbarTitle = (TextView) findViewById(R.id.tv_appbar_title);
         ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
+        Intent intent=getIntent();
 
-        appbarTitle.setText("زیردسته بندی ها");
+        appbarTitle.setText(intent.getStringExtra("subname"));
         Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
         tvtitle.setTypeface(tfmorvarid);
         ibBack.setOnClickListener(new View.OnClickListener() {
@@ -89,9 +93,10 @@ public class SubCatAgahis extends AppCompatActivity {
                 finish();
             }
         });
-        Intent intent=getIntent();
         catID = intent.getStringExtra("POSITION");
-        Log.i("subid" ,"id ;" + catID);
+
+        EditText editText=(EditText)findViewById(R.id.editText_main_search);
+        editText.addTextChangedListener(this);
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
         recyclerView = (RecyclerView) findViewById(R.id.list);
@@ -156,6 +161,20 @@ public class SubCatAgahis extends AppCompatActivity {
     }
 
 
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        adapter.filter(charSequence.toString());
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
+    }
 
 
     public void loadData(int page) {

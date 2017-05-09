@@ -134,8 +134,7 @@
                             android:layout_height="wrap_content"
                             android:ems="10"
                             android:focusableInTouchMode="true"
-                            android:hint="1000000 (یک میلیون تومان)"
-                            android:inputType="number" />
+                            android:hint=" 1000000 (یک میلیون تومان) ، توافقی ، مجانی" />
 
                     </LinearLayout>
 

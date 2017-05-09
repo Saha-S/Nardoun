@@ -16,6 +16,7 @@ import android.widget.ToggleButton;
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.FileOperations;
 import com.appmagazine.nardoon.Nini;
+import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.provider.LoadProvider;
@@ -24,6 +25,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import java.io.PipedInputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,6 +38,8 @@ import cz.msebera.android.httpclient.Header;
 public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> {
 
     List<Nini> mDataset;
+    static List<Nini> filterPoster;
+
     Context context;
 
     private int lastPosition = -1;
@@ -68,9 +72,28 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
         }
     }
 
+    public void filter(String searchKeyword){
+        searchKeyword=searchKeyword.toLowerCase();
+        if (searchKeyword.isEmpty()){
+            filterPoster=new ArrayList<>(mDataset);
+        }else {
+            filterPoster=new ArrayList<>();
+            for (int i = 0; i < mDataset.size(); i++) {
+                String title =mDataset.get(i).name;
+
+                if (title.toLowerCase().contains(searchKeyword)){
+                    filterPoster.add(mDataset.get(i));
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
     public NiniAdapter(Context context, List<Nini> myDataset) {
         this.mDataset = myDataset;
         this.context = context;
+        filterPoster=new ArrayList<>(myDataset);
+
     }
 
     @Override
@@ -89,12 +112,12 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
         file = new FileOperations();
 
-        holder.name.setText(mDataset.get(position).name);
-        holder.age.setText(mDataset.get(position).age );
-        holder.likes.setText(mDataset.get(position).point);
+        holder.name.setText(filterPoster.get(position).name);
+        holder.age.setText(filterPoster.get(position).age );
+        holder.likes.setText(filterPoster.get(position).point);
 
         Glide.with(context)
-                .load(App.urlimages + mDataset.get(position).image)
+                .load(App.urlimages + filterPoster.get(position).image)
                 .placeholder(R.mipmap.nopic)
                 .into(holder.imageNini);
 
@@ -103,7 +126,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             liksarray=likestr.split("-");
 
 
-        if(Arrays.asList(liksarray).contains(mDataset.get(position).id+"")){
+        if(Arrays.asList(liksarray).contains(filterPoster.get(position).id+"")){
             holder.like.setChecked(true);
             holder.dislike.setEnabled(false);
         }
@@ -111,7 +134,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
         String dislikestr =file.read("dislikes");
             disliksarray=dislikestr.split("-");
 
-        if(Arrays.asList(disliksarray).contains(mDataset.get(position).id+"")){
+        if(Arrays.asList(disliksarray).contains(filterPoster.get(position).id+"")){
             holder.dislike.setChecked(true);
             holder.like.setEnabled(false);
 
@@ -121,11 +144,11 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             @Override
             public void onClick(View v) {
                 if(holder.like.isChecked()== false) {
-                    webServiceDislike(mDataset.get(position).id , holder ,position);
+                    webServiceDislike(filterPoster.get(position).id , holder ,position);
 
                     String likes= "";
                     for (int i=0;i<liksarray.length;i++) {
-                        if (!liksarray[i].equals( mDataset.get(position).id )) {
+                        if (!liksarray[i].equals( filterPoster.get(position).id )) {
                             if(likes.equals(""))
                             likes+=liksarray[i];
                          else
@@ -137,15 +160,15 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                     holder.dislike.setEnabled(true);
 
                 }else{
-                    webServiceLike(mDataset.get(position).id , holder ,position);
+                    webServiceLike(filterPoster.get(position).id , holder ,position);
                   //  holder.likes.setText(likes);
                     holder.dislike.setEnabled(false);
 
                     String likes = file.read("likes");
                     if(likes.equals("")) {
-                        file.write("likes", mDataset.get(position).id);
+                        file.write("likes", filterPoster.get(position).id);
                     }else {
-                        file.write("likes",likes +"-"+ mDataset.get(position).id);
+                        file.write("likes",likes +"-"+ filterPoster.get(position).id);
                     }
                 }
             }
@@ -155,10 +178,10 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             @Override
             public void onClick(View v) {
                 if(holder.dislike.isChecked()== false) {
-                    webServiceLike(mDataset.get(position).id , holder ,position);
+                    webServiceLike(filterPoster.get(position).id , holder ,position);
                     String dislikes= "";
                     for (int i=0;i<disliksarray.length;i++) {
-                        if (!disliksarray[i].equals( mDataset.get(position).id )) {
+                        if (!disliksarray[i].equals( filterPoster.get(position).id )) {
                             if(dislikes.equals(""))
                                 dislikes+=disliksarray[i];
                             else
@@ -169,13 +192,13 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                     file.write("dislikes" , dislikes);
                     holder.like.setEnabled(true);
                 }else{
-                    webServiceDislike(mDataset.get(position).id , holder ,position);
+                    webServiceDislike(filterPoster.get(position).id , holder ,position);
                     holder.like.setEnabled(false);
                     String dislikes = file.read("dislikes");
                     if(dislikes.equals("")) {
-                        file.write("dislikes", mDataset.get(position).id);
+                        file.write("dislikes", filterPoster.get(position).id);
                     }else {
-                        file.write("dislikes",dislikes +"-"+ mDataset.get(position).id);
+                        file.write("dislikes",dislikes +"-"+ filterPoster.get(position).id);
                     }
 
                 }
@@ -191,13 +214,13 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
     }
 
     public void update(List<Nini> list) {
-        mDataset = list;
+        filterPoster = list;
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() { // از توابع خود اداپتر برای دریافت تعداد داده ها می باشد.
-        return mDataset.size();
+        return filterPoster.size();
     }
 
 

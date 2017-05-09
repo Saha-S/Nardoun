@@ -182,6 +182,7 @@ package com.appmagazine.nardoon.activities;
                         }
                         else{
                             link.setVisibility(View.GONE);
+                            link.setText("");
                         }
                     }
                                                    });
@@ -280,10 +281,20 @@ package com.appmagazine.nardoon.activities;
 
                     }else if(SelectCat.getText().equals("استخدام و کاریابی")) {
                         Log.i("qqqqqq",SelectCat.getText().toString() );
-                          txtCat.setVisibility(View.GONE);
-                        txtCat.setText("ثبت آگهی در این بخش رایگان نمی باشد");
-                        txtCat.setVisibility(View.VISIBLE);
-                    }else
+                            txtCat.setVisibility(View.GONE);
+                            txtCat.setText("ثبت آگهی در این بخش رایگان نمی باشد");
+                            txtCat.setVisibility(View.VISIBLE);
+                            llType.setVisibility(View.GONE);
+                            llPrice.setVisibility(View.GONE);
+                            llBegin.setVisibility(View.VISIBLE);
+                            llFinish.setVisibility(View.VISIBLE);
+                            container.setVisibility(View.VISIBLE);
+                            llMenu.setVisibility(View.VISIBLE);
+                            llForm.setVisibility(LinearLayout.VISIBLE);
+                            llClose.setVisibility(LinearLayout.VISIBLE);
+                            llErsal.setVisibility(LinearLayout.VISIBLE);
+
+                        }else
                     {
                         txtCat.setVisibility(View.GONE);
                         llForm.setVisibility(LinearLayout.VISIBLE);
@@ -449,7 +460,11 @@ package com.appmagazine.nardoon.activities;
                                 webServiceNewAgahi();
 
                             }
-                        }else{
+                        }
+                        if(SelectCat.getText().equals("رستوران")) {
+
+                        }
+                        else{
 
                             if(chkSpecial.isChecked()){
                                 webServiceCountSpecial();
@@ -564,9 +579,9 @@ package com.appmagazine.nardoon.activities;
                     public void onClick(View v) {
                         if(imgAsli.getVisibility()==View.GONE) {
                             selectImage(ivImageAsli);
-                        } else if(imgAsli.getVisibility()==View.VISIBLE && img2.getVisibility()==View.GONE) {
+                        }  if(imgAsli.getVisibility()==View.VISIBLE && img2.getVisibility()==View.GONE) {
                             selectImage(ivImage2);
-                        }else if(img2.getVisibility()==View.VISIBLE && img3.getVisibility()==View.GONE) {
+                        } if(img2.getVisibility()==View.VISIBLE && img3.getVisibility()==View.GONE) {
                             selectImage(ivImage3);
                         }
 
@@ -800,7 +815,7 @@ package com.appmagazine.nardoon.activities;
 
                         if(imgAsli.getVisibility()==View.GONE) {
                             SelectImage.setText("افزودن عکس");
-                        }else if(imgAsli.getVisibility()==View.VISIBLE) {
+                        } if(imgAsli.getVisibility()==View.VISIBLE) {
                             SelectImage.setText("افزودن عکسی دیگر");
                         }
 
@@ -808,12 +823,12 @@ package com.appmagazine.nardoon.activities;
                             imgAsli.setVisibility(View.VISIBLE);
                             file1 = destination;
                             Log.i("file1" , "1: "+file1.toString());
-                        }else if(imgAsli.getVisibility()==View.VISIBLE && img2.getVisibility()==View.GONE){
+                        } if(imgAsli.getVisibility()==View.VISIBLE && img2.getVisibility()==View.GONE){
                             img2.setVisibility(View.VISIBLE);
                             file2 = destination;
                             Log.i("file2" , "2: "+file2.toString());
 
-                        }else if(img2.getVisibility()==View.VISIBLE && img3.getVisibility()==View.GONE) {
+                        } if(img2.getVisibility()==View.VISIBLE && img3.getVisibility()==View.GONE) {
                             img3.setVisibility(View.VISIBLE);
                             file3 = destination;
                             Log.i("file3" , "3: "+file3.toString());
@@ -896,15 +911,11 @@ package com.appmagazine.nardoon.activities;
                 client.get(App.urlApi+"specialcount/"+id, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
                     @Override
                     public void onStart() {
-                        Log.i("jjjjjjjjjjjjjjjj" , "sdfgh   "+id);
                     }
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] response) {
                         String value = new String(response);
                         countSpecial = Integer.parseInt(value);
-                        Log.i("jjjjjjjjjjjjjjjj" , "222   "+value);
-                        Log.i("jjjjjjjjjjjjjjjj" , "333   "+countSpecial);
-                        Log.i("jjjjjjjjjjjjjjjj" , "444   "+App.urlApi+"specialcount/"+id);
 
 
                     }
@@ -912,10 +923,10 @@ package com.appmagazine.nardoon.activities;
                     public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
                         if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                         {
-                            App.CustomToast(" لطفا دوباره سعی کنید ");
+                       //     App.CustomToast(" لطفا دوباره سعی کنید ");
 
                         }else{
-                            App.CustomToast(" لطفا دوباره سعی کنید ");
+                          //  App.CustomToast(" لطفا دوباره سعی کنید ");
                         }
                     }
 

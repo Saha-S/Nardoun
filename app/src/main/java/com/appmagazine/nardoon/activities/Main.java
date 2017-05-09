@@ -313,6 +313,12 @@ public class Main extends AppCompatActivity
         }else if (id == R.id.nav_my_agahi) {
 
         }else if (id == R.id.nav_rules) {
+            Intent intent = new Intent(App.context , Rules.class);
+            startActivity(intent);
+
+        }else if (id == R.id.nav_support) {
+            Intent intent = new Intent(App.context , Poshtibani.class);
+            startActivity(intent);
 
         }
 

@@ -38,7 +38,7 @@ import cz.msebera.android.httpclient.Header;
 public class Order extends AppCompatActivity {
 
     private LinearLayout container;
-    private String menuOrder , allPrice;
+    private String menuOrder , allPrice , start , end;
     private JSONArray menuJsonArray;
     private JSONArray orderJsonArray = new JSONArray();
     private JSONObject jsnobject;
@@ -59,6 +59,7 @@ public class Order extends AppCompatActivity {
         setContentView(R.layout.activity_order);
 
         TextView tvtitle = (TextView) findViewById(R.id.tv_mainpage_title);
+        TextView txtTime = (TextView) findViewById(R.id.txt_time);
         TextView appbarTitle = (TextView) findViewById(R.id.tv_appbar_title);
         ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
         appbarTitle.setText("مشاهده منو و سفارش");
@@ -82,13 +83,16 @@ public class Order extends AppCompatActivity {
         totalprice = (TextView) findViewById(R.id.txt_all_price);
         container = (LinearLayout) findViewById(R.id.container);
         menuOrder = intent.getStringExtra("menu");
+        start = intent.getStringExtra("start");
+        end = intent.getStringExtra("end");
+
+        txtTime.setText("ثبت سفارش از ساعت "+start+   " الی "+end+" امکان پذیر می باشد.");
         try {
             menuJsonArray = new JSONArray(menuOrder);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.i("aaaaaaa122333",menuJsonArray.toString() );
         try {
         for (int i = 0; i < menuJsonArray.length(); i++) {
 
@@ -361,9 +365,9 @@ public class Order extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
                 dialog.hide();
 
-                if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                if(statusCode==403)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
-                    App.CustomToast("خطا");
+                    App.CustomToast("ثبت سفارش در این زمان امکان پذیر نمی باشد");
 
                 }else{
                     App.CustomToast(" لطفا دوباره سعی کنید ");

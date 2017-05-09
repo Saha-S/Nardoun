@@ -69,7 +69,7 @@ public class AgahiOrderDetails extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.parse("tel:"+mobile));
+                intent.setData(Uri.parse("tel:"+mobile.getText()));
                 startActivity(intent);
 
 

@@ -12,9 +12,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.appmagazine.nardoon.Adapter.PosterAdapter;
@@ -40,14 +44,13 @@ import cz.msebera.android.httpclient.Header;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 
-public class Main extends Fragment {
+public class Main extends Fragment implements TextWatcher{
     RecyclerView recyclerView;
     PosterAdapter adapter;
     LinearLayoutManager linearLayoutManager;
     List<Poster> array;
     SwipeRefreshLayout swipeRefreshLayout;
     EndlessRecyclerViewScrollListener scrollListener;
-    LinearLayout llFilter;
     public static ProgressDialog dialog;
 
 
@@ -66,19 +69,8 @@ public class Main extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
 
-        llFilter=(LinearLayout) view.findViewById(R.id.ll_Filter);
-
-
-        llFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(App.context , Filter.class);
-                startActivity(intent);
-
-            }
-        });
-
+        EditText editText=(EditText)view.findViewById(R.id.editText_main_search);
+        editText.addTextChangedListener(this);
 
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
@@ -141,6 +133,21 @@ public class Main extends Fragment {
     }
 
 
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        adapter.filter(charSequence.toString());
+        Log.i("sssssssss1" , "mishe?");
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
+    }
 
 
     public  void webServiceGetAgahi()

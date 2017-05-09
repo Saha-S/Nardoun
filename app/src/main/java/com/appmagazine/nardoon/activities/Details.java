@@ -52,7 +52,7 @@ import ir.moslem_deris.apps.zarinpal.models.Payment;
 public class Details extends AppCompatActivity {
     boolean FLAG_COLLAPSED = true;
     public static String validity,permission;
-    public static TextView tvtitle,tvcontent,tvprice,tvlocation , tvtime ,tvtype  , txt;
+    public static TextView tvtitle,tvcontent,tvprice,tvlocation , tvtime ,tvtype ,tvLink , txt;
     public static String url, catname , mobile , email , price , image , location,time ,special , link , start , end  , order;
     public static int idRadio  ;
     ImageView  ivshare ;
@@ -63,13 +63,13 @@ public class Details extends AppCompatActivity {
     public static String idAgahi , url1 , url2 , url3 ;
     Context context;
     private ArrayList<String> ids;
-    LinearLayout llVizhe ,llPrice, llType , llMenu;
+    LinearLayout llVizhe ,llPrice, llType , llMenu , llLink , llDetails;
     ViewPager viewPager;
     Button pay ,btnMenu;
     int AgahiPrice,EstekhdamPrice , LinkPrice , SpecialPrice  , RestaurantPrice= 0;
     String id_confirmaation , peygiri , linkPos, specialPos , catPos , foodPos;
     private String why;
-    private String menuOrder;
+    private String menuOrder ;
     DetailsImagePagerAdapter myCustomPagerAdapter;
     String[] favoritearray;
     FileOperations file;
@@ -94,12 +94,17 @@ public class Details extends AppCompatActivity {
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        toolbar.setSubtitle("");
+
+
         tvtitle = (TextView) findViewById(R.id.txtTitle);
         tvlocation = (TextView) findViewById(R.id.txtLocation);
         tvprice = (TextView) findViewById(R.id.txtPrice);
         tvtype = (TextView) findViewById(R.id.txtType);
         tvcontent = (TextView) findViewById(R.id.txtContent);
         tvtime = (TextView) findViewById(R.id.txtTime);
+        tvLink = (TextView) findViewById(R.id.txtLink);
         txt = (TextView) findViewById(R.id.txt);
         // ivtitle=(ImageView) findViewById(R.id.iv_title);
         ivshare = (ImageView) findViewById(R.id.iv_share);
@@ -109,7 +114,9 @@ public class Details extends AppCompatActivity {
         llVizhe = (LinearLayout) findViewById(R.id.llVizhe);
         llPrice = (LinearLayout) findViewById(R.id.ll_price);
         llType = (LinearLayout) findViewById(R.id.ll_type);
+        llLink = (LinearLayout) findViewById(R.id.ll_link);
         llMenu = (LinearLayout) findViewById(R.id.ll_menu);
+        llDetails = (LinearLayout) findViewById(R.id.ll_details);
         pay = (Button) findViewById(R.id.btn_pay);
         btnMenu = (Button) findViewById(R.id.btn_menu);
 
@@ -143,6 +150,8 @@ public class Details extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(App.context, Order.class);
                 intent.putExtra("menu" , menuOrder);
+                intent.putExtra("start" , start);
+                intent.putExtra("end" , end);
                 startActivity(intent);
             }
         });
@@ -355,6 +364,13 @@ public class Details extends AppCompatActivity {
                 try {
                     JSONObject obj =new JSONArray(value).getJSONObject(0);  //********* chon ye json array ba 1 json objecte injur migirimesh
 
+                    if(obj.getString("link").isEmpty())
+                    {
+                        llLink.setVisibility(View.GONE);
+                    }else{
+                        llLink.setVisibility(View.VISIBLE);
+                        tvLink.setText(obj.getString("link"));
+                    }
                     String content= obj.getString("content");
                     String type= obj.getString("type");
                     catname= obj.getString("category_name");
@@ -448,6 +464,7 @@ public class Details extends AppCompatActivity {
                     /////////////////// if Vizheee ///////////////////////////
                     ///////////////////END if Vizheee ////////////////////////
 
+                    llDetails.setVisibility(View.VISIBLE);
                     dialog.hide();
 
                 } catch (JSONException e1) {

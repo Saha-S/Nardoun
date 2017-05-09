@@ -18,6 +18,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -26,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -58,7 +61,7 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
-public class CatAgahis extends AppCompatActivity {
+public class CatAgahis extends AppCompatActivity implements TextWatcher {
     RecyclerView recyclerView;
     CatAdapter adapter;
     LinearLayoutManager linearLayoutManager;
@@ -74,18 +77,19 @@ public class CatAgahis extends AppCompatActivity {
     TextView txtSub;
     Boolean isSubcatAvailable = false;
     Typeface sansfarsi;
+    LinearLayout lm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cat_agahis);
-
+        Intent intent = getIntent();
         sansfarsi= Typeface.createFromAsset(App.context.getAssets(), "Sansfarsi.ttf");
         subs.clear();
         TextView tvtitle = (TextView) findViewById(R.id.tv_mainpage_title);
         TextView appbarTitle = (TextView) findViewById(R.id.tv_appbar_title);
         ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
-        appbarTitle.setText("دسته بندی ها");
+        appbarTitle.setText(intent.getStringExtra("name").toString());
         Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
         tvtitle.setTypeface(tfmorvarid);
         ibBack.setOnClickListener(new View.OnClickListener() {
@@ -101,8 +105,11 @@ public class CatAgahis extends AppCompatActivity {
             }
         });
 
-        Intent intent = getIntent();
+        EditText editText=(EditText)findViewById(R.id.editText_main_search);
+        editText.addTextChangedListener(this);
+
         catID = intent.getStringExtra("id");
+        lm = (LinearLayout) findViewById(R.id.linearMain);
 
         txtSub = (TextView) findViewById(R.id.txt_sub);
         TextView txtAgahi = (TextView) findViewById(R.id.txt_agahi);
@@ -135,8 +142,11 @@ public class CatAgahis extends AppCompatActivity {
                 webServiceGetCategory();
 
             }
-        }else
+        }else {
             App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
+            swipeRefreshLayout.setRefreshing(false);
+
+        }
 
 
 
@@ -159,8 +169,10 @@ public class CatAgahis extends AppCompatActivity {
 
                 if (mWifi.isConnected() || isMobileDataEnabled()) {
                     webServiceGetCatAgahi();
-                }else
+                }else {
                     App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
+                    swipeRefreshLayout.setRefreshing(false);
+                }
 
 
             }
@@ -194,6 +206,27 @@ public class CatAgahis extends AppCompatActivity {
     }
 
 
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        adapter.filter(charSequence.toString());
+        if(charSequence.toString().isEmpty()){
+            lm.setVisibility(View.VISIBLE);
+            txtSub.setVisibility(View.VISIBLE);
+        }else {
+            lm.setVisibility(View.GONE);
+            txtSub.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
+    }
 
     public  void webServiceGetCatAgahi()
     {
@@ -233,11 +266,11 @@ public class CatAgahis extends AppCompatActivity {
                 // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
-
+                    swipeRefreshLayout.setRefreshing(false);
                     App.CustomToast("آگهی موجود نیست");
 
                 }else{
-
+                    swipeRefreshLayout.setRefreshing(false);
                     App.CustomToast("fail "+statusCode);
                     App.CustomToast(" لطفا دوباره سعی کنید ");
                 }
@@ -294,7 +327,6 @@ public class CatAgahis extends AppCompatActivity {
                         subs.add(subname);
                         subsid.add(subid);
 
-                        final LinearLayout lm = (LinearLayout) findViewById(R.id.linearMain);
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
                             params.setMargins(5,5,5,5);
@@ -333,6 +365,7 @@ public class CatAgahis extends AppCompatActivity {
                                 Log.i("TAG", "index :" + index);
                                 Intent intent = new Intent(App.context, SubCatAgahis.class);
                                 intent.putExtra("POSITION", subsid.get(index) + "");
+                                intent.putExtra("subname", subs.get(index) + "");
                                 startActivity(intent);
                             }
                         });
@@ -370,7 +403,6 @@ public class CatAgahis extends AppCompatActivity {
 
 
                 } else {
-                    App.CustomToast("fail " + statusCode);
                     App.CustomToast(" لطفا دوباره سعی کنید ");
                 }
             }

@@ -230,6 +230,7 @@ public class EditAgahi extends AppCompatActivity {
                     link.setVisibility(View.VISIBLE);
                 } else {
                     link.setVisibility(View.GONE);
+                    link.setText("");
                 }
             }
         });
@@ -747,29 +748,30 @@ public class EditAgahi extends AppCompatActivity {
                 Log.i("file: " ,"....:" + file1.toString());
                 params.put("file", file1);
             } catch(FileNotFoundException e) {}
-        }else if(file2!=null){
+        }
+        if(file2!=null){
         try {
             Log.i("filei: " ,"....:" + file2.toString());
             params.put("filei", file2);
         } catch(FileNotFoundException e) {}
     }
-    else if(file3!=null){
+
+     if(file3!=null){
         try {
-            Log.i("fileii: " ,"....:" + file1.toString());
             params.put("fileii", file3);
         } catch(FileNotFoundException e) {}
     }
          if(file1==null && imgAsli.getVisibility()==View.VISIBLE){
-            Log.i("file11: " ,"....:" + Details.image.toString());
+       //     Log.i("file11: " ,"....:" + Details.image.toString());
             params.put("image", Details.image);
         }
          if(file2==null && img2.getVisibility()==View.VISIBLE){
-            Log.i("file22: " ,"....:" + Details.url2.toString());
+      //      Log.i("file22: " ,"....:" + Details.url2.toString());
             params.put("imagei", Details.url2);
         }
          if(file3==null && img3.getVisibility()==View.VISIBLE){
             Log.i("file33: " ,"....:" + Details.url3.toString());
-            params.put("imageii", Details.url3);
+       //     params.put("imageii", Details.url3);
         }
          if(file1==null && imgAsli.getVisibility()==View.GONE){
             params.put("image", "0");
@@ -1026,9 +1028,6 @@ public class EditAgahi extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
                 String value = new String(response);
                 countSpecial = Integer.parseInt(value);
-                Log.i("jjjjjjjjjjjjjjjj" , "222   "+value);
-                Log.i("jjjjjjjjjjjjjjjj" , "333   "+countSpecial);
-                Log.i("jjjjjjjjjjjjjjjj" , "444   "+App.urlApi+"specialcount/"+Details.catId);
 
 
             }
@@ -1036,10 +1035,10 @@ public class EditAgahi extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
-                    App.CustomToast(" لطفا دوباره سعی کنید ");
+            //        App.CustomToast(" لطفا دوباره سعی کنید ");
 
                 }else{
-                    App.CustomToast(" لطفا دوباره سعی کنید ");
+         //           App.CustomToast(" لطفا دوباره سعی کنید ");
                 }
             }
 

@@ -1,16 +1,12 @@
 package com.appmagazine.nardoon.Adapter;
 
 import android.content.Context;
-import android.support.design.widget.NavigationView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appmagazine.nardoon.App;
@@ -18,6 +14,7 @@ import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,7 +23,8 @@ import java.util.List;
 
 public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHolder> {
 
-    List<Poster> mDataset;
+    static List<Poster> mDataset;
+    static List<Poster> filterPoster;
     Context context;
 
     private int lastPosition = -1;
@@ -53,6 +51,25 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
     public PosterAdapter(Context context, List<Poster> myDataset) {
         this.mDataset = myDataset;
         this.context = context;
+        filterPoster=new ArrayList<>(myDataset);
+
+    }
+
+    public void filter(String searchKeyword){
+        searchKeyword=searchKeyword.toLowerCase();
+        if (searchKeyword.isEmpty()){
+            filterPoster=new ArrayList<>(mDataset);
+        }else {
+            filterPoster=new ArrayList<>();
+            for (int i = 0; i < mDataset.size(); i++) {
+                String title =mDataset.get(i).title;
+
+                if (title.toLowerCase().contains(searchKeyword)){
+                    filterPoster.add(mDataset.get(i));
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
     @Override
@@ -67,12 +84,12 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
     @Override
     public void onBindViewHolder(PosterHolder holder, int position) {
 
-        holder.title.setText(mDataset.get(position).title);
-        if(!mDataset.get(position).price.toString().equals("0")) {
-            Log.i("aaaaa2" ,mDataset.get(position).price.toString() );
-            holder.price.setText(mDataset.get(position).price + " تومان ");
+        holder.title.setText(filterPoster.get(position).title);
+        if(!filterPoster.get(position).price.toString().equals("0")) {
+            Log.i("aaaaa2" ,filterPoster.get(position).price.toString() );
+            holder.price.setText(filterPoster.get(position).price + " تومان ");
         }
-        holder.location.setText(mDataset.get(position).created_at+" در " +mDataset.get(position).location);
+        holder.location.setText(filterPoster.get(position).created_at+" در " +filterPoster.get(position).location);
 
 
         Glide.with(context)
@@ -80,26 +97,15 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
                 .placeholder(R.mipmap.nopic)
                 .into(holder.image);
 
-
-
-
-
-    /*    Animation animation = AnimationUtils.loadAnimation(context,
-                (position > lastPosition) ? android.R.anim.slide_in_left
-                        : android.R.anim.slide_out_right);
-        holder.itemView.startAnimation(animation);
-        lastPosition = position;
-        */
     }
 
     public void update(List<Poster> list) {
-        mDataset = list;
+        filterPoster = list;
         notifyDataSetChanged();
     }
-
     @Override
     public int getItemCount() { // از توابع خود اداپتر برای دریافت تعداد داده ها می باشد.
-        return mDataset.size();
+        return filterPoster.size();
     }
 
 
