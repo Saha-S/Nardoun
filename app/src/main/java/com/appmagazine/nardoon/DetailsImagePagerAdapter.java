@@ -46,7 +46,6 @@ public class DetailsImagePagerAdapter extends PagerAdapter{
                     .load(images[position])
                     .placeholder(R.mipmap.nopic)
                     .into(imageView);
-            Log.i("lllll", "hideeeee");
 
             container.addView(itemView);
 

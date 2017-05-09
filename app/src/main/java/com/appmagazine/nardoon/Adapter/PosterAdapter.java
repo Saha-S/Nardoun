@@ -83,19 +83,20 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
 
     @Override
     public void onBindViewHolder(PosterHolder holder, int position) {
+try {
+    holder.title.setText(filterPoster.get(position).title);
+    if (!filterPoster.get(position).price.toString().equals("0")) {
+        Log.i("aaaaa2", filterPoster.get(position).price.toString());
+        holder.price.setText(filterPoster.get(position).price + " تومان ");
+    }
+    holder.location.setText(filterPoster.get(position).created_at + " در " + filterPoster.get(position).location);
 
-        holder.title.setText(filterPoster.get(position).title);
-        if(!filterPoster.get(position).price.toString().equals("0")) {
-            Log.i("aaaaa2" ,filterPoster.get(position).price.toString() );
-            holder.price.setText(filterPoster.get(position).price + " تومان ");
-        }
-        holder.location.setText(filterPoster.get(position).created_at+" در " +filterPoster.get(position).location);
 
-
-        Glide.with(context)
-                .load(App.urlimages+mDataset.get(position).image)
-                .placeholder(R.mipmap.nopic)
-                .into(holder.image);
+    Glide.with(context)
+            .load(App.urlimages + mDataset.get(position).image)
+            .placeholder(R.mipmap.nopic)
+            .into(holder.image);
+}catch(Exception e){}
 
     }
 

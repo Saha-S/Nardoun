@@ -25,6 +25,9 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
+            <meta-data android:name="com.inthecheesefactory.lab.glidepicasso.GlideConfiguration"
+                android:value="GlideModule"/>
+
         </provider>
 
         <activity

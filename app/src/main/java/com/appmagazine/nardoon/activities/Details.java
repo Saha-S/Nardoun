@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -370,6 +371,7 @@ public class Details extends AppCompatActivity {
                     }else{
                         llLink.setVisibility(View.VISIBLE);
                         tvLink.setText(obj.getString("link"));
+                        tvLink.setMovementMethod(LinkMovementMethod.getInstance());
                     }
                     String content= obj.getString("content");
                     String type= obj.getString("type");

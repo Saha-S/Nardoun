@@ -280,7 +280,6 @@ package com.appmagazine.nardoon.activities;
                         llErsal.setVisibility(LinearLayout.VISIBLE);
 
                     }else if(SelectCat.getText().equals("استخدام و کاریابی")) {
-                        Log.i("qqqqqq",SelectCat.getText().toString() );
                             txtCat.setVisibility(View.GONE);
                             txtCat.setText("ثبت آگهی در این بخش رایگان نمی باشد");
                             txtCat.setVisibility(View.VISIBLE);
@@ -461,9 +460,6 @@ package com.appmagazine.nardoon.activities;
 
                             }
                         }
-                        if(SelectCat.getText().equals("رستوران")) {
-
-                        }
                         else{
 
                             if(chkSpecial.isChecked()){
@@ -579,9 +575,9 @@ package com.appmagazine.nardoon.activities;
                     public void onClick(View v) {
                         if(imgAsli.getVisibility()==View.GONE) {
                             selectImage(ivImageAsli);
-                        }  if(imgAsli.getVisibility()==View.VISIBLE && img2.getVisibility()==View.GONE) {
+                        }else  if(imgAsli.getVisibility()==View.VISIBLE && img2.getVisibility()==View.GONE) {
                             selectImage(ivImage2);
-                        } if(img2.getVisibility()==View.VISIBLE && img3.getVisibility()==View.GONE) {
+                        }else if(img2.getVisibility()==View.VISIBLE && img3.getVisibility()==View.GONE) {
                             selectImage(ivImage3);
                         }
 
@@ -768,73 +764,73 @@ package com.appmagazine.nardoon.activities;
 
             @Override
             protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-                if (requestCode == 0 && resultCode == RESULT_OK) {
+                if(resultCode != RESULT_CANCELED) {
 
-                    ImageCropFunction();
-
-                }
-                else if (requestCode == 2) {
-
-                    if (data != null) {
-
-                        uri = data.getData();
+                    if (requestCode == 0 && resultCode == RESULT_OK) {
 
                         ImageCropFunction();
 
-                    }
-                }
-                else if (requestCode == 1) {
+                    } else if (requestCode == 2) {
 
-                    if (data != null) {
+                        if (data != null) {
 
-                       // Bundle bundle = data.getExtras();
-                      //  Bitmap thumbnail = bundle.getParcelable("data");
+                            uri = data.getData();
 
-                      //  Log.i("lllll" ,"aaa"+(Bitmap) data.getExtras().get("data"));
-                        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-
-                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-
-                        destination = new File(Environment.getExternalStorageDirectory(),
-                                System.currentTimeMillis() + ".jpg");
-
-                        FileOutputStream fo;
-                        try {
-                            destination.createNewFile();
-                            fo = new FileOutputStream(destination);
-                            fo.write(bytes.toByteArray());
-                            fo.close();
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-
-
-                        if(imgAsli.getVisibility()==View.GONE) {
-                            SelectImage.setText("افزودن عکس");
-                        } if(imgAsli.getVisibility()==View.VISIBLE) {
-                            SelectImage.setText("افزودن عکسی دیگر");
-                        }
-
-                        if(imgAsli.getVisibility()==View.GONE) {
-                            imgAsli.setVisibility(View.VISIBLE);
-                            file1 = destination;
-                            Log.i("file1" , "1: "+file1.toString());
-                        } if(imgAsli.getVisibility()==View.VISIBLE && img2.getVisibility()==View.GONE){
-                            img2.setVisibility(View.VISIBLE);
-                            file2 = destination;
-                            Log.i("file2" , "2: "+file2.toString());
-
-                        } if(img2.getVisibility()==View.VISIBLE && img3.getVisibility()==View.GONE) {
-                            img3.setVisibility(View.VISIBLE);
-                            file3 = destination;
-                            Log.i("file3" , "3: "+file3.toString());
+                            ImageCropFunction();
 
                         }
-                        image.setImageBitmap(thumbnail);
+                    } else if (requestCode == 1) {
+
+                        if (data != null) {
+
+                            // Bundle bundle = data.getExtras();
+                            //  Bitmap thumbnail = bundle.getParcelable("data");
+
+                            //  Log.i("lllll" ,"aaa"+(Bitmap) data.getExtras().get("data"));
+                            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+
+                            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                            thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+
+                            destination = new File(Environment.getExternalStorageDirectory(),
+                                    System.currentTimeMillis() + ".jpg");
+
+                            FileOutputStream fo;
+                            try {
+                                destination.createNewFile();
+                                fo = new FileOutputStream(destination);
+                                fo.write(bytes.toByteArray());
+                                fo.close();
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+
+                            if (imgAsli.getVisibility() == View.GONE) {
+                                SelectImage.setText("افزودن عکس");
+                            } else if (imgAsli.getVisibility() == View.VISIBLE) {
+                                SelectImage.setText("افزودن عکسی دیگر");
+                            }
+
+                            if (imgAsli.getVisibility() == View.GONE) {
+                                imgAsli.setVisibility(View.VISIBLE);
+                                file1 = destination;
+                                Log.i("file1", "1: " + file1.toString());
+                            } else if (imgAsli.getVisibility() == View.VISIBLE && img2.getVisibility() == View.GONE) {
+                                img2.setVisibility(View.VISIBLE);
+                                file2 = destination;
+                                Log.i("file2", "2: " + file2.toString());
+
+                            } else if (img2.getVisibility() == View.VISIBLE && img3.getVisibility() == View.GONE) {
+                                img3.setVisibility(View.VISIBLE);
+                                file3 = destination;
+                                Log.i("file3", "3: " + file3.toString());
+
+                            }
+                            image.setImageBitmap(thumbnail);
+                        }
                     }
                 }
             }
@@ -850,8 +846,8 @@ package com.appmagazine.nardoon.activities;
                     CropIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
                     CropIntent.putExtra("crop", "true");
-                    CropIntent.putExtra("outputX", 100);
-                    CropIntent.putExtra("outputY", 100);
+                    CropIntent.putExtra("outputX", 512);
+                    CropIntent.putExtra("outputY", 512);
                     CropIntent.putExtra("aspectX", 3);
                     CropIntent.putExtra("aspectY", 3);
                     CropIntent.putExtra("scaleUpIfNeeded", true);

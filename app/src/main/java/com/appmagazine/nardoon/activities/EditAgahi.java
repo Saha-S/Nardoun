@@ -300,7 +300,7 @@ public class EditAgahi extends AppCompatActivity {
             if (Details.image.equals("0")) {
                 imgAsli.setVisibility(View.GONE);
                 SelectImage.setText("افزودن عکس");
-            }
+            }else
             if (!Details.image.equals("0")) {
                 Glide.with(this).load(App.urlimages + Details.image).into(ivImageAsli);
                 imgAsli.setVisibility(View.VISIBLE);
@@ -749,14 +749,14 @@ public class EditAgahi extends AppCompatActivity {
                 params.put("file", file1);
             } catch(FileNotFoundException e) {}
         }
-        if(file2!=null){
+        else if(file2!=null){
         try {
             Log.i("filei: " ,"....:" + file2.toString());
             params.put("filei", file2);
         } catch(FileNotFoundException e) {}
     }
 
-     if(file3!=null){
+     else if(file3!=null){
         try {
             params.put("fileii", file3);
         } catch(FileNotFoundException e) {}
@@ -770,8 +770,7 @@ public class EditAgahi extends AppCompatActivity {
             params.put("imagei", Details.url2);
         }
          if(file3==null && img3.getVisibility()==View.VISIBLE){
-            Log.i("file33: " ,"....:" + Details.url3.toString());
-       //     params.put("imageii", Details.url3);
+            params.put("imageii", Details.url3);
         }
          if(file1==null && imgAsli.getVisibility()==View.GONE){
             params.put("image", "0");
@@ -883,71 +882,77 @@ public class EditAgahi extends AppCompatActivity {
 
     }
 
+
+
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 0 && resultCode == RESULT_OK) {
+        if(resultCode != RESULT_CANCELED) {
 
-            ImageCropFunction();
-
-        }
-        else if (requestCode == 2) {
-
-            if (data != null) {
-
-                uri = data.getData();
+            if (requestCode == 0 && resultCode == RESULT_OK) {
 
                 ImageCropFunction();
 
-            }
-        }
-        else if (requestCode == 1) {
+            } else if (requestCode == 2) {
 
-            if (data != null) {
+                if (data != null) {
 
-                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+                    uri = data.getData();
 
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-
-                destination = new File(Environment.getExternalStorageDirectory(),
-                        System.currentTimeMillis() + ".jpg");
-
-                FileOutputStream fo;
-                try {
-
-                    destination.createNewFile();
-                    fo = new FileOutputStream(destination);
-                    fo.write(bytes.toByteArray());
-                    fo.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if(imgAsli.getVisibility()==View.GONE) {
-                    SelectImage.setText("افزودن عکس");
-                }else if(imgAsli.getVisibility()==View.VISIBLE) {
-                    SelectImage.setText("افزودن عکسی دیگر");
-                }
-
-                if(imgAsli.getVisibility()==View.GONE) {
-                    imgAsli.setVisibility(View.VISIBLE);
-                    file1 = destination;
-                    Log.i("file1" , "1: "+file1.toString());
-                }else if(imgAsli.getVisibility()==View.VISIBLE && img2.getVisibility()==View.GONE){
-                    img2.setVisibility(View.VISIBLE);
-                    file2 = destination;
-                    Log.i("file2" , "2: "+file2.toString());
-
-                }else if(img2.getVisibility()==View.VISIBLE && img3.getVisibility()==View.GONE) {
-                    img3.setVisibility(View.VISIBLE);
-                    file3 = destination;
-                    Log.i("file3" , "3: "+file3.toString());
+                    ImageCropFunction();
 
                 }
+            } else if (requestCode == 1) {
 
-                image.setImageBitmap(thumbnail);
+                if (data != null) {
 
+                    Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+
+                    destination = new File(Environment.getExternalStorageDirectory(),
+                            System.currentTimeMillis() + ".jpg");
+
+                    FileOutputStream fo;
+                    try {
+
+                        destination.createNewFile();
+                        fo = new FileOutputStream(destination);
+                        fo.write(bytes.toByteArray());
+                        fo.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (imgAsli.getVisibility() == View.GONE) {
+                        SelectImage.setText("افزودن عکس");
+                    } else if (imgAsli.getVisibility() == View.VISIBLE) {
+                        SelectImage.setText("افزودن عکسی دیگر");
+                    }
+
+                    if (imgAsli.getVisibility() == View.GONE) {
+                        imgAsli.setVisibility(View.VISIBLE);
+                        file1 = destination;
+                        Log.i("file1", "1: " + file1.toString());
+                    } else if (imgAsli.getVisibility() == View.VISIBLE && img2.getVisibility() == View.GONE) {
+                        img2.setVisibility(View.VISIBLE);
+                        file2 = destination;
+                        Log.i("file2", "2: " + file2.toString());
+
+                    } else if (img2.getVisibility() == View.VISIBLE && img3.getVisibility() == View.GONE) {
+                        img3.setVisibility(View.VISIBLE);
+                        file3 = destination;
+                        Log.i("file3", "3: " + file3.toString());
+
+                    }
+
+                    image.setImageBitmap(thumbnail);
+
+                }
             }
         }
     }
@@ -963,8 +968,8 @@ public class EditAgahi extends AppCompatActivity {
             CropIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
             CropIntent.putExtra("crop", "true");
-            CropIntent.putExtra("outputX", 100);
-            CropIntent.putExtra("outputY", 100);
+            CropIntent.putExtra("outputX", 512);
+            CropIntent.putExtra("outputY", 512);
             CropIntent.putExtra("aspectX", 3);
             CropIntent.putExtra("aspectY", 3);
             CropIntent.putExtra("scaleUpIfNeeded", true);
