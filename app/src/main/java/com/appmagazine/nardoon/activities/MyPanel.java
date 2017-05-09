@@ -50,7 +50,6 @@ public class MyPanel extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
     EndlessRecyclerViewScrollListener scrollListener;
     LinearLayout llFilter;
-    public static ProgressDialog dialog;
     String myDevice;
     private String id_confirmaation;
 
@@ -137,13 +136,11 @@ public class MyPanel extends AppCompatActivity {
         client.get(App.urlApi+"buylog/"+id_confirmaation , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
         @Override
         public void onStart() {
-            dialog = ProgressDialog.show(MyPanel.this, null, null,true, false);
-            dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
-            dialog.setContentView(R.layout.progress_layout_small);
+            swipeRefreshLayout.setRefreshing(true);
         }
         @Override
         public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-            dialog.hide();
+            swipeRefreshLayout.setRefreshing(false);
 
             String value = new String(response);
 
@@ -167,9 +164,11 @@ public class MyPanel extends AppCompatActivity {
             // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
             if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
             {
+                swipeRefreshLayout.setRefreshing(false);
                 App.CustomToast(" خطا.لطفا مجددا امتحان کنید ");
 
             }else{
+                swipeRefreshLayout.setRefreshing(false);
                 App.CustomToast(" خطا.لطفا مجددا امتحان کنید ");
             }
         }

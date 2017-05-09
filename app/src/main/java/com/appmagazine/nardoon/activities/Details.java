@@ -267,7 +267,7 @@ public class Details extends AppCompatActivity {
                 file.write("favorite" , likes);
 
             }else{
-                    Toast.makeText(App.context ,"آگهی نشان شد", Toast.LENGTH_SHORT).show();
+                    App.CustomToast("آگهی نشان شد");
                     String likes = file.read("favorite");
                 if(likes.equals("")) {
                     file.write("favorite", idAgahi);

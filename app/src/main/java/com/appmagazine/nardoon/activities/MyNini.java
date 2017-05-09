@@ -56,7 +56,6 @@ public class MyNini extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
     EndlessRecyclerViewScrollListener scrollListener;
     LinearLayout llFilter;
-    public static ProgressDialog dialog;
     private String id_confirmaation;
     private String status;
 
@@ -108,9 +107,13 @@ public class MyNini extends AppCompatActivity {
 
             if (mWifi.isConnected() || isMobileDataEnabled()) {
                 webServiceGetNini();
-            }else
+                swipeRefreshLayout.setRefreshing(true);
+
+            }else {
                 App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
-        }else {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+            }else {
             Intent intent = new Intent(App.context, Login.class);
             startActivity(intent);
         }
@@ -125,9 +128,13 @@ public class MyNini extends AppCompatActivity {
 
                     if (mWifi.isConnected() || isMobileDataEnabled()) {
                         webServiceGetNini();
-                    }else
+                        swipeRefreshLayout.setRefreshing(true);
+
+                    }else {
                         App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
-                }else {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                    }else {
                     Intent intent = new Intent(App.context, Login.class);
                     startActivity(intent);
                 }
@@ -146,9 +153,13 @@ public class MyNini extends AppCompatActivity {
 
                     if (mWifi.isConnected() || isMobileDataEnabled()) {
                         webServiceGetNini();
-                    }else
+                        swipeRefreshLayout.setRefreshing(true);
+
+                    }else {
                         App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
-                }else {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                    }else {
                     Intent intent = new Intent(App.context, Login.class);
                     startActivity(intent);
                 }
@@ -166,13 +177,10 @@ public class MyNini extends AppCompatActivity {
         client.get(App.urlApi+"nini/"+id_confirmaation , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
-                dialog = ProgressDialog.show(MyNini.this, null, null,true, false);
-                dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
-                dialog.setContentView(R.layout.progress_layout_small);
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                dialog.hide();
+                swipeRefreshLayout.setRefreshing(false);
 
                 String value = new String(response);
 
@@ -196,10 +204,11 @@ public class MyNini extends AppCompatActivity {
                 // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
-                    dialog.hide();
+                    swipeRefreshLayout.setRefreshing(false);
                     App.CustomToast(" نی نی عکسی موجود نیست");
 
                 }else{
+                    swipeRefreshLayout.setRefreshing(false);
                     App.CustomToast(" لطفا دوباره سعی کنید ");
                 }
             }

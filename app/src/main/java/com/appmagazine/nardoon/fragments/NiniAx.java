@@ -59,7 +59,6 @@ public class NiniAx extends Fragment implements TextWatcher {
     SwipeRefreshLayout swipeRefreshLayout;
     EndlessRecyclerViewScrollListener scrollListener;
     LinearLayout llFilter;
-    public static ProgressDialog dialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -88,10 +87,13 @@ public class NiniAx extends Fragment implements TextWatcher {
 
                 if (mWifi.isConnected() || isMobileDataEnabled()) {
                     webServiceGetNini();
-                }else
+                    swipeRefreshLayout.setRefreshing(true);
+                }else {
                     App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
+                    swipeRefreshLayout.setRefreshing(false);
+                }
 
-            }
+                }
         };
 
         ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -99,11 +101,14 @@ public class NiniAx extends Fragment implements TextWatcher {
 
         if (mWifi.isConnected() || isMobileDataEnabled()) {
             webServiceGetNini();
-        }else
+            swipeRefreshLayout.setRefreshing(true);
+        }else {
             App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
+            swipeRefreshLayout.setRefreshing(false);
+        }
 
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 
@@ -113,9 +118,13 @@ public class NiniAx extends Fragment implements TextWatcher {
 
                 if (mWifi.isConnected() || isMobileDataEnabled()) {
                     webServiceGetNini();
-                }else
+                    swipeRefreshLayout.setRefreshing(true);
+
+                }else {
                     App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
-                scrollListener.resetState();
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+                    scrollListener.resetState();
             }
         });
 
@@ -146,13 +155,10 @@ public class NiniAx extends Fragment implements TextWatcher {
         client.get(App.urlApi+"nini" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
-                dialog = ProgressDialog.show(getActivity(), null, null,true, false);
-                dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
-                dialog.setContentView(R.layout.progress_layout_small);
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                dialog.hide();
+                swipeRefreshLayout.setRefreshing(false);
 
                 String value = new String(response);
 
@@ -176,10 +182,11 @@ public class NiniAx extends Fragment implements TextWatcher {
                 // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
-                    App.CustomToast("آگهی موجود نیست");
+                    swipeRefreshLayout.setRefreshing(false);
+                    App.CustomToast("عکسی موجود نیست");
 
                 }else{
-                    App.CustomToast("fail "+statusCode);
+                    swipeRefreshLayout.setRefreshing(false);
                     App.CustomToast(" لطفا دوباره سعی کنید ");
                 }
             }

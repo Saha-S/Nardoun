@@ -51,7 +51,6 @@ public class Main extends Fragment implements TextWatcher{
     List<Poster> array;
     SwipeRefreshLayout swipeRefreshLayout;
     EndlessRecyclerViewScrollListener scrollListener;
-    public static ProgressDialog dialog;
 
 
 
@@ -79,9 +78,12 @@ public class Main extends Fragment implements TextWatcher{
                 NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
                 if (mWifi.isConnected() || isMobileDataEnabled()) {
+                    swipeRefreshLayout.setRefreshing(true);
                     webServiceGetAgahi();
-                }else
+                }else{
                     App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
+                    swipeRefreshLayout.setRefreshing(false);
+                }
             }
         };
 
@@ -90,12 +92,16 @@ public class Main extends Fragment implements TextWatcher{
 
         if (mWifi.isConnected() || isMobileDataEnabled()) {
             webServiceGetAgahi();
+            swipeRefreshLayout.setRefreshing(true);
 
-        }else
+        }else {
             App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
+            swipeRefreshLayout.setRefreshing(false);
+
+        }
 
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 
@@ -105,10 +111,15 @@ public class Main extends Fragment implements TextWatcher{
 
                 if (mWifi.isConnected() || isMobileDataEnabled()) {
                     webServiceGetAgahi();
-                }else
-                    App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
+                    swipeRefreshLayout.setRefreshing(true);
 
-                scrollListener.resetState();
+                }else {
+
+                    App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+
+                    scrollListener.resetState();
             }
         });
 
@@ -141,7 +152,6 @@ public class Main extends Fragment implements TextWatcher{
     @Override
     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         adapter.filter(charSequence.toString());
-        Log.i("sssssssss1" , "mishe?");
     }
 
     @Override
@@ -158,13 +168,10 @@ public class Main extends Fragment implements TextWatcher{
         client.get(App.urlApi+"agahis", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
-                dialog = ProgressDialog.show(getActivity(), null, null,true, false);
-                dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
-                dialog.setContentView(R.layout.progress_layout_small);
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                dialog.hide();
+                swipeRefreshLayout.setRefreshing(false);
 
                 String value = new String(response);
 
@@ -176,11 +183,11 @@ public class Main extends Fragment implements TextWatcher{
                     }
                     adapter.update(array);
                     swipeRefreshLayout.setRefreshing(false);
-                    dialog.hide();
+                    swipeRefreshLayout.setRefreshing(false);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    dialog.hide();
+                    swipeRefreshLayout.setRefreshing(false);
                 }
             }
             @Override
@@ -190,10 +197,11 @@ public class Main extends Fragment implements TextWatcher{
                 // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
+                    swipeRefreshLayout.setRefreshing(false);
                     App.CustomToast("آگهی موجود نیست");
 
                 }else{
-                    App.CustomToast("fail "+statusCode);
+                    swipeRefreshLayout.setRefreshing(false);
                     App.CustomToast(" لطفا دوباره سعی کنید ");
                 }
             }

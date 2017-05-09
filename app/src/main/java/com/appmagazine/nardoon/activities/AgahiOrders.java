@@ -40,7 +40,6 @@ public class AgahiOrders extends AppCompatActivity {
     List<AgahiOrder> array;
     SwipeRefreshLayout swipeRefreshLayout;
     EndlessRecyclerViewScrollListener scrollListener;
-    public static ProgressDialog dialog;
     String myDevice;
 
     @Override
@@ -112,27 +111,21 @@ Log.i("aassaass", App.urlApi+"factorsbyagahi/"+ MyAgahiAdapter.idAgahi);
         client.get(App.urlApi+"factorsbyagahi/"+ MyAgahiAdapter.idAgahi, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
         @Override
         public void onStart() {
-            dialog = ProgressDialog.show(AgahiOrders.this, null, null,true, false);
-            dialog.getWindow().setBackgroundDrawable( new ColorDrawable( Color.TRANSPARENT ) );
-            dialog.setContentView(R.layout.progress_layout_small);
+            swipeRefreshLayout.setRefreshing(true);
         }
         @Override
         public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-            dialog.hide();
+            swipeRefreshLayout.setRefreshing(false);
 
             String value = new String(response);
-            Log.i("ssssss3", value.toString());
 
             try {
 
                 JSONArray posters = new JSONArray(value);
                 for (int i = 0; i < posters.length(); i++) {
                     array.add(new AgahiOrder(posters.getJSONObject(i)));
-                    Log.i("ssssss2", array.toString());
-
                 }
                 adapter.update(array);
-                Log.i("ssssss1", array.toString());
                 swipeRefreshLayout.setRefreshing(false);
             } catch (JSONException e1) {
 
@@ -146,13 +139,12 @@ Log.i("aassaass", App.urlApi+"factorsbyagahi/"+ MyAgahiAdapter.idAgahi);
             // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
             if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
             {
-                dialog.hide();
-                App.CustomToast("آگهی با این شماره وجود ندارد !");
+                swipeRefreshLayout.setRefreshing(false);
+                App.CustomToast("سفارشی موجود نیست");
 
             }else{
 
-                dialog.hide();
-                App.CustomToast("fail "+statusCode);
+                swipeRefreshLayout.setRefreshing(false);
                 App.CustomToast(" لطفا دوباره سعی کنید ");
             }
         }
