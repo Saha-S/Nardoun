@@ -560,8 +560,7 @@ public class SMS extends Fragment {
                     NetworkInfo mWifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
                     if (mWifi.isConnected() || isMobileDataEnabled()) {
-                      //  pay();
-                        webServiceBuylog();
+                        pay();
                     }else
                         App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
 

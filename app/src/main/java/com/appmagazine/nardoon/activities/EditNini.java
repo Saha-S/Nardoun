@@ -393,7 +393,6 @@ public class EditNini extends AppCompatActivity {
 
                 FileOutputStream fo;
                 try {
-
                     destination.createNewFile();
                     fo = new FileOutputStream(destination);
                     fo.write(bytes.toByteArray());
