@@ -34,6 +34,7 @@ import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.DetailsImagePagerAdapter;
 import com.appmagazine.nardoon.FileOperations;
 import com.appmagazine.nardoon.R;
+import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
@@ -148,7 +149,7 @@ public class Details extends AppCompatActivity {
 
 
         sliderShow = (SliderLayout) findViewById(R.id.slider);
-       // sliderShow.setCustomIndicator((PagerIndicator) findViewById(R.id.custom_indicator));
+    //    sliderShow.setCustomIndicator((PagerIndicator) findViewById(R.id.custom_indicator));
         sliderShow.stopAutoCycle();
 
 
