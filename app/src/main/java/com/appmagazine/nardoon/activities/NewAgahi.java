@@ -186,7 +186,7 @@ package com.appmagazine.nardoon.activities;
                         }
                     }
                                                    });
-                    ScrollView scroll = (ScrollView) findViewById(R.id.scroll) ;
+                ScrollView scroll = (ScrollView) findViewById(R.id.scroll) ;
 
 
                 Intent intent=getIntent();

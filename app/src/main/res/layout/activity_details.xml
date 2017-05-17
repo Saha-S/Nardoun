@@ -485,11 +485,37 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:titleEnabled="false">
 
+
             <com.daimajia.slider.library.SliderLayout
                 android:id="@+id/slider"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-            />
+                >
+
+
+            </com.daimajia.slider.library.SliderLayout>
+
+            <com.daimajia.slider.library.Indicators.PagerIndicator
+                android:id="@+id/custom_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="355dp"
+                android:background="@drawable/indicator_corner_bg"
+                android:gravity="bottom|center"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                app:padding_bottom="4dp"
+                app:padding_left="3dp"
+                app:padding_right="3dp"
+                app:padding_top="4dp"
+                app:selected_color="#f60"
+                app:selected_height="6dp"
+                app:selected_width="6dp"
+                app:shape="oval"
+                app:unselected_color="#ffffff"
+                app:unselected_height="6dp"
+                app:unselected_width="6dp" />
 
 
             <android.support.v7.widget.Toolbar

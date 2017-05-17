@@ -149,7 +149,9 @@ public class Details extends AppCompatActivity {
 
 
         sliderShow = (SliderLayout) findViewById(R.id.slider);
-    //    sliderShow.setCustomIndicator((PagerIndicator) findViewById(R.id.custom_indicator));
+        sliderShow.setCustomIndicator((PagerIndicator) findViewById(R.id.custom_indicator));
+       // sliderShow.setIndicatorVisibility(PagerIndicator.IndicatorVisibility.Visible);
+
         sliderShow.stopAutoCycle();
 
 
