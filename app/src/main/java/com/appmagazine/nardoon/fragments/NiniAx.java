@@ -45,6 +45,7 @@ import org.json.JSONException;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
@@ -166,7 +167,10 @@ public class NiniAx extends Fragment implements TextWatcher {
 
                     JSONArray posters = new JSONArray(value);
                     for (int i = 0; i < posters.length(); i++) {
-                        array.add(new Nini(posters.getJSONObject(i)));
+                        if (( Arrays.asList(posters.getJSONObject(i).getString("validity")).contains("10")) ||( Arrays.asList(posters.getJSONObject(i).getString("validity")).contains("1"))) {
+
+                            array.add(new Nini(posters.getJSONObject(i)));
+                        }
                     }
                     adapter.update(array);
                     swipeRefreshLayout.setRefreshing(false);

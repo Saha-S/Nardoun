@@ -39,6 +39,7 @@ public class AgahiOrdersAdapter extends RecyclerView.Adapter<AgahiOrdersAdapter.
     public static String mobile;
 
     private int lastPosition = -1;
+    public static String address;
 
     public static class PosterHolder extends RecyclerView.ViewHolder {
 
@@ -91,8 +92,6 @@ public class AgahiOrdersAdapter extends RecyclerView.Adapter<AgahiOrdersAdapter.
 
         }
 
-        Log.i("aaaassss", mDataset.get(position).id);
-        Log.i("aaaassss", mDataset.get(position).order.toString());
         Animation animation = AnimationUtils.loadAnimation(context,
                 (position > lastPosition) ? android.R.anim.slide_in_left
                         : android.R.anim.slide_out_right);
@@ -105,6 +104,7 @@ public class AgahiOrdersAdapter extends RecyclerView.Adapter<AgahiOrdersAdapter.
                 order=mDataset.get(position).order.toString();
                 time=mDataset.get(position).created_at.toString();
                 price=mDataset.get(position).price.toString();
+                address=mDataset.get(position).address.toString();
                 intent.putExtra("ORDER" ,mDataset.get(position).order.toString() );
                 intent.putExtra("PRICE" ,mDataset.get(position).price.toString() );
                 intent.putExtra("AGAHIID" ,mDataset.get(position).agahi_id.toString() );

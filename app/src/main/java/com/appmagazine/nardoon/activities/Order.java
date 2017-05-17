@@ -255,7 +255,7 @@ public class Order extends AppCompatActivity {
                 String status = prefs2.getString("islogin", "0");
                 String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
 
-                if (status.matches("1")) {
+                if (status.matches("1") && !id_confirmaationSH.equals("0")) {
                     id_confirmaation = id_confirmaationSH.replace("[{\"id\":", "").replace("}]", "");
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Order.this);
 

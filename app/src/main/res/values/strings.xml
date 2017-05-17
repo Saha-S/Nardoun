@@ -9,9 +9,9 @@
     <string name="this_is_tab_2">This is tab 2</string>
     <string name="this_is_tab_3">This is tab 3</string>
 
-    <string name="daemi">همراه اول دائمی (نور آباد و مصیری)</string>
-    <string name="etebari">همراه اول اعتباری (نور آباد و مصیری)</string>
-    <string name="irancell">ایرانسل (نور آباد و مصیری)</string>
+    <string name="daemi">همراه اول دائمی (نور آباد ممسنی)</string>
+    <string name="etebari">همراه اول اعتباری (نور آباد ممسنی)</string>
+    <string name="irancell">ایرانسل (نور آباد ممسنی)</string>
     <string name="numberOfSMS">تعداد پیامک های انتخابی شما: </string>
     <string name="numberOfHorof">تعداد کارکتر:فارسی 70 (کارکتر یک پیامک) </string>
     <string name="filterMatn">به دلیل فیلتر برخی از کلمات مانند قرعه کشی، جایزه، برنده و غیره از به کار بردن این کلمات در متن پیامک خودداری نمایید
@@ -28,7 +28,9 @@
     <string name="tedadMojaz">امکان ارسال وجود ندارد . تعداد پیامک های شما بیشتر از اعتبارتان می باشد.</string>
     <string name="failSend">پیامک ارسال نشد . لطفا لحظاتی بعد مجددا اممتحان کنید.</string>
     <string name="yourOrder">سفارش شما با موفقیت ثبت شد</string>
-    <string name="screenshot">لطفا از سفارش خود اسکرین شات گرفته و تا زمان دریافت سفارش آن رو نزد خود نگه دارید.</string>
+    <string name="screenshot">لطفا از شماره پیگیری سفارش خود را یادداشت نموده و تا زمان دریافت سفارش آن رو نزد خود نگه دارید.</string>
+    <string name="niniText">انتخاب برنده نی نی عکس در پایان هر ماه ساعت 10 شب انجام میشود.</string>
+    <string name="niniExpire">لطفا توجه داشته باشید نی نی عکس ها در پایان هر ماه پس از انتخاب عکس برتر منقضی خواهند شد و نمایش داده نمیشوند.</string>
     <string name="aboutus">
         ناردون یک برند قانونی و ثبت شده میباشد که با هدف خرید و فروش انلاین و بی واسطه ما بین خریدار و فروشنده طراحی شده است. \n
         در بخش اگهی های ناردون تمامی لوازم نو و دست دوم مورد نیاز خود را میتوانید جستجو کنید\n\n
@@ -85,6 +87,8 @@
 
 
 </string>
+    <integer-array name="img_id_arr">
+    </integer-array>
 
 
 

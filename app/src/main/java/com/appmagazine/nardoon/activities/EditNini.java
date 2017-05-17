@@ -214,7 +214,7 @@ public class EditNini extends AppCompatActivity {
                     String status = prefs2.getString("islogin", "0");
                     String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
 
-                    if (status.matches("1")) {
+                    if (status.matches("1") && !id_confirmaationSH.equals("0")) {
                         id_confirmaation = id_confirmaationSH.replace("[{\"id\":", "").replace("}]", "");
                         webServiceEditAgahi();
                     }else {
@@ -241,11 +241,10 @@ public class EditNini extends AppCompatActivity {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
 
-        if(MyNiniAdapter.status.equals("3")){
-            params.put("validity","3");
-        }else{
-            params.put("validity","0");
-        }
+        params.put("validity","0");
+        params.put("point","0");
+        params.put("pointm","0");
+
 
         params.put("name", edtName.getText()); //  ********** parametr  ersali dar surate niaz
         params.put("age", edtAge.getText());
@@ -253,12 +252,10 @@ public class EditNini extends AppCompatActivity {
 
         if(file1!=null){
             try {
-                Log.i("file: " ,"....:" + file1.toString());
                 params.put("file", file1);
             } catch(FileNotFoundException e) {}
         }
          if(file1==null && imgAsli.getVisibility()==View.VISIBLE){
-            Log.i("file11: " ,"....:" + MyNiniAdapter.image.toString());
             params.put("image", MyNiniAdapter.image);
         }
 
@@ -276,6 +273,8 @@ public class EditNini extends AppCompatActivity {
               //  intent.putExtra("id", Details.idAgahi+"");
                // startActivity(intent);
                 App.CustomToast("آگهی ویرایش شد !");
+                Intent intent = new Intent(App.context , MyNini.class);
+                startActivity(intent);
 
                 finish();
 
@@ -288,12 +287,12 @@ public class EditNini extends AppCompatActivity {
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
                     dialog.hide();
-                    App.CustomToast("آگهی با این شماره وجود ندارد !");
+                    App.CustomToast(" خطایی رخ داده است . لطفا دقایقی دیگر امتحان کنید ");
 
                 }else{
                     dialog.hide();
-                    App.CustomToast("fail "+statusCode);
-                    App.CustomToast(" لطفا دوباره سعی کنید ");
+                 //   App.CustomToast("fail "+statusCode);
+                    App.CustomToast(" خطایی رخ داده است . لطفا دقایقی دیگر امتحان کنید ");
                 }
             }
 
@@ -407,7 +406,6 @@ public class EditNini extends AppCompatActivity {
 
 
                     file1 = destination;
-                    Log.i("file1" , "1: "+file1.toString());
 
                 image.setImageBitmap(thumbnail);
 

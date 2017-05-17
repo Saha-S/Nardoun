@@ -54,6 +54,7 @@ public class AgahiOrderDetails extends Activity {
         final TextView mobile = (TextView) findViewById(R.id.mobile);
         TextView AgahiId = (TextView) findViewById(R.id.idAgahi);
         TextView agahiMobile = (TextView) findViewById(R.id.agahi_mobile);
+        TextView address = (TextView) findViewById(R.id.address);
         LinearLayout container = (LinearLayout) findViewById(R.id.container);
         LinearLayout llCall = (LinearLayout) findViewById(R.id.ll_call);
 
@@ -63,6 +64,8 @@ public class AgahiOrderDetails extends Activity {
             idAgahi = AgahiOrdersAdapter.id;
             mobile.setText(AgahiOrdersAdapter.mobile);
             agahiMobile.setText(AgahiOrdersAdapter.agahiMobile);
+            address.setText(AgahiOrdersAdapter.address);
+
             AgahiId.setText(idAgahi);
 
         llCall.setOnClickListener(new View.OnClickListener() {
@@ -75,10 +78,6 @@ public class AgahiOrderDetails extends Activity {
 
             }
         });
-
-        //   id =  intent.getStringExtra("ID").toString();
-            Log.i("FFFFFFFFFFF" ,isused );
-            Log.i("FFFFFFFFFFF" ,idAgahi );
 
             if(isused.equals("0")){
                 send.setVisibility(View.VISIBLE);
@@ -94,16 +93,12 @@ public class AgahiOrderDetails extends Activity {
             txtTime.setText(AgahiOrdersAdapter.time.toString());
 
         try {
-            //   Intent intent = getIntent();
             String order = AgahiOrdersAdapter.order;
             menuJsonArray = new JSONArray(order);
-            //     Log.i("aaaaaaa122322", order);
-            Log.i("aaaaaaa12234433", menuJsonArray.toString());
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.i("aaaaaaa122333", menuJsonArray.toString());
         try {
             for (int i = 0; i < menuJsonArray.length(); i++) {
 
@@ -114,7 +109,6 @@ public class AgahiOrderDetails extends Activity {
                 final TextView txtfoodPrice = (TextView) addView.findViewById(R.id.txtPrice);
 
                 final JSONObject oo = menuJsonArray.getJSONObject(i);
-                Log.i("aaaaaaa12233113", oo.getString("name").toString());
 
                 txtName.setText(oo.getString("name").toString());
                 txtNumber.setText(oo.getString("number").toString());
@@ -160,6 +154,7 @@ public class AgahiOrderDetails extends Activity {
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
                 dialog.hide();
+                App.CustomToast("تحویل داده شده");
                 send.setVisibility(View.GONE);
                 txtDone.setText("تحویل داده شده");
                 isused="1";

@@ -4,6 +4,7 @@ package com.appmagazine.nardoon;
  * Created by nadia on 4/22/2017.
  */
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.v4.view.PagerAdapter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,16 +16,23 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+
 public class DetailsImagePagerAdapter extends PagerAdapter{
     Context context;
     String images[];
     LayoutInflater layoutInflater;
 
+    private int dotsCount;
+private ImageView[] dots;
+private int[] intdots;
+
+
 
     public DetailsImagePagerAdapter(Context context, String images[]) {
         this.context = context;
         this.images = images;
-        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        layoutInflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -42,14 +50,51 @@ public class DetailsImagePagerAdapter extends PagerAdapter{
 
             View itemView = layoutInflater.inflate(R.layout.item_image, container, false);
             ImageView imageView = (ImageView) itemView.findViewById(R.id.imageView);
+
             Glide.with(App.context)
                     .load(images[position])
                     .placeholder(R.mipmap.nopic)
                     .into(imageView);
 
-            container.addView(itemView);
+        Resources r = App.context.getResources();
+        int[] bases = r.getIntArray(R.array.img_id_arr);
+        dotsCount = images.length;
 
-            //listening to image click
+
+
+/*
+        dotsCount = images.length;
+        dots = new ImageView[dotsCount];
+        intdots = new int[dotsCount];
+
+        for (int i = 0; i < dotsCount; i++) {
+            Log.i("dooooot1" , dotsCount+"");
+            View rootView = layoutInflater.inflate(R.layout.activity_details, container, false);
+
+            // final View addView = layoutInflater.inflate(R.layout.row, null);
+
+            LinearLayout row2 = (LinearLayout) rootView.findViewById(R.id.dots);
+
+            dots[i] = new ImageView(App.context);
+            Log.i("dooooot2" , i+"");
+            intdots[i]=((R.drawable.like));
+            dots[i].setImageResource((intdots[i]));
+            LinearLayout.LayoutParams layoutParams = new  LinearLayout.LayoutParams(70, 70);
+            layoutParams.setMargins(4, 2, 4, 2);
+
+            row2.addView(dots[i]);
+            Log.i("dooooot2" ,"shod");
+
+        }
+
+        intdots[position]=((R.drawable.liked));
+        dots[position].setImageResource((intdots[position]));
+*/
+        container.addView(itemView);
+
+
+
+        //listening to image click
      /*   imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

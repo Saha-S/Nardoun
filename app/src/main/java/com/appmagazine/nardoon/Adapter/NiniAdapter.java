@@ -1,6 +1,7 @@
 package com.appmagazine.nardoon.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -54,9 +57,13 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
         TextView name;
         TextView age;
         TextView likes;
+        TextView dislikes;
         ImageView imageNini;
         ToggleButton like;
         ToggleButton dislike;
+        LinearLayout llName;
+        LinearLayout llFrame;
+        FrameLayout frameLayout;
 
 
         public PosterHolder(View itemView) {
@@ -65,9 +72,13 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             name = (TextView) itemView.findViewById(R.id.txt_name);
             age = (TextView) itemView.findViewById(R.id.txt_age);
             likes = (TextView) itemView.findViewById(R.id.txt_like);
+            dislikes = (TextView) itemView.findViewById(R.id.txt_dislike);
             imageNini = (ImageView) itemView.findViewById(R.id.img_nini);
             like = (ToggleButton) itemView.findViewById(R.id.iv_like);
             dislike = (ToggleButton) itemView.findViewById(R.id.iv_dislike);
+            llName = (LinearLayout) itemView.findViewById(R.id.ll_name);
+            llFrame = (LinearLayout) itemView.findViewById(R.id.ll_frame);
+            frameLayout = (FrameLayout) itemView.findViewById(R.id.frame_layout);
 
         }
     }
@@ -112,105 +123,135 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
         file = new FileOperations();
 
-        holder.name.setText(filterPoster.get(position).name);
-        holder.age.setText(filterPoster.get(position).age );
-        holder.likes.setText(filterPoster.get(position).point);
 
-        Glide.with(context)
-                .load(App.urlimages + filterPoster.get(position).image)
-                .placeholder(R.mipmap.nopic)
-                .into(holder.imageNini);
-
-
-        String likestr =file.read("likes");
-            liksarray=likestr.split("-");
-
-
-        if(Arrays.asList(liksarray).contains(filterPoster.get(position).id+"")){
-            holder.like.setChecked(true);
-            holder.dislike.setEnabled(false);
-        }
-
-        String dislikestr =file.read("dislikes");
-            disliksarray=dislikestr.split("-");
-
-        if(Arrays.asList(disliksarray).contains(filterPoster.get(position).id+"")){
-            holder.dislike.setChecked(true);
+        String validity = filterPoster.get(position).validity;
+        if (validity.equals("10")){
+            holder.frameLayout.setVisibility(View.VISIBLE);
+            holder.llName.setBackgroundColor(Color.parseColor("#ffb300"));
+            holder.llFrame.setBackgroundResource(R.drawable.orangeframe);
             holder.like.setEnabled(false);
+            holder.dislike.setEnabled(false);
+
+            holder.name.setText("برنده این ماه "+filterPoster.get(position).name + "   -   ");
+            holder.age.setText(filterPoster.get(position).age);
+            holder.likes.setText(filterPoster.get(position).point);
+            holder.dislikes.setText(filterPoster.get(position).pointm);
+
+            Glide.with(context)
+                    .load(App.urlimages + filterPoster.get(position).image)
+                    .placeholder(R.mipmap.nopic)
+                    .into(holder.imageNini);
 
         }
+        if(validity.equals("1")) {
+            holder.frameLayout.setVisibility(View.GONE);
 
-        holder.like.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(holder.like.isChecked()== false) {
-                    webServiceDislike(filterPoster.get(position).id , holder ,position);
+            holder.name.setText(filterPoster.get(position).name + "   -   ");
+            holder.age.setText(filterPoster.get(position).age);
+            holder.likes.setText(filterPoster.get(position).point);
+            holder.dislikes.setText(filterPoster.get(position).pointm);
 
-                    String likes= "";
-                    for (int i=0;i<liksarray.length;i++) {
-                        if (!liksarray[i].equals( filterPoster.get(position).id )) {
-                            if(likes.equals(""))
-                            likes+=liksarray[i];
-                         else
-                            likes+="-"+liksarray[i];
+            Glide.with(context)
+                    .load(App.urlimages + filterPoster.get(position).image)
+                    .placeholder(R.mipmap.nopic)
+                    .into(holder.imageNini);
 
+
+            String likestr = file.read("likes");
+            liksarray = likestr.split("-");
+
+
+            if (Arrays.asList(liksarray).contains(filterPoster.get(position).id + "")) {
+                holder.like.setChecked(true);
+                holder.dislike.setEnabled(false);
+            } else {
+                holder.like.setChecked(false);
+                holder.dislike.setEnabled(true);
+            }
+
+            String dislikestr = file.read("dislikes");
+            disliksarray = dislikestr.split("-");
+
+            if (Arrays.asList(disliksarray).contains(filterPoster.get(position).id + "")) {
+                holder.dislike.setChecked(true);
+                holder.like.setEnabled(false);
+            } else {
+                holder.dislike.setChecked(false);
+                holder.like.setEnabled(true);
+            }
+
+            holder.like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (holder.like.isChecked() == false) {
+                        webServiceUnLike(filterPoster.get(position).id, holder, position);
+
+                        String likes = "";
+                        for (int i = 0; i < liksarray.length; i++) {
+                            if (!liksarray[i].equals(filterPoster.get(position).id)) {
+                                if (likes.equals(""))
+                                    likes += liksarray[i];
+                                else
+                                    likes += "-" + liksarray[i];
+
+                            }
+                        }
+                        file.write("likes", likes);
+                        holder.dislike.setEnabled(true);
+
+                    } else {
+                        webServiceLike(filterPoster.get(position).id, holder, position);
+                        //  holder.likes.setText(likes);
+                        holder.dislike.setEnabled(false);
+
+                        String likes = file.read("likes");
+                        if (likes.equals("")) {
+                            file.write("likes", filterPoster.get(position).id);
+                        } else {
+                            file.write("likes", likes + "-" + filterPoster.get(position).id);
                         }
                     }
-                    file.write("likes" , likes);
-                    holder.dislike.setEnabled(true);
-
-                }else{
-                    webServiceLike(filterPoster.get(position).id , holder ,position);
-                  //  holder.likes.setText(likes);
-                    holder.dislike.setEnabled(false);
-
-                    String likes = file.read("likes");
-                    if(likes.equals("")) {
-                        file.write("likes", filterPoster.get(position).id);
-                    }else {
-                        file.write("likes",likes +"-"+ filterPoster.get(position).id);
-                    }
                 }
-            }
-        });
+            });
 
-        holder.dislike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(holder.dislike.isChecked()== false) {
-                    webServiceLike(filterPoster.get(position).id , holder ,position);
-                    String dislikes= "";
-                    for (int i=0;i<disliksarray.length;i++) {
-                        if (!disliksarray[i].equals( filterPoster.get(position).id )) {
-                            if(dislikes.equals(""))
-                                dislikes+=disliksarray[i];
-                            else
-                                dislikes+="-"+disliksarray[i];
+            holder.dislike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (holder.dislike.isChecked() == false) {
+                        webServiceUnDislike(filterPoster.get(position).id, holder, position);
+                        String dislikes = "";
+                        for (int i = 0; i < disliksarray.length; i++) {
+                            if (!disliksarray[i].equals(filterPoster.get(position).id)) {
+                                if (dislikes.equals(""))
+                                    dislikes += disliksarray[i];
+                                else
+                                    dislikes += "-" + disliksarray[i];
 
+                            }
                         }
-                    }
-                    file.write("dislikes" , dislikes);
-                    holder.like.setEnabled(true);
-                }else{
-                    webServiceDislike(filterPoster.get(position).id , holder ,position);
-                    holder.like.setEnabled(false);
-                    String dislikes = file.read("dislikes");
-                    if(dislikes.equals("")) {
-                        file.write("dislikes", filterPoster.get(position).id);
-                    }else {
-                        file.write("dislikes",dislikes +"-"+ filterPoster.get(position).id);
-                    }
+                        file.write("dislikes", dislikes);
+                        holder.like.setEnabled(true);
+                    } else {
+                        webServiceDislike(filterPoster.get(position).id, holder, position);
+                        holder.like.setEnabled(false);
+                        String dislikes = file.read("dislikes");
+                        if (dislikes.equals("")) {
+                            file.write("dislikes", filterPoster.get(position).id);
+                        } else {
+                            file.write("dislikes", dislikes + "-" + filterPoster.get(position).id);
+                        }
 
+                    }
                 }
-            }
-        });
+            });
 
 
-        Animation animation = AnimationUtils.loadAnimation(context,
-                (position > lastPosition) ? android.R.anim.slide_in_left
-                        : android.R.anim.slide_out_right);
-        holder.itemView.startAnimation(animation);
-        lastPosition = position;
+            Animation animation = AnimationUtils.loadAnimation(context,
+                    (position > lastPosition) ? android.R.anim.slide_in_left
+                            : android.R.anim.slide_out_right);
+            holder.itemView.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
     public void update(List<Nini> list) {
@@ -231,32 +272,26 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
         client.get(App.urlApi+"nini/" + id + "/like" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
-                // called before request is started
-
-                // loginpb1.setVisibility(View.VISIBLE);      *************** inja  progressbar faal mishe
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
                 String value = new String(response);
-              //  likes = value;
                 holder.likes.setText(value);
 
             }
 
+
+
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-
-                // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
-                if (statusCode == 404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                if (statusCode == 403)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
-                    App.CustomToast("آگهی با این شماره وجود ندارد !");
+                    App.CustomToast(" در حال حاضر امکان رای دادن وجود ندارد. ");
 
                 } else {
-                    App.CustomToast("fail " + statusCode);
-                    App.CustomToast(" لطفا دوباره سعی کنید ");
+                    App.CustomToast(" لطفا مجددا امتحان کنید ");
                 }
             }
 
@@ -266,6 +301,52 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             }
         });
     }
+    ///////////////////////////////////// unLIKE //////////////////////////////
+    public void webServiceUnLike(String id , final PosterHolder holder, final int position) {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        client.get(App.urlApi+"nini/" + id + "/unlike" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+            @Override
+            public void onStart() {
+                // called before request is started
+
+                // loginpb1.setVisibility(View.VISIBLE);      *************** inja  progressbar faal mishe
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
+                String value = new String(response);
+                //  likes = value;
+                holder.likes.setText(value);
+
+            }
+
+
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+
+                // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
+                if (statusCode == 403)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
+                    App.CustomToast(" در حال حاضر امکان رای دادن وجود ندارد. ");
+
+                } else {
+                    App.CustomToast(" لطفا مجددا امتحان کنید ");
+                }
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+                // called when request is retried
+            }
+        });
+    }
+
+    ///////////////////////////////////// unLIKE //////////////////////////////
 
     public void webServiceDislike(String id, final PosterHolder holder, final int position) {
 
@@ -284,7 +365,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
                 String value = new String(response);
                // likes = value;
-                holder.likes.setText(value);
+                holder.dislikes.setText(value);
 
 
             }
@@ -294,13 +375,12 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                 // called when response HTTP status is "4XX" (eg. 401, 403, 404)
 
                 // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
-                if (statusCode == 404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                if (statusCode == 403)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
-                    App.CustomToast("آگهی با این شماره وجود ندارد !");
+                    App.CustomToast(" در حال حاضر امکان رای دادن وجود ندارد. ");
 
                 } else {
-                    App.CustomToast("fail " + statusCode);
-                    App.CustomToast(" لطفا دوباره سعی کنید ");
+                    App.CustomToast(" لطفا مجددا امتحان کنید ");
                 }
             }
 
@@ -310,6 +390,52 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             }
         });
     }
+
+    ///////////////////////////////////////////// UNDISLIKE /////////////////////////////////
+    public void webServiceUnDislike(String id, final PosterHolder holder, final int position) {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        client.get(App.urlApi+"nini/" + id + "/undislike" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+            @Override
+            public void onStart() {
+                // called before request is started
+
+                // loginpb1.setVisibility(View.VISIBLE);      *************** inja  progressbar faal mishe
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
+                String value = new String(response);
+                // likes = value;
+                holder.dislikes.setText(value);
+
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+
+                // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
+                if (statusCode == 403)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
+                    App.CustomToast(" در حال حاضر امکان رای دادن وجود ندارد. ");
+
+                } else {
+                    App.CustomToast(" لطفا مجددا امتحان کنید ");
+                }
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+                // called when request is retried
+            }
+        });
+    }
+
+    ///////////////////////////////////////////// UNDISLIKE /////////////////////////////////
 
 
 }

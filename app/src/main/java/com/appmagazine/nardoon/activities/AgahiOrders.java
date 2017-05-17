@@ -99,7 +99,6 @@ public class AgahiOrders extends AppCompatActivity {
                 scrollListener.resetState();
             }
         });
-Log.i("aassaass", App.urlApi+"factorsbyagahi/"+ MyAgahiAdapter.idAgahi);
     }
     public  void webServiceGetAgahi()
     {

@@ -62,7 +62,7 @@ import cz.msebera.android.httpclient.cookie.SM;
 public class DetailsSms extends AppCompatActivity {
 
     EditText edtMobile,edtmatn ;
-    String cnt1 , cnt2 , cnt11,matn;
+    String matn;
     TextView txtCharacter , txtTedadMojaz;
     int countSMS=1;
     int credit;
@@ -71,6 +71,8 @@ public class DetailsSms extends AppCompatActivity {
     int tedadMojaz;
     private ProgressDialog dialog;
     Button send , test;
+    int webCredit;
+    int daemi , etebari , irancell;
 
 
     @Override
@@ -78,12 +80,26 @@ public class DetailsSms extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.details_sms);
 
-
+        TextView tvtitle = (TextView) findViewById(R.id.tv_mainpage_title);
+        TextView appbarTitle = (TextView) findViewById(R.id.tv_appbar_title);
+        ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
+        appbarTitle.setText("ارسال پیامک");
         Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
-        TextView tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
-        txtTedadMojaz=(TextView) findViewById(R.id.txt_tedad_mojaz);
         tvtitle.setTypeface(tfmorvarid);
+        ibBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        appbarTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
+        txtTedadMojaz=(TextView) findViewById(R.id.txt_tedad_mojaz);
         txtCharacter = (TextView) findViewById(R.id.txt_character);
         edtmatn = (EditText) findViewById(R.id.edt_matn);
         send = (Button) findViewById(R.id.btn_send);
@@ -95,18 +111,13 @@ public class DetailsSms extends AppCompatActivity {
         matn = intent.getStringExtra("MATN");
         flag = intent.getStringExtra("FLAG");
         id = intent.getStringExtra("ID");
-        cnt11 = intent.getStringExtra("CNT11");
-        cnt1 = intent.getStringExtra("CNT1");
-        cnt2 = intent.getStringExtra("CNT2");
-        Log.i("mylog" ,cnt1 + " ,,, "  +cnt11 +",,,"+cnt2 );
+        webServiceGetCredit();
+
         if(matn!=null) {
             edtmatn.setText(matn.toString());
         }
-        if(flag.equals("sms")) {
-            credit = (SMS.Sdaemi + SMS.Setebari + SMS.Sirancell);
-        }if(flag.equals("panel")){
-            credit = (PayDetails.Sdaemi + PayDetails.Setebari + PayDetails.Sirancell);
-        }
+
+
         TextWatcher inputTextWatcherMatn = new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 if(s.length()<=70){
@@ -171,6 +182,16 @@ public class DetailsSms extends AppCompatActivity {
 
         edtmatn.addTextChangedListener(inputTextWatcherMatn);
 
+        test.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (edtMobile.getText().toString().trim().length() < 11 || edtMobile.getText().toString().trim().length() > 11) {
+                    App.CustomToast("لطفا یک شماره تلفن معتبر وارد کنید.");
+                }else {
+                webServiceTestSMS();
+                }
+            }
+        });
 
 
     }
@@ -182,8 +203,6 @@ public class DetailsSms extends AppCompatActivity {
             txtTedadMojaz.setVisibility(View.VISIBLE);
             send.setClickable(false);
             test.setClickable(false);
-
-
         }else {
             txtTedadMojaz.setVisibility(View.GONE);
             send.setClickable(true);
@@ -225,40 +244,15 @@ public class DetailsSms extends AppCompatActivity {
         params.put("content", edtmatn.getText()); //  ********** parametr  ersali dar surate niaz
       //  params.put("count", intent.getStringExtra("COUNT"));
         if(flag.equals("sms")) {
-            if(SMS.Setebari!=0){
-                        params.put("cnt11", tedadMojaz);
-                        params.put("cnt1", "0");
-                        params.put("cnt2", "0");
-            }
-            if(SMS.Sdaemi!=0){
-                params.put("cnt11", "0");
-                params.put("cnt1", tedadMojaz);
-                params.put("cnt2", "0");
-            }
-            if(SMS.Sirancell!=0){
-                params.put("cnt11", "0");
-                params.put("cnt1", "0");
-                params.put("cnt2", tedadMojaz);
-            }
-
+                params.put("cnt11", etebari);
+                params.put("cnt1", daemi);
+                params.put("cnt2", irancell);
         }
         if(flag.equals("panel")){
-            if(PayDetails.Setebari!=0){
-                params.put("cnt11", tedadMojaz);
-                params.put("cnt1", "0");
-                params.put("cnt2", "0");
-            }
-            if(PayDetails.Sdaemi!=0){
-                params.put("cnt11", "0");
-                params.put("cnt1", tedadMojaz);
-                params.put("cnt2", "0");
-            }
-            if(PayDetails.Sirancell!=0){
-                params.put("cnt11", "0");
-                params.put("cnt1", "0");
-                params.put("cnt2", tedadMojaz);
-            }    }
-
+            params.put("cnt11", etebari);
+            params.put("cnt1", daemi);
+            params.put("cnt2", irancell);
+        }
 
 
         client.post("http://nardoun.ir/api/sendsms", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
@@ -301,7 +295,7 @@ public class DetailsSms extends AppCompatActivity {
         });
     }
 
-    public  void webServiceTestSMS(View view)
+    public  void webServiceTestSMS()
     {
 
         AsyncHttpClient client = new AsyncHttpClient();
@@ -322,8 +316,16 @@ public class DetailsSms extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
                 //dialog.hide();
                 App.CustomToast("پیامک با موفقیت ارسال شد");
-                credit = credit - (1 * countSMS );
+                webCredit = webCredit - (1 * countSMS );
                 webServiceUpdate("0");
+
+                Intent intent = new Intent(App.context, DetailsSms.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("MATN" , edtmatn.getText().toString() );
+
+                startActivity(intent);
+                finish();
+
 
 
             }
@@ -349,7 +351,7 @@ public class DetailsSms extends AppCompatActivity {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
 
-        params.put("credit",credit);
+        params.put("credit",webCredit);
         params.put("isused",isused);
 
         client.put(App.urlApi+"buylog/"+id, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
@@ -360,12 +362,7 @@ public class DetailsSms extends AppCompatActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
-                //  Intent intent = new Intent(App.context , Details.class);
-                //  intent.putExtra("id", Details.idAgahi+"");
-                // startActivity(intent);
                 App.CustomToast("اطلاعات خرید ثبت شد");
-
-                //  finish();
 
             }
             @Override
@@ -380,7 +377,6 @@ public class DetailsSms extends AppCompatActivity {
 
                 }else{
                     // dialog.hide();
-                    App.CustomToast("fail "+statusCode);
                     App.CustomToast("اطلاعات خرید ثبت نشد ");
                 }
             }
@@ -391,5 +387,77 @@ public class DetailsSms extends AppCompatActivity {
             }
         });
     }
+
+    public  void webServiceGetCredit()
+    {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        client.get(App.urlApi+"showbuylog/"+id , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+            @Override
+            public void onStart() {
+
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
+                String value = new String(response);
+                webCredit = Integer.parseInt(value);
+                if(flag.equals("sms")) {
+                    daemi=SMS.Sdaemi;
+                    etebari =SMS.Setebari;
+                    irancell = SMS.Sirancell;
+                    if(daemi>0){
+                        credit = webCredit+etebari+irancell;
+                        daemi= webCredit;
+                    }
+                    else if(etebari>0){
+                        credit = daemi+webCredit+irancell;
+                        etebari=webCredit;
+                    }
+                    else if(irancell>0){
+                        credit = daemi+etebari+webCredit;
+                        irancell=webCredit;
+                    }
+
+                }if(flag.equals("panel")){
+                    daemi=PayDetails.Sdaemi;
+                    etebari =PayDetails.Setebari;
+                    irancell = PayDetails.Sirancell;
+                    if(daemi>0){
+                        credit = webCredit+etebari+irancell;
+                        daemi= webCredit;
+                    }
+                    else if(etebari>0){
+                        credit = daemi+webCredit+irancell;
+                        etebari=webCredit;
+                    }
+                    else if(irancell>0){
+                        credit = daemi+etebari+webCredit;
+                        irancell=webCredit;
+                    }
+
+                }
+                mojazSms();
+
+
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
+                  //  App.CustomToast(" خطا.لطفا مجددا امتحان کنید ");
+
+                }else{
+                  //  App.CustomToast(" خطا.لطفا مجددا امتحان کنید ");
+                }
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+            }
+        });
+    }
+
 
 }

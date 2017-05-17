@@ -104,6 +104,7 @@ public class MyAgahiAdapter extends RecyclerView.Adapter<MyAgahiAdapter.PosterHo
         if(status.matches("0")){StatusName =  "در انتظار"; holder.status.setBackgroundColor(Color.parseColor("#ff9900"));}
         if(status.matches("2")){StatusName =  "رد شده";holder.status.setBackgroundColor(Color.RED);}
         if(status.matches("3")){StatusName =  "درانتظار پرداخت";holder.status.setBackgroundColor(Color.parseColor("#ff9900"));}
+        if(status.matches("4")){StatusName =  "منقضی شده";holder.status.setBackgroundColor(Color.RED);}
         holder.status.setText("وضعیت آگهی : "+StatusName.toString());
         holder.location.setText(mDataset.get(position).created_at+" در " +mDataset.get(position).location);
         holder.llRow.setOnClickListener(new View.OnClickListener() {

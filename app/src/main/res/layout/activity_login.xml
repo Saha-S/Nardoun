@@ -8,16 +8,6 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="right">
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="right"
-        android:layoutDirection="rtl"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer"
-        android:fitsSystemWindows="false" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,10 +24,12 @@
             />
 
         <LinearLayout
+            android:id="@+id/ll_login"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.30"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -58,7 +50,8 @@
                 android:layout_margin="10dp"
                 android:ems="10"
                 android:hint="شماره تلفن همراه"
-                android:inputType="phone" />
+                android:inputType="phone"
+                android:maxLength="11" />
 
             <Button
                 android:id="@+id/btn_login"
@@ -68,6 +61,55 @@
                 android:background="@color/colorPrimary"
                 android:onClick="isconfirmed"
                 android:text="دریافت کد فعال سازی"
+                android:textColor="#fff" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_validaty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.30"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="@string/txtvalidation"
+                android:textColor="#000"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/edt_validation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:ems="10"
+                android:hint="کد فعال سازی"
+                android:inputType="phone" />
+
+            <Button
+                android:id="@+id/btn_login2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@color/colorPrimary"
+                android:onClick="isValid"
+                android:text="ورود به ناردون"
+                android:textColor="#fff" />
+
+            <Button
+                android:id="@+id/btn_retry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:onClick="isValid"
                 android:textColor="#fff" />
         </LinearLayout>
 

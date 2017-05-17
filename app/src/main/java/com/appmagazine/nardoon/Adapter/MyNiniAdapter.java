@@ -101,57 +101,101 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
     @Override
     public void onBindViewHolder(final PosterHolder holder, final int position) {
 
-        holder.name.setText(mDataset.get(position).name);
-        holder.age.setText(mDataset.get(position).age);
-        status = mDataset.get(position).validity;
-        id_confirm = mDataset.get(position).confirmation_id;
-        image = mDataset.get(position).image;
-        idNini = mDataset.get(position).id;
+        try {
+            holder.name.setText(mDataset.get(position).name);
+            holder.age.setText(mDataset.get(position).age);
+            status = mDataset.get(position).validity;
+
+            id_confirm = mDataset.get(position).confirmation_id;
+            image = mDataset.get(position).image;
+            idNini = mDataset.get(position).id;
 
 
-        Glide.with(context)
-                .load(App.urlimages + mDataset.get(position).image)
-                .placeholder(R.mipmap.nopic)
-                .into(holder.imageNini);
-        String StatusName = null;
-
-        if(status.matches("1")){StatusName =  "منتشر شده";holder.txt.setTextColor(Color.parseColor("#008542")); holder.edit.setVisibility(View.GONE); holder.pay.setVisibility(View.GONE);}
-        if(status.matches("0")){StatusName =  "در انتظار تایید ناظر"; holder.txt.setTextColor(Color.parseColor("#ff9900")); holder.pay.setVisibility(View.GONE);}
-        if(status.matches("2")){StatusName =   "رد شده - "+ mDataset.get(position).comment ; holder.txt.setTextColor(Color.RED);holder.pay.setVisibility(View.GONE);}
-        if(status.matches("3")){StatusName =  "درانتظار پرداخت";holder.txt.setTextColor(Color.parseColor("#ff9900"));}
-        holder.txt.setText("وضعیت آگهی : "+StatusName.toString());
-
-
-        holder.edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(App.context, EditNini.class);
-                name = holder.name.getText().toString();
-                age = mDataset.get(position).age;
-                image = mDataset.get(position).image;
-                idNini = mDataset.get(position).id;
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                App.context.startActivity(intent);
+            Glide.with(context)
+                    .load(App.urlimages + mDataset.get(position).image)
+                    .placeholder(R.mipmap.nopic)
+                    .into(holder.imageNini);
+            String StatusName = null;
+            if (status.matches("1")) {
+                StatusName = "منتشر شده";
+                holder.txt.setTextColor(Color.parseColor("#008542"));
+                holder.edit.setVisibility(View.GONE);
+                holder.pay.setVisibility(View.GONE);
             }
-        });
-
-        holder.pay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog = ProgressDialog.show(v.getContext(), null, null, true, false);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.setContentView(R.layout.progress_layout_small);
-
-                pay(v);
+            if (status.matches("0")) {
+                StatusName = "در انتظار تایید ناظر";
+                holder.txt.setTextColor(Color.parseColor("#ff9900"));
+                holder.pay.setVisibility(View.GONE);
+                holder.edit.setVisibility(View.VISIBLE);
             }
-        });
+            if (status.matches("2")) {
+                StatusName = "رد شده - " + mDataset.get(position).comment;
+                holder.txt.setTextColor(Color.RED);
+                holder.pay.setVisibility(View.GONE);
+                holder.edit.setVisibility(View.VISIBLE);
+            }
+            if (status.matches("3")) {
+                StatusName = "درانتظار پرداخت";
+                holder.txt.setTextColor(Color.parseColor("#ff9900"));
+                holder.edit.setVisibility(View.GONE);
+                holder.pay.setVisibility(View.VISIBLE);
+            }
+            if (status.matches("4")) {
+                StatusName = "منقضی شده";
+                holder.txt.setTextColor(Color.RED);
+                holder.edit.setVisibility(View.VISIBLE);
+                holder.edit.setText("ویرایش و تمدید");
+                holder.pay.setVisibility(View.GONE);
+            }
+            if (status.matches("10")) {
+                StatusName = "منتشر شده";
+                holder.txt.setTextColor(Color.parseColor("#008542"));
+                holder.edit.setVisibility(View.GONE);
+                holder.pay.setVisibility(View.GONE);
+            }
+            if (status.matches("20")) {
+                StatusName = "منقضی شده(برتر)";
+                holder.txt.setTextColor(Color.RED);
+                holder.edit.setVisibility(View.GONE);
+                holder.pay.setVisibility(View.GONE);
+            }
 
 
-        Animation animation = AnimationUtils.loadAnimation(context,
-                (position > lastPosition) ? android.R.anim.slide_in_left
-                        : android.R.anim.slide_out_right);
-        holder.itemView.startAnimation(animation);
-        lastPosition = position;
+
+            holder.txt.setText("وضعیت آگهی : " + StatusName.toString());
+
+
+            holder.edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(App.context, EditNini.class);
+                    name = holder.name.getText().toString();
+                    age = mDataset.get(position).age;
+                    image = mDataset.get(position).image;
+                    idNini = mDataset.get(position).id;
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    App.context.startActivity(intent);
+                }
+            });
+
+            holder.pay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog = ProgressDialog.show(v.getContext(), null, null, true, false);
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.setContentView(R.layout.progress_layout_small);
+
+                    pay(v);
+                }
+            });
+
+
+            Animation animation = AnimationUtils.loadAnimation(context,
+                    (position > lastPosition) ? android.R.anim.slide_in_left
+                            : android.R.anim.slide_out_right);
+            holder.itemView.startAnimation(animation);
+            lastPosition = position;
+        }catch (Exception e){}
     }
 
     public void update(List<Nini> list) {
@@ -227,7 +271,7 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
                 //  Intent intent = new Intent(App.context , Details.class);
                 //  intent.putExtra("id", Details.idAgahi+"");
                 // startActivity(intent);
-                App.CustomToast("اطلاعات خرید ثبت شد");
+                App.CustomToast("پرداخت شد");
                 update(mDataset);
                 Intent intent = new Intent(App.context, MyNini.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -244,12 +288,12 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
                     dialog.hide();
-                    App.CustomToast("ثبت اطلاعات خرید با مشکل مواجه شد !");
+                //    App.CustomToast("ثبت اطلاعات خرید با مشکل مواجه شد !");
 
                 }else{
                     dialog.hide();
-                    App.CustomToast("fail "+statusCode);
-                    App.CustomToast("اطلاعات خرید ثبت نشد ");
+               //     App.CustomToast("fail "+statusCode);
+              //      App.CustomToast("اطلاعات خرید ثبت نشد ");
                 }
             }
 
@@ -266,10 +310,12 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
 
-        params.put("validity","0");
+        if(status.equals("4") || status.equals("20")){
+            params.put("validity","3");
+        }else {
+            params.put("validity","0");
+        }
         params.put("image", image);
-        Log.i("asdasd" , image);
-        Log.i("asdasd2" , App.urlApi+"updatenini/"+ idNini);
 
         client.post(App.urlApi+"updatenini/"+ idNini, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
@@ -281,10 +327,10 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
 
             //    dialog.hide();
                 webServiceBuylog();
-                //  Intent intent = new Intent(App.context , Details.class);
+               // Intent intent = new Intent(App.context , Details.class);
                 //  intent.putExtra("id", Details.idAgahi+"");
                 // startActivity(intent);
-                App.CustomToast("آگهی ویرایش شد !");
+              //  App.CustomToast(" ویرایش شد !");
 
             }
             @Override
@@ -295,12 +341,12 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
                 //    dialog.hide();
-                    App.CustomToast("آگهی با این شماره وجود ندارد !");
+                    App.CustomToast("مشکلی به وجود آمده است. لطفا دوباره امتحان کنید.");
 
                 }else{
                   //  dialog.hide();
                     App.CustomToast("fail "+statusCode);
-                    App.CustomToast(" لطفا دوباره سعی کنید ");
+                    App.CustomToast("مشکلی به وجود آمده است. لطفا دوباره امتحان کنید.");
                 }
             }
 

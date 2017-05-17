@@ -35,7 +35,7 @@ public class MyOrders extends AppCompatActivity {
     private JSONArray orderJsonArray = new JSONArray();
     private JSONObject jsnobject;
     private int num2;
-    TextView factorId, factorNum , price;
+    TextView factorId, factorNum , price ,address;
     int index;
     private ProgressDialog dialog;
     private String id_confirmaation;
@@ -49,6 +49,7 @@ public class MyOrders extends AppCompatActivity {
         factorId = (TextView) findViewById(R.id.factor_id);
         factorNum = (TextView) findViewById(R.id.factor_num);
         price = (TextView) findViewById(R.id.price);
+        address = (TextView) findViewById(R.id.txt_address);
 
 
 
@@ -78,7 +79,7 @@ public class MyOrders extends AppCompatActivity {
         String status = prefs2.getString("islogin", "0");
         String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
 
-        if (status.matches("1")) {
+        if (status.matches("1") && !id_confirmaationSH.equals("0")) {
             id_confirmaation = id_confirmaationSH.replace("[{\"id\":", "").replace("}]", "");
 
         }else {
@@ -93,14 +94,12 @@ public class MyOrders extends AppCompatActivity {
             factorId.setText( "شماره فاکتور : "+intent.getStringExtra("factor_id"));
             factorNum.setText("پیگیری : "+ intent.getStringExtra("factor_name"));
             price.setText("قیمت کل : "+ intent.getStringExtra("price"));
+            address.setText("آدرس : "+intent.getStringExtra("address"));
             menuJsonArray = new JSONArray(order);
-            Log.i("aaaaaaa122322",order );
-            Log.i("aaaaaaa12234433",menuJsonArray.toString() );
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.i("aaaaaaa122333",menuJsonArray.toString() );
         try {
         for (int i = 0; i < menuJsonArray.length(); i++) {
 
@@ -111,7 +110,6 @@ public class MyOrders extends AppCompatActivity {
             final TextView txtNumber = (TextView)addView.findViewById(R.id.txtNumber);
 
             final JSONObject oo = menuJsonArray.getJSONObject(i);
-            Log.i("aaaaaaa12233113",oo.getString("name").toString() );
 
             txtName.setText(oo.getString("name").toString());
             txtPrice.setText(oo.getString("price").toString()+" تومان ");

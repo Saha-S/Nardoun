@@ -18,6 +18,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -34,6 +36,8 @@ import com.appmagazine.nardoon.activities.MyPanel;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+
+import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -58,16 +62,18 @@ public class SMS extends Fragment {
     public static int Sdaemi,Setebari,Sirancell =0;
     Button price,pay;
     TextView txtPrice,txtWarning , txtCharacter;
-    int credit , number, operator , priceint;
+    int credit , number, operator , priceint , allIrancell , allDaemi , allEtebari;
     int countSMS=1;
-    RadioGroup radioOperatorGroup;
-    RadioButton radioOperatorButton;
-    EditText matn , numberSMS;
+    EditText matn ;
     private String id_confirmaation;
     private String peygiri ;
     int typeSMS=0;
     private LinearLayout llnewagahi;
 
+    CheckBox chkIrancell , chkEteberi , chkDaemi;
+    EditText edtIrancell , edtEteberi , edtDaemi;
+    TextView txtIrancell , txtEteberi , txtDaemi;
+    String split[];
 //    public static ProgressDialog dialog;
 
 
@@ -80,11 +86,63 @@ public class SMS extends Fragment {
         txtWarning = (TextView) view.findViewById(R.id.txt_warning);
         txtPrice = (TextView) view.findViewById(R.id.txt_price);
         matn = (EditText) view.findViewById(R.id.edt_matn);
-        numberSMS = (EditText) view.findViewById(R.id.edt_number);
-        radioOperatorGroup = (RadioGroup) view.findViewById(R.id.radio_operator);
+        chkIrancell = (CheckBox) view.findViewById(R.id.chk_irancell);
+        chkEteberi = (CheckBox) view.findViewById(R.id.chk_etebari);
+        chkDaemi = (CheckBox) view.findViewById(R.id.chk_daemi);
 
-        int selectedId = radioOperatorGroup.getCheckedRadioButtonId();
-        radioOperatorButton = (RadioButton) view.findViewById(selectedId);
+        edtDaemi = (EditText) view.findViewById(R.id.edt_daemi);
+        edtIrancell = (EditText) view.findViewById(R.id.edt_irancell);
+        edtEteberi = (EditText) view.findViewById(R.id.edt_etebari);
+
+        txtEteberi = (TextView) view.findViewById(R.id.txt_etebari);
+        txtIrancell = (TextView) view.findViewById(R.id.txt_irancell);
+        txtDaemi = (TextView) view.findViewById(R.id.txt_daemi);
+
+        chkIrancell.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    edtIrancell.setVisibility(View.VISIBLE);
+                    txtIrancell.setVisibility(View.VISIBLE);
+                }
+                else{
+                    txtIrancell.setVisibility(View.GONE);
+                    edtIrancell.setVisibility(View.GONE);
+                    edtIrancell.setText("");
+                }
+            }
+        });
+        chkEteberi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    edtEteberi.setVisibility(View.VISIBLE);
+                    txtEteberi.setVisibility(View.VISIBLE);
+
+                }
+                else{
+                    txtEteberi.setVisibility(View.GONE);
+                    edtEteberi.setVisibility(View.GONE);
+                    edtEteberi.setText("");
+                }
+            }
+        });
+        chkDaemi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    edtDaemi.setVisibility(View.VISIBLE);
+                    txtDaemi.setVisibility(View.VISIBLE);
+
+                }
+                else{
+                    txtDaemi.setVisibility(View.GONE);
+                    edtDaemi.setVisibility(View.GONE);
+                    edtDaemi.setText("");
+                }
+            }
+        });
+
 
         Object connectivityService = App.context.getSystemService(CONNECTIVITY_SERVICE);
         ConnectivityManager cm = (ConnectivityManager) connectivityService;
@@ -99,15 +157,34 @@ public class SMS extends Fragment {
 
 
 
+////////////////////////////////////////////////////////////////////////////////
+
         final TextWatcher inputTextWatcherMatn = new TextWatcher() {
             public void afterTextChanged(Editable s) {
+                int daemi , etebari , irancell = 0 ;
+                try{
+                    daemi = Integer.parseInt(edtDaemi.getText().toString());
+                }catch (NumberFormatException n){
+                    daemi=0;
+                }
+                try{
+                    etebari = Integer.parseInt(edtEteberi.getText().toString());
+                }catch (NumberFormatException n){
+                    etebari=0;
+                }
+                try{
+                    irancell = Integer.parseInt(edtIrancell.getText().toString());
+                }catch (NumberFormatException n){
+                    irancell=0;
+                }
+
                 if(s.length()<=70){
                     txtCharacter.setText("1 پیامک / "+s.length());
                     countSMS=1;
                     try {
-                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
-                        number = Integer.parseInt(numberSMS.getText().toString()) * countSMS;
-                        priceint = Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                        number =( etebari  + daemi  + irancell) * countSMS;
+                        txtPrice.setText(number * App.priceSms * countSMS + " تومان ");
+                        priceint = number * App.priceSms * countSMS;
                     }catch (NumberFormatException e){}
 
                 }
@@ -115,9 +192,9 @@ public class SMS extends Fragment {
                     txtCharacter.setText("2 پیامک / "+s.length());
                     countSMS = 2;
                     try{
-                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
-                        number=Integer.parseInt(numberSMS.getText().toString()) * countSMS;
-                        priceint=Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                        number =( etebari  + daemi  + irancell) * countSMS;
+                        txtPrice.setText(number * App.priceSms  + " تومان ");
+                        priceint = number * App.priceSms ;
                     }catch (NumberFormatException e){}
 
                 }
@@ -125,18 +202,18 @@ public class SMS extends Fragment {
                     txtCharacter.setText("3 پیامک / "+s.length());
                     countSMS = 3;
                     try{
-                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
-                        number=Integer.parseInt(numberSMS.getText().toString()) * countSMS;
-                        priceint=Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                        number =( etebari  + daemi  + irancell) * countSMS;
+                        txtPrice.setText(number * App.priceSms  + " تومان ");
+                        priceint = number * App.priceSms ;
                     }catch (NumberFormatException e){}
                 }
                 if(s.length()<=268 && s.length()> 201) {
                     txtCharacter.setText("4 پیامک / "+s.length());
                     countSMS = 4;
                     try{
-                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
-                        number=Integer.parseInt(numberSMS.getText().toString()) * countSMS;
-                        priceint=Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                        number =( etebari  + daemi  + irancell) * countSMS;
+                        txtPrice.setText(number * App.priceSms  + " تومان ");
+                        priceint = number * App.priceSms ;
                     }catch (NumberFormatException e){}
 
                 }
@@ -144,9 +221,9 @@ public class SMS extends Fragment {
                     txtCharacter.setText("5 پیامک / "+s.length());
                     countSMS = 5;
                     try{
-                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
-                        number=Integer.parseInt(numberSMS.getText().toString()) * countSMS;
-                        priceint=Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                        number =( etebari  + daemi  + irancell) * countSMS;
+                        txtPrice.setText(number * App.priceSms  + " تومان ");
+                        priceint = number * App.priceSms ;
                     }catch (NumberFormatException e){}
 
                 }
@@ -154,18 +231,18 @@ public class SMS extends Fragment {
                     txtCharacter.setText("6 پیامک / "+s.length());
                     countSMS = 6;
                     try{
-                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
-                        number=Integer.parseInt(numberSMS.getText().toString()) * countSMS;
-                        priceint=Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                        number =( etebari  + daemi  + irancell) * countSMS;
+                        txtPrice.setText(number * App.priceSms  + " تومان ");
+                        priceint = number * App.priceSms ;
                     }catch (NumberFormatException e){}
                 }
                 if(s.length()<=469 && s.length()> 402) {
                     txtCharacter.setText("7 پیامک / "+s.length());
                     countSMS = 7;
                     try{
-                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
-                        number=Integer.parseInt(numberSMS.getText().toString()) * countSMS;
-                        priceint=Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                        number =( etebari  + daemi  + irancell) * countSMS;
+                        txtPrice.setText(number * App.priceSms  + " تومان ");
+                        priceint = number * App.priceSms ;
                     }catch (NumberFormatException e){}
 
                 }
@@ -173,36 +250,36 @@ public class SMS extends Fragment {
                     txtCharacter.setText("8 پیامک / "+s.length());
                     countSMS = 8;
                     try{
-                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
-                        number=Integer.parseInt(numberSMS.getText().toString()) * countSMS;
-                        priceint=Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                        number =( etebari  + daemi  + irancell) * countSMS;
+                        txtPrice.setText(number * App.priceSms  + " تومان ");
+                        priceint = number * App.priceSms ;
                     }catch (NumberFormatException e){}
                 }
                 if(s.length()<=603 && s.length()> 536) {
                     txtCharacter.setText("9 پیامک / "+s.length());
                     countSMS = 9;
                     try{
-                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
-                        number=Integer.parseInt(numberSMS.getText().toString()) * countSMS;
-                        priceint=Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                        number =( etebari  + daemi  + irancell) * countSMS;
+                        txtPrice.setText(number * App.priceSms  + " تومان ");
+                        priceint = number * App.priceSms ;
                     }catch (NumberFormatException e){}
                 }
                 if(s.length()<=670 && s.length()> 603) {
                     txtCharacter.setText("10 پیامک / "+s.length());
                     countSMS = 10;
                     try{
-                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
-                        number=Integer.parseInt(numberSMS.getText().toString()) * countSMS;
-                        priceint=Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                        number =( etebari  + daemi  + irancell) * countSMS;
+                        txtPrice.setText(number * App.priceSms  + " تومان ");
+                        priceint = number * App.priceSms ;
                     }catch (NumberFormatException e){}
                 }
                 if(s.length()<=737 && s.length()> 670) {
                     txtCharacter.setText("10 پیامک / "+s.length());
                     countSMS = 11;
                     try{
-                        txtPrice.setText(Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS + " تومان ");
-                        number=Integer.parseInt(numberSMS.getText().toString()) * countSMS;
-                        priceint=Integer.parseInt(numberSMS.getText().toString()) * App.priceSms * countSMS;
+                        number =( etebari  + daemi  + irancell) * countSMS;
+                        txtPrice.setText(number * App.priceSms  + " تومان ");
+                        priceint = number * App.priceSms ;
                     }catch (NumberFormatException e){}
                 }
                 if(s.length()>737){
@@ -220,29 +297,136 @@ public class SMS extends Fragment {
         };
 
         matn.addTextChangedListener(inputTextWatcherMatn);
-
-        TextWatcher inputTextWatcher = new TextWatcher() {
+//////////////////////////////////////////////////////////////////////////////////
+        TextWatcher inputTextWatcherDaemi = new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 matn.addTextChangedListener(inputTextWatcherMatn);
 
+                int daemi , etebari , irancell = 0 ;
+                try{
+                    daemi = Integer.parseInt(edtDaemi.getText().toString());
+                }catch (NumberFormatException n){
+                    daemi=0;
+                }
+                try{
+                    etebari = Integer.parseInt(edtEteberi.getText().toString());
+                }catch (NumberFormatException n){
+                    etebari=0;
+                }
+                try{
+                    irancell = Integer.parseInt(edtIrancell.getText().toString());
+                }catch (NumberFormatException n){
+                    irancell=0;
+                }
+                try {
+                    if (daemi > allDaemi) {
+                        edtDaemi.setBackgroundResource(R.drawable.edt_error);
+                        pay.setEnabled(false);
+                        txtWarning.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        edtDaemi.setBackgroundResource(R.drawable.edt_frame);
+                        pay.setEnabled(true);
+                        txtWarning.setVisibility(View.GONE);
+                    }
+                }
+                catch (NumberFormatException n){}
+
                 try {
                     if (countSMS == 1) {
-                        txtPrice.setText(Integer.parseInt(s.toString()) * App.priceSms + " تومان ");
-                        number=Integer.parseInt(s.toString()) * countSMS;
-                        priceint = Integer.parseInt(s.toString()) * App.priceSms;
-                        Log.i("number" ,"aa"+number );
+
+                            number = (daemi + etebari + irancell) * countSMS;
+                            txtPrice.setText(number * App.priceSms + " تومان ");
+                            priceint = number * App.priceSms;
+                            Log.i("number", "aa" + number);
 
                     } else {
-                        txtPrice.setText(Integer.parseInt(s.toString()) * App.priceSms * countSMS + " تومان ");
-                        number=Integer.parseInt(s.toString()) * countSMS;
-                        priceint=Integer.parseInt(s.toString()) * App.priceSms * countSMS;
-                        Log.i("number" ,"aa"+number );
+
+                        number = (daemi + etebari + irancell) * countSMS;
+                            txtPrice.setText(number * App.priceSms + " تومان ");
+                            priceint = number * App.priceSms;
+                            Log.i("number", "aa" + number);
                     }
                 }catch (NumberFormatException e){
                     txtPrice.setText( " 0 تومان ");
                 }
                 try {
-                    if (Integer.parseInt(s.toString()) * countSMS >= credit) {
+                    if (number * countSMS >= credit) {
+                        pay.setVisibility(View.INVISIBLE);
+                        txtWarning.setVisibility(View.VISIBLE);
+                    }else{
+                        pay.setVisibility(View.VISIBLE);
+                        txtWarning.setVisibility(View.INVISIBLE);
+                    }
+                }catch (NumberFormatException e){
+                }            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after){
+
+
+            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        };
+
+        edtDaemi.addTextChangedListener(inputTextWatcherDaemi);
+
+//////////////////////////////////////////////////////////////////////////////////
+
+        TextWatcher inputTextWatcherEtebari = new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                matn.addTextChangedListener(inputTextWatcherMatn);
+
+                int daemi , etebari , irancell = 0 ;
+                try{
+                    daemi = Integer.parseInt(edtDaemi.getText().toString());
+                }catch (NumberFormatException n){
+                    daemi=0;
+                }
+                try{
+                    etebari = Integer.parseInt(edtEteberi.getText().toString());
+                }catch (NumberFormatException n){
+                    etebari=0;
+                }
+                try{
+                    irancell = Integer.parseInt(edtIrancell.getText().toString());
+                }catch (NumberFormatException n){
+                    irancell=0;
+                }
+                try {
+                    if (etebari > allEtebari) {
+                        edtEteberi.setBackgroundResource(R.drawable.edt_error);
+                        pay.setEnabled(false);
+                        txtWarning.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        edtEteberi.setBackgroundResource(R.drawable.edt_frame);
+                        pay.setEnabled(true);
+                        txtWarning.setVisibility(View.GONE);
+                    }
+                }
+                catch (NumberFormatException n){}
+
+                try {
+
+                    if (countSMS == 1) {
+
+                        number = (daemi + etebari + irancell) * countSMS;
+                        txtPrice.setText(number * App.priceSms + " تومان ");
+                        priceint = number * App.priceSms;
+                        Log.i("number", "aa" + number);
+
+                    } else {
+
+                        number = (daemi + etebari + irancell) * countSMS;
+                        txtPrice.setText(number * App.priceSms + " تومان ");
+                        priceint = number * App.priceSms;
+                        Log.i("number", "aa" + number);
+                    }
+                }catch (NumberFormatException e){
+                    txtPrice.setText( " 0 تومان ");
+                }
+                try {
+                    if (number * countSMS >= credit) {
                         pay.setVisibility(View.INVISIBLE);
                         txtWarning.setVisibility(View.VISIBLE);
                     }else{
@@ -260,8 +444,84 @@ public class SMS extends Fragment {
             }
         };
 
-        numberSMS.addTextChangedListener(inputTextWatcher);
+        edtEteberi.addTextChangedListener(inputTextWatcherEtebari);
 
+//////////////////////////////////////////////////////////////////////////////////
+
+        TextWatcher inputTextWatcherIrancell = new TextWatcher() {
+            public void afterTextChanged(Editable s) {
+                matn.addTextChangedListener(inputTextWatcherMatn);
+
+                int daemi , etebari , irancell = 0 ;
+                try{
+                    daemi = Integer.parseInt(edtDaemi.getText().toString());
+                }catch (NumberFormatException n){
+                    daemi=0;
+                }
+                try{
+                    etebari = Integer.parseInt(edtEteberi.getText().toString());
+                }catch (NumberFormatException n){
+                    etebari=0;
+                }
+                try{
+                    irancell = Integer.parseInt(edtIrancell.getText().toString());
+                }catch (NumberFormatException n){
+                    irancell=0;
+                }
+                try {
+                    if (irancell > allIrancell) {
+                        edtIrancell.setBackgroundResource(R.drawable.edt_error);
+                        pay.setEnabled(false);
+                        txtWarning.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        edtIrancell.setBackgroundResource(R.drawable.edt_frame);
+                        pay.setEnabled(true);
+                        txtWarning.setVisibility(View.GONE);
+                    }
+                }
+                catch (NumberFormatException n){}
+
+                try {
+                    if (countSMS == 1) {
+
+                        number = (daemi + etebari + irancell) * countSMS;
+                        txtPrice.setText(number * App.priceSms + " تومان ");
+                        priceint = number * App.priceSms;
+                        Log.i("number", "aa" + number);
+
+                    } else {
+
+                        number = (daemi + etebari + irancell) * countSMS;
+                        txtPrice.setText(number * App.priceSms + " تومان ");
+                        priceint = number * App.priceSms;
+                        Log.i("number", "aa" + number);
+                    }
+                }catch (NumberFormatException e){
+                    txtPrice.setText( " 0 تومان ");
+                }
+                try {
+                    if (number * countSMS >= credit) {
+                        pay.setVisibility(View.INVISIBLE);
+                        txtWarning.setVisibility(View.VISIBLE);
+                    }else{
+                        pay.setVisibility(View.VISIBLE);
+                        txtWarning.setVisibility(View.INVISIBLE);
+                    }
+                }catch (NumberFormatException e){
+                }
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after){
+
+
+            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+        };
+
+        edtIrancell.addTextChangedListener(inputTextWatcherIrancell);
+
+//////////////////////////////////////////////////////////////////////////////////
 
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -275,23 +535,24 @@ public class SMS extends Fragment {
 
                 if (status.matches("1")) {
                     id_confirmaation = id_confirmaationSH.replace("[{\"id\":", "").replace("}]", "");
-                    if (radioOperatorButton.getText().toString() == getString(R.string.daemi)) {
-                        Sdaemi = number;
-                        Setebari = 0;
-                        Sirancell = 0;
-                        typeSMS = 1;
-                        Log.i("mylog2", Sdaemi + " ,,, " + Setebari + ",,," + Sirancell);
-                    } else if (radioOperatorButton.getText() == getString(R.string.etebari)) {
-                        Sdaemi = 0;
-                        Setebari = number;
-                        Sirancell = 0;
-                        typeSMS = 2;
-                    } else if (radioOperatorButton.getText() == getString(R.string.daemi)) {
-                        Sdaemi = 0;
-                        Setebari = 0;
-                        Sirancell = number;
-                        typeSMS = 3;
+                    try{
+                        Sdaemi =Integer.parseInt(edtDaemi.getText().toString()) ;
+                    }catch (NumberFormatException i){
+                        Sdaemi=0;
                     }
+                    try{
+                        Setebari = Integer.parseInt(edtEteberi.getText().toString()) ;
+                    }catch (NumberFormatException i){
+                        Setebari=0;
+                    }
+                    try{
+                        Sirancell = Integer.parseInt(edtIrancell.getText().toString()) ;
+                    }catch (NumberFormatException i){
+                        Sirancell=0;
+                    }
+
+                        typeSMS = 3;
+
                     Object connectivityService = App.context.getSystemService(CONNECTIVITY_SERVICE);
                     ConnectivityManager cm = (ConnectivityManager) connectivityService;
 
@@ -299,7 +560,8 @@ public class SMS extends Fragment {
                     NetworkInfo mWifi = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
                     if (mWifi.isConnected() || isMobileDataEnabled()) {
-                        pay();
+                      //  pay();
+                        webServiceBuylog();
                     }else
                         App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
 
@@ -392,7 +654,16 @@ public class SMS extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             try {
-                credit = Integer.parseInt(result);
+                split = result.split("-");
+
+                credit = Integer.parseInt(split[0]);
+                allDaemi = Integer.parseInt(split[1]);
+                allEtebari = Integer.parseInt(split[2]);
+                allIrancell = Integer.parseInt(split[3]);
+                txtDaemi.setText("از "+ allDaemi );
+                txtEteberi.setText("از "+ allEtebari);
+                txtIrancell.setText("از "+ allIrancell );
+
             }catch (Exception e){}
             super.onPostExecute(result);
         }
@@ -405,13 +676,44 @@ public class SMS extends Fragment {
         RequestParams params = new RequestParams();
 
         params.put("confirmation_id",id_confirmaation.toString());
-        params.put("type",""+typeSMS);
         params.put("related_id","1");
-        params.put("description", Sdaemi+Setebari+Sirancell+"");
+        params.put("description", Sdaemi+"-"+Setebari+"-"+Sirancell+"");
         params.put("price",priceint);
         params.put("traking_code","123456");
         params.put("isused","0");
-        params.put("credit",Sdaemi+Setebari+Sirancell+"");
+        if(Sdaemi>0 && Setebari==0 && Sirancell ==0){
+            params.put("type","1");
+        }
+        if(Sdaemi==0 && Setebari>0 && Sirancell ==0){
+            params.put("type","2");
+        }
+        if(Sdaemi==0 && Setebari==0 && Sirancell >0){
+            params.put("type","3");
+        }
+        if(Sdaemi>0 && Setebari>0 && Sirancell ==0){
+            params.put("type","12");
+        }
+        if(Sdaemi>0 && Setebari==0 && Sirancell >0){
+            params.put("type","13");
+        }
+        if(Sdaemi==0 && Setebari>0 && Sirancell >0){
+            params.put("type","23");
+        }
+        if(Sdaemi>0 && Setebari>0 && Sirancell >0){
+            params.put("type","123");
+        }
+
+
+        if(Sdaemi>0){
+            params.put("credit",Sdaemi+"");
+        }
+        else if(Setebari>0){
+            params.put("credit",Setebari+"");
+        }
+        else if(Sirancell>0){
+            params.put("credit",Sirancell+"");
+        }
+
 
         client.post(App.urlApi+"buylog", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override

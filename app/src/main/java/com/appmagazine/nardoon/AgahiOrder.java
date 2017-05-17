@@ -8,7 +8,7 @@ import org.json.JSONObject;
  */
 
 public class AgahiOrder {
-    public String created_at, confirmation_mobile ,agahi_mobile ,id, confirmation_id, order, price,isdone,agahi_id ;
+    public String created_at, confirmation_mobile ,agahi_mobile ,id, confirmation_id, order, price,isdone,agahi_id ,address;
 
     public AgahiOrder(JSONObject jsonObject) { // تابع سازنده برای دریافت مقادیر از JsonObject
         try {
@@ -23,6 +23,7 @@ public class AgahiOrder {
             this.agahi_mobile = jsonObject.getString("agahi_mobile");
             this.confirmation_id = jsonObject.getString("confirmation_id");
             this.confirmation_mobile = jsonObject.getString("confirmation_mobile");
+            this.address = jsonObject.getString("address");
 
 
         } catch (JSONException e) {

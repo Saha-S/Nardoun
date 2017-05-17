@@ -177,15 +177,6 @@ public class EditAgahi extends AppCompatActivity {
         url = App.urlApi + "updateagahi/" + Details.idAgahi;
         menuJsonArray = new JSONArray();
 
-    /*    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(content.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(email.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(price.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(title.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(location.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(phone.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(link.getWindowToken(), 0);
-*/
         content.setSingleLine(false);
         content.setImeOptions(EditorInfo.IME_FLAG_NO_ENTER_ACTION);
         title.setText(Details.tvtitle.getText());
@@ -675,10 +666,6 @@ public class EditAgahi extends AppCompatActivity {
                 container.addView(addView);
                 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(foodName.getWindowToken(), 0);
-                foodPrice.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
-
-                //  imm.hideSoftInputFromWindow(foodPrice.getWindowToken(), 0);
-
                 foodName.setText("");
                 foodPrice.setText("");
             }
@@ -710,11 +697,8 @@ public class EditAgahi extends AppCompatActivity {
             params.put("start",startTime);
             params.put("end",endTime);
             params.put("menu",menuJsonArray.toString());
-            Log.i("teeees22", menuJsonArray.toString());
-
             params.put("type","0");
             params.put("price","0");
-
 
         }else {
             params.put("price", price.getText());
@@ -726,7 +710,7 @@ public class EditAgahi extends AppCompatActivity {
             if(Details.validity.equals("3")) {
                 params.put("validity", "3");
             }else{
-                if(chkSpecial.isChecked() || chkLink.isChecked()){
+                if((Details.special.equals("0") && chkSpecial.isChecked()) ||(Details.link.equals("")&& chkLink.isChecked())){
                     params.put("validity","3");
                 }else {
                     params.put("validity", "0");
@@ -734,7 +718,7 @@ public class EditAgahi extends AppCompatActivity {
 
             }
         }else{
-            if(chkSpecial.isChecked() || chkLink.isChecked()){
+            if((Details.special.equals("0") && chkSpecial.isChecked()) ||(Details.link.equals("")&& chkLink.isChecked())){
                 params.put("validity","3");
             }else {
                 params.put("validity", "0");
@@ -745,13 +729,11 @@ public class EditAgahi extends AppCompatActivity {
         params.put("location",location.getText());
         if(file1!=null){
             try {
-                Log.i("file: " ,"....:" + file1.toString());
                 params.put("file", file1);
             } catch(FileNotFoundException e) {}
         }
         else if(file2!=null){
         try {
-            Log.i("filei: " ,"....:" + file2.toString());
             params.put("filei", file2);
         } catch(FileNotFoundException e) {}
     }
@@ -762,11 +744,9 @@ public class EditAgahi extends AppCompatActivity {
         } catch(FileNotFoundException e) {}
     }
          if(file1==null && imgAsli.getVisibility()==View.VISIBLE){
-       //     Log.i("file11: " ,"....:" + Details.image.toString());
             params.put("image", Details.image);
         }
          if(file2==null && img2.getVisibility()==View.VISIBLE){
-      //      Log.i("file22: " ,"....:" + Details.url2.toString());
             params.put("imagei", Details.url2);
         }
          if(file3==null && img3.getVisibility()==View.VISIBLE){
@@ -863,7 +843,6 @@ public class EditAgahi extends AppCompatActivity {
         uri = FileProvider.getUriForFile(App.context, App.context.getApplicationContext().getPackageName() + ".provider", file);
         App.context.grantUriPermission("com.android.camera",uri,
                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        Log.i("myuri" , "aa  :  " + uri.toString()  );
 
         CamIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
 

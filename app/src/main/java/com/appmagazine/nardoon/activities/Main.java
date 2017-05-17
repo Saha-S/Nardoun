@@ -199,7 +199,7 @@ public class Main extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        Menu nav_Menu = navigationView.getMenu();
+                Menu nav_Menu = navigationView.getMenu();
 
         View hView =  navigationView.getHeaderView(0);
 
@@ -308,9 +308,8 @@ public class Main extends AppCompatActivity
                 Intent intent = new Intent(App.context , Login.class);
                 startActivity(intent);
         }
-        else if (id == R.id.nav_recently) {
 
-        }else if (id == R.id.nav_my_agahi) {
+        else if (id == R.id.nav_my_agahi) {
 
         }else if (id == R.id.nav_rules) {
             Intent intent = new Intent(App.context , Rules.class);
@@ -318,6 +317,11 @@ public class Main extends AppCompatActivity
 
         }else if (id == R.id.nav_support) {
             Intent intent = new Intent(App.context , Poshtibani.class);
+            startActivity(intent);
+
+        }
+        else if (id == R.id.nav_winner_nini) {
+            Intent intent = new Intent(App.context , WinnerNini.class);
             startActivity(intent);
 
         }

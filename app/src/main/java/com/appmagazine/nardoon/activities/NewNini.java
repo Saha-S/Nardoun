@@ -33,6 +33,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.appmagazine.nardoon.App;
+import com.appmagazine.nardoon.MyAgahi;
 import com.appmagazine.nardoon.R;
 import com.appmagazine.nardoon.Utility;
 import com.appmagazine.nardoon.fragments.NiniAx;
@@ -200,10 +201,11 @@ public class NewNini extends AppCompatActivity {
                     String status = prefs2.getString("islogin", "0");
                     String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
 
-                    if (status.matches("1")) {
+                    if (status.matches("1") && !id_confirmaationSH.equals("0")) {
                         id_confirmaation = id_confirmaationSH.replace("[{\"id\":", "").replace("}]", "");
                         webServiceNewAgahi();
                     }else {
+                        dialog.hide();
                         Intent intent = new Intent(App.context, Login.class);
                         startActivity(intent);
                     }
@@ -232,6 +234,8 @@ public class NewNini extends AppCompatActivity {
 
         params.put("validity","3");
         params.put("point","0");
+        params.put("pointm","0");
+        params.put("comment","-");
 
         params.put("name", edtName.getText()); //  ********** parametr  ersali dar surate niaz
         params.put("age", edtAge.getText());
@@ -250,9 +254,9 @@ public class NewNini extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
                 dialog.hide();
               //  String value = new String(response);
-             //   Intent intent = new Intent(App.context, NiniAx.class);
-            //    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-             //   startActivity(intent);
+                Intent intent = new Intent(App.context, MyNini.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 finish();
 
             }
@@ -338,60 +342,59 @@ public class NewNini extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 0 && resultCode == RESULT_OK) {
-
-            ImageCropFunction();
-
-        }
-        else if (requestCode == 2) {
-
-            if (data != null) {
-
-                uri = data.getData();
+        if(resultCode != RESULT_CANCELED) {
+            if (requestCode == 0 && resultCode == RESULT_OK) {
 
                 ImageCropFunction();
 
-            }
-        }
-        else if (requestCode == 1) {
+            } else if (requestCode == 2) {
 
-            if (data != null) {
+                if (data != null) {
 
-               // Bundle bundle = data.getExtras();
-              //  Bitmap thumbnail = bundle.getParcelable("data");
+                    uri = data.getData();
 
-              //  Log.i("lllll" ,"aaa"+(Bitmap) data.getExtras().get("data"));
-                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+                    ImageCropFunction();
 
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-
-                destination = new File(Environment.getExternalStorageDirectory(),
-                        System.currentTimeMillis() + ".jpg");
-
-                FileOutputStream fo;
-                try {
-                    destination.createNewFile();
-                    fo = new FileOutputStream(destination);
-                    fo.write(bytes.toByteArray());
-                    fo.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
+            } else if (requestCode == 1) {
+
+                if (data != null) {
+
+                    // Bundle bundle = data.getExtras();
+                    //  Bitmap thumbnail = bundle.getParcelable("data");
+
+                    //  Log.i("lllll" ,"aaa"+(Bitmap) data.getExtras().get("data"));
+                    Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
+
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+
+                    destination = new File(Environment.getExternalStorageDirectory(),
+                            System.currentTimeMillis() + ".jpg");
+
+                    FileOutputStream fo;
+                    try {
+                        destination.createNewFile();
+                        fo = new FileOutputStream(destination);
+                        fo.write(bytes.toByteArray());
+                        fo.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
 
-
-                if(imgAsli.getVisibility()==View.GONE) {
-                    SelectImage.setText("افزودن عکس");
+                    if (imgAsli.getVisibility() == View.GONE) {
+                        SelectImage.setText("افزودن عکس");
+                    }
+                    if (imgAsli.getVisibility() == View.GONE) {
+                        imgAsli.setVisibility(View.VISIBLE);
+                        file1 = destination;
+                        Log.i("file1", "1: " + file1.toString());
+                    }
+                    image.setImageBitmap(thumbnail);
                 }
-                if(imgAsli.getVisibility()==View.GONE) {
-                    imgAsli.setVisibility(View.VISIBLE);
-                    file1 = destination;
-                    Log.i("file1" , "1: "+file1.toString());
-                }
-                image.setImageBitmap(thumbnail);
             }
         }
     }

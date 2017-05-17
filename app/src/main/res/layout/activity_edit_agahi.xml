@@ -811,7 +811,7 @@
                                 android:ems="10"
                                 android:focusableInTouchMode="true"
                                 android:hint="قیمت"
-                                 />
+                                android:inputType="number" />
 
                             <EditText
                                 android:id="@+id/edt_food_name"

@@ -69,7 +69,10 @@ public class MyPanelAdapter extends RecyclerView.Adapter<MyPanelAdapter.PosterHo
     public void onBindViewHolder(PosterHolder holder, final int position) {
 
         holder.id.setText(mDataset.get(position).id);
-        holder.number.setText(mDataset.get(position).credit +" عدد");
+        final String[] eachNumbers ;
+        eachNumbers=mDataset.get(position).description.toString().split("-");
+        int all = Integer.parseInt(eachNumbers[0])+Integer.parseInt(eachNumbers[1])+Integer.parseInt(eachNumbers[2]);
+        holder.number.setText(all +" عدد");
         if(mDataset.get(position).isused.equals("0")) {
             holder.isused.setText("استفاده نشده");
             holder.isused.setBackgroundColor(Color.parseColor("#ff471a"));
@@ -91,9 +94,19 @@ public class MyPanelAdapter extends RecyclerView.Adapter<MyPanelAdapter.PosterHo
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(App.context , PayDetails.class);
-                intent.putExtra("TYPE" ,mDataset.get(position).type.toString() );
-                intent.putExtra("CREDIT" ,mDataset.get(position).credit.toString() );
-                intent.putExtra("DESC" ,mDataset.get(position).description.toString() );
+                if(Integer.parseInt(eachNumbers[0])>0){
+                    intent.putExtra("CREDIT" ,Integer.parseInt(mDataset.get(position).credit.toString()) + Integer.parseInt(eachNumbers[1])+ Integer.parseInt(eachNumbers[2]) +"");
+                }
+                else if(Integer.parseInt(eachNumbers[1])>0){
+                    intent.putExtra("CREDIT" ,Integer.parseInt(mDataset.get(position).credit.toString()) + Integer.parseInt(eachNumbers[0])+ Integer.parseInt(eachNumbers[2]) +"");
+                }
+                else if(Integer.parseInt(eachNumbers[2])>0){
+                    intent.putExtra("CREDIT" ,Integer.parseInt(mDataset.get(position).credit.toString()) + Integer.parseInt(eachNumbers[1])+ Integer.parseInt(eachNumbers[0]) +"");
+                }
+
+                intent.putExtra("DAEMI" ,eachNumbers[0].toString() );
+                intent.putExtra("ETEBARI" ,eachNumbers[1].toString() );
+                intent.putExtra("IRANCELL" ,eachNumbers[2].toString() );
                 intent.putExtra("PEYGIRI" ,mDataset.get(position).traking_code.toString() );
                 intent.putExtra("PRICE" ,mDataset.get(position).price.toString() );
                 intent.putExtra("TIME" ,mDataset.get(position).created_at.toString() );

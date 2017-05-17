@@ -237,7 +237,6 @@ package com.appmagazine.nardoon.activities;
                         container.addView(addView);
                         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(foodName.getWindowToken(), 0);
-                        foodPrice.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
                         foodName.setText("");
                         foodPrice.setText("");
                     }});
@@ -464,11 +463,8 @@ package com.appmagazine.nardoon.activities;
 
                             if(chkSpecial.isChecked()){
                                 webServiceCountSpecial();
-                                Log.i("lklklklklklklk" , String.valueOf(countSpecial));
                                 if(countSpecial>=5) {
                                     flag10 = true;
-                                    Log.i("lklklklklklklk" , "shoood");
-
                                     App.CustomToast("در حال حاضر امکان انتخاب آگهی ویژه برای این دسته بندی وجود ندارد .");
                                 }
                                 else {
@@ -584,8 +580,6 @@ package com.appmagazine.nardoon.activities;
                     }
                 });
 
-                //this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
             }
 
             public  void webServiceNewAgahi()
@@ -635,8 +629,8 @@ package com.appmagazine.nardoon.activities;
                 params.put("content", content.getText());
                 params.put("email", email.getText());
                 params.put("mobile", phone.getText());
+                params.put("comment", "-");
                 params.put("category_id",id);
-                Log.i("aaaa6" , id);
 
                 params.put("subcategory_id",subid);
                 params.put("deviceid",App.android_id);
@@ -783,14 +777,10 @@ package com.appmagazine.nardoon.activities;
 
                         if (data != null) {
 
-                            // Bundle bundle = data.getExtras();
-                            //  Bitmap thumbnail = bundle.getParcelable("data");
-
-                            //  Log.i("lllll" ,"aaa"+(Bitmap) data.getExtras().get("data"));
                             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
 
                             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                            thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                            thumbnail.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
 
                             destination = new File(Environment.getExternalStorageDirectory(),
                                     System.currentTimeMillis() + ".jpg");
@@ -866,8 +856,6 @@ package com.appmagazine.nardoon.activities;
                 if (ActivityCompat.shouldShowRequestPermissionRationale(NewAgahi.this,
                         Manifest.permission.CAMERA))
                 {
-
-                   // Toast.makeText(NewAgahi.this,"CAMERA permission allows us to Access CAMERA app", Toast.LENGTH_LONG).show();
 
                 } else {
 
