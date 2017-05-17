@@ -45,8 +45,7 @@
                         android:id="@+id/imageView2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:padding="50dp"
+                        android:padding="30dp"
                         app:srcCompat="@drawable/nardoonlogo" />
 
                     <TextView
@@ -54,8 +53,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:padding="15dp"
-                        android:text="شما میتوانید مشکلات و سوالات خود را با پشتیبان در میان بگذارید"
+                        android:padding="10dp"
+                        android:text=" مشکلات و سوالات خود را با پشتیبان در میان بگذارید"
                         android:textColor="@color/cardview_dark_background"
                         android:textSize="18sp" />
 
@@ -64,7 +63,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:padding="15dp"
+                        android:padding="10dp"
                         android:text="پاسخگویی از طریق تماس ، تلگرام و واتس اپ"
                         android:textColor="@color/maroon"
                         android:textSize="17sp" />
@@ -74,7 +73,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:padding="15dp"
+                        android:padding="10dp"
                         android:text="شماره تماس"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="22sp" />
@@ -84,7 +83,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:padding="15dp"
+                        android:padding="10dp"
                         android:text="09175006484"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="22sp" />

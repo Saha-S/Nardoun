@@ -1,5 +1,6 @@
 package com.appmagazine.nardoon.fragments;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -228,6 +229,4 @@ public class Main extends Fragment implements TextWatcher{
             return null;
         }
     }
-
-
 }

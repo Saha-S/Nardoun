@@ -726,7 +726,6 @@ public class Details extends AppCompatActivity {
                                     startActivity(intent);
                                 }
 
-                                Log.i("0o0o0o0o0o0o0", finalJsonArray.toString());
                             }
                         });
                     }
@@ -749,14 +748,13 @@ public class Details extends AppCompatActivity {
                     App.CustomToast("آگهی با این شماره وجود ندارد !");
 
                 }else{
-                    App.CustomToast("fail "+statusCode);
+               //     App.CustomToast("fail "+statusCode);
                     App.CustomToast(" لطفا دوباره سعی کنید ");
                 }
             }
 
             @Override
             public void onRetry(int retryNo) {
-                // called when request is retried
             }
         });
     }
@@ -776,16 +774,6 @@ public class Details extends AppCompatActivity {
 
         switch (item.getItemId()) {
 
-        /*    case R.id.mShare:
-                Intent  i = new Intent(
-                        android.content.Intent.ACTION_SEND);
-                i.setType("text/plain");
-                i.putExtra(
-                        android.content.Intent.EXTRA_TEXT, "The string you want to share, which can include URLs");
-                startActivity(Intent.createChooser(
-                        i,
-                        "Title of your share dialog"));
-                        */
             case R.id.mBack:
                 finish();
 
@@ -846,8 +834,6 @@ public class Details extends AppCompatActivity {
 
         if(url1.toString().equals("0")){
             params.put("image", "0");
-            Log.i("aaaaa0" , url1);
-
         }else {
             params.put("image", url1);
             Log.i("aaaaa" , url1);
@@ -859,16 +845,13 @@ public class Details extends AppCompatActivity {
 
         }else {
             params.put("imagei", url2);
-            Log.i("aaaaa" , url2);
 
         }
         if(url3.toString().equals("0")){
             params.put("imageii", "0");
-            Log.i("aaaaa0" , url3);
 
         }else {
             params.put("imageii", url2);
-            Log.i("aaaaa" , url3);
 
         }
         client.post(App.urlApi+"updateagahi/"+idAgahi, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
@@ -1019,7 +1002,8 @@ public class Details extends AppCompatActivity {
                 }
                 if(validity.equals("2")) {
                     llVizhe.setBackgroundColor(Color.parseColor("#ffc2b3"));
-                    txt.setText(R.string.rad);
+                    txt.setText(R.string.rad   );
+                    txt.setText(txt.getText()+ " - " + why   );
                     pay.setVisibility(View.GONE);
                 }
                 if(validity.equals("3")) {

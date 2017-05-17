@@ -1,6 +1,7 @@
 package com.appmagazine.nardoon.activities;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -331,9 +332,18 @@ public class Main extends AppCompatActivity
         return true;
     }
 
+ /*   @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if ((resultCode == Activity.RESULT_OK)) {
+            // recreate your fragment here
+            invalidateOptionsMenu();
 
+        }
 
+    }
 
+*/
 
 
 

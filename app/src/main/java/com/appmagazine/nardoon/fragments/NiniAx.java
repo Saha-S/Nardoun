@@ -216,6 +216,12 @@ public class NiniAx extends Fragment implements TextWatcher {
             return null;
         }
     }
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        // Load data and do stuff
+    }
 
 
 }

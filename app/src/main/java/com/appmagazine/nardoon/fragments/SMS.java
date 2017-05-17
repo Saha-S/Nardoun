@@ -771,6 +771,12 @@ public class SMS extends Fragment {
             return null;
         }
     }
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        // Load data and do stuff
+    }
 
 
 }

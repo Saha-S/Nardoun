@@ -1,5 +1,6 @@
 package com.appmagazine.nardoon.activities;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -296,6 +297,7 @@ public class Login extends AppCompatActivity {
 
                 //  Intent intent = new Intent(App.context , Main.class);
                 //  startActivity(intent);
+                setResult(Activity.RESULT_OK);
                 finish();
 
 

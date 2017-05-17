@@ -584,7 +584,6 @@ public class EditAgahi extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.i("aaaaaaa122333", menuJsonArray.toString());
         try {
             for (int i = 0; i < menuJsonArray.length(); i++) {
 
@@ -594,7 +593,6 @@ public class EditAgahi extends AppCompatActivity {
                 final TextView txtPrice = (TextView) addView.findViewById(R.id.txtPrice);
 
                 final JSONObject oo = menuJsonArray.getJSONObject(i);
-                Log.i("aaaaaaa12233113", oo.getString("name").toString());
 
                 txtName.setText(oo.getString("name").toString());
                 txtPrice.setText(oo.getString("price").toString() + " تومان ");
@@ -608,10 +606,12 @@ public class EditAgahi extends AppCompatActivity {
                     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                     @Override
                     public void onClick(View v) {
-                      //  int index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
-                        ((LinearLayout) addView.getParent()).removeView(addView);
-                        menuJsonArray.remove(finalI);
-                        Log.i("teeees", menuJsonArray.toString());
+                        int index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
+                        addView.setVisibility(View.GONE);
+
+                        try {
+                            menuJsonArray.getJSONObject(index).put("name","0");
+                        }catch (JSONException e){e.printStackTrace();}
 
 
                     }
@@ -696,7 +696,21 @@ public class EditAgahi extends AppCompatActivity {
         if(SelectCat.getText().equals("رستوران")) {
             params.put("start",startTime);
             params.put("end",endTime);
-            params.put("menu",menuJsonArray.toString());
+            final JSONArray finalJsonArray = new JSONArray();
+            try {
+
+
+                for (int i=0;i<menuJsonArray.length();i++){
+
+                    if(!menuJsonArray.getJSONObject(i).getString("name").equalsIgnoreCase("0")){
+
+                        finalJsonArray.put(menuJsonArray.getJSONObject(i));
+                    }
+
+                }
+            }catch (JSONException e){e.printStackTrace();}
+
+            params.put("menu",finalJsonArray.toString());
             params.put("type","0");
             params.put("price","0");
 

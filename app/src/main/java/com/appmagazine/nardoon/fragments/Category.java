@@ -129,4 +129,11 @@ public class Category extends Fragment {
         return view;
 
     }
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        // Load data and do stuff
+    }
+
 }
