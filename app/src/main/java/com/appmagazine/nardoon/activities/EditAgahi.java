@@ -655,10 +655,12 @@ public class EditAgahi extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         int index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
-                        ((LinearLayout) addView.getParent()).removeView(addView);
-                       // menuJsonArray.remove(index);
-                        menuJsonArray.remove(index);
-                        Log.i("teeees", menuJsonArray.toString());
+                        addView.setVisibility(View.GONE);
+
+                        try {
+                            menuJsonArray.getJSONObject(index).put("name","0");
+                        }catch (JSONException e){e.printStackTrace();}
+
 
                     }
                 });

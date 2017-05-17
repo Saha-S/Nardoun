@@ -3,13 +3,17 @@ package com.appmagazine.nardoon.fragments;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,10 +21,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appmagazine.nardoon.Adapter.NiniAdapter;
@@ -33,8 +41,16 @@ import com.appmagazine.nardoon.Nini;
 import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
 import com.appmagazine.nardoon.RecyclerItemClickListener;
+import com.appmagazine.nardoon.activities.AboutUs;
 import com.appmagazine.nardoon.activities.Details;
+import com.appmagazine.nardoon.activities.Favorite;
 import com.appmagazine.nardoon.activities.Filter;
+import com.appmagazine.nardoon.activities.Login;
+import com.appmagazine.nardoon.activities.MyAgahis;
+import com.appmagazine.nardoon.activities.MyNini;
+import com.appmagazine.nardoon.activities.Poshtibani;
+import com.appmagazine.nardoon.activities.Rules;
+import com.appmagazine.nardoon.activities.WinnerNini;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -52,7 +68,7 @@ import cz.msebera.android.httpclient.Header;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 
-public class NiniAx extends Fragment implements TextWatcher {
+public class NiniAx extends Fragment implements TextWatcher  , NavigationView.OnNavigationItemSelectedListener{
     RecyclerView recyclerView;
     NiniAdapter adapter;
     LinearLayoutManager linearLayoutManager;
@@ -60,10 +76,13 @@ public class NiniAx extends Fragment implements TextWatcher {
     SwipeRefreshLayout swipeRefreshLayout;
     EndlessRecyclerViewScrollListener scrollListener;
     LinearLayout llFilter;
+    private View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_nini_ax, container, false);
+        view = inflater.inflate(R.layout.fragment_nini_ax, container, false);
+
+
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe);
 
@@ -221,6 +240,58 @@ public class NiniAx extends Fragment implements TextWatcher {
     {
         super.onResume();
         // Load data and do stuff
+    }
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_about) {
+            Intent intent = new Intent(App.context , AboutUs.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_favarit) {
+            Intent intent = new Intent(App.context , Favorite.class);
+            startActivity(intent);
+
+        } else if (id == R.id.nav_my_agahi) {
+
+            Intent intent = new Intent(App.context , MyAgahis.class);
+            startActivity(intent);
+
+        }
+        else if (id == R.id.nav_my_nini) {
+
+            Intent intent = new Intent(App.context , MyNini.class);
+            startActivity(intent);
+
+        }
+        else if (id == R.id.nav_login) {
+
+            Intent intent = new Intent(App.context , Login.class);
+            startActivity(intent);
+        }
+
+        else if (id == R.id.nav_my_agahi) {
+
+        }else if (id == R.id.nav_rules) {
+            Intent intent = new Intent(App.context , Rules.class);
+            startActivity(intent);
+
+        }else if (id == R.id.nav_support) {
+            Intent intent = new Intent(App.context , Poshtibani.class);
+            startActivity(intent);
+
+        }
+        else if (id == R.id.nav_winner_nini) {
+            Intent intent = new Intent(App.context , WinnerNini.class);
+            startActivity(intent);
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.END);
+        return true;
     }
 
 

@@ -451,8 +451,8 @@ public class Details extends AppCompatActivity {
                                 .image(R.drawable.nopic);
                     }
 */
-                    if(url2.equals("0") && url3.equals("0")){
-                        String images[] = {App.urlimages+url1};
+                    if(url1.equals("0") && url2.equals("0") && url3.equals("0")){
+                        int images[] = {R.drawable.nopic};
                         sliderShow.setPagerTransformer(false, new BaseTransformer() {
 
                             @Override
@@ -462,48 +462,66 @@ public class Details extends AppCompatActivity {
                         });
                         for(int i = 0 ; i<images.length ; i++){
 
-                        SliderView
-                                .image(images[i]);
+                            SliderView
+                                    .image(images[i]);
 
                         }
                         sliderShow.addSlider(SliderView);
 
 
-                    }
-                    if(url2.equals("0") && !url3.equals("0")){
-                        String images[] = {App.urlimages+url1,App.urlimages+url3};
-                        url_maps.put("1", App.urlimages+url1);
-                        url_maps.put("2", App.urlimages+url3);
+
+                    }else {
+                        if(url2.equals("0") && url3.equals("0")){
+                            String images[] = {App.urlimages+url1};
+                            sliderShow.setPagerTransformer(false, new BaseTransformer() {
+
+                                @Override
+                                public void onTransform(View view, float position) {
+                                }
+
+                            });
+                            for(int i = 0 ; i<images.length ; i++){
+
+                                SliderView
+                                        .image(images[i]);
+
+                            }
+                            sliderShow.addSlider(SliderView);
+
+
+                        }
+
+
+                        if (url2.equals("0") && !url3.equals("0")) {
+                            url_maps.put("1", App.urlimages + url1);
+                            url_maps.put("2", App.urlimages + url3);
+
+                        }
+                        if (!url2.equals("0") && url3.equals("0")) {
+                            url_maps.put("1", App.urlimages + url1);
+                            url_maps.put("2", App.urlimages + url2);
+
+                        }
+                        if (!url2.equals("0") && !url3.equals("0")) {
+                            url_maps.put("1", App.urlimages + url1);
+                            url_maps.put("2", App.urlimages + url2);
+                            url_maps.put("3", App.urlimages + url3);
+
+
+                        }
+                        for (String name : url_maps.keySet()) {
+
+
+                            DefaultSliderView textSliderView = new DefaultSliderView(Details.this);
+                            // initialize a SliderLayout
+                            textSliderView
+                                    .description(name)
+                                    .image(url_maps.get(name))
+                                    .setScaleType(BaseSliderView.ScaleType.Fit);
+                            sliderShow.addSlider(textSliderView);
+                        }
 
                     }
-                    if(!url2.equals("0") && url3.equals("0")){
-                        String images[] = {App.urlimages+url1,App.urlimages+url2};
-                        url_maps.put("1", App.urlimages+url1);
-                        url_maps.put("2", App.urlimages+url2);
-
-                    }
-                    if(!url2.equals("0") && !url3.equals("0")){
-                        final  String images[] = {App.urlimages+url1,App.urlimages+url2,App.urlimages+url3};
-
-                        url_maps.put("1", App.urlimages+url1);
-                        url_maps.put("2", App.urlimages+url2);
-                        url_maps.put("3", App.urlimages+url3);
-
-
-                    }
-                    for(String name : url_maps.keySet()){
-
-
-                        DefaultSliderView textSliderView = new DefaultSliderView(Details.this);
-                        // initialize a SliderLayout
-                        textSliderView
-                                .description(name)
-                                .image(url_maps.get(name))
-                                .setScaleType(BaseSliderView.ScaleType.Fit);
-                        sliderShow.addSlider(textSliderView);
-                    }
-
-
                     price = intent.getStringExtra("price");
                     time = intent.getStringExtra("time");
                     tvlocation               .setText(location);

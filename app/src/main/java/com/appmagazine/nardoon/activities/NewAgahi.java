@@ -645,7 +645,6 @@ package com.appmagazine.nardoon.activities;
                 try {
                     params.put("fileii", file3);
                 } catch(FileNotFoundException e) {}
-                Log.i("locaaa" , "loca:" + destination);
 
                 client.post(App.urlApi+"agahis", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
                     @Override
@@ -686,7 +685,6 @@ package com.appmagazine.nardoon.activities;
 
                         }else{
                             App.CustomToast(" لطفا دوباره سعی کنید ");
-                            Log.i("myerror" , errorResponse.toString());
                         }
                     }
                 });
@@ -780,7 +778,7 @@ package com.appmagazine.nardoon.activities;
                             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
 
                             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                            thumbnail.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+                            thumbnail.compress(Bitmap.CompressFormat.JPEG,90, bytes);
 
                             destination = new File(Environment.getExternalStorageDirectory(),
                                     System.currentTimeMillis() + ".jpg");
@@ -807,16 +805,13 @@ package com.appmagazine.nardoon.activities;
                             if (imgAsli.getVisibility() == View.GONE) {
                                 imgAsli.setVisibility(View.VISIBLE);
                                 file1 = destination;
-                                Log.i("file1", "1: " + file1.toString());
                             } else if (imgAsli.getVisibility() == View.VISIBLE && img2.getVisibility() == View.GONE) {
                                 img2.setVisibility(View.VISIBLE);
                                 file2 = destination;
-                                Log.i("file2", "2: " + file2.toString());
 
                             } else if (img2.getVisibility() == View.VISIBLE && img3.getVisibility() == View.GONE) {
                                 img3.setVisibility(View.VISIBLE);
                                 file3 = destination;
-                                Log.i("file3", "3: " + file3.toString());
 
                             }
                             image.setImageBitmap(thumbnail);
@@ -836,8 +831,8 @@ package com.appmagazine.nardoon.activities;
                     CropIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
                     CropIntent.putExtra("crop", "true");
-                    CropIntent.putExtra("outputX", 512);
-                    CropIntent.putExtra("outputY", 512);
+                    CropIntent.putExtra("outputX", 100);
+                    CropIntent.putExtra("outputY", 100);
                     CropIntent.putExtra("aspectX", 3);
                     CropIntent.putExtra("aspectY", 3);
                     CropIntent.putExtra("scaleUpIfNeeded", true);

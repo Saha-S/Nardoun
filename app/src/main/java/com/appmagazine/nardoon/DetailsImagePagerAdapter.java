@@ -61,48 +61,10 @@ private int[] intdots;
         dotsCount = images.length;
 
 
-
-/*
-        dotsCount = images.length;
-        dots = new ImageView[dotsCount];
-        intdots = new int[dotsCount];
-
-        for (int i = 0; i < dotsCount; i++) {
-            Log.i("dooooot1" , dotsCount+"");
-            View rootView = layoutInflater.inflate(R.layout.activity_details, container, false);
-
-            // final View addView = layoutInflater.inflate(R.layout.row, null);
-
-            LinearLayout row2 = (LinearLayout) rootView.findViewById(R.id.dots);
-
-            dots[i] = new ImageView(App.context);
-            Log.i("dooooot2" , i+"");
-            intdots[i]=((R.drawable.like));
-            dots[i].setImageResource((intdots[i]));
-            LinearLayout.LayoutParams layoutParams = new  LinearLayout.LayoutParams(70, 70);
-            layoutParams.setMargins(4, 2, 4, 2);
-
-            row2.addView(dots[i]);
-            Log.i("dooooot2" ,"shod");
-
-        }
-
-        intdots[position]=((R.drawable.liked));
-        dots[position].setImageResource((intdots[position]));
-*/
         container.addView(itemView);
 
 
-
-        //listening to image click
-     /*   imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "you clicked image " + (position + 1), Toast.LENGTH_LONG).show();
-            }
-        });*/
-
-            return itemView;
+         return itemView;
 
     }
 
