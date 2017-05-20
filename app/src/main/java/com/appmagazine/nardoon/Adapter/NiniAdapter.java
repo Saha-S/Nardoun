@@ -309,9 +309,6 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
         client.get(App.urlApi+"nini/" + id + "/unlike" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
-                // called before request is started
-
-                // loginpb1.setVisibility(View.VISIBLE);      *************** inja  progressbar faal mishe
             }
 
             @Override
@@ -327,9 +324,6 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-
-                // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
                 if (statusCode == 403)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
                     App.CustomToast(" در حال حاضر امکان رای دادن وجود ندارد. ");
@@ -341,7 +335,6 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
             @Override
             public void onRetry(int retryNo) {
-                // called when request is retried
             }
         });
     }
@@ -355,16 +348,12 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
         client.get(App.urlApi+"nini/" + id + "/dislike" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
-                // called before request is started
-
-                // loginpb1.setVisibility(View.VISIBLE);      *************** inja  progressbar faal mishe
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
                 String value = new String(response);
-               // likes = value;
                 holder.dislikes.setText(value);
 
 
@@ -372,9 +361,6 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-
-                // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
                 if (statusCode == 403)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
                     App.CustomToast(" در حال حاضر امکان رای دادن وجود ندارد. ");
@@ -399,16 +385,12 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
         client.get(App.urlApi+"nini/" + id + "/undislike" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
-                // called before request is started
-
-                // loginpb1.setVisibility(View.VISIBLE);      *************** inja  progressbar faal mishe
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
                 String value = new String(response);
-                // likes = value;
                 holder.dislikes.setText(value);
 
 
@@ -416,9 +398,6 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-
-                // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
                 if (statusCode == 403)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
                     App.CustomToast(" در حال حاضر امکان رای دادن وجود ندارد. ");

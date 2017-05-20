@@ -264,9 +264,7 @@ public class EditAgahi extends AppCompatActivity {
 
         SelectCat.setText(Details.catname);
 
-        Log.i("teeeeeeest"  ,SelectCat.getText().toString() );
         if (SelectCat.getText().toString().equals("رستوران")) {
-            Log.i("teeeeeeest2"  ,SelectCat.getText().toString() );
 
             txtCat.setVisibility(View.GONE);
             llType.setVisibility(View.GONE);
@@ -281,8 +279,21 @@ public class EditAgahi extends AppCompatActivity {
 
             startTime = Details.start;
             endTime = Details.end;
-            txtBeginTime.setText(startTime);
-            txtFinishTime.setText(endTime);
+            txtBeginTime.setText("شروع سفارش گیری از "+startTime);
+            txtFinishTime.setText("پایان سفارش گیری "+endTime);
+
+        }else if(SelectCat.getText().equals("استخدام و کاریابی")) {
+            txtCat.setVisibility(View.GONE);
+            txtCat.setVisibility(View.VISIBLE);
+            llType.setVisibility(View.GONE);
+            llPrice.setVisibility(View.GONE);
+            llBegin.setVisibility(View.GONE);
+            llFinish.setVisibility(View.GONE);
+            container.setVisibility(View.GONE);
+            llMenu.setVisibility(View.GONE);
+            llForm.setVisibility(LinearLayout.VISIBLE);
+            llClose.setVisibility(LinearLayout.VISIBLE);
+            llErsal.setVisibility(LinearLayout.VISIBLE);
 
         }
 
@@ -373,10 +384,8 @@ public class EditAgahi extends AppCompatActivity {
                 if (SelectCat.getText().equals("رستوران")) {
                     if(chkSpecial.isChecked()){
                         webServiceCountSpecial();
-                        Log.i("lklklklklklklk" , String.valueOf(countSpecial));
                         if(countSpecial>=5) {
                             flag10 = true;
-                            Log.i("lklklklklklklk" , "shoood");
 
                             App.CustomToast("در حال حاضر امکان انتخاب آگهی ویژه برای این دسته بندی وجود ندارد .");
                         }
@@ -465,13 +474,85 @@ public class EditAgahi extends AppCompatActivity {
                         webServiceEditAgahi();
 
                     }
-                } else {
+                }
+                else if(SelectCat.getText().equals("استخدام و کاریابی")){
+
                     if(chkSpecial.isChecked()){
                         webServiceCountSpecial();
-                        Log.i("lklklklklklklk" , String.valueOf(countSpecial));
                         if(countSpecial>=5) {
                             flag10 = true;
-                            Log.i("lklklklklklklk" , "shoood");
+                            App.CustomToast("در حال حاضر امکان انتخاب آگهی ویژه برای این دسته بندی وجود ندارد .");
+                        }
+                    } else {
+                        flag10 = false;
+                    }
+                    if (phone.getText().toString().matches("")) {
+                        txtMobile.setVisibility(View.VISIBLE);
+                        flag3 = true;
+                    } else {
+                        txtMobile.setVisibility(View.GONE);
+                        flag3 = false;
+                    }
+
+
+                    if (location.getText().toString().matches("")) {
+                        txtLocation.setVisibility(View.VISIBLE);
+                        flag4 = true;
+                    } else {
+                        txtLocation.setVisibility(View.GONE);
+                        flag4 = false;
+                    }
+
+
+                    if (title.getText().toString().matches("")) {
+                        txtTitle.setVisibility(View.VISIBLE);
+                        flag5 = true;
+                    } else {
+                        txtTitle.setVisibility(View.GONE);
+                        flag5 = false;
+                    }
+
+
+                    if (content.getText().toString().matches("")) {
+                        txtContent.setVisibility(View.VISIBLE);
+                        flag6 = true;
+                    } else {
+                        txtContent.setVisibility(View.GONE);
+                        flag6 = false;
+                    }
+
+
+                    if (imgAsli.getVisibility() == View.GONE && (img2.getVisibility() == View.VISIBLE || img3.getVisibility() == View.VISIBLE)) {
+                        txtImg.setVisibility(View.VISIBLE);
+                        flag8 = true;
+                    } else {
+                        txtImg.setVisibility(View.GONE);
+                        flag8 = false;
+                    }
+
+
+                    if ( flag3 == false && flag4 == false && flag5 == false && flag6 == false  && flag8 == false && flag10 == false) {
+
+                        dialog = ProgressDialog.show(EditAgahi.this, null, null, true, false);
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                        dialog.setContentView(R.layout.progress_layout_small);
+
+                        int selectedId = radioTypeGroup.getCheckedRadioButtonId();
+                        radioTypeButton = (RadioButton) findViewById(selectedId);
+
+                        if (radioTypeButton != null) {
+
+                            type = radioTypeButton.getText().toString();
+                        }
+                        webServiceEditAgahi();
+
+                    }
+                }else {
+                    if(chkSpecial.isChecked()){
+                        webServiceCountSpecial();
+                        if(countSpecial>=5) {
+                            flag10 = true;
 
                             App.CustomToast("در حال حاضر امکان انتخاب آگهی ویژه برای این دسته بندی وجود ندارد .");
                         }
@@ -578,8 +659,6 @@ public class EditAgahi extends AppCompatActivity {
          //   Intent intent = getIntent();
             String order = Details.order;
             menuJsonArray = new JSONArray(order);
-       //     Log.i("aaaaaaa122322", order);
-            Log.i("aaaaaaa12234433", menuJsonArray.toString());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -716,7 +795,12 @@ public class EditAgahi extends AppCompatActivity {
             params.put("type","0");
             params.put("price","0");
 
-        }else {
+        }
+        if(SelectCat.getText().equals("استخدام و کاریابی")) {
+            params.put("type","0");
+            params.put("price","0");
+        }
+        else {
             params.put("price", price.getText());
             params.put("type",type);
         }
@@ -803,11 +887,10 @@ public class EditAgahi extends AppCompatActivity {
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
                     dialog.hide();
-                    App.CustomToast("آگهی با این شماره وجود ندارد !");
+                    App.CustomToast("لطفا دوباره سعی کنید");
 
                 }else{
                     dialog.hide();
-                    App.CustomToast("fail "+statusCode);
                     App.CustomToast(" لطفا دوباره سعی کنید ");
                 }
             }
@@ -1021,7 +1104,6 @@ public class EditAgahi extends AppCompatActivity {
         client.get(App.urlApi+"specialcount/"+Details.catId, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
-                Log.i("jjjjjjjjjjjjjjjj" , "sdfgh   "+Details.catId);
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {

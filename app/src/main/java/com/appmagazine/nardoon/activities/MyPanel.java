@@ -38,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
@@ -83,15 +84,9 @@ public class MyPanel extends AppCompatActivity {
         String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
 
         if (status.matches("1") && !id_confirmaationSH.equals("0")) {
-            id_confirmaation = id_confirmaationSH.replace("[{\"id\":", "").replace("}]", "");
-
-
-
+        id_confirmaation = id_confirmaationSH.replace("[{\"id\":", "").replace("}]", "");
         myDevice=App.android_id;
-
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
-
-
         recyclerView = (RecyclerView) findViewById(R.id.list);
         linearLayoutManager = new LinearLayoutManager(App.context, LinearLayoutManager.VERTICAL, false);
         array = new ArrayList<>();
@@ -131,8 +126,6 @@ public class MyPanel extends AppCompatActivity {
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-//        params.put("username", ""); //  ********** parametr  ersali dar surate niaz
-//        params.put("password", "");
         client.get(App.urlApi+"buylog/"+id_confirmaation , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
         @Override
         public void onStart() {
@@ -148,9 +141,12 @@ public class MyPanel extends AppCompatActivity {
 
                 JSONArray posters = new JSONArray(value);
                 for (int i = 0; i < posters.length(); i++) {
-                    array.add(new MyPay(posters.getJSONObject(i)));
+                    if  (!posters.getJSONObject(i).isNull("credit") ) {
+                        array.add(new MyPay(posters.getJSONObject(i)));
+                    }
                 }
                 adapter.update(array);
+                Log.i("arrrrr" , array.toString());
                 swipeRefreshLayout.setRefreshing(false);
             } catch (JSONException e1) {
 
@@ -165,7 +161,7 @@ public class MyPanel extends AppCompatActivity {
             if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
             {
                 swipeRefreshLayout.setRefreshing(false);
-                App.CustomToast(" خطا.لطفا مجددا امتحان کنید ");
+                App.CustomToast(" تاریخچه خالی می باشد. ");
 
             }else{
                 swipeRefreshLayout.setRefreshing(false);

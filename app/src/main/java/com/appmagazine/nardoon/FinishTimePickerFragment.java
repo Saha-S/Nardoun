@@ -13,6 +13,7 @@ import android.text.format.DateFormat;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.appmagazine.nardoon.activities.EditAgahi;
 import com.appmagazine.nardoon.activities.NewAgahi;
 
 import java.util.Calendar;
@@ -45,6 +46,7 @@ public class FinishTimePickerFragment extends DialogFragment implements TimePick
 
         tv.setText(   "پایان سفارش گیری " + String.valueOf(hourOfDay) + ":"+ String.valueOf(minute) );
         NewAgahi.endTime = String.valueOf(hourOfDay) + ":"+ String.valueOf(minute) + ":"+ "00";
+        EditAgahi.endTime = String.valueOf(hourOfDay) + ":"+ String.valueOf(minute) + ":"+ "00";
 
     }
 }

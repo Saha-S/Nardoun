@@ -268,6 +268,7 @@ public class Details extends AppCompatActivity {
                 if(permission.equals("1")){
                     Intent intent = new Intent(App.context, EditAgahi.class);
                     startActivity(intent);
+                    finish();
                 }else {
                     App.CustomToast("ویرایش آگهی 2 روز پس از ایجاد آگهی ممکن میباشد.");
                 }
@@ -810,9 +811,9 @@ public class Details extends AppCompatActivity {
         Payment payment = new PaymentBuilder()
                 .setMerchantID("f1bd82da-273d-11e7-9b41-005056a205be")  //  This is an example, put your own merchantID here.
                 .setAmount(AgahiPrice)                                        //  In Toman
-                .setDescription("پرداخت تست پلاگین اندروید")
-                .setEmail("moslem.deris@gmail.com")                     //  This field is not necessary.
-                .setMobile("09123456789")                               //  This field is not necessary.
+                .setDescription("پرداخت به ناردون")
+                .setEmail("info@nardoun.ir")                     //  This field is not necessary.
+                .setMobile("09175006484")                               //  This field is not necessary.
                 .create();
 
         dialog = ProgressDialog.show(Details.this, null, null, true, false);
@@ -903,12 +904,11 @@ public class Details extends AppCompatActivity {
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
                     dialog.hide();
-                    App.CustomToast("ویرایش با خطا مواجه شد !");
+                   // App.CustomToast("ویرایش با خطا مواجه شد !");
 
                 }else{
                     dialog.hide();
-                    App.CustomToast("fail "+statusCode);
-                    App.CustomToast(" ویرایش نشد ");
+                  //  App.CustomToast(" ویرایش نشد ");
                 }
             }
 
@@ -970,12 +970,12 @@ public class Details extends AppCompatActivity {
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
                     dialog.hide();
-                    App.CustomToast("ثبت اطلاعات خرید با مشکل مواجه شد !");
+                  //  App.CustomToast("ثبت اطلاعات خرید با مشکل مواجه شد !");
 
                 }else{
                     dialog.hide();
-                    App.CustomToast("fail "+statusCode);
-                    App.CustomToast("اطلاعات خرید ثبت نشد ");
+                  //  App.CustomToast("fail "+statusCode);
+                 //   App.CustomToast("اطلاعات خرید ثبت نشد ");
                 }
             }
 
@@ -1134,7 +1134,6 @@ public class Details extends AppCompatActivity {
 
                 }else{
                     App.CustomToast(" لطفا دوباره سعی کنید ");
-                    Log.i("myerror" , errorResponse.toString());
                 }
             }
         });

@@ -14,6 +14,7 @@ import android.app.Dialog;
 import java.util.Calendar;
 import android.widget.TimePicker;
 
+import com.appmagazine.nardoon.activities.EditAgahi;
 import com.appmagazine.nardoon.activities.NewAgahi;
 
 
@@ -43,5 +44,6 @@ public class BeginTimePickerFragment extends DialogFragment implements TimePicke
         //Display the user changed time on TextView
         tv.setText( "شروع سفارش گیری از " + String.valueOf(hourOfDay) + ":"+ String.valueOf(minute) );
         NewAgahi.startTime = String.valueOf(hourOfDay) + ":"+ String.valueOf(minute) + ":"+ "00";
+        EditAgahi.startTime = String.valueOf(hourOfDay) + ":"+ String.valueOf(minute) + ":"+ "00";
     }
 }

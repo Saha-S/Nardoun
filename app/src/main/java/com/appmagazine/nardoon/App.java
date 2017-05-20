@@ -55,11 +55,11 @@ public class App extends Application {
                 Secure.ANDROID_ID);
         android_Model = Build.MODEL;
         priceSms =10;
-        priceLink =100;
-        priceVizhe =100;
-        priceEstekhdam =100;
-        priceNini =100;
-        priceRestaurant =100;
+        priceLink =10000;
+        priceVizhe =15000;
+        priceEstekhdam =10000;
+        priceNini =10000;
+        priceRestaurant =15000;
         SharedPreferences prefs = getSharedPreferences("LOGIN_ID", MODE_PRIVATE);
         String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
         if(id_confirmaationSH!="0"){

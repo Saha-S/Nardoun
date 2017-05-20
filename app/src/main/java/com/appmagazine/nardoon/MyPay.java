@@ -20,8 +20,9 @@ public class MyPay {
             this.price = jsonObject.getString("price");
             this.traking_code = jsonObject.getString("traking_code");
             this.isused = jsonObject.getString("isused");
-            this.credit = jsonObject.getString("credit");
             this.created_at = jsonObject.getString("created_at");
+            this.credit = jsonObject.getString("credit");
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

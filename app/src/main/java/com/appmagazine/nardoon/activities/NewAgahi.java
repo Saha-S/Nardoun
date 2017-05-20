@@ -14,6 +14,8 @@ package com.appmagazine.nardoon.activities;
         import android.net.Uri;
         import android.os.Build;
         import android.os.Environment;
+        import android.os.Handler;
+        import android.os.Message;
         import android.support.annotation.RequiresApi;
         import android.support.v4.app.ActivityCompat;
         import android.support.v4.content.FileProvider;
@@ -98,12 +100,29 @@ package com.appmagazine.nardoon.activities;
             JSONArray menuJsonArray;
             public static String startTime , endTime;
             private int countSpecial;
+            public static Handler h;
 
 
             @Override
             protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
                 setContentView(R.layout.activity_new);
+
+                h = new Handler() {
+
+                    public void handleMessage(Message msg) {
+                        super.handleMessage(msg);
+
+                        switch(msg.what) {
+
+                            case 0:
+                                finish();
+                                break;
+
+                        }
+                    }
+
+                };
 
                 menuJsonArray = new JSONArray();
 
@@ -263,6 +282,7 @@ package com.appmagazine.nardoon.activities;
 
 
                 if (name!= null){
+
                     SelectCat.setText(name);
                         if(SelectCat.getText().equals("رستوران")){
                         txtCat.setVisibility(View.GONE);
@@ -284,10 +304,10 @@ package com.appmagazine.nardoon.activities;
                             txtCat.setVisibility(View.VISIBLE);
                             llType.setVisibility(View.GONE);
                             llPrice.setVisibility(View.GONE);
-                            llBegin.setVisibility(View.VISIBLE);
-                            llFinish.setVisibility(View.VISIBLE);
-                            container.setVisibility(View.VISIBLE);
-                            llMenu.setVisibility(View.VISIBLE);
+                            llBegin.setVisibility(View.GONE);
+                            llFinish.setVisibility(View.GONE);
+                            container.setVisibility(View.GONE);
+                            llMenu.setVisibility(View.GONE);
                             llForm.setVisibility(LinearLayout.VISIBLE);
                             llClose.setVisibility(LinearLayout.VISIBLE);
                             llErsal.setVisibility(LinearLayout.VISIBLE);
@@ -459,6 +479,80 @@ package com.appmagazine.nardoon.activities;
 
                             }
                         }
+                        else if(SelectCat.getText().equals("استخدام و کاریابی")){
+
+                            if(chkSpecial.isChecked()){
+                                webServiceCountSpecial();
+                                if(countSpecial>=5) {
+                                    flag10 = true;
+                                    App.CustomToast("در حال حاضر امکان انتخاب آگهی ویژه برای این دسته بندی وجود ندارد .");
+                                }
+                            } else {
+                                flag10 = false;
+                            }
+                            if (phone.getText().toString().matches("")) {
+                                txtMobile.setVisibility(View.VISIBLE);
+                                flag3 = true;
+                            } else {
+                                txtMobile.setVisibility(View.GONE);
+                                flag3 = false;
+                            }
+
+
+                            if (location.getText().toString().matches("")) {
+                                txtLocation.setVisibility(View.VISIBLE);
+                                flag4 = true;
+                            } else {
+                                txtLocation.setVisibility(View.GONE);
+                                flag4 = false;
+                            }
+
+
+                            if (title.getText().toString().matches("")) {
+                                txtTitle.setVisibility(View.VISIBLE);
+                                flag5 = true;
+                            } else {
+                                txtTitle.setVisibility(View.GONE);
+                                flag5 = false;
+                            }
+
+
+                            if (content.getText().toString().matches("")) {
+                                txtContent.setVisibility(View.VISIBLE);
+                                flag6 = true;
+                            } else {
+                                txtContent.setVisibility(View.GONE);
+                                flag6 = false;
+                            }
+
+
+                            if (imgAsli.getVisibility() == View.GONE && (img2.getVisibility() == View.VISIBLE || img3.getVisibility() == View.VISIBLE)) {
+                                txtImg.setVisibility(View.VISIBLE);
+                                flag8 = true;
+                            } else {
+                                txtImg.setVisibility(View.GONE);
+                                flag8 = false;
+                            }
+
+
+                            if ( flag3 == false && flag4 == false && flag5 == false && flag6 == false  && flag8 == false && flag10 == false) {
+
+                                dialog = ProgressDialog.show(NewAgahi.this, null, null, true, false);
+                                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                                dialog.setContentView(R.layout.progress_layout_small);
+
+                                int selectedId = radioTypeGroup.getCheckedRadioButtonId();
+                                radioTypeButton = (RadioButton) findViewById(selectedId);
+
+                                if (radioTypeButton != null) {
+
+                                    type = radioTypeButton.getText().toString();
+                                }
+                                webServiceNewAgahi();
+
+                            }
+                        }
                         else{
 
                             if(chkSpecial.isChecked()){
@@ -561,8 +655,18 @@ package com.appmagazine.nardoon.activities;
                 SelectCat.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(App.context , cats.class);
-                        startActivity(intent);
+                        if (SelectCat.getText().equals("انتخاب"))
+                        {
+
+                    Intent intent = new Intent(App.context, cats.class);
+
+                    startActivity(intent);
+                }else{
+                            Intent intent = new Intent(App.context, cats.class);
+
+                            startActivity(intent);
+                        //    finish();
+                        }
                     }
                 });
 
@@ -619,7 +723,12 @@ package com.appmagazine.nardoon.activities;
                     params.put("price","0");
 
 
-                }else {
+                }
+                if(SelectCat.getText().equals("استخدام و کاریابی")) {
+                    params.put("type","0");
+                    params.put("price","0");
+                }
+                else {
                     params.put("price", price.getText());
                     params.put("type",type);
                 }

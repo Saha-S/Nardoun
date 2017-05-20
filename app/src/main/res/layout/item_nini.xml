@@ -233,7 +233,7 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:id="@+id/imageView9"
+                        android:id="@+id/imageView09"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat="@mipmap/winner" />
@@ -246,7 +246,7 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:id="@+id/imageView11"
+                        android:id="@+id/imageView101"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:srcCompat="@mipmap/winner" />

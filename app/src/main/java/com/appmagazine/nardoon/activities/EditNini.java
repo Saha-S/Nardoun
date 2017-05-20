@@ -386,7 +386,7 @@ public class EditNini extends AppCompatActivity {
                 Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
 
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
                 destination = new File(Environment.getExternalStorageDirectory(),
                         System.currentTimeMillis() + ".jpg");
@@ -423,10 +423,10 @@ public class EditNini extends AppCompatActivity {
             CropIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
             CropIntent.putExtra("crop", "true");
-            CropIntent.putExtra("outputX", 100);
-            CropIntent.putExtra("outputY", 100);
-            CropIntent.putExtra("aspectX", 3);
-            CropIntent.putExtra("aspectY", 3);
+            CropIntent.putExtra("aspectX", 1);
+            CropIntent.putExtra("aspectY", 1);
+            CropIntent.putExtra("outputX", 300);
+            CropIntent.putExtra("outputY", 300);
             CropIntent.putExtra("scaleUpIfNeeded", true);
             CropIntent.putExtra("return-data", true);
 

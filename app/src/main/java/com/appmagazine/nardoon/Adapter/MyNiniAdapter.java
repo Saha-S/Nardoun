@@ -3,9 +3,11 @@ package com.appmagazine.nardoon.Adapter;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -158,12 +160,51 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
                 holder.txt.setTextColor(Color.RED);
                 holder.edit.setVisibility(View.GONE);
                 holder.pay.setVisibility(View.GONE);
+                holder.delete.setVisibility(View.GONE);
             }
 
 
 
             holder.txt.setText("وضعیت آگهی : " + StatusName.toString());
+            holder.delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder((Activity) v.getContext());
 
+//                // set title
+//                alertDialogBuilder.setTitle("-");
+
+                    // set dialog message
+                    alertDialogBuilder
+                            .setMessage("آیا میخواهید این نی نی عکس را حذف کنید؟")
+                            .setCancelable(true)
+                            .setPositiveButton("بله", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // if this button is clicked, close
+                                    webServiceDeleteNini(mDataset.get(position).id.toString() , v);
+
+                                }
+                            })
+                            .setNegativeButton("خیر", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // if this button is clicked, just close
+                                    // the dialog box and do nothing
+                                    dialog.cancel();
+                                }
+                            });
+                    // create alert dialog
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+
+                    alertDialog.show();
+
+                    TextView msgtv = (TextView) alertDialog.findViewById(android.R.id.message);
+                    alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextSize(20);
+                    //alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTypeface(Font_Far_Koodak);
+                    alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextSize(20);
+                    msgtv.setTextSize(19);
+
+                }
+            });
 
             holder.edit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -175,6 +216,8 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
                     idNini = mDataset.get(position).id;
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     App.context.startActivity(intent);
+                    ((Activity)v.getContext()).finish();
+
                 }
             });
 
@@ -185,7 +228,7 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     dialog.setContentView(R.layout.progress_layout_small);
 
-                    pay(v);
+                    pay(v, mDataset.get(position).confirmation_id.toString());
                 }
             });
 
@@ -208,19 +251,19 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
         return mDataset.size();
     }
 
-    private void pay(View v ){
+    private void pay(final View v , final String id ){
         Payment payment = new PaymentBuilder()
                 .setMerchantID("f1bd82da-273d-11e7-9b41-005056a205be")  //  This is an example, put your own merchantID here.
                 .setAmount(App.priceNini)                                        //  In Toman
-                .setDescription("پرداخت تست پلاگین اندروید")
-                .setEmail("moslem.deris@gmail.com")                     //  This field is not necessary.
-                .setMobile("09123456789")                               //  This field is not necessary.
+                .setDescription("پرداخت به ناردون")
+                .setEmail("info@nardoun.ir")                     //  This field is not necessary.
+                .setMobile("09175006484")                               //  This field is not necessary.
                 .create();
         ZarinPal.pay((Activity) v.getContext(), payment, new OnPaymentListener() {
             @Override
             public void onSuccess(String refID ) {
                 dialog.hide();
-                webServiceEditNini();
+                webServiceEditNini(id , v);
                 Log.wtf("TAG", "::ZarinPal::  RefId: " + refID);
                 peygiri  = refID;
              //   holder.pay.setVisibility(View.GONE);
@@ -243,13 +286,13 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
     }
 
 
-    public  void webServiceBuylog()
+    public  void webServiceBuylog(final String id , final View v)
     {
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
 
-        params.put("confirmation_id",id_confirm);
+        params.put("confirmation_id",id);
         params.put("type","7");
         params.put("related_id",idNini);
         params.put("description","نی نی عکس");
@@ -266,7 +309,6 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-
              //   dialog.hide();
                 //  Intent intent = new Intent(App.context , Details.class);
                 //  intent.putExtra("id", Details.idAgahi+"");
@@ -276,8 +318,7 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
                 Intent intent = new Intent(App.context, MyNini.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 App.context.startActivity(intent);
-
-                //  finish();
+                ((Activity)v.getContext()).finish();
 
             }
             @Override
@@ -304,15 +345,15 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
         });
     }
 
-    public  void webServiceEditNini()
+    public  void webServiceEditNini(final String id , final View v)
     {
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-
         if(status.equals("4") || status.equals("20")){
             params.put("validity","3");
         }else {
+
             params.put("validity","0");
         }
         params.put("image", image);
@@ -325,12 +366,7 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
-            //    dialog.hide();
-                webServiceBuylog();
-               // Intent intent = new Intent(App.context , Details.class);
-                //  intent.putExtra("id", Details.idAgahi+"");
-                // startActivity(intent);
-              //  App.CustomToast(" ویرایش شد !");
+                webServiceBuylog(id , v);
 
             }
             @Override
@@ -345,7 +381,56 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
 
                 }else{
                   //  dialog.hide();
-                    App.CustomToast("fail "+statusCode);
+                    App.CustomToast("مشکلی به وجود آمده است. لطفا دوباره امتحان کنید.");
+                }
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+                // called when request is retried
+            }
+        });
+    }
+
+    public  void webServiceDeleteNini(final String id , final View v)
+    {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+
+
+        client.delete(App.urlApi+"nini/"+ id, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+            @Override
+            public void onStart() {
+
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
+
+                App.CustomToast(" نی نی عکس با موفقیت حذف شد. ");
+
+          //  notifyDataSetChanged();
+                Intent intent = new Intent(App.context, MyNini.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                App.context.startActivity(intent);
+                ((Activity)v.getContext()).finish();
+
+
+
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+
+                // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
+                if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
+                    //    dialog.hide();
+                    App.CustomToast("مشکلی به وجود آمده است. لطفا دوباره امتحان کنید.");
+
+                }else{
+                    //  dialog.hide();
                     App.CustomToast("مشکلی به وجود آمده است. لطفا دوباره امتحان کنید.");
                 }
             }

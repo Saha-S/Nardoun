@@ -21,10 +21,10 @@ public class Nini {
             this.pointm = jsonObject.getString("pointm");
             this.validity = jsonObject.getString("validity");
             this.created_at = jsonObject.getString("created_at");
+            this.confirmation_id = jsonObject.getString("confirmation_id");
 
             this.comment = jsonObject.getString("comment");
 
-            this.confirmation_id = jsonObject.getString("confirmation_id");
         } catch (JSONException e) {
             e.printStackTrace();
         }

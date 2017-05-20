@@ -582,9 +582,9 @@ public class SMS extends Fragment {
         Payment payment = new PaymentBuilder()
                 .setMerchantID("f1bd82da-273d-11e7-9b41-005056a205be")  //  This is an example, put your own merchantID here.
                 .setAmount(priceint)                                        //  In Toman
-                .setDescription("پرداخت تست پلاگین اندروید")
-                .setEmail("moslem.deris@gmail.com")                     //  This field is not necessary.
-                .setMobile("09123456789")                               //  This field is not necessary.
+                .setDescription("پرداخت به ناردون")
+                .setEmail("info@nardoun.ir")                     //  This field is not necessary.
+                .setMobile("09175006484")                               //  This field is not necessary.
                 .create();
              //   dialog.hide();
 
@@ -678,7 +678,7 @@ public class SMS extends Fragment {
         params.put("related_id","1");
         params.put("description", Sdaemi+"-"+Setebari+"-"+Sirancell+"");
         params.put("price",priceint);
-        params.put("traking_code","123456");
+        params.put("traking_code",peygiri);
         params.put("isused","0");
         if(Sdaemi>0 && Setebari==0 && Sirancell ==0){
             params.put("type","1");
