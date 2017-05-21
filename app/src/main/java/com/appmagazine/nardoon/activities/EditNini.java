@@ -240,8 +240,11 @@ public class EditNini extends AppCompatActivity {
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-
-        params.put("validity","0");
+        if(MyNiniAdapter.status.equals("4")){
+            params.put("validity","3");
+        }else {
+            params.put("validity", "0");
+        }
         params.put("point","0");
         params.put("pointm","0");
 

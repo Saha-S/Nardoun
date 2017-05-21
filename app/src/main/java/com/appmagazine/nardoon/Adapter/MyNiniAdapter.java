@@ -213,6 +213,7 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
                     name = holder.name.getText().toString();
                     age = mDataset.get(position).age;
                     image = mDataset.get(position).image;
+                    status = mDataset.get(position).validity;
                     idNini = mDataset.get(position).id;
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     App.context.startActivity(intent);
@@ -350,12 +351,9 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        if(status.equals("4") || status.equals("20")){
-            params.put("validity","3");
-        }else {
 
             params.put("validity","0");
-        }
+
         params.put("image", image);
 
         client.post(App.urlApi+"updatenini/"+ idNini, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim

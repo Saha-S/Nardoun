@@ -235,7 +235,7 @@ public class NewNini extends AppCompatActivity {
         params.put("validity","3");
         params.put("point","0");
         params.put("pointm","0");
-        params.put("comment","-");
+        params.put("commment","-");
 
         params.put("name", edtName.getText()); //  ********** parametr  ersali dar surate niaz
         params.put("age", edtAge.getText());
