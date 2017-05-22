@@ -117,6 +117,7 @@ public class MyNini extends AppCompatActivity {
             }else {
             Intent intent = new Intent(App.context, Login.class);
             startActivity(intent);
+            finish();
         }
 
 

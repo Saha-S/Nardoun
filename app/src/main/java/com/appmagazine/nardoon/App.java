@@ -113,7 +113,7 @@ public class App extends Application {
         view.setGravity(Gravity.CENTER);
         layout.addView(view);
         Toast toast=new Toast(context);
-        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setDuration(Toast.LENGTH_SHORT);
         toast.setView(layout);
         toast.show();
     }

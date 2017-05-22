@@ -200,9 +200,13 @@ public class NewNini extends AppCompatActivity {
                     SharedPreferences prefs2 = getSharedPreferences("IS_LOGIN", MODE_PRIVATE);
                     String status = prefs2.getString("islogin", "0");
                     String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
+                    Log.i("iddddd" , id_confirmaationSH.toString());
 
                     if (status.matches("1") && !id_confirmaationSH.equals("0")) {
+
                         id_confirmaation = id_confirmaationSH.replace("[{\"id\":", "").replace("}]", "");
+                        Log.i("iddddd2" , id_confirmaation.toString());
+
                         webServiceNewAgahi();
                     }else {
                         dialog.hide();

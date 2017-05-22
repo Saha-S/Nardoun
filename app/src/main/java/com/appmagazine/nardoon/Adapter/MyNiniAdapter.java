@@ -228,8 +228,16 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
                     dialog = ProgressDialog.show(v.getContext(), null, null, true, false);
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     dialog.setContentView(R.layout.progress_layout_small);
+                    holder.name.setText(mDataset.get(position).name);
+                    holder.age.setText(mDataset.get(position).age);
+                    status = mDataset.get(position).validity;
 
-                    pay(v, mDataset.get(position).confirmation_id.toString());
+                    id_confirm = mDataset.get(position).confirmation_id;
+                    image = mDataset.get(position).image;
+                    idNini = mDataset.get(position).id;
+
+
+                    pay(v, id_confirm);
                 }
             });
 
@@ -321,6 +329,7 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
                 App.context.startActivity(intent);
                 ((Activity)v.getContext()).finish();
 
+
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
@@ -364,6 +373,7 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
+                notifyDataSetChanged();
                 webServiceBuylog(id , v);
 
             }

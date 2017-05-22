@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -38,6 +40,7 @@ public class Main extends AppCompatActivity
     ImageButton ibmenu , ib;
     TextView tvtitle , txt;
     LinearLayout llnewagahi;
+    public static Handler h;
 
 
     @Override
@@ -199,7 +202,7 @@ public class Main extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-                Menu nav_Menu = navigationView.getMenu();
+                final Menu nav_Menu = navigationView.getMenu();
 
         View hView =  navigationView.getHeaderView(0);
 
@@ -215,6 +218,11 @@ public class Main extends AppCompatActivity
                 SharedPreferences.Editor editor = getSharedPreferences("IS_LOGIN", MODE_PRIVATE).edit();
                 editor.putString("islogin", "0");
                 editor.commit();
+
+                SharedPreferences.Editor editor2 = getSharedPreferences("LOGIN_ID", MODE_PRIVATE).edit();
+                editor2.putString("time", "0");
+                editor2.commit();
+
                 Intent intent = new Intent(App.context , Main.class);
                 startActivity(intent);
                 finish();
@@ -226,7 +234,27 @@ public class Main extends AppCompatActivity
         SharedPreferences prefs = getSharedPreferences("LOGIN_ID", MODE_PRIVATE);
         SharedPreferences prefs2 = getSharedPreferences("IS_LOGIN", MODE_PRIVATE);
         String status = prefs2.getString("islogin", "0");
-        String mobile = prefs.getString("mobile", "0");
+        final String mobile = prefs.getString("mobile", "0");
+
+        h = new Handler() {
+
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+
+                switch(msg.what) {
+
+                    case 0:
+                        nav_Menu.findItem(R.id.nav_login).setVisible(false);
+                        nav_mobile.setVisibility(View.VISIBLE);
+                        btnExit.setVisibility(View.VISIBLE);
+                        nav_mobile.setText(mobile);
+                        break;
+
+                }
+            }
+
+        };
+
 
         if (status.matches("1")) {
 
