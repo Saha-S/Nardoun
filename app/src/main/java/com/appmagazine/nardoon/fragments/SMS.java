@@ -659,9 +659,10 @@ public class SMS extends Fragment {
                 allDaemi = Integer.parseInt(split[1]);
                 allEtebari = Integer.parseInt(split[2]);
                 allIrancell = Integer.parseInt(split[3]);
-                txtDaemi.setText("از "+ allDaemi );
-                txtEteberi.setText("از "+ allEtebari);
-                txtIrancell.setText("از "+ allIrancell );
+                txtDaemi.setText("از "+ allDaemi+ " شماره");
+                txtEteberi.setText("از "+ allEtebari+ " شماره");
+//                txtIrancell.setText("از "+ allIrancell+ " شماره");
+                txtIrancell.setText("تماس بگیرید");
 
             }catch (Exception e){}
             super.onPostExecute(result);
