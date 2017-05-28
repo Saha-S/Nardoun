@@ -155,6 +155,7 @@ package com.appmagazine.nardoon.activities;
                 LinearLayout llPrice = (LinearLayout) findViewById(R.id.ll_price);
                 LinearLayout llBegin = (LinearLayout) findViewById(R.id.ll_begin);
                 LinearLayout llFinish = (LinearLayout) findViewById(R.id.ll_finish);
+                LinearLayout llSpecial = (LinearLayout) findViewById(R.id.ll_special);
 
                 ImageButton close = (ImageButton) findViewById(R.id.close);
                 LinearLayout llBack = (LinearLayout) findViewById(R.id.ll_back);
@@ -297,8 +298,10 @@ package com.appmagazine.nardoon.activities;
                         llForm.setVisibility(LinearLayout.VISIBLE);
                         llClose.setVisibility(LinearLayout.VISIBLE);
                         llErsal.setVisibility(LinearLayout.VISIBLE);
+                            llSpecial.setVisibility(LinearLayout.GONE);
 
-                    }else if(SelectCat.getText().equals("استخدام و کاریابی")) {
+
+                        }else if(SelectCat.getText().equals("استخدام و کاریابی")) {
                             txtCat.setVisibility(View.GONE);
                             txtCat.setText("ثبت آگهی در این بخش رایگان نمی باشد");
                             txtCat.setVisibility(View.VISIBLE);
@@ -311,6 +314,8 @@ package com.appmagazine.nardoon.activities;
                             llForm.setVisibility(LinearLayout.VISIBLE);
                             llClose.setVisibility(LinearLayout.VISIBLE);
                             llErsal.setVisibility(LinearLayout.VISIBLE);
+                            llSpecial.setVisibility(LinearLayout.VISIBLE);
+
 
                         }else
                     {
@@ -322,6 +327,8 @@ package com.appmagazine.nardoon.activities;
                         llFinish.setVisibility(View.GONE);
                         container.setVisibility(View.GONE);
                         llMenu.setVisibility(View.GONE);
+                        llSpecial.setVisibility(LinearLayout.VISIBLE);
+
 
                     }
 
@@ -696,7 +703,11 @@ package com.appmagazine.nardoon.activities;
                 {
                     params.put("special", "1");
                 }
-               if(chkLink.isChecked() || chkSpecial.isChecked() || SelectCat.getText().equals("استخدام و کاریابی") || SelectCat.getText().equals("رستوران")){
+                else {
+                    params.put("special", "0");
+                }
+
+                if(chkLink.isChecked() || chkSpecial.isChecked() || SelectCat.getText().equals("استخدام و کاریابی") || SelectCat.getText().equals("رستوران")){
                    params.put("validity","3");
                }
                 if(SelectCat.getText().equals("رستوران")) {
@@ -727,6 +738,7 @@ package com.appmagazine.nardoon.activities;
                 if(SelectCat.getText().equals("استخدام و کاریابی")) {
                     params.put("type","0");
                     params.put("price","0");
+                    params.put("special", "0");
                 }
                 else {
                     params.put("price", price.getText());

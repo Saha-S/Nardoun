@@ -82,11 +82,22 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
     } 
 
     @Override
-    public void onBindViewHolder(PosterHolder holder, int position) {
+    public void onBindViewHolder(final PosterHolder holder, final int position) {
 try {
     holder.title.setText(filterPoster.get(position).title);
+
+    holder.title.post(new Runnable() {
+        @Override
+        public void run() {
+            int lineCount = holder.title.getLineCount();
+
+            if(lineCount>=2){
+                holder.title.setLines(2);
+            }
+        }
+    });
+
     if (!filterPoster.get(position).price.toString().equals("0")) {
-        Log.i("aaaaa2", filterPoster.get(position).price.toString());
         holder.price.setText(filterPoster.get(position).price + " تومان ");
     }
     holder.location.setText(filterPoster.get(position).created_at + " در " + filterPoster.get(position).location);

@@ -159,6 +159,8 @@ public class EditAgahi extends AppCompatActivity {
         LinearLayout llPrice = (LinearLayout) findViewById(R.id.ll_price);
         LinearLayout llBegin = (LinearLayout) findViewById(R.id.ll_begin);
         LinearLayout llFinish = (LinearLayout) findViewById(R.id.ll_finish);
+        LinearLayout llSpecial = (LinearLayout) findViewById(R.id.ll_special);
+
         txtBegin = (TextView) findViewById(R.id.txt_begin);
         txtFinish = (TextView) findViewById(R.id.txt_finish);
         txtBeginTime = (TextView) findViewById(R.id.txt_begin_time);
@@ -276,6 +278,8 @@ public class EditAgahi extends AppCompatActivity {
             llForm.setVisibility(LinearLayout.VISIBLE);
             llClose.setVisibility(LinearLayout.VISIBLE);
             llErsal.setVisibility(LinearLayout.VISIBLE);
+            llSpecial.setVisibility(LinearLayout.GONE);
+
 
             startTime = Details.start;
             endTime = Details.end;
@@ -294,6 +298,8 @@ public class EditAgahi extends AppCompatActivity {
             llForm.setVisibility(LinearLayout.VISIBLE);
             llClose.setVisibility(LinearLayout.VISIBLE);
             llErsal.setVisibility(LinearLayout.VISIBLE);
+            llSpecial.setVisibility(LinearLayout.VISIBLE);
+
 
         }
 
@@ -765,6 +771,8 @@ public class EditAgahi extends AppCompatActivity {
         if(chkSpecial.isChecked())
         {
             params.put("special", "1");
+        }else {
+            params.put("special", "0");
         }
 
         params.put("title", title.getText()); //  ********** parametr  ersali dar surate niaz
@@ -799,6 +807,8 @@ public class EditAgahi extends AppCompatActivity {
         if(SelectCat.getText().equals("استخدام و کاریابی")) {
             params.put("type","0");
             params.put("price","0");
+            params.put("special", "0");
+
         }
         else {
             params.put("price", price.getText());

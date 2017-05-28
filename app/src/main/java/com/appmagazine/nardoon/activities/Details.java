@@ -997,17 +997,29 @@ public class Details extends AppCompatActivity {
 
                 if(special.equals("1")){
                     SpecialPrice=App.priceVizhe;
+                }else {
+                    SpecialPrice=0;
                 }
 
                 if(catname.toString().equals("استخدام و کاریابی")){
                     EstekhdamPrice=App.priceEstekhdam;
                 }
+                else {
+                    EstekhdamPrice=0;
+
+                }
+
                 if(catname.toString().equals("رستوران")){
                     RestaurantPrice=App.priceRestaurant;
+                }else {
+                    RestaurantPrice=0;
+
                 }
 
                 if(!link.equals("")){
                     LinkPrice=App.priceLink;
+                }else {
+                    LinkPrice=0;
                 }
                 AgahiPrice=LinkPrice+SpecialPrice+EstekhdamPrice+RestaurantPrice;
 
