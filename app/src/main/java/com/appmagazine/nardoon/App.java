@@ -1,13 +1,16 @@
 package com.appmagazine.nardoon;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.app.Application;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
@@ -21,8 +24,19 @@ import android.widget.Toast;
 import android.provider.Settings.Secure;
 
 import com.appmagazine.nardoon.activities.Request;
+import com.appmagazine.nardoon.activities.cats;
+import com.appmagazine.nardoon.activities.subs;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Field;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by behroozhj on 2/20/17.
@@ -38,7 +52,8 @@ public class App extends Application {
     public static String android_id;
     public static String android_Model;
     public static String confirm_id;
-    public static int priceSms, priceLink , priceVizhe , priceEstekhdam , priceNini , priceRestaurant;
+    public static String versiontxt;
+    public static int priceSms, priceLink , priceVizhe , priceEstekhdam , priceNini , priceRestaurant, appversion;
     String fileCreated = "0" ;
 
 
@@ -58,8 +73,10 @@ public class App extends Application {
         priceLink =10000;
         priceVizhe =15000;
         priceEstekhdam =10000;
-        priceNini =10000;
+        priceNini =5000;
         priceRestaurant =15000;
+        appversion = 7;
+        versiontxt = "";
         SharedPreferences prefs = getSharedPreferences("LOGIN_ID", MODE_PRIVATE);
         String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
         if(id_confirmaationSH!="0"){
@@ -67,7 +84,7 @@ public class App extends Application {
         }
 
 
-
+        webServiceGetPrice();
 
 
 
@@ -126,7 +143,56 @@ public class App extends Application {
     }
 
 
+    public  void webServiceGetPrice()
+    {
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
 
+        client.get(App.urlApi+"getprice", params, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onStart() {
+
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
+
+                String value = new String(response);
+                try {
+                    JSONObject obj = new JSONObject(value);
+
+                    priceSms =obj.getInt("sms");
+                    priceLink =obj.getInt("link");
+                    priceVizhe =obj.getInt("vizhe");
+                    priceEstekhdam =obj.getInt("estekhdam");
+                    priceNini =obj.getInt("nini");
+                    priceRestaurant =obj.getInt("restaurant");
+                    appversion =obj.getInt("version");
+                    versiontxt =obj.getString("versiontxt");
+
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+
+
+
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+
+
+            }
+
+
+            @Override
+            public void onRetry(int retryNo) {
+
+            }
+        });
+
+
+    }
 
 
 }

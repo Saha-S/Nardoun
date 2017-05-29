@@ -1,19 +1,24 @@
 package com.appmagazine.nardoon.activities;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.AbsSavedState;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -31,8 +36,11 @@ import android.widget.TextView;
 
 import com.appmagazine.nardoon.Adapter.PagerAdapter;
 import com.appmagazine.nardoon.App;
+import com.appmagazine.nardoon.BuildConfig;
 import com.appmagazine.nardoon.FileOperations;
 import com.appmagazine.nardoon.R;
+
+import java.util.HashMap;
 
 public class Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -41,6 +49,7 @@ public class Main extends AppCompatActivity
     TextView tvtitle , txt;
     LinearLayout llnewagahi;
     public static Handler h;
+    public  Thread t;
 
 
     @Override
@@ -290,6 +299,73 @@ public class Main extends AppCompatActivity
 
             }
         });
+
+
+
+      t = new Thread() {
+
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+                        Thread.sleep(5000);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                int buildconfig = BuildConfig.VERSION_CODE;
+
+                                if(App.appversion > buildconfig){
+
+                                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Main.this);
+
+                                    alertDialogBuilder
+                                            .setMessage(App.versiontxt)
+                                            .setCancelable(true)
+                                            .setPositiveButton("دریافت",new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog,int id) {
+
+                                                    Intent intent = new Intent(Intent.ACTION_VIEW , Uri.parse("http://nardoun.ir/nardoun.apk"));
+                                                    startActivity(intent);
+
+
+                                                }
+                                            })
+                                            .setNegativeButton("لغو", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+
+                                                    dialog.cancel();
+                                                }
+                                            });
+                                    AlertDialog alertDialog = alertDialogBuilder.create();
+
+                                    alertDialog.show();
+
+                                    TextView msgtv = (TextView) alertDialog.findViewById(android.R.id.message);
+                                    alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextSize(20);
+                                    alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTypeface(App.getFont());
+                                    alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextSize(20);
+                                    alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTypeface(App.getFont());
+                                    msgtv.setTypeface(App.getFont());
+                                    msgtv.setTextSize(19);
+
+                                    t.interrupt();
+
+                                }
+
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        t.start();
+
+
+
 
 
     }
