@@ -1,6 +1,7 @@
 package com.appmagazine.nardoon.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.Cat;
 import com.appmagazine.nardoon.R;
+import com.appmagazine.nardoon.activities.Details;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
@@ -88,7 +90,7 @@ public class CatAdapter extends RecyclerView.Adapter<CatAdapter.PosterHolder> {
     } 
 
     @Override
-    public void onBindViewHolder(PosterHolder holder, int position) {
+    public void onBindViewHolder(PosterHolder holder, final int position) {
 
         holder.title.setText(filterCat.get(position).title);
         if(!mDataset.get(position).price.toString().equals("0")) {
@@ -111,6 +113,20 @@ public class CatAdapter extends RecyclerView.Adapter<CatAdapter.PosterHolder> {
                 .load(App.urlimages+ filterCat.get(position).image)
                 .placeholder(R.mipmap.nopic)
                 .into(holder.image);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(App.context, Details.class);
+                intent.putExtra("id", filterCat.get(position).id + "");
+                intent.putExtra("title", filterCat.get(position).title);
+                intent.putExtra("image", filterCat.get(position).image);
+                intent.putExtra("location", filterCat.get(position).location);
+                intent.putExtra("price", filterCat.get(position).price);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                App.context.startActivity(intent);
+
+            }
+        });
 
 
 

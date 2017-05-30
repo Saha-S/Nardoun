@@ -188,7 +188,7 @@ public class CatAgahis extends AppCompatActivity implements TextWatcher {
             }
         });
 
-        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(App.context, new RecyclerItemClickListener.OnItemClickListener() {
+     /*   recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(App.context, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 //Toast.makeText(getContext(), "آیتم شماره " + array.get(position).id + " را کلیک کردید!", Toast.LENGTH_LONG).show();
@@ -201,7 +201,7 @@ public class CatAgahis extends AppCompatActivity implements TextWatcher {
                 startActivity(intent);
             }
         }));
-
+*/
 
     }
 

@@ -882,7 +882,8 @@ public class EditAgahi extends AppCompatActivity {
 
                 dialog.hide();
                 Intent intent = new Intent(App.context , MyAgahis.class);
-               // intent.putExtra("id", Details.idAgahi+"");
+                MyAgahis.h.sendEmptyMessage(0);
+                // intent.putExtra("id", Details.idAgahi+"");
                 startActivity(intent);
                 App.CustomToast("آگهی ویرایش شد !");
 

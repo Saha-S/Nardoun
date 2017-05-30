@@ -343,6 +343,7 @@ public class Details extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
                 App.CustomToast(" آگهی با موفقیت حذف شد. ");
+                MyAgahis.h.sendEmptyMessage(0);
                 Intent intent = new Intent(App.context, MyAgahis.class);
                 startActivity(intent);
                 finish();

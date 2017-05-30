@@ -78,8 +78,6 @@ public class MyAgahiAdapter extends RecyclerView.Adapter<MyAgahiAdapter.PosterHo
 
         holder.title.setText(mDataset.get(position).title);
         String status = mDataset.get(position).validity;
-        Log.i("lllll", status);
-      //  Log.i("lllll", status+mDataset.get(position).factors.toString());
         String cat = mDataset.get(position).category_id;
         if(cat.equals("10")){
             holder.orders.setVisibility(View.VISIBLE);

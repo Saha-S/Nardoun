@@ -124,7 +124,7 @@ public class Main extends Fragment implements TextWatcher{
             }
         });
 
-        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(App.context, new RecyclerItemClickListener.OnItemClickListener() {
+    /*    recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(App.context, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 
@@ -141,6 +141,7 @@ public class Main extends Fragment implements TextWatcher{
                 startActivity(intent);
             }
         }));
+        */
         return view;
     }
 
