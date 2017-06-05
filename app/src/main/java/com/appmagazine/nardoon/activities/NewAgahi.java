@@ -9,6 +9,7 @@ package com.appmagazine.nardoon.activities;
         import android.content.Intent;
         import android.content.pm.PackageManager;
         import android.graphics.Bitmap;
+        import android.graphics.BitmapFactory;
         import android.graphics.Color;
         import android.graphics.drawable.ColorDrawable;
         import android.net.Uri;
@@ -60,6 +61,8 @@ package com.appmagazine.nardoon.activities;
         import java.io.FileNotFoundException;
         import java.io.FileOutputStream;
         import java.io.IOException;
+        import java.net.URI;
+        import java.net.URISyntaxException;
 
         import cz.msebera.android.httpclient.Header;
 
@@ -870,36 +873,65 @@ package com.appmagazine.nardoon.activities;
 
                 GalIntent = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
                 startActivityForResult(Intent.createChooser(GalIntent, "انتخاب عکس از گالری"), 2);
 
             }
 
             @Override
-            protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            protected void onActivityResult(int requestCode, int resultCode, Intent data ) {
                 if(resultCode != RESULT_CANCELED) {
 
-                    if (requestCode == 0 && resultCode == RESULT_OK) {
+                if (requestCode == 0 && resultCode == RESULT_OK) {
+
+                    ImageCropFunction();
+
+                } else if (requestCode == 2) {
+
+                    if (data != null) {
+
+                        uri = data.getData();
+                        file = new File(uri.getPath());
+                        file = new File(Environment.getExternalStorageDirectory(),
+                                "file" + String.valueOf(System.currentTimeMillis()) + ".jpg");
+
+                        Log.i("log223" , file.getAbsolutePath().toString());
 
                         ImageCropFunction();
 
-                    } else if (requestCode == 2) {
+                    }
+                } else {
+                    if (requestCode == 1) {
 
                         if (data != null) {
+                                BitmapFactory.Options options = new BitmapFactory.Options();
+                                options.inScaled = false;
+                                options.inDither = false;
+                                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath() , options);
 
-                            uri = data.getData();
+                            Log.i("log1" , file.getAbsolutePath());
+                                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap ,bitmap.getWidth(), bitmap.getHeight(), true);
 
-                            ImageCropFunction();
+                                String path = Environment.getExternalStorageDirectory().toString();
+                                File tempFile = new File(path, System.currentTimeMillis() + ".jpg");
+                                if (tempFile.exists())
+                                    tempFile.delete();
+                            Log.i("log2" , tempFile.getAbsolutePath().toString());
 
-                        }
-                    } else if (requestCode == 1) {
+                                FileOutputStream fileOutputStream = null;
+                                try {
+                                    fileOutputStream = new FileOutputStream(tempFile.getAbsolutePath());
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                                scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+                            Log.i("log3" , scaledBitmap.toString());
+                           /* Bitmap thumbnail = ((Bitmap) data.getExtras().get("data"));
 
-                        if (data != null) {
-
-                            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
 
                             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                            thumbnail.compress(Bitmap.CompressFormat.JPEG,100, bytes);
+                            thumbnail.compress(Bitmap.CompressFormat.JPEG,100, bytes );
+
 
                             destination = new File(Environment.getExternalStorageDirectory(),
                                     System.currentTimeMillis() + ".jpg");
@@ -915,7 +947,7 @@ package com.appmagazine.nardoon.activities;
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-
+*/
 
                             if (imgAsli.getVisibility() == View.GONE) {
                                 SelectImage.setText("افزودن عکس");
@@ -925,21 +957,22 @@ package com.appmagazine.nardoon.activities;
 
                             if (imgAsli.getVisibility() == View.GONE) {
                                 imgAsli.setVisibility(View.VISIBLE);
-                                file1 = destination;
+                                file1 = tempFile;
                             } else if (imgAsli.getVisibility() == View.VISIBLE && img2.getVisibility() == View.GONE) {
                                 img2.setVisibility(View.VISIBLE);
-                                file2 = destination;
+                                file2 = tempFile;
 
                             } else if (img2.getVisibility() == View.VISIBLE && img3.getVisibility() == View.GONE) {
                                 img3.setVisibility(View.VISIBLE);
-                                file3 = destination;
+                                file3 = tempFile;
 
                             }
-                            image.setImageBitmap(thumbnail);
+                            image.setImageBitmap(scaledBitmap);
                         }
                     }
                 }
             }
+        }
 
             public void ImageCropFunction() {
 
@@ -956,7 +989,7 @@ package com.appmagazine.nardoon.activities;
                     CropIntent.putExtra("aspectY", 1);
                     CropIntent.putExtra("outputX", 300);
                     CropIntent.putExtra("outputY", 300);
-                    CropIntent.putExtra("scaleUpIfNeeded", true);
+                    CropIntent.putExtra("scale", false);
                     CropIntent.putExtra("return-data", true);
 
                     startActivityForResult(CropIntent, 1);

@@ -11,6 +11,7 @@
 
     <uses-feature android:name="android.hardware.camera" />
 
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -46,6 +47,7 @@
             android:name=".activities.Filter"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.float" />
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
         <activity
             android:name=".activities.cats"
             android:screenOrientation="portrait"

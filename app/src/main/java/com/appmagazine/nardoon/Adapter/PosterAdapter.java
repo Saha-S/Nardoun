@@ -17,8 +17,11 @@ import com.appmagazine.nardoon.R;
 import com.appmagazine.nardoon.activities.Details;
 import com.bumptech.glide.Glide;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by nadia on 3/2/2017.
@@ -103,7 +106,13 @@ try {
     });
 
     if (!filterPoster.get(position).price.toString().equals("0")) {
-        holder.price.setText(filterPoster.get(position).price + " تومان ");
+        String s =filterPoster.get(position).price;
+        Locale farsi = new Locale("fa", "IR");
+        NumberFormat numberFormatDutch = NumberFormat.getCurrencyInstance(farsi);
+
+        String c = numberFormatDutch.format(new BigDecimal(s.toString()));
+        String cc = c.replace("ریال",   " تومان " + "\u200e") ;
+        holder.price.setText(  cc );
     }
     holder.location.setText(filterPoster.get(position).created_at + " در " + filterPoster.get(position).location);
 

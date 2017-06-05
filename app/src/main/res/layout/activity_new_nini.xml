@@ -148,7 +148,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:ems="10"
-                            android:hint="2 سال"
+                            android:hint="مثال : 2 ساله / 4 ماهه"
                             android:inputType="text" />
 
                     </LinearLayout>

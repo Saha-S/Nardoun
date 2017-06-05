@@ -493,6 +493,7 @@
                                 android:layout_height="match_parent"
                                 android:orientation="horizontal">
 
+
                                 <LinearLayout
                                     android:id="@+id/img_asli"
                                     android:layout_width="100dp"

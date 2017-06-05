@@ -118,6 +118,7 @@ public class MyPanel extends AppCompatActivity {
         } else {
             Intent intent = new Intent(App.context, Login.class);
             startActivity(intent);
+            finish();
         }
 
     }

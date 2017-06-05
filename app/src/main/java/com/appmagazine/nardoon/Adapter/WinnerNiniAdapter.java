@@ -45,18 +45,18 @@ public class WinnerNiniAdapter extends RecyclerView.Adapter<WinnerNiniAdapter.Po
     private FileOperations file;
 
     String[] liksarray;
-    String[] disliksarray;
+   // String[] disliksarray;
 
     public static class PosterHolder extends RecyclerView.ViewHolder {
 
         TextView name;
         TextView age;
         TextView likes;
-        TextView dislikes;
+      //  TextView dislikes;
         TextView txtTime;
         ImageView imageNini;
         ToggleButton like;
-        ToggleButton dislike;
+//        ToggleButton dislike;
         LinearLayout llName;
         LinearLayout llFrame;
         FrameLayout frameLayout;
@@ -68,11 +68,9 @@ public class WinnerNiniAdapter extends RecyclerView.Adapter<WinnerNiniAdapter.Po
             name = (TextView) itemView.findViewById(R.id.txt_name);
             age = (TextView) itemView.findViewById(R.id.txt_age);
             likes = (TextView) itemView.findViewById(R.id.txt_like);
-            dislikes = (TextView) itemView.findViewById(R.id.txt_dislike);
             txtTime = (TextView) itemView.findViewById(R.id.txtTime);
             imageNini = (ImageView) itemView.findViewById(R.id.img_nini);
             like = (ToggleButton) itemView.findViewById(R.id.iv_like);
-            dislike = (ToggleButton) itemView.findViewById(R.id.iv_dislike);
             llName = (LinearLayout) itemView.findViewById(R.id.ll_name);
             llFrame = (LinearLayout) itemView.findViewById(R.id.ll_frame);
             frameLayout = (FrameLayout) itemView.findViewById(R.id.frame_layout);
@@ -124,12 +122,12 @@ public class WinnerNiniAdapter extends RecyclerView.Adapter<WinnerNiniAdapter.Po
             holder.llName.setBackgroundColor(Color.parseColor("#ffb300"));
             holder.llFrame.setBackgroundResource(R.drawable.orangeframe);
             holder.like.setEnabled(false);
-            holder.dislike.setEnabled(false);
+       //     holder.dislike.setEnabled(false);
 
             holder.name.setText(filterPoster.get(position).name + "   -   ");
             holder.age.setText(filterPoster.get(position).age);
             holder.likes.setText(filterPoster.get(position).point);
-            holder.dislikes.setText(filterPoster.get(position).pointm);
+        //    holder.dislikes.setText(filterPoster.get(position).pointm);
             holder.txtTime.setText(filterPoster.get(position).created_at);
 
             Glide.with(context)

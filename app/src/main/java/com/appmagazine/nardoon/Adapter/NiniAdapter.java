@@ -50,17 +50,17 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
     private FileOperations file;
 
     String[] liksarray;
-    String[] disliksarray;
+  //  String[] disliksarray;
 
     public static class PosterHolder extends RecyclerView.ViewHolder {
 
         TextView name;
         TextView age;
         TextView likes;
-        TextView dislikes;
+     //   TextView dislikes;
         ImageView imageNini;
         ToggleButton like;
-        ToggleButton dislike;
+     //   ToggleButton dislike;
         LinearLayout llName;
         LinearLayout llFrame;
         FrameLayout frameLayout;
@@ -72,10 +72,8 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             name = (TextView) itemView.findViewById(R.id.txt_name);
             age = (TextView) itemView.findViewById(R.id.txt_age);
             likes = (TextView) itemView.findViewById(R.id.txt_like);
-            dislikes = (TextView) itemView.findViewById(R.id.txt_dislike);
             imageNini = (ImageView) itemView.findViewById(R.id.img_nini);
             like = (ToggleButton) itemView.findViewById(R.id.iv_like);
-            dislike = (ToggleButton) itemView.findViewById(R.id.iv_dislike);
             llName = (LinearLayout) itemView.findViewById(R.id.ll_name);
             llFrame = (LinearLayout) itemView.findViewById(R.id.ll_frame);
             frameLayout = (FrameLayout) itemView.findViewById(R.id.frame_layout);
@@ -130,12 +128,12 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             holder.llName.setBackgroundColor(Color.parseColor("#ffb300"));
             holder.llFrame.setBackgroundResource(R.drawable.orangeframe);
             holder.like.setEnabled(false);
-            holder.dislike.setEnabled(false);
+//            holder.dislike.setEnabled(false);
 
             holder.name.setText("برنده این ماه "+filterPoster.get(position).name + "   -   ");
             holder.age.setText(filterPoster.get(position).age);
             holder.likes.setText(filterPoster.get(position).point);
-            holder.dislikes.setText(filterPoster.get(position).pointm);
+        //    holder.dislikes.setText(filterPoster.get(position).pointm);
 
             Glide.with(context)
                     .load(App.urlimages + filterPoster.get(position).image)
@@ -149,7 +147,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             holder.name.setText(filterPoster.get(position).name + "   -   ");
             holder.age.setText(filterPoster.get(position).age);
             holder.likes.setText(filterPoster.get(position).point);
-            holder.dislikes.setText(filterPoster.get(position).pointm);
+       //     holder.dislikes.setText(filterPoster.get(position).pointm);
 
             Glide.with(context)
                     .load(App.urlimages + filterPoster.get(position).image)
@@ -163,23 +161,23 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
             if (Arrays.asList(liksarray).contains(filterPoster.get(position).id + "")) {
                 holder.like.setChecked(true);
-                holder.dislike.setEnabled(false);
+        //        holder.dislike.setEnabled(false);
             } else {
                 holder.like.setChecked(false);
-                holder.dislike.setEnabled(true);
+        //        holder.dislike.setEnabled(true);
             }
 
             String dislikestr = file.read("dislikes");
-            disliksarray = dislikestr.split("-");
+        //    disliksarray = dislikestr.split("-");
 
-            if (Arrays.asList(disliksarray).contains(filterPoster.get(position).id + "")) {
+     /*       if (Arrays.asList(disliksarray).contains(filterPoster.get(position).id + "")) {
                 holder.dislike.setChecked(true);
                 holder.like.setEnabled(false);
             } else {
                 holder.dislike.setChecked(false);
                 holder.like.setEnabled(true);
             }
-
+*/
             holder.like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -197,12 +195,12 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                             }
                         }
                         file.write("likes", likes);
-                        holder.dislike.setEnabled(true);
+                     //   holder.dislike.setEnabled(true);
 
                     } else {
                         webServiceLike(filterPoster.get(position).id, holder, position);
                         //  holder.likes.setText(likes);
-                        holder.dislike.setEnabled(false);
+                   //     holder.dislike.setEnabled(false);
 
                         String likes = file.read("likes");
                         if (likes.equals("")) {
@@ -214,7 +212,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                 }
             });
 
-            holder.dislike.setOnClickListener(new View.OnClickListener() {
+         /*   holder.dislike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (holder.dislike.isChecked() == false) {
@@ -244,7 +242,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                     }
                 }
             });
-
+*/
 
             Animation animation = AnimationUtils.loadAnimation(context,
                     (position > lastPosition) ? android.R.anim.slide_in_left
@@ -341,7 +339,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
     ///////////////////////////////////// unLIKE //////////////////////////////
 
-    public void webServiceDislike(String id, final PosterHolder holder, final int position) {
+  /*  public void webServiceDislike(String id, final PosterHolder holder, final int position) {
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
@@ -376,9 +374,9 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             }
         });
     }
-
+*/
     ///////////////////////////////////////////// UNDISLIKE /////////////////////////////////
-    public void webServiceUnDislike(String id, final PosterHolder holder, final int position) {
+  /*  public void webServiceUnDislike(String id, final PosterHolder holder, final int position) {
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
@@ -413,7 +411,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             }
         });
     }
-
+*/
     ///////////////////////////////////////////// UNDISLIKE /////////////////////////////////
 
 

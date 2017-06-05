@@ -47,9 +47,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 import ir.moslem_deris.apps.zarinpal.PaymentBuilder;
@@ -533,7 +536,12 @@ public class Details extends AppCompatActivity {
                     tvtime               .setText(time);
                     Log.i("imageee","image : "+ App.urlimages+intent.getStringExtra("image"));
                     tvtitle               .setText(intent.getStringExtra("title"));
-                    tvprice               .setText(price+" تومان ");
+                    Locale farsi = new Locale("fa", "IR");
+                    NumberFormat numberFormatDutch = NumberFormat.getCurrencyInstance(farsi);
+
+                    String c = numberFormatDutch.format(new BigDecimal(price.toString()));
+                    String cc = c.replace("ریال",   " تومان " + "\u200e") ;
+                    tvprice               .setText(cc);
 
                     getValidity();
 
