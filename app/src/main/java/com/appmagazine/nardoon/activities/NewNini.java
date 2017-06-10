@@ -320,7 +320,7 @@ public class NewNini extends AppCompatActivity {
         CamIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 
         file = new File(Environment.getExternalStorageDirectory(),
-                "file" + String.valueOf(System.currentTimeMillis()) + ".jpg");
+                "file" + String.valueOf(System.currentTimeMillis()) + ".png");
     //   uri = Uri.fromFile(file);
         uri = FileProvider.getUriForFile(App.context, App.context.getApplicationContext().getPackageName() + ".provider", file);
         App.context.grantUriPermission("com.android.camera",uri,
@@ -371,10 +371,10 @@ public class NewNini extends AppCompatActivity {
                     Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
 
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    thumbnail.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                    thumbnail.compress(Bitmap.CompressFormat.PNG, 100, bytes);
 
                     destination = new File(Environment.getExternalStorageDirectory(),
-                            System.currentTimeMillis() + ".jpg");
+                            System.currentTimeMillis() + ".png");
 
                     FileOutputStream fo;
                     try {
