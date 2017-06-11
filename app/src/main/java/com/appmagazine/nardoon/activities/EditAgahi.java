@@ -200,6 +200,7 @@ public class EditAgahi extends AppCompatActivity {
         } catch (Exception e) {
         }
 
+        Log.i("spee" , Details.special);
 
         if (Details.special.equals("0")) {
             chkSpecial.setChecked(false);
@@ -207,6 +208,7 @@ public class EditAgahi extends AppCompatActivity {
         if (Details.special.equals("1")) {
             chkSpecial.setChecked(true);
         }
+
         if (Details.link.equals("")) {
             chkLink.setChecked(false);
         }
@@ -785,9 +787,10 @@ public class EditAgahi extends AppCompatActivity {
         if(SelectCat.getText().equals("رستوران")) {
             params.put("start",startTime);
             params.put("end",endTime);
+            params.put("special", "0");
+
             final JSONArray finalJsonArray = new JSONArray();
             try {
-
 
                 for (int i=0;i<menuJsonArray.length();i++){
 
@@ -807,7 +810,6 @@ public class EditAgahi extends AppCompatActivity {
         if(SelectCat.getText().equals("استخدام و کاریابی")) {
             params.put("type","0");
             params.put("price","0");
-            params.put("special", "0");
 
         }
         else {
@@ -820,7 +822,7 @@ public class EditAgahi extends AppCompatActivity {
             if(Details.validity.equals("3")) {
                 params.put("validity", "3");
             }else{
-                if((Details.special.equals("0") && chkSpecial.isChecked()) ||(Details.link.equals("")&& chkLink.isChecked())){
+                if((Details.special.equals("1") && chkSpecial.isChecked()) ||(Details.link.equals("")&& chkLink.isChecked())){
                     params.put("validity","3");
                 }else {
                     params.put("validity", "0");
@@ -828,7 +830,7 @@ public class EditAgahi extends AppCompatActivity {
 
             }
         }else{
-            if((Details.special.equals("0") && chkSpecial.isChecked()) ||(Details.link.equals("")&& chkLink.isChecked())){
+            if((Details.special.equals("1") && chkSpecial.isChecked()) ||(Details.link.equals("")&& chkLink.isChecked())){
                 params.put("validity","3");
             }else {
                 params.put("validity", "0");
@@ -882,7 +884,9 @@ public class EditAgahi extends AppCompatActivity {
 
                 dialog.hide();
                 Intent intent = new Intent(App.context , MyAgahis.class);
-                MyAgahis.h.sendEmptyMessage(0);
+                try {
+                    MyAgahis.h.sendEmptyMessage(0);
+                }catch (RuntimeException r){}
                 // intent.putExtra("id", Details.idAgahi+"");
                 startActivity(intent);
                 App.CustomToast("آگهی ویرایش شد !");
