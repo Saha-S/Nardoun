@@ -111,7 +111,9 @@ public class subs extends Activity {
                             intent.putExtra("SUBID", subid+"");
                             intent.putExtra("NAME", subname);
                             startActivity(intent);
-                            NewAgahi.h.sendEmptyMessage(0);
+                            try {
+                                NewAgahi.h.sendEmptyMessage(0);
+                            }catch (RuntimeException r){}
                             finish();
                         }
                     });
@@ -139,7 +141,9 @@ public class subs extends Activity {
             intent.putExtra("SUBID", "1");
             intent.putExtra("NAME", CatName+"");
             startActivity(intent);
-            NewAgahi.h.sendEmptyMessage(0);
+            try {
+                MyAgahis.h.sendEmptyMessage(0);
+            }catch (RuntimeException r){}
             finish();
         }
 

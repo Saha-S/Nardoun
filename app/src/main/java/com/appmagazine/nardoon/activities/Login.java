@@ -190,8 +190,9 @@ public class Login extends AppCompatActivity {
 
                 editor.commit();
                 editor2.commit();
-                Main.h.sendEmptyMessage(0);
-
+                try {
+                    Main.h.sendEmptyMessage(0);
+                }catch (RuntimeException r){}
                 dialog.hide();
                 finish();
 
@@ -295,8 +296,9 @@ public class Login extends AppCompatActivity {
                 editor2.putString("id_confirmaation", value.toString().replace("[{\"id\":", "").replace("}]" , ""));
                 editor2.commit();
 
-                Main.h.sendEmptyMessage(0);
-
+                try {
+                    Main.h.sendEmptyMessage(0);
+                }catch (RuntimeException r){}
                 //  Intent intent = new Intent(App.context , Main.class);
                 //  startActivity(intent);
                 finish();

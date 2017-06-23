@@ -713,6 +713,8 @@ public class NewAgahi extends AppCompatActivity {
         if(SelectCat.getText().equals("رستوران")) {
             params.put("start",startTime);
             params.put("end",endTime);
+            params.put("special", "0");
+
 
 
             final JSONArray finalJsonArray = new JSONArray();
@@ -738,7 +740,6 @@ public class NewAgahi extends AppCompatActivity {
         if(SelectCat.getText().equals("استخدام و کاریابی")) {
             params.put("type","0");
             params.put("price","0");
-            params.put("special", "0");
         }
         else {
             params.put("price", price.getText());

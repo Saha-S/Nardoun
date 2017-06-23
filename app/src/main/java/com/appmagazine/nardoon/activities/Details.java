@@ -346,7 +346,9 @@ public class Details extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
                 App.CustomToast(" آگهی با موفقیت حذف شد. ");
-                MyAgahis.h.sendEmptyMessage(0);
+                try {
+                    MyAgahis.h.sendEmptyMessage(0);
+                }catch (RuntimeException r){}
                 Intent intent = new Intent(App.context, MyAgahis.class);
                 startActivity(intent);
                 finish();
@@ -400,6 +402,7 @@ public class Details extends AppCompatActivity {
                         tvLink.setText(Html.fromHtml(text));
 
                     }
+
                     String content= obj.getString("content");
                     String type= obj.getString("type");
                     catname= obj.getString("category_name");
@@ -407,6 +410,14 @@ public class Details extends AppCompatActivity {
                         catPos = "1";
                     }else{
                         catPos = "0";
+                    }
+                    if(type.equals("0")){
+                        llType.setVisibility(View.GONE);
+                        llPrice.setVisibility(View.GONE);
+
+                    }else{
+                        llType.setVisibility(View.VISIBLE);
+                        llPrice.setVisibility(View.VISIBLE);
                     }
                     if(catname.equals("رستوران")){
                         llPrice.setVisibility(View.GONE);
@@ -419,6 +430,8 @@ public class Details extends AppCompatActivity {
                     email= obj.getString("email");
                     mobile= obj.getString("mobile");
                     special= obj.getString("special");
+                    Log.i("spee2" , special);
+
                     if(special.equals("1")){
                         specialPos = "1";
                     }else{
@@ -534,15 +547,17 @@ public class Details extends AppCompatActivity {
                     time = intent.getStringExtra("time");
                     tvlocation               .setText(location);
                     tvtime               .setText(time);
-                    Log.i("imageee","image : "+ App.urlimages+intent.getStringExtra("image"));
+
+
                     tvtitle               .setText(intent.getStringExtra("title"));
-                    Locale farsi = new Locale("fa", "IR");
-                    NumberFormat numberFormatDutch = NumberFormat.getCurrencyInstance(farsi);
+                    try {
+                        Locale farsi = new Locale("fa", "IR");
+                        NumberFormat numberFormatDutch = NumberFormat.getCurrencyInstance(farsi);
 
-                    String c = numberFormatDutch.format(new BigDecimal(price.toString()));
-                    String cc = c.replace("ریال",   " تومان " + "\u200e") ;
-                    tvprice               .setText(cc);
-
+                        String c = numberFormatDutch.format(new BigDecimal(price.toString()));
+                        String cc = c.replace("ریال", " تومان " + "\u200e");
+                        tvprice.setText(cc);
+                    }catch (RuntimeException r){}
                     getValidity();
 
 //////////////////////////////////////// ORDER///////////////////////////////////////////////////

@@ -17,8 +17,11 @@ import com.appmagazine.nardoon.R;
 import com.appmagazine.nardoon.activities.Details;
 import com.bumptech.glide.Glide;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by nadia on 3/2/2017.
@@ -94,7 +97,13 @@ public class CatAdapter extends RecyclerView.Adapter<CatAdapter.PosterHolder> {
 
         holder.title.setText(filterCat.get(position).title);
         if(!mDataset.get(position).price.toString().equals("0")) {
-            holder.price.setText(filterCat.get(position).price + " تومان ");
+            String s =filterCat.get(position).price;
+            Locale farsi = new Locale("fa", "IR");
+            NumberFormat numberFormatDutch = NumberFormat.getCurrencyInstance(farsi);
+
+            String c = numberFormatDutch.format(new BigDecimal(s.toString()));
+            String cc = c.replace("ریال",   " تومان " + "\u200e") ;
+            holder.price.setText(  cc );
         }
         holder.location.setText(filterCat.get(position).created_at+" در " + filterCat.get(position).location);
 
