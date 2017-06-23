@@ -50,17 +50,18 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
     private FileOperations file;
 
     String[] liksarray;
-  //  String[] disliksarray;
+    Boolean isVotePermited=true;
+    //  String[] disliksarray;
 
     public static class PosterHolder extends RecyclerView.ViewHolder {
 
         TextView name;
         TextView age;
         TextView likes;
-     //   TextView dislikes;
+        //   TextView dislikes;
         ImageView imageNini;
         ToggleButton like;
-     //   ToggleButton dislike;
+        //   ToggleButton dislike;
         LinearLayout llName;
         LinearLayout llFrame;
         FrameLayout frameLayout;
@@ -133,7 +134,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             holder.name.setText("برنده این ماه "+filterPoster.get(position).name + "   -   ");
             holder.age.setText(filterPoster.get(position).age);
             holder.likes.setText(filterPoster.get(position).point);
-        //    holder.dislikes.setText(filterPoster.get(position).pointm);
+            //    holder.dislikes.setText(filterPoster.get(position).pointm);
 
             Glide.with(context)
                     .load(App.urlimages + filterPoster.get(position).image)
@@ -147,7 +148,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             holder.name.setText(filterPoster.get(position).name + "   -   ");
             holder.age.setText(filterPoster.get(position).age);
             holder.likes.setText(filterPoster.get(position).point);
-       //     holder.dislikes.setText(filterPoster.get(position).pointm);
+            //     holder.dislikes.setText(filterPoster.get(position).pointm);
 
             Glide.with(context)
                     .load(App.urlimages + filterPoster.get(position).image)
@@ -161,14 +162,14 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
             if (Arrays.asList(liksarray).contains(filterPoster.get(position).id + "")) {
                 holder.like.setChecked(true);
-        //        holder.dislike.setEnabled(false);
+                //        holder.dislike.setEnabled(false);
             } else {
                 holder.like.setChecked(false);
-        //        holder.dislike.setEnabled(true);
+                //        holder.dislike.setEnabled(true);
             }
 
             String dislikestr = file.read("dislikes");
-        //    disliksarray = dislikestr.split("-");
+            //    disliksarray = dislikestr.split("-");
 
      /*       if (Arrays.asList(disliksarray).contains(filterPoster.get(position).id + "")) {
                 holder.dislike.setChecked(true);
@@ -181,34 +182,39 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             holder.like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (holder.like.isChecked() == false) {
-                        webServiceUnLike(filterPoster.get(position).id, holder, position);
 
-                        String likes = "";
-                        for (int i = 0; i < liksarray.length; i++) {
-                            if (!liksarray[i].equals(filterPoster.get(position).id)) {
-                                if (likes.equals(""))
-                                    likes += liksarray[i];
-                                else
-                                    likes += "-" + liksarray[i];
+                    v.setEnabled(false);
 
+                        if (holder.like.isChecked() == false) {
+                            webServiceUnLike(filterPoster.get(position).id, holder, position, v);
+
+                            String likes = "";
+                            for (int i = 0; i < liksarray.length; i++) {
+                                if (!liksarray[i].equals(filterPoster.get(position).id)) {
+                                    if (likes.equals(""))
+                                        likes += liksarray[i];
+                                    else
+                                        likes += "-" + liksarray[i];
+
+                                }
+                            }
+                            file.write("likes", likes);
+                            //   holder.dislike.setEnabled(true);
+
+                        } else {
+                            webServiceLike(filterPoster.get(position).id, holder, position, v);
+                            //  holder.likes.setText(likes);
+                            //     holder.dislike.setEnabled(false);
+
+                            String likes = file.read("likes");
+                            if (likes.equals("")) {
+                                file.write("likes", filterPoster.get(position).id);
+                            } else {
+                                file.write("likes", likes + "-" + filterPoster.get(position).id);
                             }
                         }
-                        file.write("likes", likes);
-                     //   holder.dislike.setEnabled(true);
 
-                    } else {
-                        webServiceLike(filterPoster.get(position).id, holder, position);
-                        //  holder.likes.setText(likes);
-                   //     holder.dislike.setEnabled(false);
 
-                        String likes = file.read("likes");
-                        if (likes.equals("")) {
-                            file.write("likes", filterPoster.get(position).id);
-                        } else {
-                            file.write("likes", likes + "-" + filterPoster.get(position).id);
-                        }
-                    }
                 }
             });
 
@@ -263,18 +269,20 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
     }
 
 
-    public void webServiceLike(String id , final PosterHolder holder, final int position) {
+    public void webServiceLike(String id , final PosterHolder holder, final int position, final View v) {
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
         client.get(App.urlApi+"nini/" + id + "/like" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
+
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
+                v.setEnabled(true);
                 String value = new String(response);
                 holder.likes.setText(value);
 
@@ -284,6 +292,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                v.setEnabled(true);
                 if (statusCode == 403)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
                     App.CustomToast(" در حال حاضر امکان رای دادن وجود ندارد. ");
@@ -300,7 +309,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
         });
     }
     ///////////////////////////////////// unLIKE //////////////////////////////
-    public void webServiceUnLike(String id , final PosterHolder holder, final int position) {
+    public void webServiceUnLike(String id , final PosterHolder holder, final int position, final View v) {
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
@@ -312,6 +321,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
+                v.setEnabled(true);
                 String value = new String(response);
                 //  likes = value;
                 holder.likes.setText(value);
@@ -322,6 +332,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                v.setEnabled(true);
                 if (statusCode == 403)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
                     App.CustomToast(" در حال حاضر امکان رای دادن وجود ندارد. ");
