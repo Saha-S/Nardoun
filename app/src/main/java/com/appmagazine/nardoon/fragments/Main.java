@@ -1,8 +1,10 @@
 package com.appmagazine.nardoon.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -32,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import pl.droidsonroids.gif.GifImageView;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 
@@ -42,6 +45,7 @@ public class Main extends Fragment {
     List<Poster> array;
     SwipeRefreshLayout swipeRefreshLayout;
     EndlessRecyclerViewScrollListener scrollListener;
+    GifImageView gif;
 
 
 
@@ -52,6 +56,18 @@ public class Main extends Fragment {
 
 
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        gif = (GifImageView) view.findViewById(R.id.gif);
+
+        gif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("http://www.nardoun.ir"); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+
+            }
+        });
+
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         array = new ArrayList<>();
         adapter = new PosterAdapter(getContext(), array);

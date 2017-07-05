@@ -1,6 +1,8 @@
 package com.appmagazine.nardoon.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
@@ -8,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -31,6 +34,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.MyAgahi;
@@ -40,14 +44,19 @@ import com.appmagazine.nardoon.fragments.NiniAx;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import cz.msebera.android.httpclient.Header;
+
+import static junit.framework.Assert.assertEquals;
 
 public class NewNini extends AppCompatActivity {
 
@@ -80,6 +89,10 @@ public class NewNini extends AppCompatActivity {
     int AgahiPrice ,linkPrice , specialPrice;
     Button SelectCat;
     private String id_confirmaation;
+    private Uri mCropImageUri;
+
+    CropImageView imgCrop;
+    private File auxFile;
 
 
     @Override
@@ -221,9 +234,7 @@ public class NewNini extends AppCompatActivity {
         SelectImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(imgAsli.getVisibility()==View.GONE) {
-                    selectImage(ivImageAsli);
-                }
+                onSelectImageClick(v);
 
             }
         });
@@ -283,101 +294,61 @@ public class NewNini extends AppCompatActivity {
 
 
 
-    private void selectImage(ImageView img) {
-        final CharSequence[] items = { "دوربین", "گالری",
-                "انصراف" };
-        image= img;
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(NewNini.this);
-        builder.setTitle("اضافه کردن تصویر");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                boolean result= Utility.checkPermission(NewNini.this);
-
-                if (items[item].equals("دوربین")) {
-                    userChoosenTask ="دوربین";
-                    if(result)
-                        ClickImageFromCamera() ;
-
-                } else if (items[item].equals("گالری")) {
-                    userChoosenTask ="گالری";
-                    if(result)
-                        GetImageFromGallery();
-
-                } else if (items[item].equals("انصراف")) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
-    }
-
-    ////////////////////////////////////////////////////
-
-    public void ClickImageFromCamera() {
-
-        CamIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-
-        file = new File(Environment.getExternalStorageDirectory(),
-                "file" + String.valueOf(System.currentTimeMillis()) + ".png");
-    //   uri = Uri.fromFile(file);
-        uri = FileProvider.getUriForFile(App.context, App.context.getApplicationContext().getPackageName() + ".provider", file);
-        App.context.grantUriPermission("com.android.camera",uri,
-                Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        Log.i("myuri" , "aa  :  " + uri.toString()  );
-
-        CamIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
-
-        CamIntent.putExtra("return-data", true);
-
-        startActivityForResult(CamIntent, 0);
-
-    }
-
-    public void GetImageFromGallery(){
-
-        GalIntent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-        startActivityForResult(Intent.createChooser(GalIntent, "انتخاب عکس از گالری"), 2);
-
+    public void onSelectImageClick(View view) {
+        CropImage.startPickImageActivity(this);
     }
 
     @Override
+    @SuppressLint("NewApi")
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode != RESULT_CANCELED) {
-            if (requestCode == 0 && resultCode == RESULT_OK) {
 
-                ImageCropFunction();
+        // handle result of pick image chooser
+        if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            Uri imageUri = CropImage.getPickImageResultUri(this, data);
 
-            } else if (requestCode == 2) {
+            // For API >= 23 we need to check specifically that we have permissions to read external storage.
+            if (CropImage.isReadExternalStoragePermissionsRequired(this, imageUri)) {
+                // request permissions and handle the result in onRequestPermissionsResult()
+                mCropImageUri = imageUri;
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+            } else {
+                // no permissions required or already grunted, can start crop image activity
+                startCropImageActivity(imageUri);
+            }
+        }
 
-                if (data != null) {
+        // handle result of CropImageActivity
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
-                    uri = data.getData();
 
-                    ImageCropFunction();
 
-                }
-            } else if (requestCode == 1) {
+            destination = new File(Environment.getExternalStorageDirectory(),
+                    System.currentTimeMillis() + ".jpg");
+            Uri uri = Uri.fromFile(destination);
 
-                if (data != null) {
 
-                    // Bundle bundle = data.getExtras();
-                    //  Bitmap thumbnail = bundle.getParcelable("data");
+            auxFile = new File(uri.getPath());
+            assertEquals(destination.getAbsolutePath(), auxFile.getAbsolutePath());
 
-                    //  Log.i("lllll" ,"aaa"+(Bitmap) data.getExtras().get("data"));
-                    Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
 
+            if (resultCode == RESULT_OK) {
+
+
+
+
+                if (imgAsli.getVisibility() == View.GONE) {
+
+                    imgAsli.setVisibility(View.VISIBLE);
+                    file1 = destination;
+                    Bitmap reducedSizeBitmap = getBitmap(result.getUri().getPath());
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    thumbnail.compress(Bitmap.CompressFormat.PNG, 100, bytes);
-
-                    destination = new File(Environment.getExternalStorageDirectory(),
-                            System.currentTimeMillis() + ".png");
+                    reducedSizeBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                    ivImageAsli.setImageBitmap(reducedSizeBitmap);
 
                     FileOutputStream fo;
                     try {
+
                         destination.createNewFile();
                         fo = new FileOutputStream(destination);
                         fo.write(bytes.toByteArray());
@@ -389,53 +360,43 @@ public class NewNini extends AppCompatActivity {
                     }
 
 
-                    if (imgAsli.getVisibility() == View.GONE) {
-                        SelectImage.setText("افزودن عکس");
-                    }
-                    if (imgAsli.getVisibility() == View.GONE) {
-                        imgAsli.setVisibility(View.VISIBLE);
-                        file1 = destination;
-                        Log.i("file1", "1: " + file1.toString());
-                    }
-                    image.setImageBitmap(thumbnail);
                 }
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    public void ImageCropFunction() {
-
-        // Image Crop Code
-        try {
-            CropIntent = new Intent("com.android.camera.action.CROP");
-
-            CropIntent.setDataAndType(uri, "image/*");
-            CropIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            CropIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-
-            CropIntent.putExtra("crop", "true");
-            CropIntent.putExtra("aspectX", 1);
-            CropIntent.putExtra("aspectY", 1);
-            CropIntent.putExtra("outputX", 300);
-            CropIntent.putExtra("outputY", 300);
-            CropIntent.putExtra("scaleUpIfNeeded", true);
-            CropIntent.putExtra("return-data", true);;
-
-            startActivityForResult(CropIntent, 1);
-
-        } catch (ActivityNotFoundException e) {
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (mCropImageUri != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // required permissions granted, start crop image activity
+            startCropImageActivity(mCropImageUri);
+        } else {
+            //  Toast.makeText(this, "Cancelling, required permissions are not granted", Toast.LENGTH_LONG).show();
         }
     }
-    //Image Crop Code End Here
+
+    /**
+     * Start crop image activity for the given image.
+     */
+    private void startCropImageActivity(Uri imageUri) {
+        CropImage.activity(imageUri)
+                .setBorderLineColor(Color.RED)
+                .setGuidelinesColor(Color.GREEN)
+                .setAspectRatio(1,1)
+                .setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setFixAspectRatio(true)
+                .setRequestedSize(600,600)
+                .start(this);
+    }
 
     public void EnableRuntimePermission(){
 
         if (ActivityCompat.shouldShowRequestPermissionRationale(NewNini.this,
                 Manifest.permission.CAMERA))
         {
-
-           // Toast.makeText(NewAgahi.this,"CAMERA permission allows us to Access CAMERA app", Toast.LENGTH_LONG).show();
 
         } else {
 
@@ -445,25 +406,65 @@ public class NewNini extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int RC, String per[], int[] PResult) {
+    private Bitmap getBitmap(String path) {
 
-        switch (RC) {
+        Uri uri = Uri.fromFile(new File(path));
+        InputStream in = null;
+        try {
+            final int IMAGE_MAX_SIZE = 1200000; // 1.2MP
+            in = getContentResolver().openInputStream(uri);
 
-            case RequestPermissionCode:
+            // Decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(in, null, o);
+            in.close();
 
-                if (PResult.length > 0 && PResult[0] == PackageManager.PERMISSION_GRANTED) {
 
-                 //   Toast.makeText(NewAgahi.this,"Permission Granted, Now your application can access CAMERA.", Toast.LENGTH_LONG).show();
+            int scale = 1;
+            while ((o.outWidth * o.outHeight) * (1 / Math.pow(scale, 2)) >
+                    IMAGE_MAX_SIZE) {
+                scale++;
+            }
+            Log.d("", "scale = " + scale + ", orig-width: " + o.outWidth + ", orig-height: " + o.outHeight);
 
-                } else {
+            Bitmap b = null;
+            in = getContentResolver().openInputStream(uri);
+            if (scale > 1) {
+                scale--;
+                // scale to max possible inSampleSize that still yields an image
+                // larger than target
+                o = new BitmapFactory.Options();
+                o.inSampleSize = scale;
+                b = BitmapFactory.decodeStream(in, null, o);
 
-                  //  Toast.makeText(NewAgahi.this,"Permission Canceled, Now your application cannot access CAMERA.", Toast.LENGTH_LONG).show();
+                // resize to desired dimensions
+                int height = b.getHeight();
+                int width = b.getWidth();
+                Log.d("", "1th scale operation dimenions - width: " + width + ", height: " + height);
 
-                }
-                break;
+                double y = Math.sqrt(IMAGE_MAX_SIZE
+                        / (((double) width) / height));
+                double x = (y / height) * width;
+
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(b, (int) x,
+                        (int) y, true);
+                b.recycle();
+                b = scaledBitmap;
+
+                System.gc();
+            } else {
+                b = BitmapFactory.decodeStream(in);
+            }
+            in.close();
+
+            Log.d("", "bitmap size - width: " + b.getWidth() + ", height: " +
+                    b.getHeight());
+            return b;
+        } catch (IOException e) {
+            Log.e("", e.getMessage(), e);
+            return null;
         }
     }
-
 
 }

@@ -49,7 +49,7 @@ public class Main extends AppCompatActivity
     TabHost tabs;
     ImageButton ibmenu , ib;
     TextView tvtitle , txt;
-    LinearLayout llnewagahi;
+    LinearLayout llnewagahi,ll_search;
     public static Handler h;
     public  Thread t;
 
@@ -97,10 +97,10 @@ public class Main extends AppCompatActivity
 
         ibmenu=(ImageButton) findViewById(R.id.ib_menu);
         ib=(ImageButton) findViewById(R.id.ib);
-        final ImageButton ibSearch=(ImageButton) findViewById(R.id.ib_search);
         tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
         txt=(TextView) findViewById(R.id.txtNew);
         llnewagahi=(LinearLayout) findViewById(R.id.ll_new_agahi);
+        ll_search=(LinearLayout) findViewById(R.id.ll_search);
         Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
         tvtitle.setTypeface(tfmorvarid);
 
@@ -140,7 +140,7 @@ public class Main extends AppCompatActivity
                 switch (tab.getPosition()) {
                     case 1:
                         ib.setVisibility(View.GONE);
-                        ibSearch.setVisibility(View.GONE);
+                        ll_search.setVisibility(View.GONE);
 
                         txt.setText("تاریخچه خرید");
                         llnewagahi.setOnClickListener(new View.OnClickListener() {
@@ -153,7 +153,7 @@ public class Main extends AppCompatActivity
                         break;
                     case 2:
                         ib.setVisibility(View.VISIBLE);
-                        ibSearch.setVisibility(View.GONE);
+                        ll_search.setVisibility(View.GONE);
 
                         txt.setText("آگهی جدید");
                         llnewagahi.setOnClickListener(new View.OnClickListener() {
@@ -166,11 +166,11 @@ public class Main extends AppCompatActivity
                         break;
                     case 3:
                         ib.setVisibility(View.VISIBLE);
-                        ibSearch.setVisibility(View.VISIBLE);
+                        ll_search.setVisibility(View.VISIBLE);
 
                         txt.setText("آگهی جدید");
 
-                        ibSearch.setOnClickListener(new View.OnClickListener() {
+                        ll_search.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 Log.i("sssaaa","mishe?");
@@ -191,7 +191,7 @@ public class Main extends AppCompatActivity
 
                     case 0:
                         ib.setVisibility(View.VISIBLE);
-                        ibSearch.setVisibility(View.GONE);
+                        ll_search.setVisibility(View.GONE);
 
                         txt.setText("افزودن نی نی");
                         llnewagahi.setOnClickListener(new View.OnClickListener() {

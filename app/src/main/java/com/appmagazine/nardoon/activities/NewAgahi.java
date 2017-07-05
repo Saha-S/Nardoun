@@ -248,6 +248,11 @@ public class NewAgahi extends AppCompatActivity {
         webServiceCountSpecial();
         EnableRuntimePermission();
 
+        if (imgAsli.getVisibility() == View.GONE) {
+            SelectImage.setText("افزودن عکس");
+        } else if (imgAsli.getVisibility() == View.VISIBLE) {
+            SelectImage.setText("افزودن عکسی دیگر");
+        }
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -882,11 +887,7 @@ public class NewAgahi extends AppCompatActivity {
 
 
             if (resultCode == RESULT_OK) {
-                if (imgAsli.getVisibility() == View.GONE) {
-                    SelectImage.setText("افزودن عکس");
-                } else if (imgAsli.getVisibility() == View.VISIBLE) {
-                    SelectImage.setText("افزودن عکسی دیگر");
-                }
+
 
 
 
