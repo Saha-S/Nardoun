@@ -46,6 +46,14 @@
 
              </LinearLayout>
 
+             <ImageButton
+                 android:id="@+id/ib_search"
+                 android:layout_width="25dp"
+                 android:layout_height="25dp"
+                 android:layout_marginLeft="15dp"
+                 android:background="@android:drawable/ic_menu_search" />
+
+
              <TextView android:layout_width="0dp"
                  android:layout_height="wrap_content"
                  android:layout_weight="1"/>

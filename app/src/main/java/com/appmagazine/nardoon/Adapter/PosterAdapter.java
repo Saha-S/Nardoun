@@ -106,13 +106,17 @@ try {
     });
 
     if (!filterPoster.get(position).price.toString().equals("0")) {
-        String s =filterPoster.get(position).price;
-        Locale farsi = new Locale("fa", "IR");
-        NumberFormat numberFormatDutch = NumberFormat.getCurrencyInstance(farsi);
+        if(filterPoster.get(position).price.toString().equals("-1")){
+            holder.price.setText("توافقی");
+        }else {
+            String s = filterPoster.get(position).price;
+            Locale farsi = new Locale("fa", "IR");
+            NumberFormat numberFormatDutch = NumberFormat.getCurrencyInstance(farsi);
 
-        String c = numberFormatDutch.format(new BigDecimal(s.toString()));
-        String cc = c.replace("ریال",   " تومان " + "\u200e") ;
-        holder.price.setText(  cc );
+            String c = numberFormatDutch.format(new BigDecimal(s.toString()));
+            String cc = c.replace("ریال", " تومان " + "\u200e");
+            holder.price.setText(cc);
+        }
     }
     holder.location.setText(filterPoster.get(position).created_at + " در " + filterPoster.get(position).location);
 

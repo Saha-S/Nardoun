@@ -1,23 +1,30 @@
-package com.appmagazine.nardoon.fragments;
+package com.appmagazine.nardoon.activities;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.appmagazine.nardoon.Adapter.MyNiniAdapter;
 import com.appmagazine.nardoon.Adapter.PosterAdapter;
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.EndlessRecyclerViewScrollListener;
+import com.appmagazine.nardoon.Nini;
 import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
 import com.loopj.android.http.AsyncHttpClient;
@@ -33,9 +40,7 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
-import static android.content.Context.CONNECTIVITY_SERVICE;
-
-public class Main extends Fragment {
+public class Search extends AppCompatActivity implements TextWatcher{
     RecyclerView recyclerView;
     PosterAdapter adapter;
     LinearLayoutManager linearLayoutManager;
@@ -43,97 +48,110 @@ public class Main extends Fragment {
     SwipeRefreshLayout swipeRefreshLayout;
     EndlessRecyclerViewScrollListener scrollListener;
 
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_search);
+
+        TextView tvtitle = (TextView) findViewById(R.id.tv_mainpage_title);
+        TextView appbarTitle = (TextView) findViewById(R.id.tv_appbar_title);
+        ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
+        appbarTitle.setText("جست و جو");
+        Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
+        tvtitle.setTypeface(tfmorvarid);
+        ibBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        appbarTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
+        EditText editText=(EditText)findViewById(R.id.editText_main_search);
+        editText.addTextChangedListener(this);
 
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.list);
-        linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerView = (RecyclerView) findViewById(R.id.list);
+        linearLayoutManager = new LinearLayoutManager(App.context, LinearLayoutManager.VERTICAL, false);
         array = new ArrayList<>();
-        adapter = new PosterAdapter(getContext(), array);
+        adapter = new PosterAdapter(App.context, array);
 
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
+
+            ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+            if (mWifi.isConnected() || isMobileDataEnabled()) {
+                webServiceGetAgahi();
+                swipeRefreshLayout.setRefreshing(true);
+
+            }else {
+                App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
+                swipeRefreshLayout.setRefreshing(false);
+            }
 
 
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                    ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-                if (mWifi.isConnected() || isMobileDataEnabled()) {
-                    swipeRefreshLayout.setRefreshing(true);
-                    webServiceGetAgahi();
-                }else{
-                    App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
-                    swipeRefreshLayout.setRefreshing(false);
-                }
+                    if (mWifi.isConnected() || isMobileDataEnabled()) {
+                        webServiceGetAgahi();
+                        swipeRefreshLayout.setRefreshing(true);
+
+                    }else {
+                        App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
             }
         };
 
-        ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-        if (mWifi.isConnected() || isMobileDataEnabled()) {
-            webServiceGetAgahi();
-            swipeRefreshLayout.setRefreshing(true);
-
-        }else {
-            App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
-            swipeRefreshLayout.setRefreshing(false);
-
-        }
-
-
-            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 
                 array = new ArrayList<Poster>();
-                ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                    ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-                if (mWifi.isConnected() || isMobileDataEnabled()) {
-                    webServiceGetAgahi();
-                    swipeRefreshLayout.setRefreshing(true);
+                    if (mWifi.isConnected() || isMobileDataEnabled()) {
+                        webServiceGetAgahi();
+                        swipeRefreshLayout.setRefreshing(true);
 
-                }else {
-
-                    App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-
-                    scrollListener.resetState();
+                    }else {
+                        App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                scrollListener.resetState();
             }
         });
 
-    /*    recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(App.context, new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-
-                //Toast.makeText(getContext(), "آیتم شماره " + array.get(position).id + " را کلیک کردید!", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getContext() , Details.class);
-                intent.putExtra("id", array.get(position).id+"");
-                intent.putExtra("title", array.get(position).title);
-                intent.putExtra("image", array.get(position).image);
-                intent.putExtra("location", array.get(position).location);
-                intent.putExtra("price", array.get(position).price);
-                intent.putExtra("time", array.get(position).created_at);
-                intent.putExtra("statusbox", "0");
-
-                startActivity(intent);
-            }
-        }));
-        */
-        return view;
     }
 
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        adapter.filter(charSequence.toString());
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
+    }
 
     public  void webServiceGetAgahi()
     {
@@ -187,8 +205,6 @@ public class Main extends Fragment {
             }
         });
     }
-
-
     public Boolean isMobileDataEnabled(){
         Object connectivityService = App.context.getSystemService(CONNECTIVITY_SERVICE);
         ConnectivityManager cm = (ConnectivityManager) connectivityService;
@@ -203,4 +219,6 @@ public class Main extends Fragment {
             return null;
         }
     }
+
+
 }

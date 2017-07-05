@@ -97,13 +97,18 @@ public class CatAdapter extends RecyclerView.Adapter<CatAdapter.PosterHolder> {
 
         holder.title.setText(filterCat.get(position).title);
         if(!mDataset.get(position).price.toString().equals("0")) {
-            String s =filterCat.get(position).price;
-            Locale farsi = new Locale("fa", "IR");
-            NumberFormat numberFormatDutch = NumberFormat.getCurrencyInstance(farsi);
+            if(mDataset.get(position).price.toString().equals("-1")){
+                holder.price.setText("توافقی");
+            }else {
 
-            String c = numberFormatDutch.format(new BigDecimal(s.toString()));
-            String cc = c.replace("ریال",   " تومان " + "\u200e") ;
-            holder.price.setText(  cc );
+                String s = filterCat.get(position).price;
+                Locale farsi = new Locale("fa", "IR");
+                NumberFormat numberFormatDutch = NumberFormat.getCurrencyInstance(farsi);
+
+                String c = numberFormatDutch.format(new BigDecimal(s.toString()));
+                String cc = c.replace("ریال", " تومان " + "\u200e");
+                holder.price.setText(cc);
+            }
         }
         holder.location.setText(filterCat.get(position).created_at+" در " + filterCat.get(position).location);
 

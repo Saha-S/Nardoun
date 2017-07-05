@@ -12,6 +12,12 @@
             android:title="ورود"
             />
         <item
+            android:id="@+id/nav_search"
+            android:icon="@drawable/ic_search_black_24dp"
+            android:title="جست و جو"
+            />
+
+        <item
             android:id="@+id/nav_my_agahi"
             android:icon="@mipmap/avatar"
             android:title="آگهی های من"

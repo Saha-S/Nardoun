@@ -67,6 +67,7 @@ public class Details extends AppCompatActivity {
     public static TextView tvtitle,tvcontent,tvprice,tvlocation , tvtime ,tvtype ,tvLink , txt;
     public static String url, catname , mobile , email , price , image , location,time ,special , link , start , end  , order , allPrice;
     public static int idRadio  ;
+    public static String typetxt  ;
     ImageView  ivshare ;
     ToggleButton ivFavorites ;
     Button btnDelete, btnEdit;
@@ -172,9 +173,6 @@ public class Details extends AppCompatActivity {
             ivFavorites.setChecked(true);
         }
         //////////////////////////////////
-        String typetxt = tvtype.getText().toString();
-        if (typetxt == "فروشی") {idRadio = 0;}
-        if (typetxt == "درخواستی") {idRadio = 1;}
 
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -430,7 +428,6 @@ public class Details extends AppCompatActivity {
                     email= obj.getString("email");
                     mobile= obj.getString("mobile");
                     special= obj.getString("special");
-                    Log.i("spee2" , special);
 
                     if(special.equals("1")){
                         specialPos = "1";
@@ -453,6 +450,12 @@ public class Details extends AppCompatActivity {
 
                     tvcontent.setText(content);
                     tvtype.setText(type);
+
+                    typetxt = tvtype.getText().toString();
+                    Log.i("asasas2", typetxt.toString());
+                    if (typetxt == "فروشی") {idRadio = 0;}
+                    if (typetxt == "درخواستی") {idRadio = 1;}
+                    if (typetxt == "معاوضه") {idRadio = 2;}
 
 
                     Intent intent=getIntent();
@@ -550,14 +553,21 @@ public class Details extends AppCompatActivity {
 
 
                     tvtitle               .setText(intent.getStringExtra("title"));
-                    try {
-                        Locale farsi = new Locale("fa", "IR");
-                        NumberFormat numberFormatDutch = NumberFormat.getCurrencyInstance(farsi);
+                    if(price.toString().equals("-1")){
+                        tvprice.setText("توافقی");
+                    }
+                    else {
+                        try {
 
-                        String c = numberFormatDutch.format(new BigDecimal(price.toString()));
-                        String cc = c.replace("ریال", " تومان " + "\u200e");
-                        tvprice.setText(cc);
-                    }catch (RuntimeException r){}
+                            Locale farsi = new Locale("fa", "IR");
+                            NumberFormat numberFormatDutch = NumberFormat.getCurrencyInstance(farsi);
+
+                            String c = numberFormatDutch.format(new BigDecimal(price.toString()));
+                            String cc = c.replace("ریال", " تومان " + "\u200e");
+                            tvprice.setText(cc);
+                        } catch (RuntimeException r) {
+                        }
+                    }
                     getValidity();
 
 //////////////////////////////////////// ORDER///////////////////////////////////////////////////

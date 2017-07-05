@@ -30,6 +30,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TabHost;
@@ -96,6 +97,7 @@ public class Main extends AppCompatActivity
 
         ibmenu=(ImageButton) findViewById(R.id.ib_menu);
         ib=(ImageButton) findViewById(R.id.ib);
+        final ImageButton ibSearch=(ImageButton) findViewById(R.id.ib_search);
         tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
         txt=(TextView) findViewById(R.id.txtNew);
         llnewagahi=(LinearLayout) findViewById(R.id.ll_new_agahi);
@@ -138,6 +140,8 @@ public class Main extends AppCompatActivity
                 switch (tab.getPosition()) {
                     case 1:
                         ib.setVisibility(View.GONE);
+                        ibSearch.setVisibility(View.GONE);
+
                         txt.setText("تاریخچه خرید");
                         llnewagahi.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -149,6 +153,8 @@ public class Main extends AppCompatActivity
                         break;
                     case 2:
                         ib.setVisibility(View.VISIBLE);
+                        ibSearch.setVisibility(View.GONE);
+
                         txt.setText("آگهی جدید");
                         llnewagahi.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -160,7 +166,19 @@ public class Main extends AppCompatActivity
                         break;
                     case 3:
                         ib.setVisibility(View.VISIBLE);
+                        ibSearch.setVisibility(View.VISIBLE);
+
                         txt.setText("آگهی جدید");
+
+                        ibSearch.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Log.i("sssaaa","mishe?");
+                                Intent intent = new Intent(App.context ,Search.class );
+                                startActivity(intent);
+                            }
+                        });
+
                         llnewagahi.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -168,10 +186,13 @@ public class Main extends AppCompatActivity
                                 startActivity(intent);
                             }
                         });
+
                         break;
 
                     case 0:
                         ib.setVisibility(View.VISIBLE);
+                        ibSearch.setVisibility(View.GONE);
+
                         txt.setText("افزودن نی نی");
                         llnewagahi.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -427,6 +448,11 @@ public class Main extends AppCompatActivity
         }
         else if (id == R.id.nav_winner_nini) {
             Intent intent = new Intent(App.context , WinnerNini.class);
+            startActivity(intent);
+
+        }
+        else if (id == R.id.nav_search) {
+            Intent intent = new Intent(App.context , Search.class);
             startActivity(intent);
 
         }

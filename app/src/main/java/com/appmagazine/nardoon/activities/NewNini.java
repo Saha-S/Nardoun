@@ -236,7 +236,7 @@ public class NewNini extends AppCompatActivity {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
 
-        params.put("validity","3");
+        params.put("validity","0");
         params.put("point","0");
         params.put("pointm","0");
         params.put("commment","-");

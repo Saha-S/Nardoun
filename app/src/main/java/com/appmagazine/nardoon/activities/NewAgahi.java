@@ -1,14 +1,17 @@
 package com.appmagazine.nardoon.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -16,10 +19,10 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,9 +43,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appmagazine.nardoon.App;
-import com.appmagazine.nardoon.DetailsImagePagerAdapter;
 import com.appmagazine.nardoon.FinishTimePickerFragment;
 import com.appmagazine.nardoon.R;
 import com.appmagazine.nardoon.BeginTimePickerFragment;
@@ -50,6 +53,9 @@ import com.appmagazine.nardoon.Utility;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageOptions;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,8 +66,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import cz.msebera.android.httpclient.Header;
+
+import static junit.framework.Assert.assertEquals;
 
 public class NewAgahi extends AppCompatActivity {
 
@@ -72,7 +81,7 @@ public class NewAgahi extends AppCompatActivity {
     RadioButton radioTypeButton;
     public static ProgressDialog dialog;
     public static Button SelectImage;
-    private ImageView ivImageAsli, ivImage2, ivImage3;
+    private ImageView ivImageAsli, ivImage2, ivImage3 , ivGone1 , ivGone2, ivGone3;
     private ImageButton imgDelete1, imgDelete2, imgDelete3;
     LinearLayout imgAsli , img2,img3;
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
@@ -89,7 +98,7 @@ public class NewAgahi extends AppCompatActivity {
     int width, height;
     boolean flag1,flag2,flag3,flag4,flag5,flag6,flag7,flag8 , flag10=false;
     File file1 , file2,file3,fileAsli;
-    CheckBox chkLink;
+    CheckBox chkLink , chkTavafoqi;
     CheckBox chkSpecial;
     int AgahiPrice ,linkPrice , specialPrice;
     Button SelectCat , btnFinish , btnBegin ;
@@ -101,6 +110,10 @@ public class NewAgahi extends AppCompatActivity {
     public static String startTime , endTime;
     private int countSpecial;
     public static Handler h;
+    private Uri mCropImageUri;
+
+    CropImageView imgCrop;
+    private File auxFile;
 
 
     @Override
@@ -127,6 +140,7 @@ public class NewAgahi extends AppCompatActivity {
         menuJsonArray = new JSONArray();
 
         SelectCat = (Button) findViewById(R.id.btn_cats);
+
         SelectImage = (Button) findViewById(R.id.btn_select_image);
 
         btnFinish = (Button) findViewById(R.id.btn_finish);
@@ -145,6 +159,7 @@ public class NewAgahi extends AppCompatActivity {
         foodPrice = (EditText) findViewById(R.id.edt_food_price);
 
         chkLink = (CheckBox) findViewById(R.id.chk_link);
+        chkTavafoqi = (CheckBox) findViewById(R.id.chk_tavafoqi);
         chkSpecial = (CheckBox) findViewById(R.id.chk_special);
 
         LinearLayout llForm = (LinearLayout) findViewById(R.id.ll_form);
@@ -175,6 +190,9 @@ public class NewAgahi extends AppCompatActivity {
         ivImage2 = (ImageView) findViewById(R.id.ivImage2);
         ivImage3 = (ImageView) findViewById(R.id.ivImage3);
 
+        imgCrop = (CropImageView) findViewById(R.id.cropImageView);
+
+
         imgDelete1 = (ImageButton) findViewById(R.id.img_del1);
         imgDelete2 = (ImageButton) findViewById(R.id.img_del2);
         imgDelete3 = (ImageButton) findViewById(R.id.img_del3);
@@ -203,6 +221,19 @@ public class NewAgahi extends AppCompatActivity {
                 else{
                     link.setVisibility(View.GONE);
                     link.setText("");
+                }
+            }
+        });
+        chkTavafoqi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    price.setVisibility(View.GONE);
+                    price.setText("-1");
+                }
+                else{
+                    price.setText("");
+                    price.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -260,6 +291,9 @@ public class NewAgahi extends AppCompatActivity {
                 foodName.setText("");
                 foodPrice.setText("");
             }});
+
+
+
 
 
         imgDelete1.setOnClickListener(new View.OnClickListener() {
@@ -677,17 +711,12 @@ public class NewAgahi extends AppCompatActivity {
             }
         });
 
+
+
         SelectImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(imgAsli.getVisibility()==View.GONE) {
-                    selectImage(ivImageAsli);
-                }else  if(imgAsli.getVisibility()==View.VISIBLE && img2.getVisibility()==View.GONE) {
-                    selectImage(ivImage2);
-                }else if(img2.getVisibility()==View.VISIBLE && img3.getVisibility()==View.GONE) {
-                    selectImage(ivImage3);
-                }
-
+                onSelectImageClick(v);
             }
         });
 
@@ -758,7 +787,9 @@ public class NewAgahi extends AppCompatActivity {
         params.put("deviceid",App.android_id);
         params.put("devicemodel",App.android_Model);
         params.put("location",location.getText());
+        Log.i("fiiiil111", file1.toString());
         try {
+            Log.i("fiiiil122", file1.toString());
             params.put("file", file1);
         } catch(FileNotFoundException e) {}
         try {
@@ -812,101 +843,65 @@ public class NewAgahi extends AppCompatActivity {
         });
     }
 
-
-
-
-    private void selectImage(ImageView img) {
-        final CharSequence[] items = { "دوربین", "گالری",
-                "انصراف" };
-        image= img;
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(NewAgahi.this);
-        builder.setTitle("اضافه کردن تصویر");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                boolean result= Utility.checkPermission(NewAgahi.this);
-
-                if (items[item].equals("دوربین")) {
-                    userChoosenTask ="دوربین";
-                    if(result)
-                        ClickImageFromCamera() ;
-
-                } else if (items[item].equals("گالری")) {
-                    userChoosenTask ="گالری";
-                    if(result)
-                        GetImageFromGallery();
-
-                } else if (items[item].equals("انصراف")) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
-    }
-
-    ////////////////////////////////////////////////////
-
-    public void ClickImageFromCamera() {
-
-        CamIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-
-        file = new File(Environment.getExternalStorageDirectory(),
-                "file" + String.valueOf(System.currentTimeMillis()) + ".png");
-        //   uri = Uri.fromFile(file);
-        uri = FileProvider.getUriForFile(App.context, App.context.getApplicationContext().getPackageName() + ".provider", file);
-        App.context.grantUriPermission("com.android.camera",uri,
-                Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        Log.i("myuri" , "aa  :  " + uri.toString()  );
-
-        CamIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
-
-        CamIntent.putExtra("return-data", true);
-
-        startActivityForResult(CamIntent, 0);
-
-    }
-
-    public void GetImageFromGallery(){
-
-        GalIntent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-        startActivityForResult(Intent.createChooser(GalIntent, "انتخاب عکس از گالری"), 2);
-
-    }
+   public void onSelectImageClick(View view) {
+       CropImage.startPickImageActivity(this);
+   }
 
     @Override
+    @SuppressLint("NewApi")
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode != RESULT_CANCELED) {
 
-            if (requestCode == 0 && resultCode == RESULT_OK) {
+        // handle result of pick image chooser
+        if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            Uri imageUri = CropImage.getPickImageResultUri(this, data);
 
-                ImageCropFunction();
+            // For API >= 23 we need to check specifically that we have permissions to read external storage.
+            if (CropImage.isReadExternalStoragePermissionsRequired(this, imageUri)) {
+                // request permissions and handle the result in onRequestPermissionsResult()
+                mCropImageUri = imageUri;
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+            } else {
+                // no permissions required or already grunted, can start crop image activity
+                startCropImageActivity(imageUri);
+            }
+        }
 
-            } else if (requestCode == 2) {
+        // handle result of CropImageActivity
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
 
-                if (data != null) {
 
-                    uri = data.getData();
 
-                    ImageCropFunction();
+            destination = new File(Environment.getExternalStorageDirectory(),
+                    System.currentTimeMillis() + ".jpg");
+            Uri uri = Uri.fromFile(destination);
 
+
+            auxFile = new File(uri.getPath());
+            assertEquals(destination.getAbsolutePath(), auxFile.getAbsolutePath());
+
+
+            if (resultCode == RESULT_OK) {
+                if (imgAsli.getVisibility() == View.GONE) {
+                    SelectImage.setText("افزودن عکس");
+                } else if (imgAsli.getVisibility() == View.VISIBLE) {
+                    SelectImage.setText("افزودن عکسی دیگر");
                 }
-            } else if (requestCode == 1) {
 
-                if (data != null) {
 
-                    Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
 
+                if (imgAsli.getVisibility() == View.GONE) {
+
+                    imgAsli.setVisibility(View.VISIBLE);
+                    file1 = destination;
+                    Bitmap reducedSizeBitmap = getBitmap(result.getUri().getPath());
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    thumbnail.compress(Bitmap.CompressFormat.PNG,100, bytes);
-
-                    destination = new File(Environment.getExternalStorageDirectory(),
-                            System.currentTimeMillis() + ".png");
+                    reducedSizeBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                    ivImageAsli.setImageBitmap(reducedSizeBitmap);
 
                     FileOutputStream fo;
                     try {
+
                         destination.createNewFile();
                         fo = new FileOutputStream(destination);
                         fo.write(bytes.toByteArray());
@@ -918,55 +913,80 @@ public class NewAgahi extends AppCompatActivity {
                     }
 
 
-                    if (imgAsli.getVisibility() == View.GONE) {
-                        SelectImage.setText("افزودن عکس");
-                    } else if (imgAsli.getVisibility() == View.VISIBLE) {
-                        SelectImage.setText("افزودن عکسی دیگر");
+                } else if (imgAsli.getVisibility() == View.VISIBLE && img2.getVisibility() == View.GONE) {
+                    img2.setVisibility(View.VISIBLE);
+                    file2 = destination;
+                    Bitmap reducedSizeBitmap = getBitmap(result.getUri().getPath());
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    reducedSizeBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                    ivImage2.setImageBitmap(reducedSizeBitmap);
+
+                    FileOutputStream fo;
+                    try {
+
+                        destination.createNewFile();
+                        fo = new FileOutputStream(destination);
+                        fo.write(bytes.toByteArray());
+                        fo.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
 
-                    if (imgAsli.getVisibility() == View.GONE) {
-                        imgAsli.setVisibility(View.VISIBLE);
-                        file1 = destination;
-                    } else if (imgAsli.getVisibility() == View.VISIBLE && img2.getVisibility() == View.GONE) {
-                        img2.setVisibility(View.VISIBLE);
-                        file2 = destination;
 
-                    } else if (img2.getVisibility() == View.VISIBLE && img3.getVisibility() == View.GONE) {
-                        img3.setVisibility(View.VISIBLE);
-                        file3 = destination;
 
+                } else if (img2.getVisibility() == View.VISIBLE && img3.getVisibility() == View.GONE) {
+                    img3.setVisibility(View.VISIBLE);
+                    file3 = destination;
+                    Bitmap reducedSizeBitmap = getBitmap(result.getUri().getPath());
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    reducedSizeBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                    ivImage3.setImageBitmap(reducedSizeBitmap);
+
+                    FileOutputStream fo;
+                    try {
+
+                        destination.createNewFile();
+                        fo = new FileOutputStream(destination);
+                        fo.write(bytes.toByteArray());
+                        fo.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    image.setImageBitmap(thumbnail);
                 }
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    public void ImageCropFunction() {
-
-        // Image Crop Code
-        try {
-            CropIntent = new Intent("com.android.camera.action.CROP");
-
-            CropIntent.setDataAndType(uri, "image/*");
-            CropIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            CropIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-
-            CropIntent.putExtra("crop", "true");
-            CropIntent.putExtra("aspectX", 1);
-            CropIntent.putExtra("aspectY", 1);
-            CropIntent.putExtra("outputX", 300);
-            CropIntent.putExtra("outputY", 300);
-            CropIntent.putExtra("scaleUpIfNeeded", true);
-            CropIntent.putExtra("return-data", true);
-
-            startActivityForResult(CropIntent, 1);
-
-        } catch (ActivityNotFoundException e) {
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (mCropImageUri != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // required permissions granted, start crop image activity
+            startCropImageActivity(mCropImageUri);
+        } else {
+          //  Toast.makeText(this, "Cancelling, required permissions are not granted", Toast.LENGTH_LONG).show();
         }
     }
-    //Image Crop Code End Here
+
+    /**
+     * Start crop image activity for the given image.
+     */
+    private void startCropImageActivity(Uri imageUri) {
+        CropImage.activity(imageUri)
+                .setBorderLineColor(Color.RED)
+                .setGuidelinesColor(Color.GREEN)
+                .setAspectRatio(1,1)
+                .setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setFixAspectRatio(true)
+                .setRequestedSize(600,600)
+                .start(this);
+    }
 
     public void EnableRuntimePermission(){
 
@@ -979,26 +999,6 @@ public class NewAgahi extends AppCompatActivity {
             ActivityCompat.requestPermissions(NewAgahi.this,new String[]{
                     Manifest.permission.CAMERA}, RequestPermissionCode);
 
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int RC, String per[], int[] PResult) {
-
-        switch (RC) {
-
-            case RequestPermissionCode:
-
-                if (PResult.length > 0 && PResult[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    //   Toast.makeText(NewAgahi.this,"Permission Granted, Now your application can access CAMERA.", Toast.LENGTH_LONG).show();
-
-                } else {
-
-                    //  Toast.makeText(NewAgahi.this,"Permission Canceled, Now your application cannot access CAMERA.", Toast.LENGTH_LONG).show();
-
-                }
-                break;
         }
     }
 
@@ -1038,5 +1038,78 @@ public class NewAgahi extends AppCompatActivity {
         });
     }
 
+    private String getRealPathFromURI(Uri contentURI) {
+        String result;
+        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
+    }
+    private Bitmap getBitmap(String path) {
+
+        Uri uri = Uri.fromFile(new File(path));
+        InputStream in = null;
+        try {
+            final int IMAGE_MAX_SIZE = 1200000; // 1.2MP
+            in = getContentResolver().openInputStream(uri);
+
+            // Decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(in, null, o);
+            in.close();
+
+
+            int scale = 1;
+            while ((o.outWidth * o.outHeight) * (1 / Math.pow(scale, 2)) >
+                    IMAGE_MAX_SIZE) {
+                scale++;
+            }
+            Log.d("", "scale = " + scale + ", orig-width: " + o.outWidth + ", orig-height: " + o.outHeight);
+
+            Bitmap b = null;
+            in = getContentResolver().openInputStream(uri);
+            if (scale > 1) {
+                scale--;
+                // scale to max possible inSampleSize that still yields an image
+                // larger than target
+                o = new BitmapFactory.Options();
+                o.inSampleSize = scale;
+                b = BitmapFactory.decodeStream(in, null, o);
+
+                // resize to desired dimensions
+                int height = b.getHeight();
+                int width = b.getWidth();
+                Log.d("", "1th scale operation dimenions - width: " + width + ", height: " + height);
+
+                double y = Math.sqrt(IMAGE_MAX_SIZE
+                        / (((double) width) / height));
+                double x = (y / height) * width;
+
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(b, (int) x,
+                        (int) y, true);
+                b.recycle();
+                b = scaledBitmap;
+
+                System.gc();
+            } else {
+                b = BitmapFactory.decodeStream(in);
+            }
+            in.close();
+
+            Log.d("", "bitmap size - width: " + b.getWidth() + ", height: " +
+                    b.getHeight());
+            return b;
+        } catch (IOException e) {
+            Log.e("", e.getMessage(), e);
+            return null;
+        }
+    }
 
 }

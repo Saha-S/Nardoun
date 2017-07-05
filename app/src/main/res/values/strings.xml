@@ -88,9 +88,7 @@
 
 
 </string>
-    <integer-array name="img_id_arr">
-    </integer-array>
-
+    <integer-array name="img_id_arr"></integer-array>
 
 
     <string name="hello_blank_fragment">Hello blank fragment</string>

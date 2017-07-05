@@ -115,18 +115,28 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginRight="10dp"
+                                android:layout_marginRight="15dp"
                                 android:layout_marginTop="6dp"
-                                android:layout_weight="1.40"
                                 android:text="قیمت"
                                 android:textColor="#3d3d3d"
                                 android:textSize="18sp" />
+
+
                         </LinearLayout>
+
+                        <CheckBox
+                            android:id="@+id/chk_tavafoqi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="10dp"
+
+                            android:text="توافقی" />
 
                         <EditText
                             android:id="@+id/edt_price"
@@ -437,6 +447,14 @@
                                     android:checked="false"
                                     android:text="درخواستی" />
 
+                                <RadioButton
+                                    android:id="@+id/rb3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:checked="false"
+                                    android:text="معاوضه" />
+
+
                             </RadioGroup>
                         </LinearLayout>
 
@@ -573,7 +591,6 @@
                                         android:layout_height="60dp"
                                         app:srcCompat="@mipmap/nopic" />
                                 </LinearLayout>
-
 
                             </LinearLayout>
                         </HorizontalScrollView>
