@@ -11,23 +11,29 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.appmagazine.nardoon.Adapter.PosterAdapter;
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.EndlessRecyclerViewScrollListener;
 import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
+import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -37,6 +43,7 @@ import cz.msebera.android.httpclient.Header;
 import pl.droidsonroids.gif.GifImageView;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
+import static com.appmagazine.nardoon.activities.Details.url;
 
 public class Main extends Fragment {
     RecyclerView recyclerView;
@@ -45,8 +52,9 @@ public class Main extends Fragment {
     List<Poster> array;
     SwipeRefreshLayout swipeRefreshLayout;
     EndlessRecyclerViewScrollListener scrollListener;
-    GifImageView gif;
-
+    ImageView gif;
+    LinearLayout ll_Filter;
+    private String gifUrl;
 
 
     @Override
@@ -56,17 +64,10 @@ public class Main extends Fragment {
 
 
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
-        gif = (GifImageView) view.findViewById(R.id.gif);
+        ll_Filter = (LinearLayout) view.findViewById(R.id.ll_Filter);
+        webServiceGetGif();
+        gif = (ImageView) view.findViewById(R.id.gif);
 
-        gif.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Uri uri = Uri.parse("http://www.nardoun.ir"); // missing 'http://' will cause crashed
-                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(intent);
-
-            }
-        });
 
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         array = new ArrayList<>();
@@ -75,6 +76,16 @@ public class Main extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
 
+
+        gif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse(gifUrl); // missing 'http://' will cause crashed
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+
+            }
+        });
 
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
@@ -128,24 +139,6 @@ public class Main extends Fragment {
             }
         });
 
-    /*    recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(App.context, new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-
-                //Toast.makeText(getContext(), "آیتم شماره " + array.get(position).id + " را کلیک کردید!", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getContext() , Details.class);
-                intent.putExtra("id", array.get(position).id+"");
-                intent.putExtra("title", array.get(position).title);
-                intent.putExtra("image", array.get(position).image);
-                intent.putExtra("location", array.get(position).location);
-                intent.putExtra("price", array.get(position).price);
-                intent.putExtra("time", array.get(position).created_at);
-                intent.putExtra("statusbox", "0");
-
-                startActivity(intent);
-            }
-        }));
-        */
         return view;
     }
 
@@ -219,4 +212,65 @@ public class Main extends Fragment {
             return null;
         }
     }
+
+    public  void webServiceGetGif()
+    {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        client.get(App.urlApi+"agahis", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+            @Override
+            public void onStart() {
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                String value = new String(response);
+
+                JSONObject obj = null;  //********* chon ye json array ba 1 json objecte injur migirimesh
+                try {
+                    obj = new JSONArray(value).getJSONObject(0);
+                    String banner= obj.getString("banner");
+                    gifUrl= obj.getString("url");
+                    Glide.with(App.context)
+                            .load(App.urlimages+banner)
+                            .asGif()
+                            .placeholder(R.drawable.banner)
+                            .into(gif);
+                    ll_Filter.setVisibility(View.VISIBLE);
+                    gif.setVisibility(View.VISIBLE);
+
+
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    ll_Filter.setVisibility(View.GONE);
+                    gif.setVisibility(View.GONE);
+
+                }
+
+
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+
+                // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
+                if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
+                    ll_Filter.setVisibility(View.GONE);
+                    gif.setVisibility(View.GONE);
+                }else{
+                    ll_Filter.setVisibility(View.GONE);
+                    gif.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+                // called when request is retried
+            }
+        });
+    }
+
 }

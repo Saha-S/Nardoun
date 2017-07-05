@@ -150,6 +150,7 @@ public class Main extends AppCompatActivity
                                 startActivity(intent);
                             }
                         });
+
                         break;
                     case 2:
                         ib.setVisibility(View.VISIBLE);
@@ -160,14 +161,6 @@ public class Main extends AppCompatActivity
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(App.context ,NewAgahi.class );
-                                startActivity(intent);
-                            }
-                        });
-                        ll_search.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Log.i("sssaaa","mishe?2");
-                                Intent intent = new Intent(App.context ,Search.class );
                                 startActivity(intent);
                             }
                         });
@@ -183,14 +176,6 @@ public class Main extends AppCompatActivity
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(App.context ,NewAgahi.class );
-                                startActivity(intent);
-                            }
-                        });
-                        ll_search.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Log.i("sssaaa","mishe?");
-                                Intent intent = new Intent(App.context ,Search.class );
                                 startActivity(intent);
                             }
                         });
@@ -210,6 +195,7 @@ public class Main extends AppCompatActivity
                                 startActivity(intent);
                             }
                         });
+
 
                         break;
                 }
@@ -331,6 +317,13 @@ public class Main extends AppCompatActivity
             }
         });
 
+        ll_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(App.context ,Search.class );
+                startActivity(intent);
+            }
+        });
 
 
       t = new Thread() {

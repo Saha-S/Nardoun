@@ -48,7 +48,8 @@
         <activity
             android:name=".activities.Search"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".activities.cats"
             android:screenOrientation="portrait"

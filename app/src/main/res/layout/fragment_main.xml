@@ -14,22 +14,18 @@
         android:minHeight="65dp"
         android:gravity="right|center"
         android:weightSum="12"
-        android:id="@+id/ll_Filter">
+        android:id="@+id/ll_Filter"
+        android:visibility="gone"
+        >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="11"
-            android:gravity="right|center"
-            android:orientation="horizontal">
 
-            <pl.droidsonroids.gif.GifImageView
+            <ImageView
                 android:id="@+id/gif"
+                android:layout_weight="11"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:src="@drawable/banner" />
+                 />
 
-        </LinearLayout>
 
     </LinearLayout>
 
