@@ -163,13 +163,29 @@ public class Main extends AppCompatActivity
                                 startActivity(intent);
                             }
                         });
+                        ll_search.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Log.i("sssaaa","mishe?2");
+                                Intent intent = new Intent(App.context ,Search.class );
+                                startActivity(intent);
+                            }
+                        });
+
                         break;
                     case 3:
                         ib.setVisibility(View.VISIBLE);
                         ll_search.setVisibility(View.VISIBLE);
-
                         txt.setText("آگهی جدید");
 
+
+                        llnewagahi.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(App.context ,NewAgahi.class );
+                                startActivity(intent);
+                            }
+                        });
                         ll_search.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -179,13 +195,6 @@ public class Main extends AppCompatActivity
                             }
                         });
 
-                        llnewagahi.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(App.context ,NewAgahi.class );
-                                startActivity(intent);
-                            }
-                        });
 
                         break;
 
