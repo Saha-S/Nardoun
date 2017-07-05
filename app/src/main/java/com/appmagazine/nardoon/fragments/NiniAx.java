@@ -145,6 +145,7 @@ public class NiniAx extends Fragment implements TextWatcher  , NavigationView.On
                     swipeRefreshLayout.setRefreshing(false);
                 }
                     scrollListener.resetState();
+
             }
         });
 
