@@ -87,6 +87,27 @@
                         android:text="09175006484"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="22sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="کانال تلگرام"
+                        android:textColor="#6F3662"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/telegram"
+
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="http://t.me/nardoun96"
+                        android:textColor="#6F3662"
+                        android:textSize="22sp" />
+
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>
