@@ -14,6 +14,7 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import com.appmagazine.nardoon.EndlessRecyclerViewScrollListener;
 import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -65,8 +67,9 @@ public class Main extends Fragment {
 
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
         ll_Filter = (LinearLayout) view.findViewById(R.id.ll_Filter);
-        webServiceGetGif();
         gif = (ImageView) view.findViewById(R.id.gif);
+
+        webServiceGetGif();
 
 
         linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -218,35 +221,24 @@ public class Main extends Fragment {
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        client.get(App.urlApi+"agahis", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+        client.get(App.urlApi+"getbannerlink", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
+                Log.i("wwwww0", App.urlApi+"getbannerlink");
+
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
                 String value = new String(response);
 
-                JSONObject obj = null;  //********* chon ye json array ba 1 json objecte injur migirimesh
-                try {
-                    obj = new JSONArray(value).getJSONObject(0);
-                    String banner= obj.getString("banner");
-                    gifUrl= obj.getString("url");
-                    Glide.with(App.context)
-                            .load(App.urlimages+banner)
-                            .asGif()
-                            .placeholder(R.drawable.banner)
+                if(value!= null) {
+                    gifUrl = value;
+                    Glide.with(App.context).load(App.urlimages+"banner.gif").asGif().error( R.drawable.call).diskCacheStrategy(DiskCacheStrategy.SOURCE)
+
                             .into(gif);
                     ll_Filter.setVisibility(View.VISIBLE);
-                    gif.setVisibility(View.VISIBLE);
-
-
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                }else {
                     ll_Filter.setVisibility(View.GONE);
-                    gif.setVisibility(View.GONE);
-
                 }
 
 
@@ -259,10 +251,8 @@ public class Main extends Fragment {
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
                     ll_Filter.setVisibility(View.GONE);
-                    gif.setVisibility(View.GONE);
                 }else{
                     ll_Filter.setVisibility(View.GONE);
-                    gif.setVisibility(View.GONE);
                 }
             }
 

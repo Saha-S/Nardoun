@@ -47,7 +47,7 @@ import java.util.HashMap;
 public class Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     TabHost tabs;
-    ImageButton ibmenu , ib;
+    ImageButton ibmenu , ib,ib_search;
     TextView tvtitle , txt;
     LinearLayout llnewagahi,ll_search;
     public static Handler h;
@@ -97,6 +97,7 @@ public class Main extends AppCompatActivity
 
         ibmenu=(ImageButton) findViewById(R.id.ib_menu);
         ib=(ImageButton) findViewById(R.id.ib);
+        ib_search=(ImageButton) findViewById(R.id.ib_search);
         tvtitle=(TextView) findViewById(R.id.tv_mainpage_title);
         txt=(TextView) findViewById(R.id.txtNew);
         llnewagahi=(LinearLayout) findViewById(R.id.ll_new_agahi);
@@ -317,7 +318,7 @@ public class Main extends AppCompatActivity
             }
         });
 
-        ll_search.setOnClickListener(new View.OnClickListener() {
+        ib_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(App.context ,Search.class );
