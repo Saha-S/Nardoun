@@ -290,7 +290,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        client.get(App.urlApi+"nini/" + id + "/like" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+        client.get(App.urlApi+"nini/" + id + "/likee" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
 
@@ -330,7 +330,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        client.get(App.urlApi+"nini/" + id + "/unlike" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+        client.get(App.urlApi+"nini/" + id + "/unlikee" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
             }
