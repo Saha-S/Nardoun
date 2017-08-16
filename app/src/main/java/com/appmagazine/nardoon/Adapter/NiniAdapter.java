@@ -124,14 +124,14 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
 
         String validity = filterPoster.get(position).validity;
-        if (validity.equals("10")){
+        if (validity.equals("10")) {
             holder.frameLayout.setVisibility(View.VISIBLE);
             holder.llName.setBackgroundColor(Color.parseColor("#ffb300"));
             holder.llFrame.setBackgroundResource(R.drawable.orangeframe);
             holder.like.setEnabled(false);
 //            holder.dislike.setEnabled(false);
 
-            holder.name.setText("برنده این ماه "+filterPoster.get(position).name + "   -   ");
+            holder.name.setText("برنده این ماه " + filterPoster.get(position).name + "   -   ");
             holder.age.setText(filterPoster.get(position).age);
             holder.likes.setText(filterPoster.get(position).point);
             //    holder.dislikes.setText(filterPoster.get(position).pointm);
@@ -141,35 +141,41 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                     .placeholder(R.mipmap.nopic)
                     .into(holder.imageNini);
 
-        }
-        if(validity.equals("1")) {
+        } else {
             holder.frameLayout.setVisibility(View.GONE);
-
-            holder.name.setText(filterPoster.get(position).name + "   -   ");
-            holder.age.setText(filterPoster.get(position).age);
-            holder.likes.setText(filterPoster.get(position).point);
-            //     holder.dislikes.setText(filterPoster.get(position).pointm);
-
-            Glide.with(context)
-                    .load(App.urlimages + filterPoster.get(position).image)
-                    .placeholder(R.mipmap.nopic)
-                    .into(holder.imageNini);
+            holder.llName.setBackgroundColor(Color.parseColor("#ff6666"));
+            holder.like.setEnabled(true);
+            holder.llFrame.setBackgroundResource(R.drawable.nini_border);
+            if (validity.equals("1")) {
+                holder.frameLayout.setVisibility(View.GONE);
+                holder.llFrame.setBackgroundResource(R.drawable.nini_border);
 
 
-            String likestr = file.read("likes");
-            liksarray = likestr.split("-");
+                holder.name.setText(filterPoster.get(position).name + "   -   ");
+                holder.age.setText(filterPoster.get(position).age);
+                holder.likes.setText(filterPoster.get(position).point);
+                //     holder.dislikes.setText(filterPoster.get(position).pointm);
+
+                Glide.with(context)
+                        .load(App.urlimages + filterPoster.get(position).image)
+                        .placeholder(R.mipmap.nopic)
+                        .into(holder.imageNini);
 
 
-            if (Arrays.asList(liksarray).contains(filterPoster.get(position).id + "")) {
-                holder.like.setChecked(true);
-                //        holder.dislike.setEnabled(false);
-            } else {
-                holder.like.setChecked(false);
-                //        holder.dislike.setEnabled(true);
-            }
+                String likestr = file.read("likes");
+                liksarray = likestr.split("-");
 
-            String dislikestr = file.read("dislikes");
-            //    disliksarray = dislikestr.split("-");
+
+                if (Arrays.asList(liksarray).contains(filterPoster.get(position).id + "")) {
+                    holder.like.setChecked(true);
+                    //        holder.dislike.setEnabled(false);
+                } else {
+                    holder.like.setChecked(false);
+                    //        holder.dislike.setEnabled(true);
+                }
+
+                String dislikestr = file.read("dislikes");
+                //    disliksarray = dislikestr.split("-");
 
      /*       if (Arrays.asList(disliksarray).contains(filterPoster.get(position).id + "")) {
                 holder.dislike.setChecked(true);
@@ -179,11 +185,11 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                 holder.like.setEnabled(true);
             }
 */
-            holder.like.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                holder.like.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                    v.setEnabled(false);
+                        v.setEnabled(false);
 
                         if (holder.like.isChecked() == false) {
                             webServiceUnLike(filterPoster.get(position).id, holder, position, v);
@@ -215,8 +221,8 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                         }
 
 
-                }
-            });
+                    }
+                });
 
          /*   holder.dislike.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -250,14 +256,25 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             });
 */
 
-            Animation animation = AnimationUtils.loadAnimation(context,
-                    (position > lastPosition) ? android.R.anim.slide_in_left
-                            : android.R.anim.slide_out_right);
+                if (position > lastPosition) {
+                    Animation animation = AnimationUtils.loadAnimation(context,
+                            android.R.anim.slide_in_left);
+                    holder.itemView.startAnimation(animation);
+                    lastPosition = position;
+
+                }
+         /*   Animation animation = AnimationUtils.loadAnimation(context,
+                    (position > lastPosition) ? android.R.anim.slide_in_left : android.R.anim.fade_in
+                            );
             holder.itemView.startAnimation(animation);
             lastPosition = position;
         }
-    }
+        */
+            }
 
+        }
+
+    }
     public void update(List<Nini> list) {
         filterPoster = list;
         notifyDataSetChanged();

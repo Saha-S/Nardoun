@@ -354,8 +354,8 @@ public class EditAgahi extends AppCompatActivity {
                 imgAsli.setVisibility(View.GONE);
                 SelectImage.setText("افزودن عکس");
             }else
-            if (!Details.image.equals("0")) {
-                Glide.with(this).load(App.urlimages + Details.image).into(ivImageAsli);
+            if (!Details.url1.equals("0")) {
+                Glide.with(this).load(App.urlimages + Details.url1).into(ivImageAsli);
                 imgAsli.setVisibility(View.VISIBLE);
                 SelectImage.setText("افزودن عکسی دیگر");
                 Log.i("url", "...:" + Details.image);
@@ -367,7 +367,6 @@ public class EditAgahi extends AppCompatActivity {
                 Glide.with(this).load(App.urlimages + Details.url2).into(ivImage2);
                 img2.setVisibility(View.VISIBLE);
                 SelectImage.setText("افزودن عکسی دیگر");
-                Log.i("url2", "...:" + Details.url2);
 
             }
 
@@ -877,7 +876,6 @@ public class EditAgahi extends AppCompatActivity {
         params.put("location",location.getText());
         if(file1!=null){
             try {
-                Log.i("fiiiil133", file1.toString());
 
                 params.put("file", file1);
             } catch(FileNotFoundException e) {}
@@ -894,7 +892,7 @@ public class EditAgahi extends AppCompatActivity {
         } catch(FileNotFoundException e) {}
     }
          if(file1==null && imgAsli.getVisibility()==View.VISIBLE){
-            params.put("image", Details.image);
+            params.put("image", Details.url1);
         }
          if(file2==null && img2.getVisibility()==View.VISIBLE){
             params.put("imagei", Details.url2);

@@ -120,7 +120,7 @@ public class Main extends Fragment {
         }
 
 
-            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
 
@@ -138,7 +138,7 @@ public class Main extends Fragment {
                     swipeRefreshLayout.setRefreshing(false);
                 }
 
-                    scrollListener.resetState();
+                scrollListener.resetState();
             }
         });
 
@@ -224,7 +224,6 @@ public class Main extends Fragment {
         client.get(App.urlApi+"getbannerlink", params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
-                Log.i("wwwww0", App.urlApi+"getbannerlink");
 
             }
             @Override
@@ -236,14 +235,17 @@ public class Main extends Fragment {
                     try {
 
 
-                    JSONObject jo = new JSONObject(value);
+                        JSONObject jo = new JSONObject(value);
 
-                    gifUrl = jo.getString("banner_url");
-                    Glide.with(App.context).load(App.urlimages+jo.getString("banner_name")).asGif().placeholder(R.drawable.bannerplaceholder).error( R.drawable.bannerplaceholder).into(gif);
-                    ll_Filter.setVisibility(View.VISIBLE);
+                        gifUrl = jo.getString("banner_url");
+                        String banner = jo.getString("banner_name");
+                        Glide.with(App.context).load(App.urlimages+banner).asGif().error( R.drawable.bannerplaceholder).diskCacheStrategy(DiskCacheStrategy.SOURCE)
+
+                                .into(gif);
+                        ll_Filter.setVisibility(View.VISIBLE);
 
 
-                }catch (JSONException je){}
+                    }catch (JSONException je){}
 
                 }else {
                     ll_Filter.setVisibility(View.GONE);
