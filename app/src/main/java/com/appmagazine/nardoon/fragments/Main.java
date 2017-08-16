@@ -232,11 +232,19 @@ public class Main extends Fragment {
                 String value = new String(response);
 
                 if(value!= null) {
-                    gifUrl = value;
-                    Glide.with(App.context).load(App.urlimages+"banner.gif").asGif().error( R.drawable.call).diskCacheStrategy(DiskCacheStrategy.SOURCE)
 
-                            .into(gif);
+                    try {
+
+
+                    JSONObject jo = new JSONObject(value);
+
+                    gifUrl = jo.getString("banner_url");
+                    Glide.with(App.context).load(App.urlimages+jo.getString("banner_name")).asGif().placeholder(R.drawable.bannerplaceholder).error( R.drawable.bannerplaceholder).into(gif);
                     ll_Filter.setVisibility(View.VISIBLE);
+
+
+                }catch (JSONException je){}
+
                 }else {
                     ll_Filter.setVisibility(View.GONE);
                 }
