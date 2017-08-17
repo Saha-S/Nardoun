@@ -194,17 +194,6 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                         if (holder.like.isChecked() == false) {
                             webServiceUnLike(filterPoster.get(position).id, holder, position, v);
 
-                            String likes = "";
-                            for (int i = 0; i < liksarray.length; i++) {
-                                if (!liksarray[i].equals(filterPoster.get(position).id)) {
-                                    if (likes.equals(""))
-                                        likes += liksarray[i];
-                                    else
-                                        likes += "-" + liksarray[i];
-
-                                }
-                            }
-                            file.write("likes", likes);
                             //   holder.dislike.setEnabled(true);
 
                         } else {
@@ -212,12 +201,6 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                             //  holder.likes.setText(likes);
                             //     holder.dislike.setEnabled(false);
 
-                            String likes = file.read("likes");
-                            if (likes.equals("")) {
-                                file.write("likes", filterPoster.get(position).id);
-                            } else {
-                                file.write("likes", likes + "-" + filterPoster.get(position).id);
-                            }
                         }
 
 
@@ -301,6 +284,13 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
                 v.setEnabled(true);
                 String value = new String(response);
+                String likes = file.read("likes");
+                if (likes.equals("")) {
+                    file.write("likes", filterPoster.get(position).id);
+                } else {
+                    file.write("likes", likes + "-" + filterPoster.get(position).id);
+                }
+
                 holder.likes.setText(value);
 
             }
@@ -342,6 +332,18 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                 String value = new String(response);
                 //  likes = value;
                 holder.likes.setText(value);
+                String likes = "";
+                for (int i = 0; i < liksarray.length; i++) {
+                    if (!liksarray[i].equals(filterPoster.get(position).id)) {
+                        if (likes.equals(""))
+                            likes += liksarray[i];
+                        else
+                            likes += "-" + liksarray[i];
+
+                    }
+                }
+                file.write("likes", likes);
+
 
             }
 
