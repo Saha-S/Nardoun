@@ -162,7 +162,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                         .into(holder.imageNini);
 
 
-                String likestr = file.read("likes");
+                String likestr = file.read("likess");
                 liksarray = likestr.split("-");
 
 
@@ -174,7 +174,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                     //        holder.dislike.setEnabled(true);
                 }
 
-                String dislikestr = file.read("dislikes");
+                String dislikestr = file.read("dislikess");
                 //    disliksarray = dislikestr.split("-");
 
      /*       if (Arrays.asList(disliksarray).contains(filterPoster.get(position).id + "")) {
@@ -284,11 +284,11 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
                 v.setEnabled(true);
                 String value = new String(response);
-                String likes = file.read("likes");
+                String likes = file.read("likess");
                 if (likes.equals("")) {
-                    file.write("likes", filterPoster.get(position).id);
+                    file.write("likess", filterPoster.get(position).id);
                 } else {
-                    file.write("likes", likes + "-" + filterPoster.get(position).id);
+                    file.write("likess", likes + "-" + filterPoster.get(position).id);
                 }
 
                 holder.likes.setText(value);
@@ -342,7 +342,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
                     }
                 }
-                file.write("likes", likes);
+                file.write("likess", likes);
 
 
             }
