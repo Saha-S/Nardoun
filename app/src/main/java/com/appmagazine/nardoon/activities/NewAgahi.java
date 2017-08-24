@@ -792,9 +792,7 @@ public class NewAgahi extends AppCompatActivity {
         params.put("deviceid",App.android_id);
         params.put("devicemodel",App.android_Model);
         params.put("location",location.getText());
-        Log.i("fiiiil111", file1.toString());
         try {
-            Log.i("fiiiil122", file1.toString());
             params.put("file", file1);
         } catch(FileNotFoundException e) {}
         try {
