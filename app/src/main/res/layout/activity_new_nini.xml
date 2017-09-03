@@ -242,6 +242,102 @@
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginTop="15dp"
+                        android:background="#fff"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="6dp"
+                            android:text="شما میتوانید با انتخاب هر یک از گزینه های زیر شکلک ها را به عکس فرزند خود اضافه کنید."
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@android:color/holo_red_dark"
+                            android:textSize="14sp" />
+
+                        <HorizontalScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:layout_weight="1">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="2dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="10dp"
+                                    android:gravity="center"
+                                    android:orientation="horizontal"
+                                    android:weightSum="4">
+
+                                    <ToggleButton
+                                        android:id="@+id/checkBox_shower"
+                                        android:layout_width="60dp"
+                                        android:layout_height="60dp"
+                                        android:layout_margin="5dp"
+                                        android:background="@drawable/toggle_hamam"
+                                        android:shadowColor="#000"
+                                        android:shadowDx="1"
+                                        android:shadowDy="0.5"
+                                        android:textOff=""
+                                        android:textOn="" />
+
+                                    <ToggleButton
+                                        android:id="@+id/checkBox_kiss"
+                                        android:layout_width="60dp"
+                                        android:layout_height="60dp"
+                                        android:layout_margin="5dp"
+                                        android:background="@drawable/toggle_kiss"
+                                        android:shadowColor="#000"
+                                        android:shadowDx="1"
+                                        android:shadowDy="0.5"
+                                        android:textOff=""
+                                        android:textOn="" />
+
+                                    <ToggleButton
+                                        android:id="@+id/checkBox_flower"
+                                        android:layout_width="60dp"
+                                        android:layout_height="60dp"
+                                        android:layout_margin="5dp"
+                                        android:background="@drawable/toggle_gool"
+                                        android:shadowColor="#000"
+                                        android:shadowDx="1"
+                                        android:shadowDy="0.5"
+                                        android:textOff=""
+                                        android:textOn="" />
+
+                                    <ToggleButton
+                                        android:id="@+id/checkBox_icecream"
+                                        android:layout_width="60dp"
+                                        android:layout_height="60dp"
+                                        android:layout_margin="5dp"
+                                        android:background="@drawable/toggle_bastani"
+                                        android:shadowColor="#000"
+                                        android:shadowDx="1"
+                                        android:shadowDy="0.5"
+                                        android:textOff=""
+                                        android:textOn="" />
+
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </HorizontalScrollView>
+
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>

@@ -35,6 +35,7 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.MyAgahi;
@@ -84,8 +85,7 @@ public class NewNini extends AppCompatActivity {
     int width, height;
     boolean flag1,flag2,flag3,flag4,flag5,flag6,flag7,flag8=false;
     File file1 , file2,file3,fileAsli;
-    CheckBox chkLink;
-    CheckBox chkSpecial;
+    ToggleButton chkShower , chkKiss , chkFlower , chkIcecream;
     int AgahiPrice ,linkPrice , specialPrice;
     Button SelectCat;
     private String id_confirmaation;
@@ -118,6 +118,11 @@ public class NewNini extends AppCompatActivity {
         txtName = (TextView) findViewById(R.id.txt_name);
         txtAge = (TextView) findViewById(R.id.txt_age);
         txtImg = (TextView) findViewById(R.id.txt_img_asli);
+
+        chkShower = (ToggleButton) findViewById(R.id.checkBox_shower);
+        chkKiss = (ToggleButton) findViewById(R.id.checkBox_kiss);
+        chkFlower = (ToggleButton) findViewById(R.id.checkBox_flower);
+        chkIcecream = (ToggleButton) findViewById(R.id.checkBox_icecream);
 
 
         llClose.setVisibility(LinearLayout.VISIBLE);
@@ -255,6 +260,29 @@ public class NewNini extends AppCompatActivity {
         params.put("name", edtName.getText()); //  ********** parametr  ersali dar surate niaz
         params.put("age", edtAge.getText());
         params.put("confirmation_id", id_confirmaation);
+        if(chkIcecream.isChecked()){
+            params.put("icecream", "0");
+        }else{
+            params.put("icecream", "-1");
+        }
+        if(chkFlower.isChecked()){
+            params.put("flower", "0");
+        }else{
+            params.put("flower", "-1");
+        }
+        if(chkKiss.isChecked()){
+            params.put("kiss", "0");
+        }else{
+            params.put("kiss", "-1");
+        }
+        if(chkShower.isChecked()){
+            params.put("shower", "0");
+        }else{
+            params.put("shower", "-1");
+        }
+
+
+
 
         try {
             params.put("file", file1);

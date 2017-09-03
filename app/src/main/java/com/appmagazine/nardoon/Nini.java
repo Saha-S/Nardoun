@@ -8,7 +8,7 @@ import org.json.JSONObject;
  */
 
 public class Nini {
-    public String id, confirmation_id, age,name, image , point, pointm ,created_at ,validity ,comment;
+    public String id, confirmation_id, age,name, image , point, pointm ,created_at ,validity ,comment , shower, kiss, flower , icecream;
 
     public Nini(JSONObject jsonObject) { // تابع سازنده برای دریافت مقادیر از JsonObject
         try {
@@ -16,6 +16,10 @@ public class Nini {
             this.name = jsonObject.getString("name");
             this.image = jsonObject.getString("image");
             this.age = jsonObject.getString("age");
+            this.shower = jsonObject.getString("shower");
+            this.kiss = jsonObject.getString("kiss");
+            this.flower = jsonObject.getString("flower");
+            this.icecream = jsonObject.getString("icecream");
 
             this.point = jsonObject.getString("point");
             this.pointm = jsonObject.getString("pointm");

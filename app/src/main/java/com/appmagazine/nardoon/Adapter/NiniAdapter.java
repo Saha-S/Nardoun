@@ -49,7 +49,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
     private String likes;
     private FileOperations file;
 
-    String[] liksarray;
+    String[] liksarray , showerarray, kissarray , flowearray,icearray;
     Boolean isVotePermited=true;
     //  String[] disliksarray;
 
@@ -57,13 +57,14 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
         TextView name;
         TextView age;
-        TextView likes;
+        TextView likes , txtShower , txtKiss , txtFlower , txtIcecream;
         //   TextView dislikes;
         ImageView imageNini;
-        ToggleButton like;
+        ToggleButton like, shower , kiss , flower, icecream;
         //   ToggleButton dislike;
         LinearLayout llName;
         LinearLayout llFrame;
+        LinearLayout lShower, lKiss , lFlower , lIcecream;
         FrameLayout frameLayout;
 
 
@@ -73,10 +74,22 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             name = (TextView) itemView.findViewById(R.id.txt_name);
             age = (TextView) itemView.findViewById(R.id.txt_age);
             likes = (TextView) itemView.findViewById(R.id.txt_like);
+            txtShower = (TextView) itemView.findViewById(R.id.txt_shower);
+            txtKiss = (TextView) itemView.findViewById(R.id.txt_kiss);
+            txtFlower = (TextView) itemView.findViewById(R.id.txt_flower);
+            txtIcecream = (TextView) itemView.findViewById(R.id.txt_icecream);
             imageNini = (ImageView) itemView.findViewById(R.id.img_nini);
             like = (ToggleButton) itemView.findViewById(R.id.iv_like);
+            shower = (ToggleButton) itemView.findViewById(R.id.shower);
+            kiss = (ToggleButton) itemView.findViewById(R.id.kiss);
+            flower = (ToggleButton) itemView.findViewById(R.id.flower);
+            icecream = (ToggleButton) itemView.findViewById(R.id.icecream);
             llName = (LinearLayout) itemView.findViewById(R.id.ll_name);
             llFrame = (LinearLayout) itemView.findViewById(R.id.ll_frame);
+            lShower = (LinearLayout) itemView.findViewById(R.id.lShower);
+            lKiss = (LinearLayout) itemView.findViewById(R.id.lKiss);
+            lFlower = (LinearLayout) itemView.findViewById(R.id.lFlower);
+            lIcecream = (LinearLayout) itemView.findViewById(R.id.lIcecream);
             frameLayout = (FrameLayout) itemView.findViewById(R.id.frame_layout);
 
         }
@@ -146,9 +159,43 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             holder.llName.setBackgroundColor(Color.parseColor("#ff6666"));
             holder.like.setEnabled(true);
             holder.llFrame.setBackgroundResource(R.drawable.nini_border);
+
+
+
             if (validity.equals("1")) {
                 holder.frameLayout.setVisibility(View.GONE);
                 holder.llFrame.setBackgroundResource(R.drawable.nini_border);
+
+                if(!filterPoster.get(position).shower.equals("-1")){
+                    holder.lShower.setVisibility(View.VISIBLE);
+                    holder.txtShower.setText(filterPoster.get(position).shower);
+                }else {
+                    holder.lShower.setVisibility(View.GONE);
+                }
+
+                if(!filterPoster.get(position).kiss.equals("-1")){
+                    holder.lKiss.setVisibility(View.VISIBLE);
+                    holder.txtKiss.setText(filterPoster.get(position).kiss);
+
+                }else {
+                    holder.lKiss.setVisibility(View.GONE);
+                }
+
+                if(!filterPoster.get(position).flower.equals("-1")){
+                    holder.lFlower.setVisibility(View.VISIBLE);
+                    holder.txtFlower.setText(filterPoster.get(position).flower);
+
+                }else {
+                    holder.lFlower.setVisibility(View.GONE);
+                }
+
+                if(!filterPoster.get(position).icecream.equals("-1")){
+                    holder.lIcecream.setVisibility(View.VISIBLE);
+                    holder.txtIcecream.setText(filterPoster.get(position).icecream);
+
+                }else {
+                    holder.lIcecream.setVisibility(View.GONE);
+                }
 
 
                 holder.name.setText(filterPoster.get(position).name + "   -   ");
@@ -165,6 +212,18 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                 String likestr = file.read("likess");
                 liksarray = likestr.split("-");
 
+                String showerstr = file.read("shower");
+                showerarray = showerstr.split("-");
+
+                String kissstr = file.read("kiss");
+                kissarray = kissstr.split("-");
+
+                String flowerstr = file.read("flower");
+                flowearray = flowerstr.split("-");
+
+                String icestr = file.read("icecream");
+                icearray = icestr.split("-");
+
 
                 if (Arrays.asList(liksarray).contains(filterPoster.get(position).id + "")) {
                     holder.like.setChecked(true);
@@ -173,6 +232,33 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                     holder.like.setChecked(false);
                     //        holder.dislike.setEnabled(true);
                 }
+
+                if (Arrays.asList(showerarray).contains(filterPoster.get(position).id + "")) {
+                    holder.shower.setChecked(true);
+                } else {
+                    holder.shower.setChecked(false);
+                }
+
+                if (Arrays.asList(kissarray).contains(filterPoster.get(position).id + "")) {
+                    holder.kiss.setChecked(true);
+                } else {
+                    holder.kiss.setChecked(false);
+                }
+
+                if (Arrays.asList(flowearray).contains(filterPoster.get(position).id + "")) {
+                    holder.flower.setChecked(true);
+                } else {
+                    holder.flower.setChecked(false);
+                }
+
+                if (Arrays.asList(icearray).contains(filterPoster.get(position).id + "")) {
+                    holder.icecream.setChecked(true);
+                } else {
+                    holder.icecream.setChecked(false);
+                }
+
+
+
 
                 String dislikestr = file.read("dislikess");
                 //    disliksarray = dislikestr.split("-");
@@ -207,52 +293,77 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                     }
                 });
 
-         /*   holder.dislike.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (holder.dislike.isChecked() == false) {
-                        webServiceUnDislike(filterPoster.get(position).id, holder, position);
-                        String dislikes = "";
-                        for (int i = 0; i < disliksarray.length; i++) {
-                            if (!disliksarray[i].equals(filterPoster.get(position).id)) {
-                                if (dislikes.equals(""))
-                                    dislikes += disliksarray[i];
-                                else
-                                    dislikes += "-" + disliksarray[i];
+                holder.shower.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                            }
-                        }
-                        file.write("dislikes", dislikes);
-                        holder.like.setEnabled(true);
-                    } else {
-                        webServiceDislike(filterPoster.get(position).id, holder, position);
-                        holder.like.setEnabled(false);
-                        String dislikes = file.read("dislikes");
-                        if (dislikes.equals("")) {
-                            file.write("dislikes", filterPoster.get(position).id);
+                        v.setEnabled(false);
+
+                        if (holder.shower.isChecked() == false) {
+                            webServiceUnShower(filterPoster.get(position).id, holder, position, v);
                         } else {
-                            file.write("dislikes", dislikes + "-" + filterPoster.get(position).id);
+                            webServiceShower(filterPoster.get(position).id, holder, position, v);
                         }
 
                     }
-                }
-            });
-*/
+                });
 
-                if (position > lastPosition) {
+                holder.kiss.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        v.setEnabled(false);
+
+                        if (holder.kiss.isChecked() == false) {
+                            webServiceUnKiss(filterPoster.get(position).id, holder, position, v);
+                        } else {
+                            webServiceKiss(filterPoster.get(position).id, holder, position, v);
+                        }
+
+                    }
+                });
+
+                holder.flower.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        v.setEnabled(false);
+
+                        if (holder.flower.isChecked() == false) {
+                            webServiceUnFlower(filterPoster.get(position).id, holder, position, v);
+                        } else {
+                            webServiceFlower(filterPoster.get(position).id, holder, position, v);
+                        }
+
+                    }
+                });
+
+                holder.icecream.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        v.setEnabled(false);
+
+                        if (holder.icecream.isChecked() == false) {
+                            webServiceUnIce(filterPoster.get(position).id, holder, position, v);
+                        } else {
+                            webServiceIce(filterPoster.get(position).id, holder, position, v);
+                        }
+
+                    }
+                });
+
+
+
+
+
+          /*      if (position > lastPosition) {
                     Animation animation = AnimationUtils.loadAnimation(context,
                             android.R.anim.slide_in_left);
                     holder.itemView.startAnimation(animation);
                     lastPosition = position;
 
-                }
-         /*   Animation animation = AnimationUtils.loadAnimation(context,
-                    (position > lastPosition) ? android.R.anim.slide_in_left : android.R.anim.fade_in
-                            );
-            holder.itemView.startAnimation(animation);
-            lastPosition = position;
-        }
-        */
+                }*/
             }
 
         }
@@ -348,6 +459,102 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             }
 
 
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                v.setEnabled(true);
+                if (statusCode == 403)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
+                    App.CustomToast(" در حال حاضر امکان رای دادن وجود ندارد. ");
+
+                } else {
+                    App.CustomToast(" لطفا مجددا امتحان کنید ");
+                }
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+            }
+        });
+    }
+
+    public void webServiceShower(String id , final PosterHolder holder, final int position, final View v) {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        client.get(App.urlApi+"nini/" + id + "/shower" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
+                v.setEnabled(true);
+                String value = new String(response);
+                String shower = file.read("shower");
+                if (shower.equals("")) {
+                    file.write("shower", filterPoster.get(position).id);
+                } else {
+                    file.write("shower", shower + "-" + filterPoster.get(position).id);
+                }
+
+                holder.txtShower.setText(value);
+
+            }
+
+
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                v.setEnabled(true);
+                if (statusCode == 403)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
+                    App.CustomToast(" در حال حاضر امکان رای دادن وجود ندارد. ");
+
+                } else {
+                    App.CustomToast(" لطفا مجددا امتحان کنید ");
+                }
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+                // called when request is retried
+            }
+        });
+    }
+    ///////////////////////////////////// unLIKE //////////////////////////////
+    public void webServiceUnShower(String id , final PosterHolder holder, final int position, final View v) {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        client.get(App.urlApi+"nini/" + id + "/unshower" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+            @Override
+            public void onStart() {
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
+                v.setEnabled(true);
+                String value = new String(response);
+                //  likes = value;
+                holder.txtShower.setText(value);
+                String likes = "";
+                for (int i = 0; i < showerarray.length; i++) {
+                    if (!showerarray[i].equals(filterPoster.get(position).id)) {
+                        if (likes.equals(""))
+                            likes += showerarray[i];
+                        else
+                            likes += "-" + showerarray[i];
+
+                    }
+                }
+                file.write("shower", likes);
+
+
+            }
+
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
@@ -367,13 +574,59 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
         });
     }
 
+
+    public void webServiceKiss(String id , final PosterHolder holder, final int position, final View v) {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        client.get(App.urlApi+"nini/" + id + "/kiss" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
+                v.setEnabled(true);
+                String value = new String(response);
+                String likes = file.read("kiss");
+                if (likes.equals("")) {
+                    file.write("kiss", filterPoster.get(position).id);
+                } else {
+                    file.write("kiss", likes + "-" + filterPoster.get(position).id);
+                }
+
+                holder.txtKiss.setText(value);
+
+            }
+
+
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                v.setEnabled(true);
+                if (statusCode == 403)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
+                    App.CustomToast(" در حال حاضر امکان رای دادن وجود ندارد. ");
+
+                } else {
+                    App.CustomToast(" لطفا مجددا امتحان کنید ");
+                }
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+                // called when request is retried
+            }
+        });
+    }
     ///////////////////////////////////// unLIKE //////////////////////////////
-
-  /*  public void webServiceDislike(String id, final PosterHolder holder, final int position) {
+    public void webServiceUnKiss(String id , final PosterHolder holder, final int position, final View v) {
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        client.get(App.urlApi+"nini/" + id + "/dislike" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+        client.get(App.urlApi+"nini/" + id + "/unkiss" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
             }
@@ -381,14 +634,75 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
+                v.setEnabled(true);
                 String value = new String(response);
-                holder.dislikes.setText(value);
+                //  likes = value;
+                holder.txtKiss.setText(value);
+                String likes = "";
+                for (int i = 0; i < kissarray.length; i++) {
+                    if (!kissarray[i].equals(filterPoster.get(position).id)) {
+                        if (likes.equals(""))
+                            likes += kissarray[i];
+                        else
+                            likes += "-" + kissarray[i];
+
+                    }
+                }
+                file.write("kiss", likes);
 
 
             }
 
+
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                v.setEnabled(true);
+                if (statusCode == 403)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
+                    App.CustomToast(" در حال حاضر امکان رای دادن وجود ندارد. ");
+
+                } else {
+                    App.CustomToast(" لطفا مجددا امتحان کنید ");
+                }
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+            }
+        });
+    }
+
+    public void webServiceFlower(String id , final PosterHolder holder, final int position, final View v) {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        client.get(App.urlApi+"nini/" + id + "/flower" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
+                v.setEnabled(true);
+                String value = new String(response);
+                String likes = file.read("flower");
+                if (likes.equals("")) {
+                    file.write("flower", filterPoster.get(position).id);
+                } else {
+                    file.write("flower", likes + "-" + filterPoster.get(position).id);
+                }
+
+                holder.txtFlower.setText(value);
+
+            }
+
+
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                v.setEnabled(true);
                 if (statusCode == 403)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
                     App.CustomToast(" در حال حاضر امکان رای دادن وجود ندارد. ");
@@ -404,13 +718,12 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             }
         });
     }
-*/
-    ///////////////////////////////////////////// UNDISLIKE /////////////////////////////////
-  /*  public void webServiceUnDislike(String id, final PosterHolder holder, final int position) {
+    ///////////////////////////////////// unLIKE //////////////////////////////
+    public void webServiceUnFlower(String id , final PosterHolder holder, final int position, final View v) {
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        client.get(App.urlApi+"nini/" + id + "/undislike" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+        client.get(App.urlApi+"nini/" + id + "/unflower" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
             }
@@ -418,14 +731,75 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
 
+                v.setEnabled(true);
                 String value = new String(response);
-                holder.dislikes.setText(value);
+                //  likes = value;
+                holder.txtFlower.setText(value);
+                String likes = "";
+                for (int i = 0; i < flowearray.length; i++) {
+                    if (!flowearray[i].equals(filterPoster.get(position).id)) {
+                        if (likes.equals(""))
+                            likes += flowearray[i];
+                        else
+                            likes += "-" + flowearray[i];
+
+                    }
+                }
+                file.write("flower", likes);
 
 
             }
 
+
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                v.setEnabled(true);
+                if (statusCode == 403)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
+                    App.CustomToast(" در حال حاضر امکان رای دادن وجود ندارد. ");
+
+                } else {
+                    App.CustomToast(" لطفا مجددا امتحان کنید ");
+                }
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+            }
+        });
+    }
+
+    public void webServiceIce(String id , final PosterHolder holder, final int position, final View v) {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        client.get(App.urlApi+"nini/" + id + "/ice" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
+                v.setEnabled(true);
+                String value = new String(response);
+                String likes = file.read("icecream");
+                if (likes.equals("")) {
+                    file.write("icecream", filterPoster.get(position).id);
+                } else {
+                    file.write("icecream", likes + "-" + filterPoster.get(position).id);
+                }
+
+                holder.txtIcecream.setText(value);
+
+            }
+
+
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                v.setEnabled(true);
                 if (statusCode == 403)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
                     App.CustomToast(" در حال حاضر امکان رای دادن وجود ندارد. ");
@@ -441,8 +815,56 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             }
         });
     }
-*/
-    ///////////////////////////////////////////// UNDISLIKE /////////////////////////////////
+    ///////////////////////////////////// unLIKE //////////////////////////////
+    public void webServiceUnIce(String id , final PosterHolder holder, final int position, final View v) {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        client.get(App.urlApi+"nini/" + id + "/unice" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+            @Override
+            public void onStart() {
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
+                v.setEnabled(true);
+                String value = new String(response);
+                //  likes = value;
+                holder.txtIcecream.setText(value);
+                String likes = "";
+                for (int i = 0; i < icearray.length; i++) {
+                    if (!icearray[i].equals(filterPoster.get(position).id)) {
+                        if (likes.equals(""))
+                            likes += icearray[i];
+                        else
+                            likes += "-" + icearray[i];
+
+                    }
+                }
+                file.write("icecream", likes);
+
+
+            }
+
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                v.setEnabled(true);
+                if (statusCode == 403)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
+                    App.CustomToast(" در حال حاضر امکان رای دادن وجود ندارد. ");
+
+                } else {
+                    App.CustomToast(" لطفا مجددا امتحان کنید ");
+                }
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+            }
+        });
+    }
 
 
 }
