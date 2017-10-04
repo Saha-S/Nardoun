@@ -283,6 +283,8 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                             }
                         }else{
                             holder.like.toggle();
+                            App.CustomToast(" لطفا برای رای گیری وارد شوید ");
+
                             Intent intent = new Intent(App.context, Login.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             App.context.startActivity(intent);
