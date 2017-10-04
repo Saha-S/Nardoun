@@ -1,38 +1,38 @@
 package com.appmagazine.nardoon.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.FileOperations;
 import com.appmagazine.nardoon.Nini;
-import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
+import com.appmagazine.nardoon.activities.Login;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.provider.LoadProvider;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import java.io.PipedInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by nadia on 3/2/2017.
@@ -51,6 +51,8 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
     String[] liksarray , showerarray, kissarray , flowearray,icearray;
     Boolean isVotePermited=true;
+    private String id_confirmaation;
+    public  static    Handler h;
     //  String[] disliksarray;
 
     public static class PosterHolder extends RecyclerView.ViewHolder {
@@ -136,6 +138,8 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
         file = new FileOperations();
 
 
+        holder.like.setEnabled(true);
+
         String validity = filterPoster.get(position).validity;
         if (validity.equals("10")) {
             holder.frameLayout.setVisibility(View.VISIBLE);
@@ -155,9 +159,10 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                     .into(holder.imageNini);
 
         } else {
+            holder.like.setEnabled(true);
+
             holder.frameLayout.setVisibility(View.GONE);
             holder.llName.setBackgroundColor(Color.parseColor("#ff6666"));
-            holder.like.setEnabled(true);
             holder.llFrame.setBackgroundResource(R.drawable.nini_border);
 
 
@@ -208,9 +213,10 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                         .placeholder(R.mipmap.nopic)
                         .into(holder.imageNini);
 
-
+/*
                 String likestr = file.read("likess");
                 liksarray = likestr.split("-");
+                */
 
                 String showerstr = file.read("shower");
                 showerarray = showerstr.split("-");
@@ -225,13 +231,12 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                 icearray = icestr.split("-");
 
 
-                if (Arrays.asList(liksarray).contains(filterPoster.get(position).id + "")) {
-                    holder.like.setChecked(true);
-                    //        holder.dislike.setEnabled(false);
-                } else {
-                    holder.like.setChecked(false);
-                    //        holder.dislike.setEnabled(true);
-                }
+           if(filterPoster.get(position).like.equals("1")){
+               holder.like.setChecked(true);
+           }
+           if(filterPoster.get(position).like.equals("0")){
+               holder.like.setChecked(false);
+           }
 
                 if (Arrays.asList(showerarray).contains(filterPoster.get(position).id + "")) {
                     holder.shower.setChecked(true);
@@ -257,41 +262,36 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                     holder.icecream.setChecked(false);
                 }
 
-
-
-
-                String dislikestr = file.read("dislikess");
-                //    disliksarray = dislikestr.split("-");
-
-     /*       if (Arrays.asList(disliksarray).contains(filterPoster.get(position).id + "")) {
-                holder.dislike.setChecked(true);
-                holder.like.setEnabled(false);
-            } else {
-                holder.dislike.setChecked(false);
-                holder.like.setEnabled(true);
-            }
-*/
                 holder.like.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        v.setEnabled(false);
+                        SharedPreferences prefs = App.context.getSharedPreferences("LOGIN_ID", MODE_PRIVATE);
+                        SharedPreferences prefs2 = App.context.getSharedPreferences("IS_LOGIN", MODE_PRIVATE);
+                        String status = prefs2.getString("islogin", "0");
+                        String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
 
-                        if (holder.like.isChecked() == false) {
-                            webServiceUnLike(filterPoster.get(position).id, holder, position, v);
+                        if (status.matches("1") && !id_confirmaationSH.equals("0")) {
+                            v.setEnabled(false);
 
-                            //   holder.dislike.setEnabled(true);
+                            id_confirmaation = id_confirmaationSH.replace("[{\"id\":", "").replace("}]", "");
+                            if (holder.like.isChecked() == false) {
+                                webServiceUnLike(filterPoster.get(position).id, holder, position, v);
 
-                        } else {
-                            webServiceLike(filterPoster.get(position).id, holder, position, v);
-                            //  holder.likes.setText(likes);
-                            //     holder.dislike.setEnabled(false);
+                            } else {
+                                webServiceLike(filterPoster.get(position).id, holder, position, v);
+                            }
+                        }else{
+                            holder.like.toggle();
+                            Intent intent = new Intent(App.context, Login.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            App.context.startActivity(intent);
 
                         }
 
-
-                    }
+                        }
                 });
+
 
                 holder.shower.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -353,17 +353,6 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                     }
                 });
 
-
-
-
-
-          /*      if (position > lastPosition) {
-                    Animation animation = AnimationUtils.loadAnimation(context,
-                            android.R.anim.slide_in_left);
-                    holder.itemView.startAnimation(animation);
-                    lastPosition = position;
-
-                }*/
             }
 
         }
@@ -384,7 +373,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        client.get(App.urlApi+"nini/" + id + "/likee" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+        client.get(App.urlApi+"nini/"+id+"/like/" + App.confirm_id  , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
 
@@ -395,14 +384,14 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
                 v.setEnabled(true);
                 String value = new String(response);
-                String likes = file.read("likess");
-                if (likes.equals("")) {
-                    file.write("likess", filterPoster.get(position).id);
-                } else {
-                    file.write("likess", likes + "-" + filterPoster.get(position).id);
+                if(value.equals("-1")){
+                    App.CustomToast(" لطفا مجددا امتحان کنید ");
+                }else {
+                    holder.likes.setText(value);
+                    holder.like.setChecked(true);
+                    filterPoster.get(position).point = value;
+                    filterPoster.get(position).like = "1";
                 }
-
-                holder.likes.setText(value);
 
             }
 
@@ -431,7 +420,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        client.get(App.urlApi+"nini/" + id + "/unlikee" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+        client.get(App.urlApi+"nini/"+id+"/unlike/" + App.confirm_id , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
             }
@@ -441,20 +430,15 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
                 v.setEnabled(true);
                 String value = new String(response);
-                //  likes = value;
-                holder.likes.setText(value);
-                String likes = "";
-                for (int i = 0; i < liksarray.length; i++) {
-                    if (!liksarray[i].equals(filterPoster.get(position).id)) {
-                        if (likes.equals(""))
-                            likes += liksarray[i];
-                        else
-                            likes += "-" + liksarray[i];
+                if(value.equals("-1")){
+                    App.CustomToast(" لطفا مجددا امتحان کنید ");
 
-                    }
+                }else {
+                    holder.likes.setText(value);
+                    holder.like.setChecked(false);
+                    filterPoster.get(position).point = value;
+                    filterPoster.get(position).like = "0";
                 }
-                file.write("likess", likes);
-
 
             }
 
@@ -865,6 +849,41 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
             }
         });
     }
+
+
+    public  void webServiceLikeNini(int id)
+    {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+
+        params.put("nini",id);
+
+        client.post(App.urlApi+"api/niniwithlike/"+id_confirmaation, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+            @Override
+            public void onStart() {
+            }
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                //  String value = new String(response);
+
+
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+
+                if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
+                {
+                    App.CustomToast("خطا");
+
+                }else{
+                    App.CustomToast(" لطفا دوباره سعی کنید ");
+                    Log.i("myerror" , errorResponse.toString());
+                }
+            }
+        });
+    }
+
 
 
 }

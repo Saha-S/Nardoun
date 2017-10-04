@@ -1,6 +1,5 @@
 package com.appmagazine.nardoon.activities;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,11 +7,8 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.appmagazine.nardoon.Adapter.NiniAdapter;
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.R;
 import com.loopj.android.http.AsyncHttpClient;
@@ -297,10 +294,14 @@ public class Login extends AppCompatActivity {
                 editor2.commit();
 
                 try {
+                    NiniAdapter.h.sendEmptyMessage(0);
+                }catch (RuntimeException r){}
+
+
+                try {
                     Main.h.sendEmptyMessage(0);
                 }catch (RuntimeException r){}
-                //  Intent intent = new Intent(App.context , Main.class);
-                //  startActivity(intent);
+
                 finish();
 
 

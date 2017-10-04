@@ -4,8 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -17,31 +15,23 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.appmagazine.nardoon.App;
-import com.appmagazine.nardoon.MyAgahi;
 import com.appmagazine.nardoon.R;
-import com.appmagazine.nardoon.Utility;
-import com.appmagazine.nardoon.fragments.NiniAx;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -218,12 +208,10 @@ public class NewNini extends AppCompatActivity {
                     SharedPreferences prefs2 = getSharedPreferences("IS_LOGIN", MODE_PRIVATE);
                     String status = prefs2.getString("islogin", "0");
                     String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
-                    Log.i("iddddd" , id_confirmaationSH.toString());
 
                     if (status.matches("1") && !id_confirmaationSH.equals("0")) {
 
                         id_confirmaation = id_confirmaationSH.replace("[{\"id\":", "").replace("}]", "");
-                        Log.i("iddddd2" , id_confirmaation.toString());
 
                         webServiceNewAgahi();
                     }else {

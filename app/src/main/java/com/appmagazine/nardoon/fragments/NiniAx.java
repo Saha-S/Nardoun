@@ -1,14 +1,10 @@
 package com.appmagazine.nardoon.fragments;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -19,32 +15,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.appmagazine.nardoon.Adapter.NiniAdapter;
-import com.appmagazine.nardoon.Adapter.PosterAdapter;
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.EndlessRecyclerViewScrollListener;
-import com.appmagazine.nardoon.MyPay;
-import com.appmagazine.nardoon.NetUtils;
 import com.appmagazine.nardoon.Nini;
-import com.appmagazine.nardoon.Poster;
 import com.appmagazine.nardoon.R;
-import com.appmagazine.nardoon.RecyclerItemClickListener;
 import com.appmagazine.nardoon.activities.AboutUs;
-import com.appmagazine.nardoon.activities.Details;
 import com.appmagazine.nardoon.activities.Favorite;
-import com.appmagazine.nardoon.activities.Filter;
 import com.appmagazine.nardoon.activities.Login;
 import com.appmagazine.nardoon.activities.MyAgahis;
 import com.appmagazine.nardoon.activities.MyNini;
@@ -53,7 +37,6 @@ import com.appmagazine.nardoon.activities.Rules;
 import com.appmagazine.nardoon.activities.WinnerNini;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONArray;
@@ -67,6 +50,7 @@ import java.util.List;
 import cz.msebera.android.httpclient.Header;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
+import static android.content.Context.MODE_PRIVATE;
 
 public class NiniAx extends Fragment implements TextWatcher  , NavigationView.OnNavigationItemSelectedListener{
     RecyclerView recyclerView;
@@ -173,7 +157,12 @@ public class NiniAx extends Fragment implements TextWatcher  , NavigationView.On
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        client.get(App.urlApi+"nini" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+        SharedPreferences prefs = App.context.getSharedPreferences("LOGIN_ID", MODE_PRIVATE);
+        SharedPreferences prefs2 = App.context.getSharedPreferences("IS_LOGIN", MODE_PRIVATE);
+        String status = prefs2.getString("islogin", "0");
+        String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
+
+        client.get(App.urlApi+"niniwithlike/"+id_confirmaationSH , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
             }
