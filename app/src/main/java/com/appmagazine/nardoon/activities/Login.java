@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +18,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.appmagazine.nardoon.Adapter.NiniAdapter;
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.R;
 import com.loopj.android.http.AsyncHttpClient;
@@ -44,6 +44,7 @@ public class Login extends AppCompatActivity {
     Button btnLogin2 , btnRetry;
     private String id;
     Long time;
+    private String mobile;
 
 
     @Override
@@ -182,7 +183,9 @@ public class Login extends AppCompatActivity {
                 SharedPreferences.Editor editor = getSharedPreferences("IS_LOGIN", MODE_PRIVATE).edit();
                 editor.putString("islogin", "1");
                 SharedPreferences.Editor editor2 = getSharedPreferences("LOGIN_ID", MODE_PRIVATE).edit();
-                editor2.putString("mobile", edtMobile.getText().toString());
+                SharedPreferences.Editor edi_mobile = getSharedPreferences("MOBILE", MODE_PRIVATE).edit();
+                edi_mobile.putString("mobile", edtMobile.getText().toString());
+                edi_mobile.commit();
                 editor2.putString("id_confirmaation", value.toString().replace("[{\"id\":", "").replace("}]", ""));
 
                 editor.commit();
@@ -190,7 +193,9 @@ public class Login extends AppCompatActivity {
                 try {
                     Main.h.sendEmptyMessage(0);
                 }catch (RuntimeException r){}
+
                 dialog.hide();
+
                 finish();
 
             }
@@ -235,11 +240,18 @@ public class Login extends AppCompatActivity {
                 SharedPreferences.Editor editor = getSharedPreferences("LOGIN_ID", MODE_PRIVATE).edit();
                 editor.putString("id", value);
                 editor.putString("time", String.valueOf(time));
-                editor.putString("mobile", edtMobile.getText().toString());
 
                 editor.commit();
 
+                mobile = edtMobile.getText().toString();
+                SharedPreferences.Editor editormob = getSharedPreferences("MOB", MODE_PRIVATE).edit();
+                editormob.putString("mob", edtMobile.getText().toString());
+
+                editormob.commit();
+
+
                 Intent intent = new Intent(App.context , Login.class);
+                intent.putExtra("MOBILE" , mobile);
                 startActivity(intent);
                 finish();
             }
@@ -276,6 +288,11 @@ public class Login extends AppCompatActivity {
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.setContentView(R.layout.progress_layout_small);
 
+                Bundle extras = getIntent().getExtras();
+
+                if(extras!=null) {
+                    mobile = extras.getString("MOBILE");
+                }
 
 
             }
@@ -285,6 +302,11 @@ public class Login extends AppCompatActivity {
                 dialog.hide();
                 //  App.CustomToast("");
 
+                SharedPreferences prefs = getSharedPreferences("MOB", MODE_PRIVATE);
+// then you use
+                ;
+
+
                 SharedPreferences.Editor editor = getSharedPreferences("IS_LOGIN", MODE_PRIVATE).edit();
                 editor.putString("islogin", "1");
                 editor.commit();
@@ -293,16 +315,26 @@ public class Login extends AppCompatActivity {
                 editor2.putString("id_confirmaation", value.toString().replace("[{\"id\":", "").replace("}]" , ""));
                 editor2.commit();
 
-                try {
-                    NiniAdapter.h.sendEmptyMessage(0);
-                }catch (RuntimeException r){}
 
 
-                try {
-                    Main.h.sendEmptyMessage(0);
-                }catch (RuntimeException r){}
+                if(!prefs.getString("mob", "0").toString().equals("0")) {
+                    SharedPreferences.Editor edi_mobile = getSharedPreferences("MOBILE", MODE_PRIVATE).edit();
+                    edi_mobile.putString("mobile", prefs.getString("mob", "0"));
+                    edi_mobile.commit();
 
+                    Log.i("tesssst ", "+" + prefs.getString("mob", "0"));
+
+                    try {
+                        Main.h.sendEmptyMessage(0);
+                    } catch (RuntimeException r) {
+                    }
+
+                }
                 finish();
+
+
+
+
 
 
 

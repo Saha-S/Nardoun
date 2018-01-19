@@ -20,19 +20,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.appmagazine.nardoon.App;
-import com.appmagazine.nardoon.MyAgahi;
 import com.appmagazine.nardoon.Nini;
 import com.appmagazine.nardoon.R;
-import com.appmagazine.nardoon.activities.Details;
 import com.appmagazine.nardoon.activities.EditNini;
-import com.appmagazine.nardoon.activities.Login;
 import com.appmagazine.nardoon.activities.MyNini;
 import com.bumptech.glide.Glide;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
@@ -54,6 +50,10 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
     public static String name;
     public static String age;
     public static String image;
+    public static String shower;
+    public static String kiss;
+    public static String flower;
+    public static String icecream;
     public static String idNini;
     public static String status;
     public static ProgressDialog dialog;
@@ -111,6 +111,10 @@ public class MyNiniAdapter extends RecyclerView.Adapter<MyNiniAdapter.PosterHold
             id_confirm = mDataset.get(position).confirmation_id;
             image = mDataset.get(position).image;
             idNini = mDataset.get(position).id;
+            shower = mDataset.get(position).shower;
+            kiss = mDataset.get(position).kiss;
+            flower = mDataset.get(position).flower;
+            icecream = mDataset.get(position).icecream;
 
 
             Glide.with(context)

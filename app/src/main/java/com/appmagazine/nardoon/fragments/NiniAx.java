@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -159,10 +160,11 @@ public class NiniAx extends Fragment implements TextWatcher  , NavigationView.On
         RequestParams params = new RequestParams();
         SharedPreferences prefs = App.context.getSharedPreferences("LOGIN_ID", MODE_PRIVATE);
         SharedPreferences prefs2 = App.context.getSharedPreferences("IS_LOGIN", MODE_PRIVATE);
-        String status = prefs2.getString("islogin", "0");
-        String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
+        SharedPreferences prefsMobile = App.context.getSharedPreferences("MOBILE", MODE_PRIVATE);
+        final String mobile = prefsMobile.getString("mobile", "0");
+        Log.i("mmmmmmm" , mobile);
 
-        client.get(App.urlApi+"niniwithlike/"+id_confirmaationSH , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+        client.get(App.urlApi+"niniwithlike/"+mobile , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
             }

@@ -37,6 +37,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Field;
 
 import cz.msebera.android.httpclient.Header;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 /**
  * Created by behroozhj on 2/20/17.
@@ -85,6 +86,12 @@ public class App extends Application {
 
 
         webServiceGetPrice();
+
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("Sansfarsi.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
 
 
 

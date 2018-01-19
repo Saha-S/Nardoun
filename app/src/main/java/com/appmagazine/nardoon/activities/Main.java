@@ -1,6 +1,7 @@
 package com.appmagazine.nardoon.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,6 +21,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +39,8 @@ import com.appmagazine.nardoon.BuildConfig;
 import com.appmagazine.nardoon.FileOperations;
 import com.appmagazine.nardoon.R;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     TabHost tabs;
@@ -46,6 +50,10 @@ public class Main extends AppCompatActivity
     public static Handler h;
     public  Thread t;
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +61,8 @@ public class Main extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
 
+        Intent in = new Intent(Main.this , NewsDetails.class);
+        startActivity(in);
 
         if (Build.VERSION.SDK_INT >= 23) {
 
@@ -102,6 +112,7 @@ public class Main extends AppCompatActivity
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("نی نی عکس").setIcon(R.mipmap.baby));
         tabLayout.addTab(tabLayout.newTab().setText("پیامک انبوه").setIcon(R.mipmap.sms));
+        tabLayout.addTab(tabLayout.newTab().setText("مجله خبری").setIcon(R.mipmap.news));
         tabLayout.addTab(tabLayout.newTab().setText("دسته بندی").setIcon(R.mipmap.list));
         tabLayout.addTab(tabLayout.newTab().setText("صفحه اصلی").setIcon(R.mipmap.home));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -126,7 +137,7 @@ public class Main extends AppCompatActivity
                 (getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        viewPager.setCurrentItem(4);
+        viewPager.setCurrentItem(5);
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -145,8 +156,21 @@ public class Main extends AppCompatActivity
                             }
                         });
 
-                        break;
                     case 2:
+                        ib.setVisibility(View.GONE);
+                        ll_search.setVisibility(View.GONE);
+
+                        txt.setText("ایجاد خبر جدید");
+                        llnewagahi.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(App.context ,NewNews.class );
+                                startActivity(intent);
+                            }
+                        });
+
+                        break;
+                    case 4:
                         ib.setVisibility(View.VISIBLE);
                         ll_search.setVisibility(View.GONE);
 
@@ -243,18 +267,25 @@ public class Main extends AppCompatActivity
                 editor2.putString("time", "0");
                 editor2.commit();
 
+                SharedPreferences.Editor edi_mobile = getSharedPreferences("MOBILE", MODE_PRIVATE).edit();
+                edi_mobile.putString("mobile", "0");
+                edi_mobile.commit();
+
+
                 Intent intent = new Intent(App.context , Main.class);
                 startActivity(intent);
                 finish();
 
             }
         });
-
-
         SharedPreferences prefs = getSharedPreferences("LOGIN_ID", MODE_PRIVATE);
         SharedPreferences prefs2 = getSharedPreferences("IS_LOGIN", MODE_PRIVATE);
         String status = prefs2.getString("islogin", "0");
-        final String mobile = prefs.getString("mobile", "0");
+        SharedPreferences prefsMobile = getSharedPreferences("MOBILE", MODE_PRIVATE);
+        final String mobile = prefsMobile.getString("mobile", "0");
+
+
+
 
         h = new Handler() {
 
@@ -264,6 +295,11 @@ public class Main extends AppCompatActivity
                 switch(msg.what) {
 
                     case 0:
+                        SharedPreferences prefsMobile = getSharedPreferences("MOBILE", MODE_PRIVATE);
+                        final String mobile = prefsMobile.getString("mobile", "0");
+
+                        Log.i("nnnnnnnn11" ,"???" +mobile);
+
                         nav_Menu.findItem(R.id.nav_login).setVisible(false);
                         nav_mobile.setVisibility(View.VISIBLE);
                         btnExit.setVisibility(View.VISIBLE);

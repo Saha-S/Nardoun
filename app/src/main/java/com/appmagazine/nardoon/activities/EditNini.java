@@ -25,9 +25,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.appmagazine.nardoon.Adapter.MyNiniAdapter;
 import com.appmagazine.nardoon.App;
@@ -70,6 +69,8 @@ public class EditNini extends AppCompatActivity {
     boolean flag1,flag2,flag3=false;
     ImageView image;
     File file1 ;
+    ToggleButton chkShower , chkKiss , chkFlower , chkIcecream;
+
     private String id_confirmaation;
 
     @Override
@@ -84,6 +85,13 @@ public class EditNini extends AppCompatActivity {
         LinearLayout llForm = (LinearLayout) findViewById(R.id.ll_form);
         LinearLayout llErsal = (LinearLayout) findViewById(R.id.ll_ersal);
         LinearLayout llClose = (LinearLayout) findViewById(R.id.ll_close);
+
+        chkShower = (ToggleButton) findViewById(R.id.checkBox_shower);
+        chkKiss = (ToggleButton) findViewById(R.id.checkBox_kiss);
+        chkFlower = (ToggleButton) findViewById(R.id.checkBox_flower);
+        chkIcecream = (ToggleButton) findViewById(R.id.checkBox_icecream);
+
+
 
         imgAsli = (LinearLayout) findViewById(R.id.img_asli);
 
@@ -101,10 +109,34 @@ public class EditNini extends AppCompatActivity {
         txtImg = (TextView) findViewById(R.id.txt_img_asli);
 
         url                 =App.urlApi+"updatenini/"+ MyNiniAdapter.idNini;
-        Log.i("url", "...:" + App.urlApi+"updatenini/"+ MyNiniAdapter.idNini);
 
         edtAge.setText(MyNiniAdapter.age);
         edtName.setText(MyNiniAdapter.name);
+
+        if(MyNiniAdapter.shower.equals("-1")){
+            chkShower.setChecked(false);
+        }else{
+            chkShower.setChecked(true);
+        }
+
+        if(MyNiniAdapter.kiss.equals("-1")){
+            chkKiss.setChecked(false);
+        }else{
+            chkKiss.setChecked(true);
+        }
+
+        if(MyNiniAdapter.flower.equals("-1")){
+            chkFlower.setChecked(false);
+        }else{
+            chkFlower.setChecked(true);
+        }
+
+        if(MyNiniAdapter.icecream.equals("-1")){
+            chkIcecream.setChecked(false);
+        }else{
+            chkIcecream.setChecked(true);
+        }
+
 
 
         imgDelete1.setOnClickListener(new View.OnClickListener() {
@@ -252,6 +284,27 @@ public class EditNini extends AppCompatActivity {
         params.put("name", edtName.getText()); //  ********** parametr  ersali dar surate niaz
         params.put("age", edtAge.getText());
         params.put("confirmation_id", id_confirmaation);
+        if(chkIcecream.isChecked()){
+            params.put("icecream", "0");
+        }else{
+            params.put("icecream", "-1");
+        }
+        if(chkFlower.isChecked()){
+            params.put("flower", "0");
+        }else{
+            params.put("flower", "-1");
+        }
+        if(chkKiss.isChecked()){
+            params.put("kiss", "0");
+        }else{
+            params.put("kiss", "-1");
+        }
+        if(chkShower.isChecked()){
+            params.put("shower", "0");
+        }else{
+            params.put("shower", "-1");
+        }
+
 
         if(file1!=null){
             try {

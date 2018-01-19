@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +52,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
     Boolean isVotePermited=true;
     private String id_confirmaation;
     public  static    Handler h;
+    private String mobile;
     //  String[] disliksarray;
 
     public static class PosterHolder extends RecyclerView.ViewHolder {
@@ -270,11 +270,14 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                         SharedPreferences prefs2 = App.context.getSharedPreferences("IS_LOGIN", MODE_PRIVATE);
                         String status = prefs2.getString("islogin", "0");
                         String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
+                        SharedPreferences prefsMobile = App.context.getSharedPreferences("MOBILE", MODE_PRIVATE);
+                        final String mobilee = prefsMobile.getString("mobile", "0");
 
                         if (status.matches("1") && !id_confirmaationSH.equals("0")) {
                             v.setEnabled(false);
 
                             id_confirmaation = id_confirmaationSH.replace("[{\"id\":", "").replace("}]", "");
+                            mobile = mobilee;
                             if (holder.like.isChecked() == false) {
                                 webServiceUnLike(filterPoster.get(position).id, holder, position, v);
 
@@ -375,7 +378,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        client.get(App.urlApi+"nini/"+id+"/like/" + App.confirm_id  , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+        client.get(App.urlApi+"nini/"+id+"/like/" + mobile  , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
 
@@ -422,7 +425,7 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        client.get(App.urlApi+"nini/"+id+"/unlike/" + App.confirm_id , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+        client.get(App.urlApi+"nini/"+id+"/unlike/" + mobile , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
             }
@@ -853,38 +856,6 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
     }
 
 
-    public  void webServiceLikeNini(int id)
-    {
-
-        AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-
-        params.put("nini",id);
-
-        client.post(App.urlApi+"api/niniwithlike/"+id_confirmaation, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
-            @Override
-            public void onStart() {
-            }
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                //  String value = new String(response);
-
-
-            }
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-
-                if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
-                {
-                    App.CustomToast("خطا");
-
-                }else{
-                    App.CustomToast(" لطفا دوباره سعی کنید ");
-                    Log.i("myerror" , errorResponse.toString());
-                }
-            }
-        });
-    }
 
 
 
