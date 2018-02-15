@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.appmagazine.nardoon.Adapter.MyNiniAdapter;
 import com.appmagazine.nardoon.Adapter.NewsListAdapter;
 import com.appmagazine.nardoon.App;
+import com.appmagazine.nardoon.ArticleAdapter;
 import com.appmagazine.nardoon.EndlessRecyclerViewScrollListener;
 import com.appmagazine.nardoon.News;
 import com.appmagazine.nardoon.Nini;
@@ -27,6 +28,8 @@ import com.appmagazine.nardoon.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.prof.rssparser.Article;
+import com.prof.rssparser.Parser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,6 +51,7 @@ public class NewsList extends AppCompatActivity {
     private String id_confirmaation;
     private String status;
     private String id_confirmaationSH;
+    String cat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +61,11 @@ public class NewsList extends AppCompatActivity {
         TextView tvtitle = (TextView) findViewById(R.id.tv_mainpage_title);
         TextView appbarTitle = (TextView) findViewById(R.id.tv_appbar_title);
         ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
-        appbarTitle.setText("نی نی عکس های من");
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            appbarTitle.setText(extras.getString("name"));
+            cat = extras.getString("name");
+        }
         Typeface tfmorvarid= Typeface.createFromAsset(App.context.getAssets(), "morvarid.ttf");
         tvtitle.setTypeface(tfmorvarid);
         ibBack.setOnClickListener(new View.OnClickListener() {
@@ -79,17 +87,48 @@ public class NewsList extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.list);
         linearLayoutManager = new LinearLayoutManager(App.context, LinearLayoutManager.VERTICAL, false);
         array = new ArrayList<>();
-        adapter = new NewsListAdapter(App.context, array);
-
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(adapter);
 
 
             ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
             final NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
             if (mWifi.isConnected() || isMobileDataEnabled()) {
-                webServiceGetNini();
+                if(cat.equals("اخبار روزانه")){
+                    String urlString = "http://www.yjc.ir/fa/rss/allnews";
+                    Parser parser = new Parser();
+                    parser.execute(urlString);
+                    parser.onFinish(new Parser.OnTaskCompleted() {
+
+                        @Override
+                        public void onTaskCompleted(ArrayList<Article> list) {
+                            //what to do when the parsing is done
+                            //the Array List contains all article's data. For example you can use it for your adapter.
+                            ArticleAdapter adapter = new ArticleAdapter(list, R.layout.item_news, NewsList.this);
+                            recyclerView.setLayoutManager(linearLayoutManager);
+                            recyclerView.setAdapter(adapter);
+                            swipeRefreshLayout.setRefreshing(false);
+
+                        }
+
+                        @Override
+                        public void onError() {
+                            //what to do in case of error
+                        }
+                    });
+
+
+                }else {
+                    webServiceGetNini();
+                    adapter = new NewsListAdapter(NewsList.this, array);
+                    recyclerView.setLayoutManager(linearLayoutManager);
+                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                    adapter.update(array);
+
+
+
+
+                }
                 swipeRefreshLayout.setRefreshing(true);
 
             }else {
@@ -97,6 +136,21 @@ public class NewsList extends AppCompatActivity {
                 swipeRefreshLayout.setRefreshing(false);
             }
 
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+                if (mWifi.isConnected() || isMobileDataEnabled()) {
+                    swipeRefreshLayout.setRefreshing(true);
+                    webServiceGetNini();
+                }else{
+                    App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        };
 
 
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
@@ -107,7 +161,39 @@ public class NewsList extends AppCompatActivity {
                     NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
                     if (mWifi.isConnected() || isMobileDataEnabled()) {
-                        webServiceGetNini();
+                        if(cat.equals("اخبار روزانه")){
+                            String urlString = "http://www.yjc.ir/fa/rss/allnews";
+                            Parser parser = new Parser();
+                            parser.execute(urlString);
+                            parser.onFinish(new Parser.OnTaskCompleted() {
+
+                                @Override
+                                public void onTaskCompleted(ArrayList<Article> list) {
+                                    //what to do when the parsing is done
+                                    //the Array List contains all article's data. For example you can use it for your adapter.
+                                    ArticleAdapter adapter = new ArticleAdapter(list, R.layout.item_news, NewsList.this);
+                                    recyclerView.setLayoutManager(linearLayoutManager);
+                                    recyclerView.setAdapter(adapter);
+                                    App.CustomToast("mishe");
+                                    swipeRefreshLayout.setRefreshing(false);
+
+                                }
+
+                                @Override
+                                public void onError() {
+                                    //what to do in case of error
+                                }
+                            });
+
+
+                        }else {
+                            webServiceGetNini();
+                            adapter = new NewsListAdapter(App.context, array);
+
+                            recyclerView.setLayoutManager(linearLayoutManager);
+                            recyclerView.setAdapter(adapter);
+
+                        }
                         swipeRefreshLayout.setRefreshing(true);
 
                     }else {
@@ -129,7 +215,39 @@ public class NewsList extends AppCompatActivity {
                 array = new ArrayList<News>();
 
                     if (mWifi.isConnected() || isMobileDataEnabled()) {
-                        webServiceGetNini();
+                        if(cat.equals("اخبار روزانه")){
+                            String urlString = "http://www.farsnews.com/RSS";
+                            Parser parser = new Parser();
+                            parser.execute(urlString);
+                            parser.onFinish(new Parser.OnTaskCompleted() {
+
+                                @Override
+                                public void onTaskCompleted(ArrayList<Article> list) {
+                                    //what to do when the parsing is done
+                                    //the Array List contains all article's data. For example you can use it for your adapter.
+                                    ArticleAdapter adapter = new ArticleAdapter(list, R.layout.item_news, NewsList.this);
+                                    recyclerView.setLayoutManager(linearLayoutManager);
+                                    recyclerView.setAdapter(adapter);
+                                    swipeRefreshLayout.setRefreshing(false);
+
+                                }
+
+                                @Override
+                                public void onError() {
+                                    //what to do in case of error
+                                }
+                            });
+
+
+                        }else {
+                            webServiceGetNini();
+                            adapter = new NewsListAdapter(App.context, array);
+
+                            recyclerView.setLayoutManager(linearLayoutManager);
+                            recyclerView.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
+
+                        }
                         swipeRefreshLayout.setRefreshing(true);
 
                     }else {
@@ -140,6 +258,7 @@ public class NewsList extends AppCompatActivity {
             }
         });
 
+
     }
 
     public  void webServiceGetNini()
@@ -147,7 +266,7 @@ public class NewsList extends AppCompatActivity {
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        client.get(App.urlApi+"news" , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+        client.get(App.urlApi+"newsbycat/"+cat+"/"+App.android_id , params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
             }

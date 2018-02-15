@@ -107,6 +107,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".activities.MyNews"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".activities.MyNini"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />

@@ -26,42 +26,129 @@
                 android:layout_marginTop="8dp"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:lines="2"
+                android:lines="1"
+                android:padding="2dp"
                 android:textColor="#000"
                 android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/button4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:padding="2dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:layout_gravity="right"
+                android:background="@color/cardview_shadow_start_color"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
-                android:layout_marginTop="12dp"
                 android:layout_weight="1"
                 android:gravity="right"
 
+                android:maxLines="2"
+                android:padding="2dp"
                 android:textColor="#737373"
                 android:textSize="14sp" />
 
-            <TextView
-                android:id="@+id/time"
+            <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_weight="1"
-                android:gravity="right"
-                android:textColor="#737373"
-                android:textSize="12sp" />
+                android:gravity="left"
+                android:padding="2dp"
+                >
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="#737373"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:id="@+id/ll_comment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/commnet_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="12sp"
+                        android:textStyle="normal" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@mipmap/comment" />
+                </LinearLayout>
+
+            </TableRow>
+
 
         </LinearLayout>
 
         <ImageView
             android:id="@+id/img"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:src="@mipmap/nopic" />
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:padding="2dp"
+            android:src="@mipmap/nopic"
+            />
+
+        <LinearLayout
+            android:id="@+id/ll_emtiaz"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                app:srcCompat="@mipmap/plus" />
+
+            <TextView
+                android:id="@+id/txt_point"
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:gravity="center"
+                android:text="0" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="---"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/txt_pointm"
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:gravity="center"
+                android:text="0" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                app:srcCompat="@mipmap/minus" />
+
+
+        </LinearLayout>
 
     </LinearLayout>
 

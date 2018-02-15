@@ -30,7 +30,8 @@ dependencies {
 
 
 
-    compile 'com.android.support:appcompat-v7:26.+'
+    compile "com.android.support:appcompat-v7:26.1.0"
+
     compile 'com.android.support:design:26.+'
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'com.android.support:support-v4:26.+'
@@ -47,10 +48,11 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'jp.wasabeef:richeditor-android:1.2.2'
 
-
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.daimajia.slider:library:1.1.5@aar'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
+    compile 'com.prof.rssparser:rssparser:1.3.1'
+    compile 'de.hdodenhof:circleimageview:2.2.0'
 
 
 }

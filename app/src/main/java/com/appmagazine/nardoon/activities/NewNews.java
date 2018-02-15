@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -66,9 +67,9 @@ public class NewNews extends AppCompatActivity {
     RadioButton radioTypeButton;
     public static ProgressDialog dialog;
     public static Button SelectImage;
-    private ImageView ivImageAsli, ivImage2, ivImage3, ivImage4, ivImage5, ivImage6, ivImage7, ivImage8 , ivGone1 , ivGone2, ivGone3;
-    private ImageButton imgDelete1, imgDelete2, imgDelete3, imgDelete4, imgDelete5, imgDelete6, imgDelete7, imgDelete8;
-    LinearLayout imgAsli , img2,img3,img4,img5,img6,img7,img8;
+    private ImageView  ivImage2, ivImage3, ivImage4, ivImage5, ivImage6, ivImage7, ivImage8 , ivGone1 , ivGone2, ivGone3;
+    private ImageButton  imgDelete2, imgDelete3, imgDelete4, imgDelete5, imgDelete6, imgDelete7, imgDelete8;
+    LinearLayout  img2,img3,img4,img5,img6,img7,img8;
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
     private String userChoosenTask;
     File destination ;
@@ -83,6 +84,7 @@ public class NewNews extends AppCompatActivity {
     int width, height;
     boolean flag1,flag2,flag3,flag4,flag5,flag6,flag7,flag8 , flag10=false;
     File file1 , file2,file3,file4,file5,file6,file7,file8,fileAsli;
+    Boolean flagImgAsli ;
     CheckBox chkLink , chkTavafoqi;
     CheckBox chkSpecial;
     int AgahiPrice ,linkPrice , specialPrice;
@@ -103,6 +105,7 @@ public class NewNews extends AppCompatActivity {
 
     LinearLayout llImg;
     ImageView imgNews;
+    private String id_confirmaation;
 
 
     @Override
@@ -166,10 +169,10 @@ public class NewNews extends AppCompatActivity {
         llImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                flagImgAsli = false;
                 CropImage.startPickImageActivity(NewNews.this);
             }
         });
-        imgAsli = (LinearLayout) findViewById(R.id.img_asli);
         img2 = (LinearLayout) findViewById(R.id.img2);
         img3 = (LinearLayout) findViewById(R.id.img3);
         img4 = (LinearLayout) findViewById(R.id.img4);
@@ -178,7 +181,6 @@ public class NewNews extends AppCompatActivity {
         img7 = (LinearLayout) findViewById(R.id.img7);
         img8 = (LinearLayout) findViewById(R.id.img8);
 
-        ivImageAsli = (ImageView) findViewById(R.id.ivImage_asli);
         ivImage2 = (ImageView) findViewById(R.id.ivImage2);
         ivImage3 = (ImageView) findViewById(R.id.ivImage3);
         ivImage4 = (ImageView) findViewById(R.id.ivImage4);
@@ -189,7 +191,6 @@ public class NewNews extends AppCompatActivity {
 
         imgCrop = (CropImageView) findViewById(R.id.cropImageView);
         SelectImage = (Button) findViewById(R.id.btn_select_image);
-        imgDelete1 = (ImageButton) findViewById(R.id.img_del1);
         imgDelete2 = (ImageButton) findViewById(R.id.img_del2);
         imgDelete3 = (ImageButton) findViewById(R.id.img_del3);
         imgDelete4 = (ImageButton) findViewById(R.id.img_del4);
@@ -197,17 +198,6 @@ public class NewNews extends AppCompatActivity {
         imgDelete6 = (ImageButton) findViewById(R.id.img_del6);
         imgDelete7 = (ImageButton) findViewById(R.id.img_del7);
         imgDelete8 = (ImageButton) findViewById(R.id.img_del8);
-        if (imgAsli.getVisibility() == View.GONE) {
-            SelectImage.setText("افزودن عکس");
-        } else if (imgAsli.getVisibility() == View.VISIBLE) {
-            SelectImage.setText("افزودن عکسی دیگر");
-        }
-        imgDelete1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imgAsli.setVisibility(View.GONE);
-            }
-        });
         imgDelete2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -254,6 +244,7 @@ public class NewNews extends AppCompatActivity {
         SelectImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                flagImgAsli = true;
                 onSelectImageClick(v);
             }
         });
@@ -263,7 +254,36 @@ public class NewNews extends AppCompatActivity {
         llErsal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                webServiceNewAgahi();
+                SharedPreferences prefs = getSharedPreferences("LOGIN_ID", MODE_PRIVATE);
+                SharedPreferences prefs2 = getSharedPreferences("IS_LOGIN", MODE_PRIVATE);
+                String status = prefs2.getString("islogin", "0");
+                String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
+
+                if (status.matches("1") && !id_confirmaationSH.equals("0")) {
+
+                    id_confirmaation = id_confirmaationSH.replace("[{\"id\":", "").replace("}]", "");
+
+
+                    if(title.getText().toString().isEmpty()){
+                        title.setError("عنوان خبر");
+                    }
+                    if(content.getText().toString().isEmpty()){
+                        content.setError("متن خبر");
+                    }
+                    if(spinner.getSelectedItem().toString().equals("انتخاب کنید..")){
+                        TextView errorText = (TextView)spinner.getSelectedView();
+                        errorText.setError("-");
+                        errorText.setTextColor(Color.RED);//just to highlight that this is an error
+                        errorText.setText("     موضوع خبر    ");//changes the selected item text to this
+
+                    }
+                    if(!title.getText().toString().isEmpty() && !content.getText().toString().isEmpty() && !spinner.getSelectedItem().toString().equals("انتخاب کنید..") ) {
+                        webServiceNewAgahi();
+                    }
+                }else {
+                    Intent intent = new Intent(App.context, Login.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -314,8 +334,7 @@ public class NewNews extends AppCompatActivity {
 
 
 
-                File f = file1;
-                if (f.length() == 0) {
+                if (!flagImgAsli) {
 
                     imgNews.setVisibility(View.VISIBLE);
                     file1 = destination;
@@ -331,27 +350,7 @@ public class NewNews extends AppCompatActivity {
                         fo = new FileOutputStream(destination);
                         fo.write(bytes.toByteArray());
                         fo.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                } else if ( img2.getVisibility() == View.GONE) {
-                    img2.setVisibility(View.VISIBLE);
-                    file2 = destination;
-                    Bitmap reducedSizeBitmap = getBitmap(result.getUri().getPath());
-                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    reducedSizeBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-                    ivImage2.setImageBitmap(reducedSizeBitmap);
-
-                    FileOutputStream fo;
-                    try {
-
-                        destination.createNewFile();
-                        fo = new FileOutputStream(destination);
-                        fo.write(bytes.toByteArray());
-                        fo.close();
+                        flagImgAsli = true;
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
@@ -359,126 +358,149 @@ public class NewNews extends AppCompatActivity {
                     }
 
 
-                } else if (img2.getVisibility() == View.VISIBLE && img3.getVisibility() == View.GONE) {
-                    img3.setVisibility(View.VISIBLE);
-                    file3 = destination;
-                    Bitmap reducedSizeBitmap = getBitmap(result.getUri().getPath());
-                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    reducedSizeBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-                    ivImage3.setImageBitmap(reducedSizeBitmap);
+                } else {
+                    if (img2.getVisibility() == View.GONE) {
+                        img2.setVisibility(View.VISIBLE);
+                        file2 = destination;
+                        Bitmap reducedSizeBitmap = getBitmap(result.getUri().getPath());
+                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                        reducedSizeBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                        ivImage2.setImageBitmap(reducedSizeBitmap);
 
-                    FileOutputStream fo;
-                    try {
+                        FileOutputStream fo;
+                        try {
 
-                        destination.createNewFile();
-                        fo = new FileOutputStream(destination);
-                        fo.write(bytes.toByteArray());
-                        fo.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-             else if (img3.getVisibility() == View.VISIBLE && img4.getVisibility() == View.GONE) {
-                img4.setVisibility(View.VISIBLE);
-                file4 = destination;
-                Bitmap reducedSizeBitmap = getBitmap(result.getUri().getPath());
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                reducedSizeBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-                ivImage4.setImageBitmap(reducedSizeBitmap);
+                            destination.createNewFile();
+                            fo = new FileOutputStream(destination);
+                            fo.write(bytes.toByteArray());
+                            fo.close();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
-                FileOutputStream fo;
-                try {
 
-                    destination.createNewFile();
-                    fo = new FileOutputStream(destination);
-                    fo.write(bytes.toByteArray());
-                    fo.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else if (img4.getVisibility() == View.VISIBLE && img5.getVisibility() == View.GONE) {
-                img5.setVisibility(View.VISIBLE);
-                file5 = destination;
-                Bitmap reducedSizeBitmap = getBitmap(result.getUri().getPath());
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                reducedSizeBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-                ivImage5.setImageBitmap(reducedSizeBitmap);
+                    } else if (img2.getVisibility() == View.VISIBLE && img3.getVisibility() == View.GONE) {
+                        img3.setVisibility(View.VISIBLE);
+                        file3 = destination;
+                        Bitmap reducedSizeBitmap = getBitmap(result.getUri().getPath());
+                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                        reducedSizeBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                        ivImage3.setImageBitmap(reducedSizeBitmap);
 
-                FileOutputStream fo;
-                try {
+                        FileOutputStream fo;
+                        try {
 
-                    destination.createNewFile();
-                    fo = new FileOutputStream(destination);
-                    fo.write(bytes.toByteArray());
-                    fo.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else if (img5.getVisibility() == View.VISIBLE && img6.getVisibility() == View.GONE) {
-                img6.setVisibility(View.VISIBLE);
-                file6 = destination;
-                Bitmap reducedSizeBitmap = getBitmap(result.getUri().getPath());
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                reducedSizeBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-                ivImage6.setImageBitmap(reducedSizeBitmap);
+                            destination.createNewFile();
+                            fo = new FileOutputStream(destination);
+                            fo.write(bytes.toByteArray());
+                            fo.close();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (img3.getVisibility() == View.VISIBLE && img4.getVisibility() == View.GONE) {
+                        img4.setVisibility(View.VISIBLE);
+                        file4 = destination;
+                        Bitmap reducedSizeBitmap = getBitmap(result.getUri().getPath());
+                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                        reducedSizeBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                        ivImage4.setImageBitmap(reducedSizeBitmap);
 
-                FileOutputStream fo;
-                try {
+                        FileOutputStream fo;
+                        try {
 
-                    destination.createNewFile();
-                    fo = new FileOutputStream(destination);
-                    fo.write(bytes.toByteArray());
-                    fo.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else if (img6.getVisibility() == View.VISIBLE && img7.getVisibility() == View.GONE) {
-                img7.setVisibility(View.VISIBLE);
-                file7 = destination;
-                Bitmap reducedSizeBitmap = getBitmap(result.getUri().getPath());
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                reducedSizeBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-                ivImage7.setImageBitmap(reducedSizeBitmap);
+                            destination.createNewFile();
+                            fo = new FileOutputStream(destination);
+                            fo.write(bytes.toByteArray());
+                            fo.close();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (img4.getVisibility() == View.VISIBLE && img5.getVisibility() == View.GONE) {
+                        img5.setVisibility(View.VISIBLE);
+                        file5 = destination;
+                        Bitmap reducedSizeBitmap = getBitmap(result.getUri().getPath());
+                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                        reducedSizeBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                        ivImage5.setImageBitmap(reducedSizeBitmap);
 
-                FileOutputStream fo;
-                try {
+                        FileOutputStream fo;
+                        try {
 
-                    destination.createNewFile();
-                    fo = new FileOutputStream(destination);
-                    fo.write(bytes.toByteArray());
-                    fo.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else if (img7.getVisibility() == View.VISIBLE && img8.getVisibility() == View.GONE) {
-                    img8.setVisibility(View.VISIBLE);
-                    file8 = destination;
-                    Bitmap reducedSizeBitmap = getBitmap(result.getUri().getPath());
-                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    reducedSizeBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-                    ivImage8.setImageBitmap(reducedSizeBitmap);
+                            destination.createNewFile();
+                            fo = new FileOutputStream(destination);
+                            fo.write(bytes.toByteArray());
+                            fo.close();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (img5.getVisibility() == View.VISIBLE && img6.getVisibility() == View.GONE) {
+                        img6.setVisibility(View.VISIBLE);
+                        file6 = destination;
+                        Bitmap reducedSizeBitmap = getBitmap(result.getUri().getPath());
+                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                        reducedSizeBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                        ivImage6.setImageBitmap(reducedSizeBitmap);
 
-                    FileOutputStream fo;
-                    try {
+                        FileOutputStream fo;
+                        try {
 
-                        destination.createNewFile();
-                        fo = new FileOutputStream(destination);
-                        fo.write(bytes.toByteArray());
-                        fo.close();
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                            destination.createNewFile();
+                            fo = new FileOutputStream(destination);
+                            fo.write(bytes.toByteArray());
+                            fo.close();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (img6.getVisibility() == View.VISIBLE && img7.getVisibility() == View.GONE) {
+                        img7.setVisibility(View.VISIBLE);
+                        file7 = destination;
+                        Bitmap reducedSizeBitmap = getBitmap(result.getUri().getPath());
+                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                        reducedSizeBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                        ivImage7.setImageBitmap(reducedSizeBitmap);
+
+                        FileOutputStream fo;
+                        try {
+
+                            destination.createNewFile();
+                            fo = new FileOutputStream(destination);
+                            fo.write(bytes.toByteArray());
+                            fo.close();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (img7.getVisibility() == View.VISIBLE && img8.getVisibility() == View.GONE) {
+                        img8.setVisibility(View.VISIBLE);
+                        file8 = destination;
+                        Bitmap reducedSizeBitmap = getBitmap(result.getUri().getPath());
+                        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                        reducedSizeBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                        ivImage8.setImageBitmap(reducedSizeBitmap);
+
+                        FileOutputStream fo;
+                        try {
+
+                            destination.createNewFile();
+                            fo = new FileOutputStream(destination);
+                            fo.write(bytes.toByteArray());
+                            fo.close();
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
 
@@ -598,6 +620,9 @@ public class NewNews extends AppCompatActivity {
         params.put("subject",spinner.getSelectedItem().toString());
         params.put("title",title.getText().toString());
         params.put("content",content.getText().toString());
+        params.put("point","0");
+        params.put("pointm","0");
+        params.put("confirmation_id",id_confirmaation);
 
 
         try {
@@ -654,12 +679,13 @@ public class NewNews extends AppCompatActivity {
 //                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                startActivity(intent);
 //                finish();
-                App.CustomToast("موفق");
+                App.CustomToast("خبر با موفقیت ثبت شد");
+                finish();
 
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-                dialog.hide();
+//                dialog.hide();
 
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {

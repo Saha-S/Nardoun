@@ -372,7 +372,6 @@ public class Details extends AppCompatActivity {
 
 
     }
-
     public  void webServiceGetAgahi()
     {
 
@@ -804,7 +803,7 @@ public class Details extends AppCompatActivity {
                     App.CustomToast("آگهی با این شماره وجود ندارد !");
 
                 }else{
-               //     App.CustomToast("fail "+statusCode);
+                    //     App.CustomToast("fail "+statusCode);
                     App.CustomToast(" لطفا دوباره سعی کنید ");
                 }
             }
@@ -815,6 +814,7 @@ public class Details extends AppCompatActivity {
         });
     }
     @Override
+
 
     public boolean onCreateOptionsMenu(Menu menu) {
 

@@ -94,7 +94,6 @@ public class App extends Application {
         );
 
 
-
     }
 
     public static void      overrideFont( Context context, String defaultFontNameToOverride, String customFontFileNameInAssets) {

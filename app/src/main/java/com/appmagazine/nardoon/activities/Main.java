@@ -61,9 +61,6 @@ public class Main extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
 
-        Intent in = new Intent(Main.this , NewsDetails.class);
-        startActivity(in);
-
         if (Build.VERSION.SDK_INT >= 23) {
 
             if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -452,6 +449,11 @@ public class Main extends AppCompatActivity
         } else if (id == R.id.nav_my_agahi) {
 
             Intent intent = new Intent(App.context , MyAgahis.class);
+            startActivity(intent);
+
+        }else if (id == R.id.nav_my_news) {
+
+            Intent intent = new Intent(App.context , MyNews.class);
             startActivity(intent);
 
         }

@@ -26,7 +26,7 @@ public class Nini {
             this.validity = jsonObject.getString("validity");
             this.created_at = jsonObject.getString("created_at");
             this.confirmation_id = jsonObject.getString("confirmation_id");
-            this.like = jsonObject.getString("like");
+            this.like = jsonObject.getString("likebtn");
             this.comment = jsonObject.getString("comment");
 
         } catch (JSONException e) {

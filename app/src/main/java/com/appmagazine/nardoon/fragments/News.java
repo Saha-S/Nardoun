@@ -28,18 +28,54 @@ public class News extends Fragment {
         llSocial = (LinearLayout) view.findViewById(R.id.llSocial);
         llRSS = (LinearLayout) view.findViewById(R.id.llRSS);
 
-        llGirl.setBackgroundColor(Color.parseColor("#003399"));
-        llPublic.setBackgroundColor(Color.parseColor("#9a00ff"));
-        llSport.setBackgroundColor(Color.parseColor("#ff6501"));
-        llSocial.setBackgroundColor(Color.parseColor("#cd9933"));
-        llRSS.setBackgroundColor(Color.parseColor("#04b9e6"));
+//        llGirl.setBackgroundColor(Color.parseColor("#003399"));
+//        llPublic.setBackgroundColor(Color.parseColor("#9a00ff"));
+//        llSport.setBackgroundColor(Color.parseColor("#ff6501"));
+//        llSocial.setBackgroundColor(Color.parseColor("#cd9933"));
+//        llRSS.setBackgroundColor(Color.parseColor("#04b9e6"));
 
         llGirl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(App.context , NewsList.class);
 //                intent.putExtra("id", "8");
-//                intent.putExtra("name", "وسایل نقلیه");
+                intent.putExtra("name", "دخترانه");
+                startActivity(intent);
+            }
+        });
+        llPublic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(App.context , NewsList.class);
+//                intent.putExtra("id", "8");
+                intent.putExtra("name", "عمومی");
+                startActivity(intent);
+            }
+        });
+        llSport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(App.context , NewsList.class);
+//                intent.putExtra("id", "8");
+                intent.putExtra("name", "ورزشی");
+                startActivity(intent);
+            }
+        });
+        llSocial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(App.context , NewsList.class);
+//                intent.putExtra("id", "8");
+                intent.putExtra("name", "اجتماعی");
+                startActivity(intent);
+            }
+        });
+        llRSS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(App.context , NewsList.class);
+//                intent.putExtra("id", "8");
+                intent.putExtra("name", "اخبار روزانه");
                 startActivity(intent);
             }
         });

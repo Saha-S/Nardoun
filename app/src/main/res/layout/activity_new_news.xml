@@ -13,6 +13,11 @@
             android:layout_width="match_parent" />
 
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
     <LinearLayout
         android:id="@+id/ll_first"
         android:layout_width="match_parent"
@@ -31,6 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
+                android:layout_gravity="center"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:alwaysDrawnWithCache="true"
@@ -69,8 +75,8 @@
 
                 <ImageView
                     android:id="@+id/news_img"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     app:srcCompat="@mipmap/nopic" />
 
             </LinearLayout>
@@ -131,7 +137,6 @@
                 android:hint="متن خبر"
                 android:inputType="textMultiLine"
                 android:minLines="3"
-                android:singleLine="true"
                 android:textSize="16sp" />
         </android.support.design.widget.TextInputLayout>
 
@@ -187,38 +192,6 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
-
-                    <LinearLayout
-                        android:id="@+id/img_asli"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_margin="5dp"
-                        android:background="#c1c1c1"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <ImageButton
-                            android:id="@+id/img_del1"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="top|left"
-                            app:srcCompat="@mipmap/imgdelete" />
-
-                        <ImageView
-                            android:id="@+id/ivImage_asli"
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            app:srcCompat="@mipmap/nopic" />
-
-                        <TextView
-                            android:id="@+id/textView12"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="عکس اصلی"
-                            android:textColor="#000" />
-                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/img2"
@@ -394,5 +367,6 @@
 
     </LinearLayout>
 
+    </ScrollView>
 
 </LinearLayout>

@@ -1,55 +1,76 @@
 package com.appmagazine.nardoon;
 
-/**
- * Created by nadia on 3/9/2017.
- */
-import java.util.List;
-import java.util.UUID;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Parcelable;
-import android.telephony.TelephonyManager;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListAdapter;
-import android.widget.ListView;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 public class Utils {
-
-    public static void getTotalHeightofListView(ListView listView) {
-
-        ListAdapter mAdapter = listView.getAdapter();
-
-        int totalHeight = 0;
-
-        for (int i = 0; i < mAdapter.getCount(); i++) {
-            View mView = mAdapter.getView(i, null, listView);
-
-            mView.measure(
-                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-
-                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-
-            totalHeight += mView.getMeasuredHeight();
-            Log.w("HEIGHT" + i, String.valueOf(totalHeight));
-
+    public static String getJSONString(String url) {
+        String jsonString = null;
+        HttpURLConnection linkConnection = null;
+        try {
+            URL linkurl = new URL(url);
+            linkConnection = (HttpURLConnection) linkurl.openConnection();
+            int responseCode = linkConnection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                InputStream linkinStream = linkConnection.getInputStream();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                int j = 0;
+                while ((j = linkinStream.read()) != -1) {
+                    baos.write(j);
+                }
+                byte[] data = baos.toByteArray();
+                jsonString = new String(data);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (linkConnection != null) {
+                linkConnection.disconnect();
+            }
         }
-
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight
-                + (listView.getDividerHeight() * (mAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
-        listView.requestLayout();
-
+        return jsonString;
     }
+    public static void CopyStream(InputStream is, OutputStream os)
+    {
+        final int buffer_size=1024;
+        try
+        {
+            byte[] bytes=new byte[buffer_size];
+            for(;;)
+            {
+                int count=is.read(bytes, 0, buffer_size);
+                if(count==-1)
+                    break;
+                os.write(bytes, 0, count);
+            }
+        }
+        catch(Exception ex){}
+    }
+
+    public static boolean isNetworkAvailable(Activity activity) {
+        ConnectivityManager connectivity = (ConnectivityManager) activity
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity == null) {
+            return false;
+        } else {
+            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            if (info != null) {
+                for (int i = 0; i < info.length; i++) {
+                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 }
