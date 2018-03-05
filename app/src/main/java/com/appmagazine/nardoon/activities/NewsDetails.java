@@ -94,6 +94,12 @@ public class NewsDetails extends AppCompatActivity {
 
     String[] liksarray;
     String[] disliksarray;
+    private LinearLayout llErsal;
+    private TextView content;
+    private TextView title;
+
+    String img1 = "", img2= "", img3= "", img4= "",  img5= "", img6= "", img7= "";
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
@@ -110,8 +116,23 @@ public class NewsDetails extends AppCompatActivity {
         LinearLayout llSendComment = (LinearLayout) findViewById(R.id.ll_send_comment);
         ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
         TextView tvBack = (TextView) findViewById(R.id.tv_back);
-        LinearLayout llErsal = (LinearLayout) findViewById(R.id.ll_ersal);
+        llErsal = (LinearLayout) findViewById(R.id.ll_ersal);
+        TextView txt = (TextView) findViewById(R.id.txt_ersal);
+        ImageView imgErsal = (ImageView) findViewById(R.id.img_ersal);
         ll = (LinearLayout) findViewById(R.id.ll);
+
+        Bundle extrasV = getIntent().getExtras();
+        if(extrasV != null) {
+             if(extrasV.getString("VIRAYESH").equals("1")){
+                 llErsal.setVisibility(View.VISIBLE);
+                 imgErsal.setVisibility(View.GONE);
+                 txt.setText("ویرایش");
+             }else{
+                 llErsal.setVisibility(View.GONE);
+             }
+        }
+
+
 
         like = (LinearLayout) findViewById(R.id.like);
         unlike = (LinearLayout) findViewById(R.id.unlike);
@@ -121,8 +142,8 @@ public class NewsDetails extends AppCompatActivity {
 
         TextView time = (TextView) findViewById(R.id.time);
         TextView id = (TextView) findViewById(R.id.id);
-        TextView title = (TextView) findViewById(R.id.txt_title);
-        TextView content = (TextView) findViewById(R.id.content);
+        title = (TextView) findViewById(R.id.txt_title);
+        content = (TextView) findViewById(R.id.content);
         noComment = (TextView) findViewById(R.id.no_commnet);
         ImageView img = (ImageView) findViewById(R.id.img);
 
@@ -343,30 +364,38 @@ public class NewsDetails extends AppCompatActivity {
                     strings.clear();
                     if(!obj.getString("imagei").equals("0")){
                         strings.add(App.urlimages+obj.getString("imagei").toString());
+                        img1=App.urlimages+obj.getString("imagei").toString();
 
                     }
                     if(!obj.getString("imageii").equals("0")){
                         strings.add(App.urlimages+obj.getString("imageii").toString());
+                        img2=App.urlimages+obj.getString("imageii").toString();
+
 
                     }
                     if(!obj.getString("imageiii").equals("0")){
                         strings.add(App.urlimages+obj.getString("imageiii").toString());
+                        img3=App.urlimages+obj.getString("imageiii").toString();
 
                     }
                     if(!obj.getString("imageiv").equals("0")){
                         strings.add(App.urlimages+obj.getString("imageiv").toString());
+                        img4=App.urlimages+obj.getString("imageiv").toString();
 
                     }
                     if(!obj.getString("imagev").equals("0")){
                         strings.add(App.urlimages+obj.getString("imagev").toString());
+                        img5=App.urlimages+obj.getString("imagev").toString();
 
                     }
                     if(!obj.getString("imagevi").equals("0")){
                         strings.add(App.urlimages+obj.getString("imagevi").toString());
+                        img6=App.urlimages+obj.getString("imagevi").toString();
 
                     }
                     if(!obj.getString("imagevii").equals("0")){
                         strings.add(App.urlimages+obj.getString("imagevii").toString());
+                        img7=App.urlimages+obj.getString("imagevii").toString();
 
                     }
 
@@ -400,6 +429,30 @@ public class NewsDetails extends AppCompatActivity {
 
                     }
                     }
+
+                    final Bundle extras = getIntent().getExtras();
+                    final JSONObject finalObj = obj;
+                    llErsal.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(NewsDetails.this, EditNews.class);
+
+                            intent.putExtra("TITLE" ,extras.getString("TITLE") );
+                            intent.putExtra("ID" ,extras.getString("ID") );
+                            intent.putExtra("CONTENT" ,extras.getString("CONTENT") );
+                            intent.putExtra("IMAGE" ,extras.getString("IMAGE") );
+                            intent.putExtra("TYPE" ,extras.getString("TYPE") );
+                            intent.putExtra("IMG1" , img1 );
+                            intent.putExtra("IMG2" , img2 );
+                            intent.putExtra("IMG3" , img3 );
+                            intent.putExtra("IMG4" , img4 );
+                            intent.putExtra("IMG5" , img5 );
+                            intent.putExtra("IMG6" , img6 );
+                            intent.putExtra("IMG7" , img7 );
+                            startActivity(intent);
+                        }
+                    });
+
 //                    int[] to = { R.id.c_name,R.id.c_content};
 //                    String[] from={"name","comment"};//string array
 //                    simpleAdapter=new SimpleAdapter(NewsDetails.this,arrayList,R.layout.item_comment,from,to);//Create object and set the parameters for simpleAdapter
@@ -425,8 +478,8 @@ public class NewsDetails extends AppCompatActivity {
 
                     public void onItemClick(AdapterView<?> parent, View v, int position, long id)
                     {
-                        Toast.makeText(getBaseContext(),"pic" + (position + 1) + " selected",
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getBaseContext(),"pic" + (position + 1) + " selected",
+//                                Toast.LENGTH_SHORT).show();
                         // display the images selected
                         //    ImageView imageView = (ImageView) findViewById(R.id.image1);
                         //  imageView.setImageResource(imageIDs[position]);

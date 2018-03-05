@@ -1,6 +1,7 @@
 package com.appmagazine.nardoon.activities;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -17,9 +18,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appmagazine.nardoon.Adapter.MyAgahiAdapter;
+import com.appmagazine.nardoon.Adapter.MyNewsListAdapter;
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.EndlessRecyclerViewScrollListener;
 import com.appmagazine.nardoon.MyAgahi;
+import com.appmagazine.nardoon.News;
 import com.appmagazine.nardoon.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -36,9 +39,9 @@ import cz.msebera.android.httpclient.Header;
 
 public class MyNews extends AppCompatActivity {
     RecyclerView recyclerView;
-    MyAgahiAdapter adapter;
+    MyNewsListAdapter adapter;
     LinearLayoutManager linearLayoutManager;
-    List<MyAgahi> array;
+    List<News> array;
     SwipeRefreshLayout swipeRefreshLayout;
     EndlessRecyclerViewScrollListener scrollListener;
     LinearLayout llFilter;
@@ -46,6 +49,7 @@ public class MyNews extends AppCompatActivity {
     private TextView orders;
     private String idAgahi;
     public static Handler h;
+    private String id_confirmaation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +94,14 @@ public class MyNews extends AppCompatActivity {
 
 
 
+        SharedPreferences prefs = getSharedPreferences("LOGIN_ID", MODE_PRIVATE);
+        SharedPreferences prefs2 = getSharedPreferences("IS_LOGIN", MODE_PRIVATE);
+        String status = prefs2.getString("islogin", "0");
+        String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
+        if (status.matches("1") && !id_confirmaationSH.equals("0")) {
+            id_confirmaation = id_confirmaationSH.replace("[{\"id\":", "").replace("}]", "");
+        }
+
 
         myDevice=App.android_id;
 
@@ -98,7 +110,7 @@ public class MyNews extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.list);
         linearLayoutManager = new LinearLayoutManager(App.context, LinearLayoutManager.VERTICAL, false);
         array = new ArrayList<>();
-        adapter = new MyAgahiAdapter(App.context, array);
+        adapter = new MyNewsListAdapter(App.context, array);
 
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
@@ -138,7 +150,7 @@ public class MyNews extends AppCompatActivity {
             @Override
             public void onRefresh() {
 
-                array = new ArrayList<MyAgahi>();
+                array = new ArrayList<News>();
                 ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
                 NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
@@ -163,7 +175,7 @@ public class MyNews extends AppCompatActivity {
 
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        client.get(App.urlApi+"agahisbydevice/"+myDevice, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
+        client.get(App.urlApi+"newsbyuser/"+id_confirmaation+"/"+myDevice, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
             }
@@ -178,7 +190,7 @@ public class MyNews extends AppCompatActivity {
                         swipeRefreshLayout.setRefreshing(false);
                         for (int i = 0; i < posters.length(); i++) {
                             swipeRefreshLayout.setRefreshing(false);
-                            array.add(new MyAgahi(posters.getJSONObject(i)));
+                            array.add(new News(posters.getJSONObject(i)));
                         }
                         swipeRefreshLayout.setRefreshing(false);
                         adapter.update(array);

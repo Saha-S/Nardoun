@@ -219,25 +219,34 @@ public class NiniAdapter extends RecyclerView.Adapter<NiniAdapter.PosterHolder> 
                 liksarray = likestr.split("-");
                 */
 
-                String showerstr = file.read("shower");
-                showerarray = showerstr.split("-");
+                try {
+                    String showerstr = file.read("shower");
+                    showerarray = showerstr.split("-");
 
-                String kissstr = file.read("kiss");
-                kissarray = kissstr.split("-");
+                    String kissstr = file.read("kiss");
+                    kissarray = kissstr.split("-");
 
-                String flowerstr = file.read("flower");
-                flowearray = flowerstr.split("-");
+                    String flowerstr = file.read("flower");
+                    flowearray = flowerstr.split("-");
 
-                String icestr = file.read("icecream");
-                icearray = icestr.split("-");
+                    String icestr = file.read("icecream");
+                    icearray = icestr.split("-");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
 
-           if(filterPoster.get(position).like.equals("1")){
-               holder.like.setChecked(true);
-           }
-           if(filterPoster.get(position).like.equals("0")){
-               holder.like.setChecked(false);
-           }
+                try {
+
+                    if(filterPoster.get(position).like.equals("1")){
+                   holder.like.setChecked(true);
+               }
+                    if(filterPoster.get(position).like.equals("0")){
+                        holder.like.setChecked(false);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 if (Arrays.asList(showerarray).contains(filterPoster.get(position).id + "")) {
                     holder.shower.setChecked(true);

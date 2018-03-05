@@ -38,7 +38,7 @@ public class ImageLoader {
         executorService=Executors.newFixedThreadPool(5);
     }
 
-    int stub_id = R.drawable.ic_menu_share;
+    int stub_id = R.drawable.nopic;
     public void DisplayImage(String url, ImageView imageView)
     {
 
