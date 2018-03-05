@@ -112,6 +112,7 @@ public class NewsDetails extends AppCompatActivity {
 
         listComment = new ArrayList<HashMap<String, String>>();
 
+
         LinearLayout llBack = (LinearLayout) findViewById(R.id.ll_back);
         LinearLayout llSendComment = (LinearLayout) findViewById(R.id.ll_send_comment);
         ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
