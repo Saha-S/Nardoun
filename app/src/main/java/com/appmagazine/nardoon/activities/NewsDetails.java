@@ -124,6 +124,7 @@ public class NewsDetails extends AppCompatActivity {
 
         Bundle extrasV = getIntent().getExtras();
         if(extrasV != null) {
+
              if(extrasV.getString("VIRAYESH").equals("1")){
                  llErsal.setVisibility(View.VISIBLE);
                  imgErsal.setVisibility(View.GONE);
