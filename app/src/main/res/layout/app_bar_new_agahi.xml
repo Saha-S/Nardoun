@@ -20,28 +20,58 @@
             android:gravity="right|center_vertical">
 
             <LinearLayout
+                android:id="@+id/ll_ersal"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:id="@+id/ll_ersal"
-                android:visibility="invisible">
+                android:orientation="horizontal"
+                android:visibility="invisible"
+                android:background="?attr/selectableItemBackground">
 
-                <TextView
+
+            <TextView
                     android:id="@+id/txt_ersal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ارسال"
-                    android:textSize="16dp"
                     android:layout_marginLeft="7dp"
-                    android:textColor="#fff" />
+                    android:text="ارسال"
+                    android:textColor="#fff"
+                    android:textSize="16dp" />
 
                 <ImageButton
                     android:id="@+id/img_ersal"
-                    android:layout_marginLeft="4dp"
-                    android:background="@mipmap/ok"
                     android:layout_width="20dp"
-                    android:layout_height="20dp" />
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="4dp"
+                    android:background="@mipmap/ok" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_dell"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/txt_del"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7dp"
+                    android:text="حذف"
+                    android:textColor="#fff"
+                    android:textSize="16dp" />
+
+                <ImageButton
+                    android:id="@+id/img_del"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="4dp"
+                    android:background="@mipmap/delete" />
 
             </LinearLayout>
 

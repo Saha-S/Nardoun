@@ -1,53 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="2dp"
-        android:background="#fff"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:weightSum="12">
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="3dp"
+        app:cardMaxElevation="5dp">
 
-        <TextView
-            android:id="@+id/c_name"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:text="نادیا"
-            android:textColor="#000"
-            android:textSize="18sp" />
+            android:layout_margin="2dp"
+            android:background="#fff"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:weightSum="12">
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@color/cardview_shadow_start_color" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/c_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:padding="10dp"
-            android:text="افزایش کامنت دلخواه، عکس‌های اینستاگرام توسط کاربران 100% واقعی و ایرانی. دلتون مي خواد عكس‌های اینستاگرامتون کلی کامنت داشته باشه؟ دوست داريد عكستون بيشتر ديده بشه و به جز فالوئر‌هاتون، بقيه كاربرها عکس‌هاتونو ببينن؟ به وسیله کامنت بگير اینستاگرام می تونید تعداد کامنت‌، عكس‌های اینستاگرام خودتون رو افزايش ... "
-            android:textColor="@color/cardview_dark_background"
-            android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/c_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#D7D7D7"
+                    android:gravity="left"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="لحظاتی پیش"
+                    android:textColor="#666666"
+                    android:textSize="14sp" />
 
-        <ImageView
-            android:id="@+id/remove"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@color/cardview_shadow_start_color" />
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/c_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#D7D7D7"
+                    android:gravity="right"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="کاربر"
+                    android:textColor="#666666"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
-</RelativeLayout>
+            <TextView
+                android:id="@+id/c_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:padding="10dp"
+                android:text="افزایش کامنت دلخواه، عکس‌های اینستاگرام توسط کاربران 100% واقعی و ایرانی. دلتون مي خواد عكس‌های اینستاگرامتون کلی کامنت داشته باشه؟ دوست داريد عكستون بيشتر ديده بشه و به جز فالوئر‌هاتون، بقيه كاربرها عکس‌هاتونو ببينن؟ به وسیله کامنت بگير اینستاگرام می تونید تعداد کامنت‌، عكس‌های اینستاگرام خودتون رو افزايش ... "
+                android:textColor="@color/cardview_dark_background"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</FrameLayout>

@@ -1,6 +1,7 @@
 package com.appmagazine.nardoon.activities;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -42,6 +43,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MyPanel extends AppCompatActivity {
     RecyclerView recyclerView;
@@ -53,6 +55,10 @@ public class MyPanel extends AppCompatActivity {
     LinearLayout llFilter;
     String myDevice;
     private String id_confirmaation;
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

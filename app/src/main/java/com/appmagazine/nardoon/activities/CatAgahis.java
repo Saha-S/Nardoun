@@ -60,6 +60,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class CatAgahis extends AppCompatActivity implements TextWatcher {
     RecyclerView recyclerView;
@@ -78,6 +79,10 @@ public class CatAgahis extends AppCompatActivity implements TextWatcher {
     Boolean isSubcatAvailable = false;
     Typeface sansfarsi;
     LinearLayout lm;
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

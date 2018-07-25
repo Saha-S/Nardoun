@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -12,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
@@ -46,6 +48,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import cz.msebera.android.httpclient.Header;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -84,6 +87,10 @@ public class NewNini extends AppCompatActivity {
     CropImageView imgCrop;
     private File auxFile;
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -408,18 +415,23 @@ public class NewNini extends AppCompatActivity {
                 .start(this);
     }
 
-    public void EnableRuntimePermission(){
+    public boolean  EnableRuntimePermission(){
 
-        if (ActivityCompat.shouldShowRequestPermissionRationale(NewNini.this,
-                Manifest.permission.CAMERA))
-        {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
 
-        } else {
-
-            ActivityCompat.requestPermissions(NewNini.this,new String[]{
-                    Manifest.permission.CAMERA}, RequestPermissionCode);
-
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
         }
+        else { //permission is automatically granted on sdk<23 upon installation
+            Log.v("tag","Permission is granted");
+            return true;
+        }
+
     }
 
     private Bitmap getBitmap(String path) {

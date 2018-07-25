@@ -260,124 +260,303 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/ll_begin"
+                        android:id="@+id/ll_finish"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginTop="15dp"
-                        android:background="#fff"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        android:padding="5dp"
                         android:visibility="gone">
 
-
-                        <TextView
-                            android:id="@+id/txt_begin"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginTop="6dp"
-                            android:text="لطفا ساعت شروع سفارش گیری را مشخص کنید"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@android:color/holo_red_dark"
-                            android:textSize="14sp"
-                            android:visibility="gone" />
-
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginTop="6dp"
-                            android:text="شروع سفارش گیری"
-                            android:textColor="#3d3d3d"
-                            android:textSize="18sp" />
+                            android:background="#696969"
+                            android:gravity="center"
+                            android:text="سفارش گیری ناهار"
+                            android:textColor="#ffffff"
+                            android:textSize="16sp" />
 
-                        <LinearLayout
+                        <TableRow
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal">
+                            android:layout_height="wrap_content"
+                            android:background="@color/gray">
 
-                            <Button
-                                android:id="@+id/btn_begin"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="10dp"
-                                android:layout_marginLeft="10dp"
-                                android:background="#5A2456"
-                                android:text="انتخاب"
-                                android:textColor="#fff"
-                                android:textSize="18sp" />
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="3dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_weight=".5"
+                                android:background="#fff"
+                                android:orientation="vertical"
+                                android:visibility="visible">
 
-                            <TextView
-                                android:id="@+id/txt_begin_time"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="10dp"
-                                android:layout_weight="1"
-                                android:gravity="right" />
 
-                        </LinearLayout>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="10dp"
+                                    android:layout_marginTop="6dp"
+                                    android:gravity="center"
+                                    android:text="پایان سفارش گیری ناهار"
+                                    android:textColor="#3d3d3d"
+                                    android:textSize="16sp" />
 
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+
+                                    <Button
+                                        android:id="@+id/btn_finish"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/btn_select"
+                                        android:text="انتخاب"
+                                        android:textColor="#fff"
+                                        android:textSize="18sp" />
+
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/txt_finish_time"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center" />
+
+
+                                <TextView
+                                    android:id="@+id/txt_finish"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text="لطفا ساعت پایان سفارش گیری را مشخص کنید"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textColor="@android:color/holo_red_dark"
+                                    android:textSize="14sp"
+                                    android:visibility="gone" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="3dp"
+                                android:layout_marginRight="5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_weight=".5"
+                                android:background="#fff"
+                                android:orientation="vertical"
+                                android:visibility="visible">
+
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="10dp"
+                                    android:layout_marginTop="6dp"
+                                    android:gravity="center"
+                                    android:text="شروع سفارش گیری ناهار"
+                                    android:textColor="#3d3d3d"
+                                    android:textSize="16sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <Button
+                                        android:id="@+id/btn_begin"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/btn_select"
+                                        android:text="انتخاب"
+                                        android:textColor="#fff"
+                                        android:textSize="18sp" />
+
+
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/txt_begin_time"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center" />
+
+                                <TextView
+                                    android:id="@+id/txt_begin"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp"
+                                    android:gravity="center"
+                                    android:text="لطفا ساعت شروع سفارش گیری را مشخص کنید"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textColor="@android:color/holo_red_dark"
+                                    android:textSize="14sp"
+                                    android:visibility="gone" />
+
+                            </LinearLayout>
+
+                        </TableRow>
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/ll_finish"
+                        android:id="@+id/ll_begin"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginTop="15dp"
-                        android:background="#fff"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        android:padding="5dp"
                         android:visibility="gone">
 
-
-                        <TextView
-                            android:id="@+id/txt_finish"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginTop="6dp"
-                            android:text="لطفا ساعت پایان سفارش گیری را مشخص کنید"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@android:color/holo_red_dark"
-                            android:textSize="14sp"
-                            android:visibility="gone" />
-
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginTop="6dp"
-                            android:text="پایان سفارش گیری"
-                            android:textColor="#3d3d3d"
-                            android:textSize="18sp" />
+                            android:background="#696969"
+                            android:gravity="center"
+                            android:text="سفارش گیری شام"
+                            android:textColor="#ffffff"
+                            android:textSize="16sp" />
 
-                        <LinearLayout
+                        <TableRow
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal">
+                            android:layout_height="wrap_content"
+                            android:background="@color/gray">
 
-                            <Button
-                                android:id="@+id/btn_finish"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="10dp"
-                                android:layout_marginLeft="10dp"
-                                android:background="#5A2456"
-                                android:text="انتخاب"
-                                android:textColor="#fff"
-                                android:textSize="18sp" />
+                            <LinearLayout
+                                android:id="@+id/ll_finish2"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="3dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_weight=".5"
+                                android:background="#fff"
+                                android:orientation="vertical"
+                                android:visibility="visible">
 
-                            <TextView
-                                android:id="@+id/txt_finish_time"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginRight="10dp"
-                                android:layout_weight="1"
-                                android:gravity="right" />
 
-                        </LinearLayout>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="10dp"
+                                    android:layout_marginTop="6dp"
+                                    android:gravity="center"
+                                    android:text="پایان سفارش گیری شام"
+                                    android:textColor="#3d3d3d"
+                                    android:textSize="16sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+
+                                    <Button
+                                        android:id="@+id/btn_finish2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/btn_select"
+                                        android:text="انتخاب"
+                                        android:textColor="#fff"
+                                        android:textSize="18sp" />
+
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/txt_finish_time2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center" />
+
+
+                                <TextView
+                                    android:id="@+id/txt_finish2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+                                    android:text="لطفا ساعت پایان سفارش گیری را مشخص کنید"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textColor="@android:color/holo_red_dark"
+                                    android:textSize="14sp"
+                                    android:visibility="gone" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/ll_begin2"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="3dp"
+                                android:layout_marginRight="5dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_weight=".5"
+                                android:background="#fff"
+                                android:orientation="vertical"
+                                android:visibility="visible">
+
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="10dp"
+                                    android:layout_marginTop="6dp"
+                                    android:gravity="center"
+                                    android:text="شروع سفارش گیری شام"
+                                    android:textColor="#3d3d3d"
+                                    android:textSize="16sp" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:orientation="horizontal">
+
+                                    <Button
+                                        android:id="@+id/btn_begin2"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/btn_select"
+                                        android:text="انتخاب"
+                                        android:textColor="#fff"
+                                        android:textSize="18sp" />
+
+
+                                </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/txt_begin_time2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:gravity="center" />
+
+                                <TextView
+                                    android:id="@+id/txt_begin2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dp"
+                                    android:gravity="center"
+                                    android:text="لطفا ساعت شروع سفارش گیری را مشخص کنید"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                    android:textColor="@android:color/holo_red_dark"
+                                    android:textSize="14sp"
+                                    android:visibility="gone" />
+
+                            </LinearLayout>
+
+                        </TableRow>
 
                     </LinearLayout>
 

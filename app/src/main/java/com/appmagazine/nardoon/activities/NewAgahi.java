@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -46,7 +47,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appmagazine.nardoon.App;
+import com.appmagazine.nardoon.BeginTimePickerFragment2;
 import com.appmagazine.nardoon.FinishTimePickerFragment;
+import com.appmagazine.nardoon.FinishTimePickerFragment2;
 import com.appmagazine.nardoon.R;
 import com.appmagazine.nardoon.BeginTimePickerFragment;
 import com.appmagazine.nardoon.Utility;
@@ -69,6 +72,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import cz.msebera.android.httpclient.Header;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -96,18 +100,19 @@ public class NewAgahi extends AppCompatActivity {
     public  static final int RequestPermissionCode  = 1 ;
     DisplayMetrics displayMetrics ;
     int width, height;
-    boolean flag1,flag2,flag3,flag4,flag5,flag6,flag7,flag8 , flag10=false;
+    boolean flag1,flag2,flag3,flag4,flag5,flag6,flag7,flag8 , flag10, flag11, flag12=false;
     File file1 , file2,file3,fileAsli;
     CheckBox chkLink , chkTavafoqi;
     CheckBox chkSpecial;
     int AgahiPrice ,linkPrice , specialPrice;
-    Button SelectCat , btnFinish , btnBegin ;
+    Button SelectCat , btnFinish , btnBegin , btnFinishn , btnBeginn ;
     ImageButton btnAdd;
-    TextView txtFinish , txtBegin, txtBeginTime , txtFinishTime;
+    TextView txtFinish , txtBegin,txtFinishn , txtBeginn, txtBeginTime , txtFinishTime, txtBeginTimen , txtFinishTimen;
     EditText foodName , foodPrice;
     LinearLayout container , llMenu;
     JSONArray menuJsonArray;
     public static String startTime , endTime;
+    public static String startTimen , endTimen;
     private int countSpecial;
     public static Handler h;
     private Uri mCropImageUri;
@@ -115,6 +120,10 @@ public class NewAgahi extends AppCompatActivity {
     CropImageView imgCrop;
     private File auxFile;
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,6 +154,9 @@ public class NewAgahi extends AppCompatActivity {
 
         btnFinish = (Button) findViewById(R.id.btn_finish);
         btnBegin = (Button) findViewById(R.id.btn_begin);
+
+        btnFinishn = (Button) findViewById(R.id.btn_finish2);
+        btnBeginn = (Button) findViewById(R.id.btn_begin2);
         btnAdd = (ImageButton) findViewById(R.id.btn_add);
 
         price = (EditText) findViewById(R.id.edt_price);
@@ -206,525 +218,582 @@ public class NewAgahi extends AppCompatActivity {
         txtCat = (TextView) findViewById(R.id.txt_cat);
         txtImg = (TextView) findViewById(R.id.txt_img_asli);
 
+        txtBeginn = (TextView) findViewById(R.id.txt_begin2);
+        txtFinishn = (TextView) findViewById(R.id.txt_finish2);
+
         txtBegin = (TextView) findViewById(R.id.txt_begin);
         txtFinish = (TextView) findViewById(R.id.txt_finish);
+
+        txtBeginTimen = (TextView) findViewById(R.id.txt_begin_time2);
+        txtFinishTimen = (TextView) findViewById(R.id.txt_finish_time2);
+
         txtBeginTime = (TextView) findViewById(R.id.txt_begin_time);
         txtFinishTime = (TextView) findViewById(R.id.txt_finish_time);
 
-        content.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-        chkLink.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    link.setVisibility(View.VISIBLE);
+
+        SharedPreferences prefs = getSharedPreferences("LOGIN_ID", MODE_PRIVATE);
+        SharedPreferences prefs2 = getSharedPreferences("IS_LOGIN", MODE_PRIVATE);
+        String status = prefs2.getString("islogin", "0");
+        String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
+
+        if (status.matches("1") && !id_confirmaationSH.equals("0")) {
+
+
+            SharedPreferences prefsMobile = getSharedPreferences("MOBILE", MODE_PRIVATE);
+            final String mobile = prefsMobile.getString("mobile", "0");
+
+            phone.setText(mobile);
+
+            content.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+            chkLink.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+                        link.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        link.setVisibility(View.GONE);
+                        link.setText("");
+                    }
                 }
-                else{
-                    link.setVisibility(View.GONE);
-                    link.setText("");
+            });
+            chkTavafoqi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+                        price.setVisibility(View.GONE);
+                        price.setText("-1");
+                    }
+                    else{
+                        price.setText("");
+                        price.setVisibility(View.VISIBLE);
+                    }
                 }
+            });
+            ScrollView scroll = (ScrollView) findViewById(R.id.scroll) ;
+
+
+            Intent intent=getIntent();
+            name = intent.getStringExtra("NAME");
+            id = intent.getStringExtra("CATID");
+            subid = intent.getStringExtra("SUBID");
+
+            webServiceCountSpecial();
+            EnableRuntimePermission();
+
+            if (imgAsli.getVisibility() == View.GONE) {
+                SelectImage.setText("افزودن عکس");
+            } else if (imgAsli.getVisibility() == View.VISIBLE) {
+                SelectImage.setText("افزودن عکسی دیگر");
             }
-        });
-        chkTavafoqi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    price.setVisibility(View.GONE);
-                    price.setText("-1");
+
+            btnAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(App.context.LAYOUT_INFLATER_SERVICE);
+                    final View addView = layoutInflater.inflate(R.layout.row, null);
+                    TextView txtName = (TextView)addView.findViewById(R.id.txtName);
+                    TextView txtPrice = (TextView)addView.findViewById(R.id.txtPrice);
+                    txtName.setText(foodName.getText().toString());
+                    txtPrice.setText(foodPrice.getText().toString()+" تومان ");
+                    ImageView buttonRemove = (ImageView)addView.findViewById(R.id.remove);
+
+                    JSONObject object = new JSONObject();
+                    try {
+                        object.put("name", foodName.getText().toString());
+                        object.put("price", foodPrice.getText().toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    menuJsonArray.put(object);
+
+                    buttonRemove.setOnClickListener(new View.OnClickListener(){
+
+                        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                        @Override
+                        public void onClick(View v) {
+                            int index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
+                            addView.setVisibility(View.GONE);
+
+                            try {
+                                menuJsonArray.getJSONObject(index).put("name","0");
+                            }catch (JSONException e){e.printStackTrace();}
+
+
+                        }});
+
+                    container.addView(addView);
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(foodName.getWindowToken(), 0);
+                    foodName.setText("");
+                    foodPrice.setText("");
+                }});
+
+
+
+
+
+            imgDelete1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    imgAsli.setVisibility(View.GONE);
                 }
-                else{
-                    price.setText("");
-                    price.setVisibility(View.VISIBLE);
+            });
+            imgDelete2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    img2.setVisibility(View.GONE);
                 }
-            }
-        });
-        ScrollView scroll = (ScrollView) findViewById(R.id.scroll) ;
-
-
-        Intent intent=getIntent();
-        name = intent.getStringExtra("NAME");
-        id = intent.getStringExtra("CATID");
-        subid = intent.getStringExtra("SUBID");
-
-        webServiceCountSpecial();
-        EnableRuntimePermission();
-
-        if (imgAsli.getVisibility() == View.GONE) {
-            SelectImage.setText("افزودن عکس");
-        } else if (imgAsli.getVisibility() == View.VISIBLE) {
-            SelectImage.setText("افزودن عکسی دیگر");
-        }
-
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(App.context.LAYOUT_INFLATER_SERVICE);
-                final View addView = layoutInflater.inflate(R.layout.row, null);
-                TextView txtName = (TextView)addView.findViewById(R.id.txtName);
-                TextView txtPrice = (TextView)addView.findViewById(R.id.txtPrice);
-                txtName.setText(foodName.getText().toString());
-                txtPrice.setText(foodPrice.getText().toString()+" تومان ");
-                ImageView buttonRemove = (ImageView)addView.findViewById(R.id.remove);
-
-                JSONObject object = new JSONObject();
-                try {
-                    object.put("name", foodName.getText().toString());
-                    object.put("price", foodPrice.getText().toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            });
+            imgDelete3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    img3.setVisibility(View.GONE);
                 }
-                menuJsonArray.put(object);
-
-                buttonRemove.setOnClickListener(new View.OnClickListener(){
-
-                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                    @Override
-                    public void onClick(View v) {
-                        int index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
-                        addView.setVisibility(View.GONE);
-
-                        try {
-                            menuJsonArray.getJSONObject(index).put("name","0");
-                        }catch (JSONException e){e.printStackTrace();}
+            });
 
 
-                    }});
+            if (name!= null){
 
-                container.addView(addView);
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(foodName.getWindowToken(), 0);
-                foodName.setText("");
-                foodPrice.setText("");
-            }});
-
-
-
-
-
-        imgDelete1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imgAsli.setVisibility(View.GONE);
-            }
-        });
-        imgDelete2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                img2.setVisibility(View.GONE);
-            }
-        });
-        imgDelete3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                img3.setVisibility(View.GONE);
-            }
-        });
-
-
-        if (name!= null){
-
-            SelectCat.setText(name);
-            if(SelectCat.getText().equals("رستوران")){
-                txtCat.setVisibility(View.GONE);
-                txtCat.setText("ثبت آگهی در این بخش رایگان نمی باشد");
-                txtCat.setVisibility(View.VISIBLE);
-                llType.setVisibility(View.GONE);
-                llPrice.setVisibility(View.GONE);
-                llBegin.setVisibility(View.VISIBLE);
-                llFinish.setVisibility(View.VISIBLE);
-                container.setVisibility(View.VISIBLE);
-                llMenu.setVisibility(View.VISIBLE);
-                llForm.setVisibility(LinearLayout.VISIBLE);
-                llClose.setVisibility(LinearLayout.VISIBLE);
-                llErsal.setVisibility(LinearLayout.VISIBLE);
-                llSpecial.setVisibility(LinearLayout.GONE);
-
-
-            }else if(SelectCat.getText().equals("استخدام و کاریابی")) {
-                txtCat.setVisibility(View.GONE);
-                txtCat.setText("ثبت آگهی در این بخش رایگان نمی باشد");
-                txtCat.setVisibility(View.VISIBLE);
-                llType.setVisibility(View.GONE);
-                llPrice.setVisibility(View.GONE);
-                llBegin.setVisibility(View.GONE);
-                llFinish.setVisibility(View.GONE);
-                container.setVisibility(View.GONE);
-                llMenu.setVisibility(View.GONE);
-                llForm.setVisibility(LinearLayout.VISIBLE);
-                llClose.setVisibility(LinearLayout.VISIBLE);
-                llErsal.setVisibility(LinearLayout.VISIBLE);
-                llSpecial.setVisibility(LinearLayout.VISIBLE);
-
-
-            }else
-            {
-                txtCat.setVisibility(View.GONE);
-                llForm.setVisibility(LinearLayout.VISIBLE);
-                llClose.setVisibility(LinearLayout.VISIBLE);
-                llErsal.setVisibility(LinearLayout.VISIBLE);
-                llBegin.setVisibility(View.GONE);
-                llFinish.setVisibility(View.GONE);
-                container.setVisibility(View.GONE);
-                llMenu.setVisibility(View.GONE);
-                llSpecial.setVisibility(LinearLayout.VISIBLE);
-
-
-            }
-
-        }
-
-        btnBegin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment newFragment = new BeginTimePickerFragment();
-                newFragment.show(getFragmentManager(),"TimePicker");
-
-            }
-        });
-        btnFinish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment newFragment = new FinishTimePickerFragment();
-                newFragment.show(getFragmentManager(),"TimePicker");
-
-            }
-        });
-
-
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NewAgahi.this.finish();
-                Intent intent = new Intent(App.context, Main.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-
-            }
-        });
-        llClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NewAgahi.this.finish();
-                Intent intent = new Intent(App.context, Main.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-
-            }
-        });
-        llBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        ibBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        tvBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        llErsal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
+                SelectCat.setText(name);
                 if(SelectCat.getText().equals("رستوران")){
-
-                    if(chkSpecial.isChecked()){
-                        webServiceCountSpecial();
-                        if(countSpecial>=5) {
-                            flag10 = true;
-                            App.CustomToast("در حال حاضر امکان انتخاب آگهی ویژه برای این دسته بندی وجود ندارد .");
-                        }
-                    } else {
-                        flag10 = false;
-                    }
-                    if (phone.getText().toString().matches("")) {
-                        txtMobile.setVisibility(View.VISIBLE);
-                        flag3 = true;
-                    } else {
-                        txtMobile.setVisibility(View.GONE);
-                        flag3 = false;
-                    }
-
-                    if (txtBeginTime.getText().toString().matches("")) {
-                        txtBegin.setVisibility(View.VISIBLE);
-                        flag1 = true;
-                    } else {
-                        txtBegin.setVisibility(View.GONE);
-                        flag1 = false;
-                    }
-
-                    if (txtFinishTime.getText().toString().matches("")) {
-                        txtFinish.setVisibility(View.VISIBLE);
-                        flag7 = true;
-                    } else {
-                        txtFinish.setVisibility(View.GONE);
-                        flag7 = false;
-                    }
+                    txtCat.setVisibility(View.GONE);
+                    //  txtCat.setText("ثبت آگهی در این بخش رایگان نمی باشد");
+                    txtCat.setVisibility(View.VISIBLE);
+                    llType.setVisibility(View.GONE);
+                    llPrice.setVisibility(View.GONE);
+                    llBegin.setVisibility(View.VISIBLE);
+                    llFinish.setVisibility(View.VISIBLE);
+                    container.setVisibility(View.VISIBLE);
+                    llMenu.setVisibility(View.VISIBLE);
+                    llForm.setVisibility(LinearLayout.VISIBLE);
+                    llClose.setVisibility(LinearLayout.VISIBLE);
+                    llErsal.setVisibility(LinearLayout.VISIBLE);
+                    llSpecial.setVisibility(LinearLayout.GONE);
 
 
-                    if (location.getText().toString().matches("")) {
-                        txtLocation.setVisibility(View.VISIBLE);
-                        flag4 = true;
-                    } else {
-                        txtLocation.setVisibility(View.GONE);
-                        flag4 = false;
-                    }
+                }else
+                if(SelectCat.getText().equals("استخدام و کاریابی")) {
+                    txtCat.setVisibility(View.GONE);
+                    txtCat.setText("ثبت آگهی در این بخش رایگان نمی باشد");
+                    txtCat.setVisibility(View.VISIBLE);
+                    llType.setVisibility(View.GONE);
+                    llPrice.setVisibility(View.GONE);
+                    llBegin.setVisibility(View.GONE);
+                    llFinish.setVisibility(View.GONE);
+                    container.setVisibility(View.GONE);
+                    llMenu.setVisibility(View.GONE);
+                    llForm.setVisibility(LinearLayout.VISIBLE);
+                    llClose.setVisibility(LinearLayout.VISIBLE);
+                    llErsal.setVisibility(LinearLayout.VISIBLE);
+                    llSpecial.setVisibility(LinearLayout.VISIBLE);
 
 
-                    if (title.getText().toString().matches("")) {
-                        txtTitle.setVisibility(View.VISIBLE);
-                        flag5 = true;
-                    } else {
-                        txtTitle.setVisibility(View.GONE);
-                        flag5 = false;
-                    }
+                }else
+                {
+                    txtCat.setVisibility(View.GONE);
+                    llForm.setVisibility(LinearLayout.VISIBLE);
+                    llClose.setVisibility(LinearLayout.VISIBLE);
+                    llErsal.setVisibility(LinearLayout.VISIBLE);
+                    llBegin.setVisibility(View.GONE);
+                    llFinish.setVisibility(View.GONE);
+                    container.setVisibility(View.GONE);
+                    llMenu.setVisibility(View.GONE);
+                    llSpecial.setVisibility(LinearLayout.VISIBLE);
 
 
-                    if (content.getText().toString().matches("")) {
-                        txtContent.setVisibility(View.VISIBLE);
-                        flag6 = true;
-                    } else {
-                        txtContent.setVisibility(View.GONE);
-                        flag6 = false;
-                    }
-
-
-                    if (imgAsli.getVisibility() == View.GONE && (img2.getVisibility() == View.VISIBLE || img3.getVisibility() == View.VISIBLE)) {
-                        txtImg.setVisibility(View.VISIBLE);
-                        flag8 = true;
-                    } else {
-                        txtImg.setVisibility(View.GONE);
-                        flag8 = false;
-                    }
-
-
-                    if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false && flag8 == false && flag10 == false) {
-
-                        dialog = ProgressDialog.show(NewAgahi.this, null, null, true, false);
-                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-                        dialog.setContentView(R.layout.progress_layout_small);
-
-                        int selectedId = radioTypeGroup.getCheckedRadioButtonId();
-                        radioTypeButton = (RadioButton) findViewById(selectedId);
-
-                        if (radioTypeButton != null) {
-
-                            type = radioTypeButton.getText().toString();
-                        }
-                        webServiceNewAgahi();
-
-                    }
                 }
-                else if(SelectCat.getText().equals("استخدام و کاریابی")){
 
-                    if(chkSpecial.isChecked()){
-                        webServiceCountSpecial();
-                        if(countSpecial>=5) {
-                            flag10 = true;
-                            App.CustomToast("در حال حاضر امکان انتخاب آگهی ویژه برای این دسته بندی وجود ندارد .");
-                        }
-                    } else {
-                        flag10 = false;
-                    }
-                    if (phone.getText().toString().matches("")) {
-                        txtMobile.setVisibility(View.VISIBLE);
-                        flag3 = true;
-                    } else {
-                        txtMobile.setVisibility(View.GONE);
-                        flag3 = false;
-                    }
+            }
 
+            btnBeginn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogFragment newFragment = new BeginTimePickerFragment2();
+                    newFragment.show(getFragmentManager(),"TimePicker");
 
-                    if (location.getText().toString().matches("")) {
-                        txtLocation.setVisibility(View.VISIBLE);
-                        flag4 = true;
-                    } else {
-                        txtLocation.setVisibility(View.GONE);
-                        flag4 = false;
-                    }
-
-
-                    if (title.getText().toString().matches("")) {
-                        txtTitle.setVisibility(View.VISIBLE);
-                        flag5 = true;
-                    } else {
-                        txtTitle.setVisibility(View.GONE);
-                        flag5 = false;
-                    }
-
-
-                    if (content.getText().toString().matches("")) {
-                        txtContent.setVisibility(View.VISIBLE);
-                        flag6 = true;
-                    } else {
-                        txtContent.setVisibility(View.GONE);
-                        flag6 = false;
-                    }
-
-
-                    if (imgAsli.getVisibility() == View.GONE && (img2.getVisibility() == View.VISIBLE || img3.getVisibility() == View.VISIBLE)) {
-                        txtImg.setVisibility(View.VISIBLE);
-                        flag8 = true;
-                    } else {
-                        txtImg.setVisibility(View.GONE);
-                        flag8 = false;
-                    }
-
-
-                    if ( flag3 == false && flag4 == false && flag5 == false && flag6 == false  && flag8 == false && flag10 == false) {
-
-                        dialog = ProgressDialog.show(NewAgahi.this, null, null, true, false);
-                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-                        dialog.setContentView(R.layout.progress_layout_small);
-
-                        int selectedId = radioTypeGroup.getCheckedRadioButtonId();
-                        radioTypeButton = (RadioButton) findViewById(selectedId);
-
-                        if (radioTypeButton != null) {
-
-                            type = radioTypeButton.getText().toString();
-                        }
-                        webServiceNewAgahi();
-
-                    }
                 }
-                else{
+            });
+            btnBegin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogFragment newFragment = new BeginTimePickerFragment();
+                    newFragment.show(getFragmentManager(),"TimePicker");
 
-                    if(chkSpecial.isChecked()){
-                        webServiceCountSpecial();
-                        if(countSpecial>=5) {
-                            flag10 = true;
-                            App.CustomToast("در حال حاضر امکان انتخاب آگهی ویژه برای این دسته بندی وجود ندارد .");
-                        }
-                        else {
+                }
+            });
+            btnFinish.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogFragment newFragment = new FinishTimePickerFragment();
+                    newFragment.show(getFragmentManager(),"TimePicker");
+
+                }
+            });
+            btnFinishn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogFragment newFragment = new FinishTimePickerFragment2();
+                    newFragment.show(getFragmentManager(),"TimePicker");
+
+                }
+            });
+
+
+            close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NewAgahi.this.finish();
+                    Intent intent = new Intent(App.context, Main.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+
+                }
+            });
+            llClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    NewAgahi.this.finish();
+                    Intent intent = new Intent(App.context, Main.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+
+                }
+            });
+            llBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+            ibBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+            tvBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+
+            llErsal.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    if(SelectCat.getText().equals("رستوران")){
+
+                        if(chkSpecial.isChecked()){
+                            webServiceCountSpecial();
+                            if(countSpecial>=5) {
+                                flag10 = true;
+                                App.CustomToast("در حال حاضر امکان انتخاب آگهی ویژه برای این دسته بندی وجود ندارد .");
+                            }
+                        } else {
                             flag10 = false;
                         }
-                    } else {
-                        flag10 = false;
-                    }
-
-                    if (price.getText().toString().matches("")) {
-                        txtPrice.setVisibility(View.VISIBLE);
-                        flag1 = true;
-
-                    } else {
-                        txtPrice.setVisibility(View.GONE);
-                        flag1 = false;
-                    }
-
-                    if (phone.getText().toString().matches("")) {
-                        txtMobile.setVisibility(View.VISIBLE);
-                        flag3 = true;
-                    } else {
-                        txtMobile.setVisibility(View.GONE);
-                        flag3 = false;
-                    }
-
-
-                    if (location.getText().toString().matches("")) {
-                        txtLocation.setVisibility(View.VISIBLE);
-                        flag4 = true;
-                    } else {
-                        txtLocation.setVisibility(View.GONE);
-                        flag4 = false;
-                    }
-
-
-                    if (title.getText().toString().matches("")) {
-                        txtTitle.setVisibility(View.VISIBLE);
-                        flag5 = true;
-                    } else {
-                        txtTitle.setVisibility(View.GONE);
-                        flag5 = false;
-                    }
-
-
-                    if (content.getText().toString().matches("")) {
-                        txtContent.setVisibility(View.VISIBLE);
-                        flag6 = true;
-                    } else {
-                        txtContent.setVisibility(View.GONE);
-                        flag6 = false;
-                    }
-
-
-                    if (radioTypeGroup.getCheckedRadioButtonId() == -1) {
-                        txtType.setVisibility(View.VISIBLE);
-                        flag7 = true;
-                    } else {
-                        txtType.setVisibility(View.GONE);
-                        flag7 = false;
-                    }
-
-
-                    if (imgAsli.getVisibility() == View.GONE && (img2.getVisibility() == View.VISIBLE || img3.getVisibility() == View.VISIBLE)) {
-                        txtImg.setVisibility(View.VISIBLE);
-                        flag8 = true;
-                    } else {
-                        txtImg.setVisibility(View.GONE);
-                        flag8 = false;
-                    }
-
-
-                    if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false && flag8 == false && flag10 == false)  {
-
-                        dialog = ProgressDialog.show(NewAgahi.this, null, null, true, false);
-                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-                        dialog.setContentView(R.layout.progress_layout_small);
-
-                        int selectedId = radioTypeGroup.getCheckedRadioButtonId();
-                        radioTypeButton = (RadioButton) findViewById(selectedId);
-
-                        if (radioTypeButton != null) {
-
-                            type = radioTypeButton.getText().toString();
+                        if (phone.getText().toString().matches("")) {
+                            txtMobile.setVisibility(View.VISIBLE);
+                            flag3 = true;
+                        } else {
+                            txtMobile.setVisibility(View.GONE);
+                            flag3 = false;
                         }
-                        webServiceNewAgahi();
 
+                        if (txtBeginTime.getText().toString().matches("") ) {
+                            txtBegin.setVisibility(View.VISIBLE);
+                            flag1 = true;
+                        } else {
+                            txtBegin.setVisibility(View.GONE);
+                            flag1 = false;
+                        }
+                        if (txtBeginTimen.getText().toString().matches("") ) {
+                            txtBeginn.setVisibility(View.VISIBLE);
+                            flag11 = true;
+                        } else {
+                            txtBeginn.setVisibility(View.GONE);
+                            flag11 = false;
+                        }
+
+                        if (txtFinishTime.getText().toString().matches("")) {
+                            txtFinish.setVisibility(View.VISIBLE);
+                            flag7 = true;
+                        } else {
+                            txtFinish.setVisibility(View.GONE);
+                            flag7 = false;
+                        }
+                        if (txtFinishTimen.getText().toString().matches("")) {
+                            txtFinishn.setVisibility(View.VISIBLE);
+                            flag12 = true;
+                        } else {
+                            txtFinishn.setVisibility(View.GONE);
+                            flag12 = false;
+                        }
+
+
+                        if (location.getText().toString().matches("")) {
+                            txtLocation.setVisibility(View.VISIBLE);
+                            flag4 = true;
+                        } else {
+                            txtLocation.setVisibility(View.GONE);
+                            flag4 = false;
+                        }
+
+
+                        if (title.getText().toString().matches("")) {
+                            txtTitle.setVisibility(View.VISIBLE);
+                            flag5 = true;
+                        } else {
+                            txtTitle.setVisibility(View.GONE);
+                            flag5 = false;
+                        }
+
+
+                        if (content.getText().toString().matches("")) {
+                            txtContent.setVisibility(View.VISIBLE);
+                            flag6 = true;
+                        } else {
+                            txtContent.setVisibility(View.GONE);
+                            flag6 = false;
+                        }
+
+
+                        if (imgAsli.getVisibility() == View.GONE && (img2.getVisibility() == View.VISIBLE || img3.getVisibility() == View.VISIBLE)) {
+                            txtImg.setVisibility(View.VISIBLE);
+                            flag8 = true;
+                        } else {
+                            txtImg.setVisibility(View.GONE);
+                            flag8 = false;
+                        }
+
+
+                        if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false && flag8 == false && flag10 == false&& flag11 == false&& flag12 == false) {
+
+                            dialog = ProgressDialog.show(NewAgahi.this, null, null, true, false);
+                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                            dialog.setContentView(R.layout.progress_layout_small);
+
+                            int selectedId = radioTypeGroup.getCheckedRadioButtonId();
+                            radioTypeButton = (RadioButton) findViewById(selectedId);
+
+                            if (radioTypeButton != null) {
+
+                                type = radioTypeButton.getText().toString();
+                            }
+                            webServiceNewAgahi();
+
+                        }
+                    }
+                    else if(SelectCat.getText().equals("استخدام و کاریابی")){
+
+                        if(chkSpecial.isChecked()){
+                            webServiceCountSpecial();
+                            if(countSpecial>=5) {
+                                flag10 = true;
+                                App.CustomToast("در حال حاضر امکان انتخاب آگهی ویژه برای این دسته بندی وجود ندارد .");
+                            }
+                        } else {
+                            flag10 = false;
+                        }
+                        if (phone.getText().toString().matches("")) {
+                            txtMobile.setVisibility(View.VISIBLE);
+                            flag3 = true;
+                        } else {
+                            txtMobile.setVisibility(View.GONE);
+                            flag3 = false;
+                        }
+
+
+                        if (location.getText().toString().matches("")) {
+                            txtLocation.setVisibility(View.VISIBLE);
+                            flag4 = true;
+                        } else {
+                            txtLocation.setVisibility(View.GONE);
+                            flag4 = false;
+                        }
+
+
+                        if (title.getText().toString().matches("")) {
+                            txtTitle.setVisibility(View.VISIBLE);
+                            flag5 = true;
+                        } else {
+                            txtTitle.setVisibility(View.GONE);
+                            flag5 = false;
+                        }
+
+
+                        if (content.getText().toString().matches("")) {
+                            txtContent.setVisibility(View.VISIBLE);
+                            flag6 = true;
+                        } else {
+                            txtContent.setVisibility(View.GONE);
+                            flag6 = false;
+                        }
+
+
+                        if (imgAsli.getVisibility() == View.GONE && (img2.getVisibility() == View.VISIBLE || img3.getVisibility() == View.VISIBLE)) {
+                            txtImg.setVisibility(View.VISIBLE);
+                            flag8 = true;
+                        } else {
+                            txtImg.setVisibility(View.GONE);
+                            flag8 = false;
+                        }
+
+
+                        if ( flag3 == false && flag4 == false && flag5 == false && flag6 == false  && flag8 == false && flag10 == false) {
+
+                            dialog = ProgressDialog.show(NewAgahi.this, null, null, true, false);
+                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                            dialog.setContentView(R.layout.progress_layout_small);
+
+                            int selectedId = radioTypeGroup.getCheckedRadioButtonId();
+                            radioTypeButton = (RadioButton) findViewById(selectedId);
+
+                            if (radioTypeButton != null) {
+
+                                type = radioTypeButton.getText().toString();
+                            }
+                            webServiceNewAgahi();
+
+                        }
+                    }
+                    else{
+
+                        if(chkSpecial.isChecked()){
+                            webServiceCountSpecial();
+                            if(countSpecial>=5) {
+                                flag10 = true;
+                                App.CustomToast("در حال حاضر امکان انتخاب آگهی ویژه برای این دسته بندی وجود ندارد .");
+                            }
+                            else {
+                                flag10 = false;
+                            }
+                        } else {
+                            flag10 = false;
+                        }
+
+                        if (price.getText().toString().matches("")) {
+                            txtPrice.setVisibility(View.VISIBLE);
+                            flag1 = true;
+
+                        } else {
+                            txtPrice.setVisibility(View.GONE);
+                            flag1 = false;
+                        }
+
+                        if (phone.getText().toString().matches("")) {
+                            txtMobile.setVisibility(View.VISIBLE);
+                            flag3 = true;
+                        } else {
+                            txtMobile.setVisibility(View.GONE);
+                            flag3 = false;
+                        }
+
+
+                        if (location.getText().toString().matches("")) {
+                            txtLocation.setVisibility(View.VISIBLE);
+                            flag4 = true;
+                        } else {
+                            txtLocation.setVisibility(View.GONE);
+                            flag4 = false;
+                        }
+
+
+                        if (title.getText().toString().matches("")) {
+                            txtTitle.setVisibility(View.VISIBLE);
+                            flag5 = true;
+                        } else {
+                            txtTitle.setVisibility(View.GONE);
+                            flag5 = false;
+                        }
+
+
+                        if (content.getText().toString().matches("")) {
+                            txtContent.setVisibility(View.VISIBLE);
+                            flag6 = true;
+                        } else {
+                            txtContent.setVisibility(View.GONE);
+                            flag6 = false;
+                        }
+
+
+                        if (radioTypeGroup.getCheckedRadioButtonId() == -1) {
+                            txtType.setVisibility(View.VISIBLE);
+                            flag7 = true;
+                        } else {
+                            txtType.setVisibility(View.GONE);
+                            flag7 = false;
+                        }
+
+
+                        if (imgAsli.getVisibility() == View.GONE && (img2.getVisibility() == View.VISIBLE || img3.getVisibility() == View.VISIBLE)) {
+                            txtImg.setVisibility(View.VISIBLE);
+                            flag8 = true;
+                        } else {
+                            txtImg.setVisibility(View.GONE);
+                            flag8 = false;
+                        }
+
+
+                        if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false && flag8 == false && flag10 == false)  {
+
+                            dialog = ProgressDialog.show(NewAgahi.this, null, null, true, false);
+                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                            dialog.setContentView(R.layout.progress_layout_small);
+
+                            int selectedId = radioTypeGroup.getCheckedRadioButtonId();
+                            radioTypeButton = (RadioButton) findViewById(selectedId);
+
+                            if (radioTypeButton != null) {
+
+                                type = radioTypeButton.getText().toString();
+                            }
+                            webServiceNewAgahi();
+
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        SelectCat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (SelectCat.getText().equals("انتخاب"))
-                {
+            SelectCat.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (SelectCat.getText().equals("انتخاب"))
+                    {
 
-                    Intent intent = new Intent(App.context, cats.class);
+                        Intent intent = new Intent(App.context, cats.class);
 
-                    startActivity(intent);
-                }else{
-                    Intent intent = new Intent(App.context, cats.class);
+                        startActivity(intent);
+                    }else{
+                        Intent intent = new Intent(App.context, cats.class);
 
-                    startActivity(intent);
-                    //    finish();
+                        startActivity(intent);
+                        //    finish();
+                    }
                 }
-            }
-        });
+            });
 
 
 
-        SelectImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onSelectImageClick(v);
-            }
-        });
+            SelectImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onSelectImageClick(v);
+                }
+            });
 
+        }else {
+            Intent intent = new Intent(App.context, Login.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     public  void webServiceNewAgahi()
@@ -741,12 +810,15 @@ public class NewAgahi extends AppCompatActivity {
             params.put("special", "0");
         }
 
-        if(chkLink.isChecked() || chkSpecial.isChecked() || SelectCat.getText().equals("استخدام و کاریابی") || SelectCat.getText().equals("رستوران")){
+        //  if(chkLink.isChecked() || chkSpecial.isChecked() || SelectCat.getText().equals("استخدام و کاریابی") || SelectCat.getText().equals("رستوران")){
+        if(chkLink.isChecked() || chkSpecial.isChecked() || SelectCat.getText().equals("استخدام و کاریابی")){
             params.put("validity","3");
         }
         if(SelectCat.getText().equals("رستوران")) {
             params.put("start",startTime);
             params.put("end",endTime);
+            params.put("startn",startTimen);
+            params.put("endn",endTimen);
             params.put("special", "0");
 
 
@@ -846,9 +918,9 @@ public class NewAgahi extends AppCompatActivity {
         });
     }
 
-   public void onSelectImageClick(View view) {
-       CropImage.startPickImageActivity(this);
-   }
+    public void onSelectImageClick(View view) {
+        CropImage.startPickImageActivity(this);
+    }
 
     @Override
     @SuppressLint("NewApi")
@@ -969,7 +1041,7 @@ public class NewAgahi extends AppCompatActivity {
             // required permissions granted, start crop image activity
             startCropImageActivity(mCropImageUri);
         } else {
-          //  Toast.makeText(this, "Cancelling, required permissions are not granted", Toast.LENGTH_LONG).show();
+            //  Toast.makeText(this, "Cancelling, required permissions are not granted", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -987,18 +1059,23 @@ public class NewAgahi extends AppCompatActivity {
                 .start(this);
     }
 
-    public void EnableRuntimePermission(){
+    public boolean  EnableRuntimePermission(){
 
-        if (ActivityCompat.shouldShowRequestPermissionRationale(NewAgahi.this,
-                Manifest.permission.CAMERA))
-        {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
 
-        } else {
-
-            ActivityCompat.requestPermissions(NewAgahi.this,new String[]{
-                    Manifest.permission.CAMERA}, RequestPermissionCode);
-
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
         }
+        else { //permission is automatically granted on sdk<23 upon installation
+            Log.v("tag","Permission is granted");
+            return true;
+        }
+
     }
 
 

@@ -7,18 +7,23 @@ import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.design.widget.TabItem;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.appmagazine.nardoon.Adapter.MyNiniAdapter;
 import com.appmagazine.nardoon.Adapter.NewsListAdapter;
+import com.appmagazine.nardoon.Adapter.PosterAdapter;
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.ArticleAdapter;
 import com.appmagazine.nardoon.EndlessRecyclerViewScrollListener;
@@ -48,9 +53,6 @@ public class NewsList extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
     EndlessRecyclerViewScrollListener scrollListener;
     LinearLayout llFilter;
-    private String id_confirmaation;
-    private String status;
-    private String id_confirmaationSH;
     String cat;
 
     @Override
@@ -81,60 +83,55 @@ public class NewsList extends AppCompatActivity {
             }
         });
 
+        recyclerView = (RecyclerView) findViewById(R.id.list);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
 
 
-        recyclerView = (RecyclerView) findViewById(R.id.list);
+        final HorizontalScrollView view = (HorizontalScrollView) findViewById(R.id.scroll);
+        view.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                view.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
+            }
+        }, 10);
+
+        Button siasi = (Button)
+                findViewById(R.id.siasi);
+        Button ejtemaei = (Button) findViewById(R.id.ejtemaei);
+        Button eghtesadi = (Button) findViewById(R.id.eghtesadi);
+        Button majazi = (Button) findViewById(R.id.majazi);
+        Button pezeshki = (Button) findViewById(R.id.pezeshki);
+        Button varzeshi = (Button) findViewById(R.id.varzeshi);
+        Button all = (Button) findViewById(R.id.all);
+
+        LinearLayout llTabs = (LinearLayout) findViewById(R.id.llTabs);
+
         linearLayoutManager = new LinearLayoutManager(App.context, LinearLayoutManager.VERTICAL, false);
         array = new ArrayList<>();
+        adapter = new NewsListAdapter(App.context, array);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(adapter);
 
+        ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
-            ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            final NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-            if (mWifi.isConnected() || isMobileDataEnabled()) {
-                if(cat.equals("اخبار روزانه")){
-                    String urlString = "http://www.yjc.ir/fa/rss/allnews";
-                    Parser parser = new Parser();
-                    parser.execute(urlString);
-                    parser.onFinish(new Parser.OnTaskCompleted() {
-
-                        @Override
-                        public void onTaskCompleted(ArrayList<Article> list) {
-                            //what to do when the parsing is done
-                            //the Array List contains all article's data. For example you can use it for your adapter.
-                            ArticleAdapter adapter = new ArticleAdapter(list, R.layout.item_news, NewsList.this);
-                            recyclerView.setLayoutManager(linearLayoutManager);
-                            recyclerView.setAdapter(adapter);
-                            swipeRefreshLayout.setRefreshing(false);
-
-                        }
-
-                        @Override
-                        public void onError() {
-                            //what to do in case of error
-                        }
-                    });
-
-
-                }else {
-                    webServiceGetNini();
-                    adapter = new NewsListAdapter(NewsList.this, array);
-                    recyclerView.setLayoutManager(linearLayoutManager);
-                    recyclerView.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
-                    adapter.update(array);
-
-
-
-
-                }
-                swipeRefreshLayout.setRefreshing(true);
+        if (mWifi.isConnected() || isMobileDataEnabled()) {
+            if(cat.equals("اخبار روزانه")){
+                llTabs.setVisibility(View.VISIBLE);
+                setRss("http://www.yjc.ir/fa/rss/1/129");
 
             }else {
-                App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
-                swipeRefreshLayout.setRefreshing(false);
+                llTabs.setVisibility(View.GONE);
+                webServiceGetNini();
             }
+            swipeRefreshLayout.setRefreshing(true);
+
+        }else {
+            App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
+            swipeRefreshLayout.setRefreshing(false);
+        }
+
 
         scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
@@ -143,67 +140,41 @@ public class NewsList extends AppCompatActivity {
                 NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
                 if (mWifi.isConnected() || isMobileDataEnabled()) {
+                    if(cat.equals("اخبار روزانه")){
+                        String urlString = "https://www.yjc.ir/fa/rss/1/129";
+                        Parser parser = new Parser();
+                        parser.execute(urlString);
+                        parser.onFinish(new Parser.OnTaskCompleted() {
+
+                            @Override
+                            public void onTaskCompleted(ArrayList<Article> list) {
+                                //what to do when the parsing is done
+                                //the Array List contains all article's data. For example you can use it for your adapter.
+                                ArticleAdapter adapter = new ArticleAdapter(list, R.layout.item_news, NewsList.this);
+                                recyclerView.setLayoutManager(linearLayoutManager);
+                                recyclerView.setAdapter(adapter);
+                                App.CustomToast("mishe");
+                                swipeRefreshLayout.setRefreshing(false);
+
+                            }
+
+                            @Override
+                            public void onError() {
+                                //what to do in case of error
+                            }
+                        });
+
+
+                    }else {
+                        webServiceGetNini();
+                    }
                     swipeRefreshLayout.setRefreshing(true);
-                    webServiceGetNini();
-                }else{
+
+                }else {
                     App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
                     swipeRefreshLayout.setRefreshing(false);
                 }
-            }
-        };
 
-
-        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                if (status.matches("1") && !id_confirmaationSH.equals("0")) {
-                    ConnectivityManager connManager = (ConnectivityManager) App.context.getSystemService(Context.CONNECTIVITY_SERVICE);
-                    NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-                    if (mWifi.isConnected() || isMobileDataEnabled()) {
-                        if(cat.equals("اخبار روزانه")){
-                            String urlString = "http://www.yjc.ir/fa/rss/allnews";
-                            Parser parser = new Parser();
-                            parser.execute(urlString);
-                            parser.onFinish(new Parser.OnTaskCompleted() {
-
-                                @Override
-                                public void onTaskCompleted(ArrayList<Article> list) {
-                                    //what to do when the parsing is done
-                                    //the Array List contains all article's data. For example you can use it for your adapter.
-                                    ArticleAdapter adapter = new ArticleAdapter(list, R.layout.item_news, NewsList.this);
-                                    recyclerView.setLayoutManager(linearLayoutManager);
-                                    recyclerView.setAdapter(adapter);
-                                    App.CustomToast("mishe");
-                                    swipeRefreshLayout.setRefreshing(false);
-
-                                }
-
-                                @Override
-                                public void onError() {
-                                    //what to do in case of error
-                                }
-                            });
-
-
-                        }else {
-                            webServiceGetNini();
-                            adapter = new NewsListAdapter(App.context, array);
-
-                            recyclerView.setLayoutManager(linearLayoutManager);
-                            recyclerView.setAdapter(adapter);
-
-                        }
-                        swipeRefreshLayout.setRefreshing(true);
-
-                    }else {
-                        App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                    }else {
-                    Intent intent = new Intent(App.context, Login.class);
-                    startActivity(intent);
-                }
             }
         };
 
@@ -214,47 +185,72 @@ public class NewsList extends AppCompatActivity {
 
                 array = new ArrayList<News>();
 
-                    if (mWifi.isConnected() || isMobileDataEnabled()) {
-                        if(cat.equals("اخبار روزانه")){
-                            String urlString = "http://www.farsnews.com/RSS";
-                            Parser parser = new Parser();
-                            parser.execute(urlString);
-                            parser.onFinish(new Parser.OnTaskCompleted() {
+                if (mWifi.isConnected() || isMobileDataEnabled()) {
+                    if(cat.equals("اخبار روزانه")){
 
-                                @Override
-                                public void onTaskCompleted(ArrayList<Article> list) {
-                                    //what to do when the parsing is done
-                                    //the Array List contains all article's data. For example you can use it for your adapter.
-                                    ArticleAdapter adapter = new ArticleAdapter(list, R.layout.item_news, NewsList.this);
-                                    recyclerView.setLayoutManager(linearLayoutManager);
-                                    recyclerView.setAdapter(adapter);
-                                    swipeRefreshLayout.setRefreshing(false);
-
-                                }
-
-                                @Override
-                                public void onError() {
-                                    //what to do in case of error
-                                }
-                            });
-
-
-                        }else {
-                            webServiceGetNini();
-                            adapter = new NewsListAdapter(App.context, array);
-
-                            recyclerView.setLayoutManager(linearLayoutManager);
-                            recyclerView.setAdapter(adapter);
-                            adapter.notifyDataSetChanged();
-
-                        }
-                        swipeRefreshLayout.setRefreshing(true);
+                        setRss("https://www.yjc.ir/fa/rss/1/129");
 
                     }else {
-                        App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
-                        swipeRefreshLayout.setRefreshing(false);
+                        webServiceGetNini();
+
                     }
+                    swipeRefreshLayout.setRefreshing(true);
+
+                }else {
+                    App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
+                    swipeRefreshLayout.setRefreshing(false);
+                }
                 scrollListener.resetState();
+            }
+        });
+
+        all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                swipeRefreshLayout.setRefreshing(true);
+                setRss("https://www.yjc.ir/fa/rss/1/129");
+            }
+        });
+        siasi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                swipeRefreshLayout.setRefreshing(true);
+                setRss("https://www.yjc.ir/fa/rss/3");
+            }
+        });
+        ejtemaei.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                swipeRefreshLayout.setRefreshing(true);
+                setRss("https://www.yjc.ir/fa/rss/5");
+            }
+        });
+        eghtesadi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                swipeRefreshLayout.setRefreshing(true);
+                setRss("https://www.yjc.ir/fa/rss/6");
+            }
+        });
+        majazi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                swipeRefreshLayout.setRefreshing(true);
+                setRss("https://www.yjc.ir/fa/rss/14");
+            }
+        });
+        pezeshki.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                swipeRefreshLayout.setRefreshing(true);
+                setRss("https://www.yjc.ir/fa/rss/7");
+            }
+        });
+        varzeshi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                swipeRefreshLayout.setRefreshing(true);
+                setRss("https://www.yjc.ir/fa/rss/8");
             }
         });
 
@@ -326,5 +322,28 @@ public class NewsList extends AppCompatActivity {
         }
     }
 
+    public void setRss(String url){
+        Parser parser = new Parser();
+        parser.execute(url);
+        parser.onFinish(new Parser.OnTaskCompleted() {
+
+            @Override
+            public void onTaskCompleted(ArrayList<Article> list) {
+                //what to do when the parsing is done
+                //the Array List contains all article's data. For example you can use it for your adapter.
+                ArticleAdapter adapter = new ArticleAdapter(list, R.layout.item_news, NewsList.this);
+                recyclerView.setLayoutManager(linearLayoutManager);
+                recyclerView.setAdapter(adapter);
+                swipeRefreshLayout.setRefreshing(false);
+
+            }
+
+            @Override
+            public void onError() {
+                //what to do in case of error
+            }
+        });
+
+    }
 
 }

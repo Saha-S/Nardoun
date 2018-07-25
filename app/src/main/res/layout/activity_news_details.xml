@@ -20,6 +20,7 @@
         android:layout_marginRight="4dp">
 
         <ScrollView
+            android:id="@+id/scrl"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
@@ -28,6 +29,7 @@
                 android:id="@+id/ll"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:focusableInTouchMode="true"
                 android:orientation="vertical"
                 android:visibility="visible">
 
@@ -98,112 +100,111 @@
                                 android:gravity="right|center"
                                 android:orientation="horizontal">
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:orientation="vertical"
-                                android:layout_weight="1">
                                 <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:gravity="left"
-                                    android:layout_marginBottom="5dp">
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
 
-                                    <TableRow
-                                        android:layout_width="0dp"
-                                        android:layout_height="match_parent"
-                                        android:layout_weight="1"
-                                        android:gravity="left">
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="5dp"
+                                        android:gravity="left"
+                                        android:orientation="horizontal">
 
-                                        <LinearLayout
-                                            android:id="@+id/unlike"
-                                            android:orientation="horizontal"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_margin="5dp"
-                                            android:paddingLeft="5dp"
-                                            android:paddingRight="5dp"
-                                            android:background="@drawable/unlikebtn"
-                                            >
-                                            <ImageView
-                                                android:layout_width="20dp"
-                                                android:layout_height="20dp"
-                                                android:padding="2dp"
+                                        <TableRow
+                                            android:layout_width="0dp"
+                                            android:layout_height="match_parent"
+                                            android:layout_weight="1"
+                                            android:gravity="left">
 
-                                                app:srcCompat="@mipmap/minus" />
-
-
-                                            <TextView
-                                                android:id="@+id/txt_unlike"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="match_parent"
-                                                android:layout_marginLeft="5dp"
-                                                android:layout_marginRight="5dp"
-                                                android:gravity="center"
-                                                android:layout_gravity="center"
-                                                android:text="0"
-                                                android:textSize="14dp"
-                                                />
-
-
-                                        </LinearLayout>
-
-                                        <TextView
-                                            android:id="@+id/txt_emtiaz"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="0"
-                                            android:visibility="gone" />
-
-                                        <LinearLayout
-                                            android:id="@+id/like"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_margin="5dp"
-                                            android:background="@drawable/likebtn"
-                                            android:orientation="horizontal"
-                                            android:paddingLeft="5dp"
-                                            android:paddingRight="5dp"
-                                            >
-
-                                            <TextView
-                                                android:id="@+id/txt_like"
+                                            <LinearLayout
+                                                android:id="@+id/unlike"
                                                 android:layout_width="wrap_content"
-                                                android:layout_height="match_parent"
-                                                android:layout_marginLeft="5dp"
-                                                android:layout_marginRight="5dp"
-                                                android:gravity="center"
-                                                android:layout_gravity="center"
-                                                android:layout_weight="1"
+                                                android:layout_height="wrap_content"
+                                                android:layout_margin="5dp"
+                                                android:background="@drawable/unlikebtn"
+                                                android:orientation="horizontal"
+                                                android:paddingLeft="5dp"
+                                                android:paddingRight="5dp">
+
+                                                <ImageView
+                                                    android:layout_width="20dp"
+                                                    android:layout_height="20dp"
+                                                    android:padding="2dp"
+
+                                                    app:srcCompat="@mipmap/minus" />
+
+
+                                                <TextView
+                                                    android:id="@+id/txt_unlike"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="match_parent"
+                                                    android:layout_gravity="center"
+                                                    android:layout_marginLeft="5dp"
+                                                    android:layout_marginRight="5dp"
+                                                    android:gravity="center"
+                                                    android:text="0"
+                                                    android:textSize="14dp" />
+
+
+                                            </LinearLayout>
+
+                                            <TextView
+                                                android:id="@+id/txt_emtiaz"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
                                                 android:text="0"
-                                                android:textSize="14dp"
-                                                />
+                                                android:visibility="gone" />
 
-                                            <ImageView
-                                                android:layout_width="20dp"
-                                                android:layout_height="20dp"
-                                                android:padding="2dp"
-                                                app:srcCompat="@mipmap/plus" />
+                                            <LinearLayout
+                                                android:id="@+id/like"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_margin="5dp"
+                                                android:background="@drawable/likebtn"
+                                                android:orientation="horizontal"
+                                                android:paddingLeft="5dp"
+                                                android:paddingRight="5dp">
 
-                                        </LinearLayout>
+                                                <TextView
+                                                    android:id="@+id/txt_like"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="match_parent"
+                                                    android:layout_gravity="center"
+                                                    android:layout_marginLeft="5dp"
+                                                    android:layout_marginRight="5dp"
+                                                    android:layout_weight="1"
+                                                    android:gravity="center"
+                                                    android:text="0"
+                                                    android:textSize="14dp" />
 
-                                    </TableRow>
+                                                <ImageView
+                                                    android:layout_width="20dp"
+                                                    android:layout_height="20dp"
+                                                    android:padding="2dp"
+                                                    app:srcCompat="@mipmap/plus" />
 
+                                            </LinearLayout>
+
+                                        </TableRow>
+
+                                    </LinearLayout>
+
+
+                                    <TextView
+                                        android:id="@+id/txt_title"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="right"
+                                        android:layout_weight="1"
+                                        android:text="بازیگر متهم به آزار جنسی، شاکی شد"
+                                        android:textColor="#000"
+                                        android:textSize="18sp"
+                                        android:textStyle="bold" />
                                 </LinearLayout>
 
-
-                                <TextView
-                                    android:id="@+id/txt_title"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:layout_gravity="right"
-                                    android:text="بازیگر متهم به آزار جنسی، شاکی شد"
-                                    android:textColor="#000"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold" />
-                            </LinearLayout>
                                 <LinearLayout
                                     android:layout_width="100dp"
                                     android:layout_height="100dp"
@@ -248,17 +249,28 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.appmagazine.nardoon.MyGridview
+                            android:id="@+id/grid"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:gravity="center"
+                            android:horizontalSpacing="4dip"
+                            android:numColumns="3"
+                            android:padding="4dip"
+                            android:verticalSpacing="4dip" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        android:visibility="visible"
                         tools:context="{relativePackage}.${activityClass}">
-
-                        <Gallery
-                            android:id="@+id/gallery1"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="left"
-                            android:padding="20dp"></Gallery>
-
 
 
                         <LinearLayout
@@ -310,7 +322,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="10dp"
-                            android:background="@drawable/border"
                             android:orientation="vertical"></LinearLayout>
 
 

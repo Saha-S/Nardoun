@@ -65,7 +65,7 @@ public class Details extends AppCompatActivity {
     boolean FLAG_COLLAPSED = true;
     public static String validity,permission;
     public static TextView tvtitle,tvcontent,tvprice,tvlocation , tvtime ,tvtype ,tvLink , txt;
-    public static String url, catname , mobile , email , price , image , location,time ,special , link , start , end  , order , allPrice;
+    public static String url, catname , mobile , email , price , image , location,time ,special , link , start , end  ,startn , endn  , order , allPrice;
     public static int idRadio  ;
     public static String typetxt  ;
     ImageView  ivshare ;
@@ -154,7 +154,7 @@ public class Details extends AppCompatActivity {
 
         sliderShow = (SliderLayout) findViewById(R.id.slider);
         sliderShow.setCustomIndicator((PagerIndicator) findViewById(R.id.custom_indicator));
-       // sliderShow.setIndicatorVisibility(PagerIndicator.IndicatorVisibility.Visible);
+        // sliderShow.setIndicatorVisibility(PagerIndicator.IndicatorVisibility.Visible);
 
         sliderShow.stopAutoCycle();
 
@@ -283,29 +283,29 @@ public class Details extends AppCompatActivity {
                 if(ivFavorites.isChecked()== false) {
 
                     String likes= "";
-                for (int i=0;i<favoritearray.length;i++) {
-                    if (!favoritearray[i].equals( idAgahi )) {
-                        if(likes.equals(""))
-                            likes+=favoritearray[i];
-                        else
-                            likes+="-"+favoritearray[i];
+                    for (int i=0;i<favoritearray.length;i++) {
+                        if (!favoritearray[i].equals( idAgahi )) {
+                            if(likes.equals(""))
+                                likes+=favoritearray[i];
+                            else
+                                likes+="-"+favoritearray[i];
 
+                        }
                     }
-                }
-                file.write("favorite" , likes);
+                    file.write("favorite" , likes);
 
-            }else{
+                }else{
                     App.CustomToast("آگهی نشان شد");
                     String likes = file.read("favorite");
-                if(likes.equals("")) {
-                    file.write("favorite", idAgahi);
-                }else {
-                    file.write("favorite",likes +"-"+idAgahi);
+                    if(likes.equals("")) {
+                        file.write("favorite", idAgahi);
+                    }else {
+                        file.write("favorite",likes +"-"+idAgahi);
+                    }
                 }
+
+
             }
-
-
-        }
         });
 
         setSupportActionBar(toolbar);
@@ -463,8 +463,11 @@ public class Details extends AppCompatActivity {
                     try {
                         menuOrder = obj.getString("menu");
                         order = menuOrder.toString();
+
                         start = obj.getString("start");
                         end = obj.getString("end");
+                        startn = obj.getString("startn");
+                        endn = obj.getString("endn");
 
                     }catch (JSONException e){}
 
@@ -572,7 +575,12 @@ public class Details extends AppCompatActivity {
 //////////////////////////////////////// ORDER///////////////////////////////////////////////////
                     try {
 
-                        txtTime.setText("ثبت سفارش از ساعت " + start + " الی " + end + " امکان پذیر می باشد.");
+                        Log.i("ooooo" , start);
+                        Log.i("ooooo" , startn);
+                        Log.i("ooooo" , end);
+                        Log.i("ooooo" , endn);
+                        //txtTime.setText("ثبت سفارش ناهار از ساعت " + start + " الی " + end + " امکان پذیر می باشد.");
+                        txtTime.setText("ثبت سفارش ناهار از ساعت " + start + " الی " + end + " امکان پذیر می باشد "+"و ثبت سفارش شام از ساعت " + startn + " الی " + endn + " امکان پذیر می باشد.");
                         try {
                             menuJsonArray = new JSONArray(menuOrder);
 
@@ -938,11 +946,11 @@ public class Details extends AppCompatActivity {
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
                     dialog.hide();
-                   // App.CustomToast("ویرایش با خطا مواجه شد !");
+                    // App.CustomToast("ویرایش با خطا مواجه شد !");
 
                 }else{
                     dialog.hide();
-                  //  App.CustomToast(" ویرایش نشد ");
+                    //  App.CustomToast(" ویرایش نشد ");
                 }
             }
 
@@ -1004,12 +1012,12 @@ public class Details extends AppCompatActivity {
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
                     dialog.hide();
-                  //  App.CustomToast("ثبت اطلاعات خرید با مشکل مواجه شد !");
+                    //  App.CustomToast("ثبت اطلاعات خرید با مشکل مواجه شد !");
 
                 }else{
                     dialog.hide();
-                  //  App.CustomToast("fail "+statusCode);
-                 //   App.CustomToast("اطلاعات خرید ثبت نشد ");
+                    //  App.CustomToast("fail "+statusCode);
+                    //   App.CustomToast("اطلاعات خرید ثبت نشد ");
                 }
             }
 

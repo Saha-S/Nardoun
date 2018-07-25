@@ -30,9 +30,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="نظرات حاوی الفاظ رکیک، توهین، مورد پیگرد قرار خواهد گرفت. "
-            android:textColor="#e20505"
             android:padding="5dp"
+            android:text="نظرات حاوی توهین به همراه ای پی، و شماره موبایل تحویل مراجع فضایی داده خواهد شد "
+            android:textColor="#e20505"
             android:textSize="16sp" />
 
         <android.support.v7.widget.CardView

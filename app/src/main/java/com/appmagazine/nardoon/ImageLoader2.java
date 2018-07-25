@@ -26,14 +26,14 @@ import com.appmagazine.nardoon.MemoryCache;
 import com.appmagazine.nardoon.R;
 import com.appmagazine.nardoon.Utils;
 
-public class ImageLoader {
+public  class ImageLoader2 {
 
     MemoryCache memoryCache=new MemoryCache();
     FileCache fileCache;
     private Map<ImageView, String> imageViews=Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
     ExecutorService executorService;
 
-    public ImageLoader(Context context){
+    public ImageLoader2(Context context){
         fileCache=new FileCache(context);
         executorService=Executors.newFixedThreadPool(5);
     }

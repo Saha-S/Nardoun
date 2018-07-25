@@ -11,7 +11,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -106,6 +108,7 @@ public class NewNews extends AppCompatActivity {
     LinearLayout llImg;
     ImageView imgNews;
     private String id_confirmaation;
+    LinearLayout llDelete;
 
 
     @Override
@@ -122,6 +125,7 @@ public class NewNews extends AppCompatActivity {
         ImageButton ibBack = (ImageButton) findViewById(R.id.ib_back);
         TextView tvBack = (TextView) findViewById(R.id.tv_back);
         LinearLayout llErsal = (LinearLayout) findViewById(R.id.ll_ersal);
+        llDelete = (LinearLayout) findViewById(R.id.ll_del);
 
         llImg = (LinearLayout) findViewById(R.id.ll_news_img);
         imgNews = (ImageView) findViewById(R.id.news_img);
@@ -151,11 +155,9 @@ public class NewNews extends AppCompatActivity {
         spinner = (Spinner) findViewById(R.id.spinner);
         List<String> list = new ArrayList<String>();
         list.add("انتخاب کنید..");
-        list.add("عمومی");
-        list.add("دخترانه");
+        list.add("سرگرمی و آموزشی");
         list.add("اجتماعی");
         list.add("ورزشی");
-        list.add("اخبار روزانه");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -240,16 +242,34 @@ public class NewNews extends AppCompatActivity {
                 img8.setVisibility(View.GONE);
             }
         });
-
+        EnableRuntimePermission();
         SelectImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                flagImgAsli = true;
-                onSelectImageClick(v);
+
+                        flagImgAsli = true;
+                        onSelectImageClick(v);
             }
         });
 
 
+        llDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    imgNews.setImageDrawable(getResources().getDrawable(R.drawable.nopic, getApplicationContext().getTheme()));
+                    file1.delete();
+                    llDelete.setVisibility(View.GONE);
+                } else {
+                    imgNews.setImageDrawable(getResources().getDrawable(R.drawable.nopic));
+                    file1.delete();
+                    llDelete.setVisibility(View.GONE);
+
+
+                }
+
+            }
+        });
 
         llErsal.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -278,6 +298,12 @@ public class NewNews extends AppCompatActivity {
 
                     }
                     if(!title.getText().toString().isEmpty() && !content.getText().toString().isEmpty() && !spinner.getSelectedItem().toString().equals("انتخاب کنید..") ) {
+                        dialog = ProgressDialog.show(NewNews.this, null, null, true, false);
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                        dialog.setContentView(R.layout.progress_layout_small);
+
+                        dialog.show();
                         webServiceNewAgahi();
                     }
                 }else {
@@ -342,6 +368,7 @@ public class NewNews extends AppCompatActivity {
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                     reducedSizeBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                     imgNews.setImageBitmap(reducedSizeBitmap);
+                    llDelete.setVisibility(View.VISIBLE);
 
                     FileOutputStream fo;
                     try {
@@ -535,18 +562,23 @@ public class NewNews extends AppCompatActivity {
                 .start(this);
     }
 
-    public void EnableRuntimePermission(){
+    public boolean  EnableRuntimePermission(){
 
-        if (ActivityCompat.shouldShowRequestPermissionRationale(NewNews.this,
-                Manifest.permission.CAMERA))
-        {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
 
-        } else {
-
-            ActivityCompat.requestPermissions(NewNews.this,new String[]{
-                    Manifest.permission.CAMERA}, RequestPermissionCode);
-
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
         }
+        else { //permission is automatically granted on sdk<23 upon installation
+            Log.v("tag","Permission is granted");
+            return true;
+        }
+
     }
 
     private Bitmap getBitmap(String path) {
@@ -623,6 +655,7 @@ public class NewNews extends AppCompatActivity {
         params.put("point","0");
         params.put("pointm","0");
         params.put("confirmation_id",id_confirmaation);
+        params.put("deviceid",App.android_id);
 
 
         try {
@@ -673,19 +706,19 @@ public class NewNews extends AppCompatActivity {
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-//                dialog.hide();
+                dialog.hide();
                 //  String value = new String(response);
-//                Intent intent = new Intent(App.context, MyNini.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivity(intent);
-//                finish();
+                Intent intent = new Intent(App.context, MyNews.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
                 App.CustomToast("خبر با موفقیت ثبت شد");
                 finish();
 
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-//                dialog.hide();
+                dialog.hide();
 
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
@@ -693,7 +726,7 @@ public class NewNews extends AppCompatActivity {
 
                 }else{
                     App.CustomToast(" لطفا دوباره سعی کنید ");
-                    Log.i("myerror" , errorResponse.toString());
+                    Log.i("myerror" , new String(errorResponse));
                 }
             }
         });

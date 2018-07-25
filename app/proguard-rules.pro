@@ -99,4 +99,5 @@
 
 -dontwarn com.daimajia.slider.library.**
 
+
 -dontwarn okio.**

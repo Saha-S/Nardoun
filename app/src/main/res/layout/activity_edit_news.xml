@@ -88,6 +88,33 @@
                         android:layout_height="80dp"
                         app:srcCompat="@mipmap/nopic" />
 
+                    <LinearLayout
+                        android:id="@+id/ll_del"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="?attr/selectableItemBackground"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/textView25"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="حذف عکس"
+                            android:textColor="@android:color/holo_red_dark"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            android:id="@+id/imageView10"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            app:srcCompat="@android:drawable/ic_delete" />
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>

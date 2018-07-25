@@ -1,6 +1,7 @@
 package com.appmagazine.nardoon.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
@@ -12,7 +13,13 @@ import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.FileOperations;
 import com.appmagazine.nardoon.R;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class Request extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

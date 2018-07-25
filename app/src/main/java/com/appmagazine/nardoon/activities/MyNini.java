@@ -45,6 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.appmagazine.nardoon.R.id.status;
 
@@ -59,6 +60,10 @@ public class MyNini extends AppCompatActivity {
     private String id_confirmaation;
     private String status;
     private String id_confirmaationSH;
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

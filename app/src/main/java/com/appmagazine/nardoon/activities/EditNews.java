@@ -11,7 +11,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -109,6 +111,7 @@ public class EditNews extends AppCompatActivity {
     LinearLayout llImg;
     ImageView imgNews;
     private String id_confirmaation;
+    LinearLayout llDelete;
 
 
     @Override
@@ -128,6 +131,7 @@ public class EditNews extends AppCompatActivity {
 
         llImg = (LinearLayout) findViewById(R.id.ll_news_img);
         imgNews = (ImageView) findViewById(R.id.news_img);
+        llDelete = (LinearLayout) findViewById(R.id.ll_del);
 
         llErsal.setVisibility(View.VISIBLE);
         tvBack.setText("ویرایش خبر");
@@ -151,14 +155,13 @@ public class EditNews extends AppCompatActivity {
             }
         });
 
+
         spinner = (Spinner) findViewById(R.id.spinner);
         List<String> list = new ArrayList<String>();
         list.add("انتخاب کنید..");
-        list.add("عمومی");
-        list.add("دخترانه");
+        list.add("سرگرمی و آموزشی");
         list.add("اجتماعی");
         list.add("ورزشی");
-        list.add("اخبار روزانه");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -243,15 +246,89 @@ public class EditNews extends AppCompatActivity {
                 img8.setVisibility(View.GONE);
             }
         });
+        EnableRuntimePermission();
 
         SelectImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                flagImgAsli = true;
-                onSelectImageClick(v);
-            }
+
+                        flagImgAsli = true;
+                        onSelectImageClick(v);
+                }
         });
 
+
+
+
+//        llDelete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                    imgNews.setImageDrawable(getResources().getDrawable(R.drawable.nopic, getApplicationContext().getTheme()));
+//                    try {
+//                        file1.delete();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    llDelete.setVisibility(View.GONE);
+//                } else {
+//                    imgNews.setImageDrawable(getResources().getDrawable(R.drawable.nopic));
+//                    try {
+//                        file1.delete();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    llDelete.setVisibility(View.GONE);
+//
+//
+//                }
+//
+//            }
+//        });
+//
+
+                llErsal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences prefs = getSharedPreferences("LOGIN_ID", MODE_PRIVATE);
+                SharedPreferences prefs2 = getSharedPreferences("IS_LOGIN", MODE_PRIVATE);
+                String status = prefs2.getString("islogin", "0");
+                String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
+
+                if (status.matches("1") && !id_confirmaationSH.equals("0")) {
+
+                    id_confirmaation = id_confirmaationSH.replace("[{\"id\":", "").replace("}]", "");
+
+
+                    if(title.getText().toString().isEmpty()){
+                        title.setError("عنوان خبر");
+                    }
+                    if(content.getText().toString().isEmpty()){
+                        content.setError("متن خبر");
+                    }
+                    if(spinner.getSelectedItem().toString().equals("انتخاب کنید..")){
+                        TextView errorText = (TextView)spinner.getSelectedView();
+                        errorText.setError("-");
+                        errorText.setTextColor(Color.RED);//just to highlight that this is an error
+                        errorText.setText("     موضوع خبر    ");//changes the selected item text to this
+
+                    }
+                    if(!title.getText().toString().isEmpty() && !content.getText().toString().isEmpty() && !spinner.getSelectedItem().toString().equals("انتخاب کنید..") ) {
+                        dialog = ProgressDialog.show(EditNews.this, null, null, true, false);
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                        dialog.setContentView(R.layout.progress_layout_small);
+
+                        dialog.show();
+
+                        webServiceNewAgahi();
+                    }
+                }else {
+                    Intent intent = new Intent(App.context, Login.class);
+                    startActivity(intent);
+                }
+            }
+        });
 
         final Bundle extras = getIntent().getExtras();
 
@@ -259,14 +336,22 @@ public class EditNews extends AppCompatActivity {
             title.setText(extras.getString("TITLE"));
             id = extras.getString("ID");
             content.setText(extras.getString("CONTENT"));
-            Glide.with(this).load(extras.getString("IMAGE")).placeholder(R.drawable.nopic).into(imgNews);
+
+            if (!extras.getString("IMAGE").toString().equals("http://nardoun.ir/upload/0")){
+                llDelete.setVisibility(View.VISIBLE);
+                Glide.with(this).load(extras.getString("IMAGE")).placeholder(R.drawable.nopic).into(imgNews);
+
+            }
+            else{
+                llDelete.setVisibility(View.GONE);
+            }
+
+
             try {
                 txtimg0 = extras.getString("IMAGE").toString().replace(App.urlimages ,"");
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            Log.i("kkkkkkkkk" ,extras.getString("TYPE") );
-            Log.i("kkkkkkkkk11" ,list.indexOf(extras.getString("TYPE"))+"-" );
             spinner.setSelection(list.indexOf(extras.getString("TYPE").toString()));
             if(!extras.getString("IMG1").equals("")){
                 ivImage2.setVisibility(View.VISIBLE);
@@ -325,42 +410,6 @@ public class EditNews extends AppCompatActivity {
             }
         }
 
-                llErsal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SharedPreferences prefs = getSharedPreferences("LOGIN_ID", MODE_PRIVATE);
-                SharedPreferences prefs2 = getSharedPreferences("IS_LOGIN", MODE_PRIVATE);
-                String status = prefs2.getString("islogin", "0");
-                String id_confirmaationSH = prefs.getString("id_confirmaation", "0");
-
-                if (status.matches("1") && !id_confirmaationSH.equals("0")) {
-
-                    id_confirmaation = id_confirmaationSH.replace("[{\"id\":", "").replace("}]", "");
-
-
-                    if(title.getText().toString().isEmpty()){
-                        title.setError("عنوان خبر");
-                    }
-                    if(content.getText().toString().isEmpty()){
-                        content.setError("متن خبر");
-                    }
-                    if(spinner.getSelectedItem().toString().equals("انتخاب کنید..")){
-                        TextView errorText = (TextView)spinner.getSelectedView();
-                        errorText.setError("-");
-                        errorText.setTextColor(Color.RED);//just to highlight that this is an error
-                        errorText.setText("     موضوع خبر    ");//changes the selected item text to this
-
-                    }
-                    if(!title.getText().toString().isEmpty() && !content.getText().toString().isEmpty() && !spinner.getSelectedItem().toString().equals("انتخاب کنید..") ) {
-                        webServiceNewAgahi();
-                    }
-                }else {
-                    Intent intent = new Intent(App.context, Login.class);
-                    startActivity(intent);
-                }
-            }
-        });
-
     }
 
 
@@ -407,7 +456,6 @@ public class EditNews extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
 
 
-
                 if (!flagImgAsli) {
 
                     imgNews.setVisibility(View.VISIBLE);
@@ -416,6 +464,7 @@ public class EditNews extends AppCompatActivity {
                     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                     reducedSizeBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
                     imgNews.setImageBitmap(reducedSizeBitmap);
+                    llDelete.setVisibility(View.VISIBLE);
 
                     FileOutputStream fo;
                     try {
@@ -609,18 +658,23 @@ public class EditNews extends AppCompatActivity {
                 .start(this);
     }
 
-    public void EnableRuntimePermission(){
+    public boolean  EnableRuntimePermission(){
 
-        if (ActivityCompat.shouldShowRequestPermissionRationale(EditNews.this,
-                Manifest.permission.CAMERA))
-        {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
 
-        } else {
-
-            ActivityCompat.requestPermissions(EditNews.this,new String[]{
-                    Manifest.permission.CAMERA}, RequestPermissionCode);
-
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
         }
+        else { //permission is automatically granted on sdk<23 upon installation
+            Log.v("tag","Permission is granted");
+            return true;
+        }
+
     }
 
     private Bitmap getBitmap(String path) {
@@ -697,6 +751,7 @@ public class EditNews extends AppCompatActivity {
         params.put("point","0");
         params.put("pointm","0");
         params.put("confirmation_id",id_confirmaation);
+        params.put("validity","0");
 
         if(file1!=null) {
             try {
@@ -787,9 +842,9 @@ public class EditNews extends AppCompatActivity {
         if(file8==null && img8.getVisibility()==View.VISIBLE){
             params.put("imagevii", txtimg7);
         }
-//        if(file1==null && imgAsli.getVisibility()==View.GONE){
-//            params.put("image", "0");
-//        }
+        if (llDelete.getVisibility()==View.GONE){
+            params.put("image", "0");
+        }
         if( img2.getVisibility()==View.GONE){
             params.put("imagei", "0");
         }
@@ -821,19 +876,19 @@ public class EditNews extends AppCompatActivity {
             }
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-//                dialog.hide();
+                dialog.hide();
                 //  String value = new String(response);
-//                Intent intent = new Intent(App.context, MyNini.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivity(intent);
-//                finish();
+                Intent intent = new Intent(App.context, MyNews.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
                 App.CustomToast("خبر با موفقیت ویرایش شد");
                 finish();
 
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-//                dialog.hide();
+                dialog.hide();
 
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
@@ -841,7 +896,7 @@ public class EditNews extends AppCompatActivity {
 
                 }else{
                     App.CustomToast(" لطفا دوباره سعی کنید ");
-                    Log.i("myerror" , errorResponse.toString());
+                    Log.i("myerror" , new String (errorResponse));
                 }
             }
         });

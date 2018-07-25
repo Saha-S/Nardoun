@@ -2,12 +2,14 @@ package com.appmagazine.nardoon.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.appmagazine.nardoon.App;
@@ -36,6 +38,8 @@ public class MyNewsListAdapter extends RecyclerView.Adapter<MyNewsListAdapter.Po
         TextView time;
         TextView point;
         TextView pointm;
+        TextView state;
+        LinearLayout llState;
         TextView commnetNumber;
         ImageView image;
         CardView item ;
@@ -50,6 +54,8 @@ public class MyNewsListAdapter extends RecyclerView.Adapter<MyNewsListAdapter.Po
             point = (TextView) itemView.findViewById(R.id.txt_point);
             pointm = (TextView) itemView.findViewById(R.id.txt_pointm);
             commnetNumber = (TextView) itemView.findViewById(R.id.commnet_number);
+            state = (TextView) itemView.findViewById(R.id.txt_state);
+            llState = (LinearLayout) itemView.findViewById(R.id.ll_state);
             image = (ImageView) itemView.findViewById(R.id.img);
             item = (CardView) itemView.findViewById(R.id.ll_row);
 
@@ -87,7 +93,13 @@ public class MyNewsListAdapter extends RecyclerView.Adapter<MyNewsListAdapter.Po
                     .load(App.urlimages + mDataset.get(position).image)
                     .placeholder(R.mipmap.nopic)
                     .into(holder.image);
+            String StatusName = null;
 
+            holder.llState.setVisibility(View.VISIBLE);
+            if(mDataset.get(position).validity.matches("1")){StatusName =  "منتشر شده";holder.llState.setBackgroundColor(Color.parseColor("#008542"));}
+            if(mDataset.get(position).validity.matches("0")){StatusName =  "در انتظار تایید"; holder.llState.setBackgroundColor(Color.parseColor("#ff9900"));}
+            if(mDataset.get(position).validity.matches("2")){StatusName =  "رد شده";holder.llState.setBackgroundColor(Color.RED);}
+            holder.state.setText("وضعیت خبر : "+StatusName.toString());
 
 
             holder.item.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +114,11 @@ public class MyNewsListAdapter extends RecyclerView.Adapter<MyNewsListAdapter.Po
                     intent.putExtra("TYPE", mDataset.get(position).subject);
                     intent.putExtra("IMAGE", App.urlimages + mDataset.get(position).image);
                     intent.putExtra("VIRAYESH", "1");
+                    intent.putExtra("ISLIKE", mDataset.get(position).like);
+                    intent.putExtra("ISDISLIKE", mDataset.get(position).dislike);
+                    intent.putExtra("LIKE", mDataset.get(position).point);
+                    intent.putExtra("DISLIKE", mDataset.get(position).pointm);
+                    intent.putExtra("VALIDITY", mDataset.get(position).validity);
 
                     App.context.startActivity(intent);
 

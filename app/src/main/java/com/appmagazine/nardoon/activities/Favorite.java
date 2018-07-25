@@ -48,6 +48,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class Favorite extends AppCompatActivity {
     RecyclerView recyclerView;
@@ -60,6 +61,10 @@ public class Favorite extends AppCompatActivity {
     String myDevice;
     public static String[] favoritearray;
     public static int numbers=0;
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
 
     @Override

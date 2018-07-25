@@ -21,6 +21,126 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize" />
 
+        <LinearLayout
+            android:id="@+id/llTabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <HorizontalScrollView
+                android:id="@+id/scroll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <Button
+                        android:id="@+id/siasi"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/frame"
+                        android:backgroundTint="@color/olive"
+                        android:shadowColor="#cccccc"
+                        android:shadowDx="2"
+                        android:shadowDy="3"
+                        android:text="سیاسی"
+                        android:textColor="#ffffff"
+                        android:textSize="18sp" />
+
+                    <Button
+                        android:id="@+id/ejtemaei"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/frame"
+                        android:backgroundTint="@color/teal"
+                        android:shadowColor="#cccccc"
+                        android:shadowDx="2"
+                        android:shadowDy="3"
+                        android:text="اجتماعی"
+                        android:textColor="#ffffff"
+                        android:textSize="18sp" />
+
+                    <Button
+                        android:id="@+id/eghtesadi"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/frame"
+                        android:backgroundTint="@color/maroon"
+                        android:shadowColor="#cccccc"
+                        android:shadowDx="2"
+                        android:shadowDy="3"
+                        android:text="اقتصادی"
+                        android:textColor="#ffffff"
+                        android:textSize="18sp" />
+
+                    <Button
+                        android:id="@+id/majazi"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/frame"
+                        android:backgroundTint="@android:color/holo_orange_dark"
+                        android:shadowColor="#cccccc"
+                        android:shadowDx="2"
+                        android:shadowDy="3"
+                        android:text="فضای مجازی"
+                        android:textColor="#ffffff"
+                        android:textSize="18sp" />
+
+                    <Button
+                        android:id="@+id/pezeshki"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/frame"
+                        android:backgroundTint="@color/green"
+                        android:shadowColor="#cccccc"
+                        android:shadowDx="2"
+                        android:shadowDy="3"
+                        android:text="پزشکی"
+                        android:textColor="#ffffff"
+                        android:textSize="18sp" />
+
+                    <Button
+                        android:id="@+id/varzeshi"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/frame"
+                        android:backgroundTint="@color/blue"
+                        android:shadowColor="#cccccc"
+                        android:shadowDx="2"
+                        android:shadowDy="3"
+                        android:text="ورزشی"
+                        android:textColor="#ffffff"
+                        android:textSize="18sp" />
+
+                    <Button
+                        android:id="@+id/all"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/frame"
+                        android:backgroundTint="@color/cardview_dark_background"
+                        android:shadowColor="#cccccc"
+                        android:shadowDx="2"
+                        android:shadowDy="3"
+                        android:text="همه ی اخبار"
+                        android:textColor="#ffffff"
+                        android:textSize="18sp" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+        </LinearLayout>
+
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe"
             android:layout_width="match_parent"
@@ -38,4 +158,4 @@
         </android.support.v4.widget.SwipeRefreshLayout>
 
     </LinearLayout>
-    </android.support.v4.widget.DrawerLayout>
+</android.support.v4.widget.DrawerLayout>

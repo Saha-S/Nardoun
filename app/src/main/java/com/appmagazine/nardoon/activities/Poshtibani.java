@@ -1,5 +1,6 @@
 package com.appmagazine.nardoon.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -12,7 +13,13 @@ import android.widget.TextView;
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.R;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class Poshtibani extends AppCompatActivity {
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

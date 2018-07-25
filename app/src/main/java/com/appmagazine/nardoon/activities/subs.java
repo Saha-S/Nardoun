@@ -3,6 +3,7 @@ package com.appmagazine.nardoon.activities;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -29,6 +30,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class subs extends Activity {
     ArrayAdapter<String> adapterSub;
@@ -37,6 +39,10 @@ public class subs extends Activity {
     String CatId ,CatName;
     Boolean ifsubcatavailable = false;
     Typeface sansfarsi;
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

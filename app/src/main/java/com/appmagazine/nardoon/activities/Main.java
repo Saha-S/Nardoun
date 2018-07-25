@@ -61,39 +61,39 @@ public class Main extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
 
-        if (Build.VERSION.SDK_INT >= 23) {
-
-            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-
-                //File write logic here
-                FileOperations file = new FileOperations();
-
-                if (file.read("likes").equalsIgnoreCase("nofile")) {
-
-                    file.write("likes", "");
-                    file.write("dislikes", "");
-                    file.write("favorite", "");
-                }
-
-            }else {
-
-                App.newactivity(Main.this, Request.class);
-                finish();
-            }
-
-
-        }else {
-            FileOperations file = new FileOperations();
-
-            if (file.read("likes").equalsIgnoreCase("nofile")) {
-
-                file.write("likes", "");
-                file.write("dislikes", "");
-                file.write("favorite", "");
-            }
-        }
-
-
+//        if (Build.VERSION.SDK_INT >= 23) {
+//
+//            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+//
+//                //File write logic here
+//                FileOperations file = new FileOperations();
+//
+//                if (file.read("likes").equalsIgnoreCase("nofile")) {
+//
+//                    file.write("likes", "");
+//                    file.write("dislikes", "");
+//                    file.write("favorite", "");
+//                }
+//
+//            }else {
+//
+//                App.newactivity(Main.this, Request.class);
+//                finish();
+//            }
+//
+//
+//        }else {
+//            FileOperations file = new FileOperations();
+//
+//            if (file.read("likes").equalsIgnoreCase("nofile")) {
+//
+//                file.write("likes", "");
+//                file.write("dislikes", "");
+//                file.write("favorite", "");
+//            }
+//        }
+//
+//
 
         ibmenu=(ImageButton) findViewById(R.id.ib_menu);
         ib=(ImageButton) findViewById(R.id.ib);
@@ -140,63 +140,6 @@ public class Main extends AppCompatActivity
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
                 switch (tab.getPosition()) {
-                    case 1:
-                        ib.setVisibility(View.GONE);
-                        ll_search.setVisibility(View.GONE);
-
-                        txt.setText("تاریخچه خرید");
-                        llnewagahi.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(App.context ,MyPanel.class );
-                                startActivity(intent);
-                            }
-                        });
-
-                    case 2:
-                        ib.setVisibility(View.GONE);
-                        ll_search.setVisibility(View.GONE);
-
-                        txt.setText("ایجاد خبر جدید");
-                        llnewagahi.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(App.context ,NewNews.class );
-                                startActivity(intent);
-                            }
-                        });
-
-                        break;
-                    case 4:
-                        ib.setVisibility(View.VISIBLE);
-                        ll_search.setVisibility(View.GONE);
-
-                        txt.setText("آگهی جدید");
-                        llnewagahi.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(App.context ,NewAgahi.class );
-                                startActivity(intent);
-                            }
-                        });
-
-                        break;
-                    case 3:
-                        ib.setVisibility(View.VISIBLE);
-                        ll_search.setVisibility(View.VISIBLE);
-                        txt.setText("آگهی جدید");
-
-
-                        llnewagahi.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(App.context ,NewAgahi.class );
-                                startActivity(intent);
-                            }
-                        });
-
-
-                        break;
 
                     case 0:
                         ib.setVisibility(View.VISIBLE);
@@ -210,9 +153,67 @@ public class Main extends AppCompatActivity
                                 startActivity(intent);
                             }
                         });
-
-
                         break;
+
+
+                    case 1:
+                        ib.setVisibility(View.GONE);
+                        ll_search.setVisibility(View.GONE);
+
+                        txt.setText("تاریخچه خرید");
+                        llnewagahi.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(App.context ,MyPanel.class );
+                                startActivity(intent);
+                            }
+                        });
+                        break;
+
+
+                    case 2:
+                        ib.setVisibility(View.GONE);
+                        ll_search.setVisibility(View.GONE);
+
+                        txt.setText("ایجاد خبر جدید");
+                        llnewagahi.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(App.context ,NewNews.class );
+                                startActivity(intent);
+                            }
+                        });
+                        break;
+
+                    case 4:
+                        ib.setVisibility(View.VISIBLE);
+                        ll_search.setVisibility(View.GONE);
+
+                        txt.setText("آگهی جدید");
+                        llnewagahi.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(App.context ,NewAgahi.class );
+                                startActivity(intent);
+                            }
+                        });
+                        break;
+
+                    case 3:
+                        ib.setVisibility(View.VISIBLE);
+                        ll_search.setVisibility(View.VISIBLE);
+                        txt.setText("آگهی جدید");
+
+
+                        llnewagahi.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(App.context ,NewAgahi.class );
+                                startActivity(intent);
+                            }
+                        });
+                        break;
+
                 }
             }
             @Override

@@ -15,7 +15,7 @@ import com.appmagazine.nardoon.activities.CatAgahis;
 import com.appmagazine.nardoon.activities.NewsList;
 
 public class News extends Fragment {
-    LinearLayout llGirl , llPublic , llSport , llSocial , llRSS;
+    LinearLayout llGirl , llPublic , llSport , llSocial , llRSS , llAll;
 
 
     @Override
@@ -27,6 +27,7 @@ public class News extends Fragment {
         llSport = (LinearLayout) view.findViewById(R.id.llSport);
         llSocial = (LinearLayout) view.findViewById(R.id.llSocial);
         llRSS = (LinearLayout) view.findViewById(R.id.llRSS);
+        llAll = (LinearLayout) view.findViewById(R.id.llAll);
 
 //        llGirl.setBackgroundColor(Color.parseColor("#003399"));
 //        llPublic.setBackgroundColor(Color.parseColor("#9a00ff"));
@@ -34,21 +35,23 @@ public class News extends Fragment {
 //        llSocial.setBackgroundColor(Color.parseColor("#cd9933"));
 //        llRSS.setBackgroundColor(Color.parseColor("#04b9e6"));
 
-        llGirl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(App.context , NewsList.class);
-//                intent.putExtra("id", "8");
-                intent.putExtra("name", "دخترانه");
-                startActivity(intent);
-            }
-        });
+//        llGirl.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(App.context , NewsList.class);
+////                intent.putExtra("id", "8");
+//                intent.putExtra("name", "سرگرمی و آموزشی");
+//                startActivity(intent);
+//            }
+//        });
+
+
         llPublic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(App.context , NewsList.class);
 //                intent.putExtra("id", "8");
-                intent.putExtra("name", "عمومی");
+                intent.putExtra("name", "سرگرمی و آموزشی");
                 startActivity(intent);
             }
         });
@@ -67,6 +70,15 @@ public class News extends Fragment {
                 Intent intent = new Intent(App.context , NewsList.class);
 //                intent.putExtra("id", "8");
                 intent.putExtra("name", "اجتماعی");
+                startActivity(intent);
+            }
+        });
+        llAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(App.context , NewsList.class);
+//                intent.putExtra("id", "8");
+                intent.putExtra("name", "همه ی اخبار");
                 startActivity(intent);
             }
         });

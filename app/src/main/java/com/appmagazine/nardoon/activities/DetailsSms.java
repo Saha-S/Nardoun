@@ -2,6 +2,7 @@ package com.appmagazine.nardoon.activities;
 
 import android.app.ActionBar.LayoutParams;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -58,6 +59,7 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.cookie.SM;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class DetailsSms extends AppCompatActivity {
 
@@ -74,6 +76,10 @@ public class DetailsSms extends AppCompatActivity {
     int webCredit;
     int daemi , etebari , irancell;
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

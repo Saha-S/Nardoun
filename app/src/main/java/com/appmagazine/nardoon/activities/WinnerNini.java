@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class WinnerNini extends AppCompatActivity {
     RecyclerView recyclerView;
@@ -49,6 +50,10 @@ public class WinnerNini extends AppCompatActivity {
     private String id_confirmaation;
     private String status;
     private String id_confirmaationSH;
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

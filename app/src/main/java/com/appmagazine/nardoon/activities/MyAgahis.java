@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MyAgahis extends AppCompatActivity {
     RecyclerView recyclerView;
@@ -62,6 +63,10 @@ public class MyAgahis extends AppCompatActivity {
     private TextView orders;
     private String idAgahi;
     public static Handler h;
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

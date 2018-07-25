@@ -48,7 +48,9 @@ import android.widget.Toast;
 
 import com.appmagazine.nardoon.App;
 import com.appmagazine.nardoon.BeginTimePickerFragment;
+import com.appmagazine.nardoon.BeginTimePickerFragment2;
 import com.appmagazine.nardoon.FinishTimePickerFragment;
+import com.appmagazine.nardoon.FinishTimePickerFragment2;
 import com.appmagazine.nardoon.MyAgahi;
 import com.appmagazine.nardoon.R;
 import com.appmagazine.nardoon.Utility;
@@ -78,7 +80,7 @@ public class EditAgahi extends AppCompatActivity {
 
     EditText price,email,phone , title , content , location ,link;
     TextView txtPrice,txtEmail,txtMobile , txtTitle, txtContent , txtType,txtLocation,txtCat , txtImg;
-   // String name , id , type,subid,location_id;
+    // String name , id , type,subid,location_id;
     String    type;
     RadioGroup radioTypeGroup;
     RadioButton radioTypeButton;
@@ -98,16 +100,16 @@ public class EditAgahi extends AppCompatActivity {
     public  static final int RequestPermissionCode  = 1 ;
     DisplayMetrics displayMetrics ;
     int width, height;
-    boolean flag1,flag2,flag3,flag4,flag5,flag6,flag7,flag8 ,flag10=false;
+    boolean flag1,flag2,flag3,flag4,flag5,flag6,flag7,flag8 ,flag10,flag11,flag12=false;
     ImageView image;
     File file1 , file2 , file3;
     private LinearLayout container;
     private LinearLayout llMenu;
-    private TextView txtBegin ,txtFinish ,txtBeginTime,txtFinishTime;
+    private TextView txtBegin ,txtFinish ,txtBeginTime,txtFinishTime ,txtBeginn ,txtFinishn ,txtBeginTimen,txtFinishTimen;
     JSONArray menuJsonArray;
-    public static String startTime , endTime;
+    public static String startTime , endTime,startTimen , endTimen;
     ImageButton btnAdd;
-    Button btnFinish , btnBegin ;
+    Button btnFinish , btnBegin,btnFinishn , btnBeginn ;
     EditText foodName , foodPrice;
     Button SelectCat;
     CheckBox chkLink , chkTavafoqi;
@@ -179,10 +181,22 @@ public class EditAgahi extends AppCompatActivity {
 
         txtBegin = (TextView) findViewById(R.id.txt_begin);
         txtFinish = (TextView) findViewById(R.id.txt_finish);
+
+        txtBeginn = (TextView) findViewById(R.id.txt_begin2);
+        txtFinishn = (TextView) findViewById(R.id.txt_finish2);
+
         txtBeginTime = (TextView) findViewById(R.id.txt_begin_time);
         txtFinishTime = (TextView) findViewById(R.id.txt_finish_time);
+
+        txtBeginTimen = (TextView) findViewById(R.id.txt_begin_time2);
+        txtFinishTimen = (TextView) findViewById(R.id.txt_finish_time2);
+
         btnFinish = (Button) findViewById(R.id.btn_finish);
         btnBegin = (Button) findViewById(R.id.btn_begin);
+
+        btnFinishn = (Button) findViewById(R.id.btn_finish2);
+        btnBeginn = (Button) findViewById(R.id.btn_begin2);
+
         btnAdd = (ImageButton) findViewById(R.id.btn_add);
         foodName = (EditText) findViewById(R.id.edt_food_name);
         foodPrice = (EditText) findViewById(R.id.edt_food_price);
@@ -299,10 +313,26 @@ public class EditAgahi extends AppCompatActivity {
 
             }
         });
+        btnBeginn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment newFragment = new BeginTimePickerFragment2();
+                newFragment.show(getFragmentManager(),"TimePicker");
+
+            }
+        });
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DialogFragment newFragment = new FinishTimePickerFragment();
+                newFragment.show(getFragmentManager(),"TimePicker");
+
+            }
+        });
+        btnFinishn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment newFragment = new FinishTimePickerFragment2();
                 newFragment.show(getFragmentManager(),"TimePicker");
 
             }
@@ -328,10 +358,19 @@ public class EditAgahi extends AppCompatActivity {
 
             startTime = Details.start;
             endTime = Details.end;
+
+            startTimen = Details.startn;
+            endTimen = Details.endn;
+
             txtBeginTime.setText("شروع سفارش گیری از "+startTime);
             txtFinishTime.setText("پایان سفارش گیری "+endTime);
 
-        }else if(SelectCat.getText().equals("استخدام و کاریابی")) {
+            txtBeginTimen.setText("شروع سفارش گیری از "+startTimen);
+            txtFinishTimen.setText("پایان سفارش گیری "+endTimen);
+
+        }else
+
+        if(SelectCat.getText().equals("استخدام و کاریابی")) {
             txtCat.setVisibility(View.GONE);
             txtCat.setVisibility(View.VISIBLE);
             llType.setVisibility(View.GONE);
@@ -461,6 +500,13 @@ public class EditAgahi extends AppCompatActivity {
                         txtBegin.setVisibility(View.GONE);
                         flag1 = false;
                     }
+                    if (txtBeginTimen.getText().toString().matches("")) {
+                        txtBeginn.setVisibility(View.VISIBLE);
+                        flag11 = true;
+                    } else {
+                        txtBeginn.setVisibility(View.GONE);
+                        flag11 = false;
+                    }
 
                     if (txtFinishTime.getText().toString().matches("")) {
                         txtFinish.setVisibility(View.VISIBLE);
@@ -468,6 +514,13 @@ public class EditAgahi extends AppCompatActivity {
                     } else {
                         txtFinish.setVisibility(View.GONE);
                         flag7 = false;
+                    }
+                    if (txtFinishTimen.getText().toString().matches("")) {
+                        txtFinishn.setVisibility(View.VISIBLE);
+                        flag12 = true;
+                    } else {
+                        txtFinishn.setVisibility(View.GONE);
+                        flag12 = false;
                     }
 
 
@@ -507,7 +560,7 @@ public class EditAgahi extends AppCompatActivity {
                     }
 
 
-                    if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false && flag8 == false && flag10 == false) {
+                    if (flag1 == false && flag3 == false && flag4 == false && flag5 == false && flag6 == false && flag7 == false && flag8 == false && flag10 == false && flag11 == false && flag12 == false) {
 
                         dialog = ProgressDialog.show(EditAgahi.this, null, null, true, false);
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -698,105 +751,105 @@ public class EditAgahi extends AppCompatActivity {
         if(SelectCat.getText().equals("رستوران")) {
 
 
-        try {
-         //   Intent intent = getIntent();
-            String order = Details.order;
-            menuJsonArray = new JSONArray(order);
+            try {
+                //   Intent intent = getIntent();
+                String order = Details.order;
+                menuJsonArray = new JSONArray(order);
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
-            for (int i = 0; i < menuJsonArray.length(); i++) {
-
-                LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(App.context.LAYOUT_INFLATER_SERVICE);
-                final View addView = layoutInflater.inflate(R.layout.row, null);
-                final TextView txtName = (TextView) addView.findViewById(R.id.txtName);
-                final TextView txtPrice = (TextView) addView.findViewById(R.id.txtPrice);
-
-                final JSONObject oo = menuJsonArray.getJSONObject(i);
-
-                txtName.setText(oo.getString("name").toString());
-                txtPrice.setText(oo.getString("price").toString() + " تومان ");
-
-                ImageView buttonRemove = (ImageView) addView.findViewById(R.id.remove);
-
-                JSONObject object = new JSONObject();
-                final int finalI = i;
-                buttonRemove.setOnClickListener(new View.OnClickListener() {
-
-                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                    @Override
-                    public void onClick(View v) {
-                        int index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
-                        addView.setVisibility(View.GONE);
-
-                        try {
-                            menuJsonArray.getJSONObject(index).put("name","0");
-                        }catch (JSONException e){e.printStackTrace();}
-
-
-                    }
-                });
-
-
-                container.addView(addView);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            try {
+                for (int i = 0; i < menuJsonArray.length(); i++) {
+
+                    LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(App.context.LAYOUT_INFLATER_SERVICE);
+                    final View addView = layoutInflater.inflate(R.layout.row, null);
+                    final TextView txtName = (TextView) addView.findViewById(R.id.txtName);
+                    final TextView txtPrice = (TextView) addView.findViewById(R.id.txtPrice);
+
+                    final JSONObject oo = menuJsonArray.getJSONObject(i);
+
+                    txtName.setText(oo.getString("name").toString());
+                    txtPrice.setText(oo.getString("price").toString() + " تومان ");
+
+                    ImageView buttonRemove = (ImageView) addView.findViewById(R.id.remove);
+
+                    JSONObject object = new JSONObject();
+                    final int finalI = i;
+                    buttonRemove.setOnClickListener(new View.OnClickListener() {
+
+                        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                        @Override
+                        public void onClick(View v) {
+                            int index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
+                            addView.setVisibility(View.GONE);
+
+                            try {
+                                menuJsonArray.getJSONObject(index).put("name","0");
+                            }catch (JSONException e){e.printStackTrace();}
 
 
-        /////////////////////////////////////
-
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(App.context.LAYOUT_INFLATER_SERVICE);
-                final View addView = layoutInflater.inflate(R.layout.row, null);
-                TextView txtName = (TextView) addView.findViewById(R.id.txtName);
-                TextView txtPrice = (TextView) addView.findViewById(R.id.txtPrice);
-                txtName.setText(foodName.getText().toString());
-                txtPrice.setText(foodPrice.getText().toString() + " تومان ");
-                ImageView buttonRemove = (ImageView) addView.findViewById(R.id.remove);
+                        }
+                    });
 
 
-                JSONObject object = new JSONObject();
-                try {
-                    object.put("name", foodName.getText().toString());
-                    object.put("price", foodPrice.getText().toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    container.addView(addView);
                 }
-                menuJsonArray.put(object);
-
-                buttonRemove.setOnClickListener(new View.OnClickListener() {
-
-                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                    @Override
-                    public void onClick(View v) {
-                        int index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
-                        addView.setVisibility(View.GONE);
-
-                        try {
-                            menuJsonArray.getJSONObject(index).put("name","0");
-                        }catch (JSONException e){e.printStackTrace();}
-
-
-                    }
-                });
-
-                container.addView(addView);
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(foodName.getWindowToken(), 0);
-                foodName.setText("");
-                foodPrice.setText("");
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        });
 
 
-    }
+            /////////////////////////////////////
+
+            btnAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    LayoutInflater layoutInflater = (LayoutInflater) getBaseContext().getSystemService(App.context.LAYOUT_INFLATER_SERVICE);
+                    final View addView = layoutInflater.inflate(R.layout.row, null);
+                    TextView txtName = (TextView) addView.findViewById(R.id.txtName);
+                    TextView txtPrice = (TextView) addView.findViewById(R.id.txtPrice);
+                    txtName.setText(foodName.getText().toString());
+                    txtPrice.setText(foodPrice.getText().toString() + " تومان ");
+                    ImageView buttonRemove = (ImageView) addView.findViewById(R.id.remove);
+
+
+                    JSONObject object = new JSONObject();
+                    try {
+                        object.put("name", foodName.getText().toString());
+                        object.put("price", foodPrice.getText().toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    menuJsonArray.put(object);
+
+                    buttonRemove.setOnClickListener(new View.OnClickListener() {
+
+                        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                        @Override
+                        public void onClick(View v) {
+                            int index = ((LinearLayout) addView.getParent()).indexOfChild(addView);
+                            addView.setVisibility(View.GONE);
+
+                            try {
+                                menuJsonArray.getJSONObject(index).put("name","0");
+                            }catch (JSONException e){e.printStackTrace();}
+
+
+                        }
+                    });
+
+                    container.addView(addView);
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(foodName.getWindowToken(), 0);
+                    foodName.setText("");
+                    foodPrice.setText("");
+                }
+            });
+
+
+        }
 
     }
 
@@ -822,6 +875,8 @@ public class EditAgahi extends AppCompatActivity {
         if(SelectCat.getText().equals("رستوران")) {
             params.put("start",startTime);
             params.put("end",endTime);
+            params.put("startn",startTimen);
+            params.put("endn",endTimen);
             params.put("special", "0");
 
             final JSONArray finalJsonArray = new JSONArray();
@@ -853,7 +908,8 @@ public class EditAgahi extends AppCompatActivity {
         }
 
 
-        if((Details.catId.equals("10") || Details.catId.equals("9"))  ){
+        // if((Details.catId.equals("10") || Details.catId.equals("9"))  ){
+        if(( Details.catId.equals("9"))  ){
             if(Details.validity.equals("3")) {
                 params.put("validity", "3");
             }else{
@@ -872,7 +928,7 @@ public class EditAgahi extends AppCompatActivity {
             }
 
         }
-        
+
         params.put("location",location.getText());
         if(file1!=null){
             try {
@@ -881,32 +937,32 @@ public class EditAgahi extends AppCompatActivity {
             } catch(FileNotFoundException e) {}
         }
         else if(file2!=null){
-        try {
-            params.put("filei", file2);
-        } catch(FileNotFoundException e) {}
-    }
+            try {
+                params.put("filei", file2);
+            } catch(FileNotFoundException e) {}
+        }
 
-     else if(file3!=null){
-        try {
-            params.put("fileii", file3);
-        } catch(FileNotFoundException e) {}
-    }
-         if(file1==null && imgAsli.getVisibility()==View.VISIBLE){
+        else if(file3!=null){
+            try {
+                params.put("fileii", file3);
+            } catch(FileNotFoundException e) {}
+        }
+        if(file1==null && imgAsli.getVisibility()==View.VISIBLE){
             params.put("image", Details.url1);
         }
-         if(file2==null && img2.getVisibility()==View.VISIBLE){
+        if(file2==null && img2.getVisibility()==View.VISIBLE){
             params.put("imagei", Details.url2);
         }
-         if(file3==null && img3.getVisibility()==View.VISIBLE){
+        if(file3==null && img3.getVisibility()==View.VISIBLE){
             params.put("imageii", Details.url3);
         }
-         if(file1==null && imgAsli.getVisibility()==View.GONE){
+        if(file1==null && imgAsli.getVisibility()==View.GONE){
             params.put("image", "0");
         }
-         if( img2.getVisibility()==View.GONE){
+        if( img2.getVisibility()==View.GONE){
             params.put("imagei", "0");
         }
-         if(img3.getVisibility()==View.GONE){
+        if(img3.getVisibility()==View.GONE){
             params.put("imageii", "0");
         }
 
@@ -1080,7 +1136,7 @@ public class EditAgahi extends AppCompatActivity {
             // required permissions granted, start crop image activity
             startCropImageActivity(mCropImageUri);
         } else {
-          //  Toast.makeText(this, "Cancelling, required permissions are not granted", Toast.LENGTH_LONG).show();
+            //  Toast.makeText(this, "Cancelling, required permissions are not granted", Toast.LENGTH_LONG).show();
         }
     }
 

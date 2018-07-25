@@ -3,6 +3,7 @@ package com.appmagazine.nardoon.activities;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
@@ -44,6 +46,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import cz.msebera.android.httpclient.Header;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class EditNini extends AppCompatActivity {
 
@@ -72,6 +75,10 @@ public class EditNini extends AppCompatActivity {
     ToggleButton chkShower , chkKiss , chkFlower , chkIcecream;
 
     private String id_confirmaation;
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -494,20 +501,23 @@ public class EditNini extends AppCompatActivity {
     }
     //Image Crop Code End Here
 
-    public void EnableRuntimePermission(){
+    public boolean  EnableRuntimePermission(){
 
-        if (ActivityCompat.shouldShowRequestPermissionRationale(EditNini.this,
-                Manifest.permission.CAMERA))
-        {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
 
-            // Toast.makeText(NewAgahi.this,"CAMERA permission allows us to Access CAMERA app", Toast.LENGTH_LONG).show();
-
-        } else {
-
-            ActivityCompat.requestPermissions(EditNini.this,new String[]{
-                    Manifest.permission.CAMERA}, RequestPermissionCode);
-
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                return false;
+            }
         }
+        else { //permission is automatically granted on sdk<23 upon installation
+            Log.v("tag","Permission is granted");
+            return true;
+        }
+
     }
 
     @Override

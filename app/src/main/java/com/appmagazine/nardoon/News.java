@@ -8,7 +8,7 @@ import org.json.JSONObject;
  */
 
 public class News {
-    public String id,title, subject, content,image, updated_at , create_at ,commentcount ,point ,pointm;
+    public String id,title, subject, content,image, updated_at , create_at ,commentcount ,point ,pointm , like , dislike ,validity;
 
     public News(JSONObject jsonObject) { // تابع سازنده برای دریافت مقادیر از JsonObject
         try {
@@ -22,8 +22,13 @@ public class News {
             this.commentcount = jsonObject.getString("commentcount");
             this.point = jsonObject.getString("point");
             this.pointm = jsonObject.getString("pointm");
-
-
+            this.like = jsonObject.getString("like");
+            this.dislike = jsonObject.getString("dislike");
+            try {
+                this.validity = jsonObject.getString("validity");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
 
         } catch (JSONException e) {

@@ -86,7 +86,6 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.PosterHold
                 .inflate(R.layout.item_poster, parent, false);
         PosterHolder dataObjectHolder = new PosterHolder(view);
         return dataObjectHolder;
-
     } 
 
     @Override

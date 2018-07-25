@@ -93,4 +93,8 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_details">Details</string>
+
+    <string name="typeofnews">بخش دخترانه و سلامت صرفا جهت مطالب سرگرم کننده و اموزشی میباشد
+بخش اجتماعی مختص روابط عمومی اداره‌های شهرستان میباشد و تنها مسئولین محترم روابط عمومی مجاز به درج خبر در این بخش هستند
+</string>
 </resources>

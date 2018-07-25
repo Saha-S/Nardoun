@@ -2,6 +2,7 @@ package com.appmagazine.nardoon.activities;
 
 import android.app.ActionBar;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -53,6 +54,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SubCatAgahis extends AppCompatActivity implements TextWatcher {
     RecyclerView recyclerView;
@@ -66,6 +68,10 @@ public class SubCatAgahis extends AppCompatActivity implements TextWatcher {
     public static ProgressDialog dialog;
 
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
 
     @Override

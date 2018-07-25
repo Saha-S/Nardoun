@@ -36,7 +36,6 @@ import com.loopj.android.http.RequestParams;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
-import de.hdodenhof.circleimageview.CircleImageView;
 import ir.moslem_deris.apps.zarinpal.PaymentBuilder;
 import ir.moslem_deris.apps.zarinpal.ZarinPal;
 import ir.moslem_deris.apps.zarinpal.enums.ZarinPalError;
@@ -127,6 +126,11 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.Poster
                     intent.putExtra("TYPE", mDataset.get(position).subject);
                     intent.putExtra("IMAGE", App.urlimages + mDataset.get(position).image);
                     intent.putExtra("VIRAYESH", "0");
+                    intent.putExtra("VALIDITY", "000");
+                    intent.putExtra("ISLIKE", mDataset.get(position).like);
+                    intent.putExtra("ISDISLIKE", mDataset.get(position).dislike);
+                    intent.putExtra("LIKE", mDataset.get(position).point);
+                    intent.putExtra("DISLIKE", mDataset.get(position).pointm);
 
                     App.context.startActivity(intent);
 
