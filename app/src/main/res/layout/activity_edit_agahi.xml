@@ -923,8 +923,9 @@
                             android:layout_height="wrap_content"
                             android:ems="10"
                             android:focusableInTouchMode="true"
-                            android:hint="09121234567"
-                            android:inputType="phone" />
+                            android:hint=""
+                            android:inputType="phone"
+                            android:enabled="false"/>
 
                     </LinearLayout>
 
