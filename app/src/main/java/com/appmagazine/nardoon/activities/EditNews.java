@@ -168,6 +168,7 @@ public class EditNews extends AppCompatActivity {
         spinner.setAdapter(dataAdapter);
 
 
+
         title = (EditText) findViewById(R.id.edt_title);
         content = (EditText) findViewById(R.id.edt_content);
 
