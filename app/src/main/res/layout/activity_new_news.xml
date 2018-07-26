@@ -176,8 +176,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:text="بخش دخترانه و سلامت صرفا جهت مطالب سرگرم کننده و اموزشی میباشد.
-بخش اجتماعی مختص روابط عمومی اداره‌های شهرستان میباشد و تنها مسئولین محترم روابط عمومی مجاز به درج خبر در این بخش هستند "
+                    android:text="بخش اجتماعی مختص روابط عمومی اداره‌های شهرستان میباشد و تنها مسئولین محترم روابط عمومی مجاز به درج خبر در این بخش هستند "
                     android:textColor="@color/navy"
                     android:textSize="12sp" />
 

@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="5dp"
-            android:text="نظرات حاوی توهین به همراه ای پی، و شماره موبایل تحویل مراجع فضایی داده خواهد شد "
+            android:text="نظرات حاوی توهین به همراه ای پی، و شماره موبایل تحویل مراجع قضایی داده خواهد شد "
             android:textColor="#e20505"
             android:textSize="16sp" />
 

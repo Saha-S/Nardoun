@@ -26,24 +26,17 @@ public class News extends Fragment {
         llPublic = (LinearLayout) view.findViewById(R.id.llPublic);
         llSport = (LinearLayout) view.findViewById(R.id.llSport);
         llSocial = (LinearLayout) view.findViewById(R.id.llSocial);
-        llRSS = (LinearLayout) view.findViewById(R.id.llRSS);
+
+        LinearLayout rssVarzeshi = (LinearLayout) view.findViewById(R.id.rssVarzeshi);
+        LinearLayout rssPezeshki = (LinearLayout) view.findViewById(R.id.rssPezeshki);
+        LinearLayout rssMajazi = (LinearLayout) view.findViewById(R.id.rssMajazi);
+        LinearLayout rssEghtesadi = (LinearLayout) view.findViewById(R.id.rssEghtesadi);
+        LinearLayout rssSiasi = (LinearLayout) view.findViewById(R.id.rssSiasi);
+        LinearLayout rssEjtemaei = (LinearLayout) view.findViewById(R.id.rssEjtemaei);
+
+
+        //  llRSS = (LinearLayout) view.findViewById(R.id.llRSS);
         llAll = (LinearLayout) view.findViewById(R.id.llAll);
-
-//        llGirl.setBackgroundColor(Color.parseColor("#003399"));
-//        llPublic.setBackgroundColor(Color.parseColor("#9a00ff"));
-//        llSport.setBackgroundColor(Color.parseColor("#ff6501"));
-//        llSocial.setBackgroundColor(Color.parseColor("#cd9933"));
-//        llRSS.setBackgroundColor(Color.parseColor("#04b9e6"));
-
-//        llGirl.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(App.context , NewsList.class);
-////                intent.putExtra("id", "8");
-//                intent.putExtra("name", "سرگرمی و آموزشی");
-//                startActivity(intent);
-//            }
-//        });
 
 
         llPublic.setOnClickListener(new View.OnClickListener() {
@@ -82,15 +75,60 @@ public class News extends Fragment {
                 startActivity(intent);
             }
         });
-        llRSS.setOnClickListener(new View.OnClickListener() {
+
+
+        /////////////////// RSS ////////////
+
+        rssVarzeshi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(App.context , NewsList.class);
-//                intent.putExtra("id", "8");
-                intent.putExtra("name", "اخبار روزانه");
+                intent.putExtra("name", "rssVarzeshi");
                 startActivity(intent);
             }
         });
+        rssPezeshki.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(App.context , NewsList.class);
+                intent.putExtra("name", "rssPezeshki");
+                startActivity(intent);
+            }
+        });
+        rssMajazi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(App.context , NewsList.class);
+                intent.putExtra("name", "rssMajazi");
+                startActivity(intent);
+            }
+        });
+        rssEghtesadi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(App.context , NewsList.class);
+                intent.putExtra("name", "rssEghtesadi");
+                startActivity(intent);
+            }
+        });
+        rssSiasi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(App.context , NewsList.class);
+                intent.putExtra("name", "rssSiasi");
+                startActivity(intent);
+            }
+        });
+        rssEjtemaei.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(App.context , NewsList.class);
+                intent.putExtra("name", "rssEjtemaei");
+                startActivity(intent);
+            }
+        });
+
+
         return view;
 
     }

@@ -117,11 +117,48 @@ public class NewsList extends AppCompatActivity {
         final NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
         if (mWifi.isConnected() || isMobileDataEnabled()) {
-            if(cat.equals("اخبار روزانه")){
-                llTabs.setVisibility(View.VISIBLE);
-                setRss("http://www.yjc.ir/fa/rss/1/129");
 
-            }else {
+                if (cat.equals("rssVarzeshi")){
+                    llTabs.setVisibility(View.VISIBLE);
+                    appbarTitle.setText("ورزشی");
+                    swipeRefreshLayout.setRefreshing(true);
+                    setRss("https://www.yjc.ir/fa/rss/8");
+                }
+                else if (cat.equals("rssPezeshki")){
+                    appbarTitle.setText("پزشکی");
+                    llTabs.setVisibility(View.VISIBLE);
+                    swipeRefreshLayout.setRefreshing(true);
+                    setRss("https://www.yjc.ir/fa/rss/7");
+
+                }
+
+                else if (cat.equals("rssMajazi")){
+                    appbarTitle.setText("فضای مجازی");
+                    llTabs.setVisibility(View.VISIBLE);
+                    swipeRefreshLayout.setRefreshing(true);
+                    setRss("https://www.yjc.ir/fa/rss/14");
+                }
+                else if (cat.equals("rssEghtesadi")){
+                    appbarTitle.setText("اقتصادی");
+                    llTabs.setVisibility(View.VISIBLE);
+                    swipeRefreshLayout.setRefreshing(true);
+                    setRss("https://www.yjc.ir/fa/rss/6");
+                }
+                else if (cat.equals("rssSiasi")){
+                    appbarTitle.setText("سیاسی");
+                    llTabs.setVisibility(View.VISIBLE);
+                    swipeRefreshLayout.setRefreshing(true);
+                    setRss("https://www.yjc.ir/fa/rss/3");
+                }
+                else if (cat.equals("rssEjtemaei")){
+                    appbarTitle.setText("اجتماعی");
+                    llTabs.setVisibility(View.VISIBLE);
+                    swipeRefreshLayout.setRefreshing(true);
+                    setRss("https://www.yjc.ir/fa/rss/5");
+                }
+
+
+            else {
                 llTabs.setVisibility(View.GONE);
                 webServiceGetNini();
             }
@@ -140,35 +177,37 @@ public class NewsList extends AppCompatActivity {
                 NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
                 if (mWifi.isConnected() || isMobileDataEnabled()) {
-                    if(cat.equals("اخبار روزانه")){
-                        String urlString = "https://www.yjc.ir/fa/rss/1/129";
-                        Parser parser = new Parser();
-                        parser.execute(urlString);
-                        parser.onFinish(new Parser.OnTaskCompleted() {
 
-                            @Override
-                            public void onTaskCompleted(ArrayList<Article> list) {
-                                //what to do when the parsing is done
-                                //the Array List contains all article's data. For example you can use it for your adapter.
-                                ArticleAdapter adapter = new ArticleAdapter(list, R.layout.item_news, NewsList.this);
-                                recyclerView.setLayoutManager(linearLayoutManager);
-                                recyclerView.setAdapter(adapter);
-                                App.CustomToast("mishe");
-                                swipeRefreshLayout.setRefreshing(false);
-
-                            }
-
-                            @Override
-                            public void onError() {
-                                //what to do in case of error
-                            }
-                        });
-
-
-                    }else {
-                        webServiceGetNini();
+                     if (cat.equals("rssVarzeshi")){
+                        swipeRefreshLayout.setRefreshing(true);
+                        setRss("https://www.yjc.ir/fa/rss/8");
                     }
-                    swipeRefreshLayout.setRefreshing(true);
+                    else if (cat.equals("rssPezeshki")){
+                        swipeRefreshLayout.setRefreshing(true);
+                        setRss("https://www.yjc.ir/fa/rss/7");
+                    }
+
+                    else if (cat.equals("rssMajazi")){
+                        swipeRefreshLayout.setRefreshing(true);
+                        setRss("https://www.yjc.ir/fa/rss/14");
+                    }
+                    else if (cat.equals("rssEghtesadi")){
+                        swipeRefreshLayout.setRefreshing(true);
+                        setRss("https://www.yjc.ir/fa/rss/6");
+                    }
+                    else if (cat.equals("rssSiasi")){
+                        swipeRefreshLayout.setRefreshing(true);
+                        setRss("https://www.yjc.ir/fa/rss/3");
+                    }
+                    else if (cat.equals("rssEjtemaei")){
+                        swipeRefreshLayout.setRefreshing(true);
+                        setRss("https://www.yjc.ir/fa/rss/5");
+                    }
+
+                    else {
+                         swipeRefreshLayout.setRefreshing(true);
+                         webServiceGetNini();
+                    }
 
                 }else {
                     App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
@@ -186,17 +225,31 @@ public class NewsList extends AppCompatActivity {
                 array = new ArrayList<News>();
 
                 if (mWifi.isConnected() || isMobileDataEnabled()) {
-                    if(cat.equals("اخبار روزانه")){
-
-                        setRss("https://www.yjc.ir/fa/rss/1/129");
-
-                    }else {
+                    if (cat.equals("rssVarzeshi")) {
+                        swipeRefreshLayout.setRefreshing(true);
+                        setRss("https://www.yjc.ir/fa/rss/8");
+                    } else if (cat.equals("rssPezeshki")) {
+                        swipeRefreshLayout.setRefreshing(true);
+                        setRss("https://www.yjc.ir/fa/rss/7");
+                    } else if (cat.equals("rssMajazi")) {
+                        swipeRefreshLayout.setRefreshing(true);
+                        setRss("https://www.yjc.ir/fa/rss/14");
+                    } else if (cat.equals("rssEghtesadi")) {
+                        swipeRefreshLayout.setRefreshing(true);
+                        setRss("https://www.yjc.ir/fa/rss/6");
+                    } else if (cat.equals("rssSiasi")) {
+                        swipeRefreshLayout.setRefreshing(true);
+                        setRss("https://www.yjc.ir/fa/rss/3");
+                    } else if (cat.equals("rssEjtemaei")) {
+                        swipeRefreshLayout.setRefreshing(true);
+                        setRss("https://www.yjc.ir/fa/rss/5");
+                    } else {
+                        swipeRefreshLayout.setRefreshing(true);
                         webServiceGetNini();
-
                     }
-                    swipeRefreshLayout.setRefreshing(true);
 
-                }else {
+                }
+                else {
                     App.CustomToast("خطا: ارتباط اینترنت را چک نمایید");
                     swipeRefreshLayout.setRefreshing(false);
                 }
@@ -204,13 +257,6 @@ public class NewsList extends AppCompatActivity {
             }
         });
 
-        all.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                swipeRefreshLayout.setRefreshing(true);
-                setRss("https://www.yjc.ir/fa/rss/1/129");
-            }
-        });
         siasi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -287,9 +333,7 @@ public class NewsList extends AppCompatActivity {
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
 
-                // loginpb1.setVisibility(View.INVISIBLE); *******************   inja progress bar qeyre faal mishe
                 if(statusCode==404)  //**************   agar agahi vojud nadashte bashe man code 404 mifrestam
                 {
                     swipeRefreshLayout.setRefreshing(false);
@@ -329,8 +373,7 @@ public class NewsList extends AppCompatActivity {
 
             @Override
             public void onTaskCompleted(ArrayList<Article> list) {
-                //what to do when the parsing is done
-                //the Array List contains all article's data. For example you can use it for your adapter.
+
                 ArticleAdapter adapter = new ArticleAdapter(list, R.layout.item_news, NewsList.this);
                 recyclerView.setLayoutManager(linearLayoutManager);
                 recyclerView.setAdapter(adapter);
@@ -340,7 +383,7 @@ public class NewsList extends AppCompatActivity {
 
             @Override
             public void onError() {
-                //what to do in case of error
+
             }
         });
 

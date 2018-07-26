@@ -33,6 +33,8 @@ public class Category extends Fragment {
         llEstekhdam = (LinearLayout) view.findViewById(R.id.llEstekhdam);
         llRestaurant = (LinearLayout) view.findViewById(R.id.llRestaurant);
 
+
+
         llCar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
