@@ -294,7 +294,7 @@ public class NewsDetails extends AppCompatActivity {
             time.setText(extras.getString("TIME"));
             title.setText(extras.getString("TITLE"));
             id.setText("کد خبر: "+extras.getString("ID"));
-            content.setText(extras.getString("CONTENT"));
+           // content.setText(extras.getString("CONTENT"));
             txtLike.setText(extras.getString("LIKE").toString());
             txtUnlike.setText(extras.getString("DISLIKE").toString());
 
@@ -461,7 +461,7 @@ public class NewsDetails extends AppCompatActivity {
         client.get(App.urlApi+"news/"+pid, params, new AsyncHttpResponseHandler() {   // **************   get request  vase post: clinet.post qarar midim
             @Override
             public void onStart() {
-                swipeRefreshLayout.setRefreshing(false);
+
                 ll.setVisibility(View.VISIBLE);
 
 
@@ -474,6 +474,8 @@ public class NewsDetails extends AppCompatActivity {
                 try {
 
                     obj = new JSONArray(value).getJSONObject(0);
+
+                    content.setText(obj.getString("content"));
                     strings = new ArrayList<String>();
 
                     txtLike.setText(obj.getString("point"));
@@ -595,9 +597,10 @@ public class NewsDetails extends AppCompatActivity {
                         }
                     });
 
-
+                    swipeRefreshLayout.setRefreshing(false);
 
                 } catch (JSONException e) {
+                    swipeRefreshLayout.setRefreshing(false);
                     e.printStackTrace();
                 }
 

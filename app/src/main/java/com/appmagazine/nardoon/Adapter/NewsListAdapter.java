@@ -119,7 +119,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.Poster
                 public void onClick(View view) {
                     Intent intent = new Intent(App.context, NewsDetails.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("CONTENT", mDataset.get(position).content);
+                   // intent.putExtra("CONTENT", mDataset.get(position).content);
                     intent.putExtra("TITLE", mDataset.get(position).title);
                     intent.putExtra("TIME", mDataset.get(position).create_at);
                     intent.putExtra("ID", mDataset.get(position).id);

@@ -171,7 +171,8 @@
         <activity
             android:name=".activities.NewNews"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".activities.NewsDetails"></activity>
         <activity
             android:name=".activities.EditNews"
